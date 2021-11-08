@@ -14,11 +14,19 @@ int TaskManager::Create(Task t) {
 }
 
 void TaskManager::Edit(int id, Task t) {
-    tasks_[id] = t;
+    if (tasks_.find(id) != tasks_.end()) {
+        tasks_[id] = t;
+    } else{
+        throw std::invalid_argument("No task with such id.");
+    }
 }
 
 void TaskManager::Delete(int id) {
-    tasks_.erase(id);
+    if (tasks_.find(id) != tasks_.end()) {
+        tasks_.erase(id);
+    } else{
+        throw std::invalid_argument("No task with such id.");
+    }
 }
 
 std::vector<std::pair<int, Task>> TaskManager::Show() {
