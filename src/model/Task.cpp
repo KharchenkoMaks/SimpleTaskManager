@@ -17,3 +17,5 @@ Task::Task(std::string title, Priority priority, time_t due_to) {
     this->priority_ = priority;
     this->due_to_ = due_to;
 }
+
+Task::Task() {}
