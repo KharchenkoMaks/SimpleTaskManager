@@ -22,6 +22,7 @@ private:
     std::string title_;
     Priority priority_;
     time_t due_to_;
+    Task(std::string title, Priority priority, time_t due_to);
 };
 
 
