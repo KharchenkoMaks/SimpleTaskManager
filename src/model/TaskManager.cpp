@@ -29,6 +29,10 @@ void TaskManager::Delete(int id) {
     }
 }
 
+void TaskManager::Complete(int id) {
+    this->Delete(id);
+}
+
 std::vector<std::pair<int, Task>> TaskManager::Show() {
     std::vector<std::pair<int, Task>> tasks;
     for (std::pair<const int, Task>& item : tasks_){
