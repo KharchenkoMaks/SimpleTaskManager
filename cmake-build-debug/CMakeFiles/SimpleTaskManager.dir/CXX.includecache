@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/main.cpp
+iostream
+-
+
+/Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/model/Task.cpp
+Task.h
+/Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/model/Task.h
+
+/Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/model/Task.h
+string
+-
+ctime
+-
+
+/Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/model/TaskManager.cpp
+TaskManager.h
+/Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/model/TaskManager.h
+
+/Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/model/TaskManager.h
+Task.h
+/Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/model/Task.h
+map
+-
+
