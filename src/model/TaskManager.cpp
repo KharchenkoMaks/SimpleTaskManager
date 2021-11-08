@@ -26,4 +26,5 @@ std::vector<std::pair<int, Task>> TaskManager::Show() {
     for (std::pair<const int, Task>& item : tasks_){
         tasks.push_back(std::pair<int, Task>(item.first, item.second));
     }
+    return tasks;
 }
