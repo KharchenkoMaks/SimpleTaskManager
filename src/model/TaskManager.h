@@ -16,6 +16,7 @@ public:
     int Create(Task t);
     void Edit(int id, Task t);
     void Delete(int id);
+    void Complete(int id);
     std::vector<std::pair<int, Task>> Show();
     TaskManager();
 private:
