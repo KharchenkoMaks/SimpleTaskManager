@@ -6,14 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/main.cpp
-iostream
--
-
-/Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/model/Task.cpp
-Task.h
-/Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/model/Task.h
-
 /Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/model/Task.h
 string
 -
@@ -28,5 +20,9 @@ TaskManager.h
 Task.h
 /Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/model/Task.h
 map
+-
+vector
+-
+utility
 -
 

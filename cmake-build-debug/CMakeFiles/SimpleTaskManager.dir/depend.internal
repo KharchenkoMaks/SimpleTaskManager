@@ -3,6 +3,8 @@
 
 CMakeFiles/SimpleTaskManager.dir/src/main.cpp.o
  /Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/main.cpp
+ /Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/model/Task.h
+ /Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/model/TaskManager.h
 CMakeFiles/SimpleTaskManager.dir/src/model/Task.cpp.o
  /Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/model/Task.cpp
  /Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/src/model/Task.h
