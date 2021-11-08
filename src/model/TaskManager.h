@@ -15,7 +15,9 @@ public:
     void Edit(Task t);
     void Delete(Task t);
     std::vector<std::pair<int, Task>> Show();
+    TaskManager();
 private:
+    int next_id_;
     std::map<int, Task> tasks_;
 };
 

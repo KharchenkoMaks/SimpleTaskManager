@@ -3,3 +3,7 @@
 //
 
 #include "TaskManager.h"
+
+TaskManager::TaskManager() {
+    next_id_ = 0;
+}
