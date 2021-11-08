@@ -16,6 +16,8 @@ public:
         LOW,
         NONE
     };
+
+    static Task Create(std::string title, Priority priority, time_t due_to);
 private:
     std::string title_;
     Priority priority_;
