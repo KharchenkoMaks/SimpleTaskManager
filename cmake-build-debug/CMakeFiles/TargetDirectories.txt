@@ -1,3 +1,0 @@
-/Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/maksym.kharchenko/CLionProjects/SimpleTaskManager/cmake-build-debug/CMakeFiles/SimpleTaskManager.dir
