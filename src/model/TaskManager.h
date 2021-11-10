@@ -6,6 +6,7 @@
 #define SIMPLETASKMANAGER_TASKMANAGER_H
 
 #include "Task.h"
+#include "TaskId.h"
 
 #include <map>
 #include <vector>
@@ -13,15 +14,15 @@
 
 class TaskManager {
 public:
-    int Create(Task t);
-    void Edit(int id, Task t);
-    void Delete(int id);
-    void Complete(int id);
-    std::vector<std::pair<int, Task>> Show();
+    TaskId Create(Task t);
+    void Edit(TaskId id, Task t);
+    void Delete(TaskId id);
+    void Complete(TaskId id);
+    std::vector<std::pair<TaskId, Task>> Show();
     TaskManager();
 private:
-    int next_id_;
-    std::map<int, Task> tasks_;
+    std::map<TaskId, Task> tasks_;
+    IdGenerator generator_;
 };
 
 

@@ -5,15 +5,16 @@
 #include "TaskManager.h"
 
 TaskManager::TaskManager() {
-    next_id_ = 0;
+    generator_ = IdGenerator();
 }
 
-int TaskManager::Create(Task t) {
-    tasks_.insert({ ++next_id_, t });
-    return next_id_;
+TaskId TaskManager::Create(Task t) {
+    TaskId task_id = generator_.CreateNewTaskId();
+    tasks_.insert({ task_id, t });
+    return task_id;
 }
 
-void TaskManager::Edit(int id, Task t) {
+void TaskManager::Edit(TaskId id, Task t) {
     if (tasks_.find(id) != tasks_.end()) {
         tasks_.insert_or_assign(id, t);
     } else{
@@ -21,7 +22,7 @@ void TaskManager::Edit(int id, Task t) {
     }
 }
 
-void TaskManager::Delete(int id) {
+void TaskManager::Delete(TaskId id) {
     if (tasks_.find(id) != tasks_.end()) {
         tasks_.erase(id);
     } else{
@@ -29,14 +30,14 @@ void TaskManager::Delete(int id) {
     }
 }
 
-void TaskManager::Complete(int id) {
+void TaskManager::Complete(TaskId id) {
     this->Delete(id);
 }
 
-std::vector<std::pair<int, Task>> TaskManager::Show() {
-    std::vector<std::pair<int, Task>> tasks;
-    for (std::pair<const int, Task>& item : tasks_){
-        tasks.push_back(std::pair<int, Task>(item.first, item.second));
+std::vector<std::pair<TaskId, Task>> TaskManager::Show() {
+    std::vector<std::pair<TaskId, Task>> tasks;
+    for (std::pair<const TaskId, Task>& item : tasks_){
+        tasks.push_back(std::pair<TaskId, Task>(item.first, item.second));
     }
     return tasks;
 }
