@@ -15,7 +15,7 @@ int TaskManager::Create(Task t) {
 
 void TaskManager::Edit(int id, Task t) {
     if (tasks_.find(id) != tasks_.end()) {
-        tasks_[id] = t;
+        tasks_.insert_or_assign(id, t);
     } else{
         throw std::invalid_argument("No task with such id.");
     }
