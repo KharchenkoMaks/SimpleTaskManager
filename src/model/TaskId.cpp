@@ -24,11 +24,11 @@ int TaskId::GetId() {
     return id_;
 }
 
-bool TaskId::operator==(TaskId t) {
+bool TaskId::operator==(const TaskId& t) const {
     return this->id_ == t.id_;
 }
 
-bool TaskId::operator<(TaskId t) {
+bool TaskId::operator<(const TaskId& t) const {
     return this->id_ < t.id_;
 }
 

@@ -12,8 +12,8 @@ public:
     static TaskId Create(int id);
     static TaskId Create(std::string id);
     int GetId();
-    bool operator== (TaskId t);
-    bool operator< (TaskId t);
+    bool operator== (const TaskId& t) const;
+    bool operator< (const TaskId& t) const;
 private:
     explicit TaskId(int id);
     int id_;
