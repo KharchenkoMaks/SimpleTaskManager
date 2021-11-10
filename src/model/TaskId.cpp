@@ -11,3 +11,11 @@ TaskId::TaskId(int id) {
         throw std::invalid_argument("Id was < 0");
     }
 }
+
+TaskId TaskId::Create(int id) {
+    return TaskId(id);
+}
+
+TaskId TaskId::Create(std::string id) {
+    return TaskId(std::stoi(id));
+}
