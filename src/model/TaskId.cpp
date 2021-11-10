@@ -19,3 +19,15 @@ TaskId TaskId::Create(int id) {
 TaskId TaskId::Create(std::string id) {
     return TaskId(std::stoi(id));
 }
+
+int TaskId::GetId() {
+    return id_;
+}
+
+bool TaskId::operator==(TaskId t) {
+    return this->id_ == t.id_;
+}
+
+bool TaskId::operator<(TaskId t) {
+    return this->id_ < t.id_;
+}
