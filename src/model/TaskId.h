@@ -15,7 +15,7 @@ public:
     bool operator== (TaskId t);
     bool operator< (TaskId t);
 private:
-    TaskId(int id);
+    explicit TaskId(int id);
     int id_;
 };
 
