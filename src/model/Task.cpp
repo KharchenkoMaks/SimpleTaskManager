@@ -45,3 +45,11 @@ std::string Task::to_string() {
 std::string Task::GetTitle() {
     return this->title_;
 }
+
+Task::Priority Task::GetPriority() {
+    return this->priority_;
+}
+
+time_t Task::GetDueTime() {
+    return this->due_to_;
+}
