@@ -3,4 +3,9 @@
 //
 
 #include "gtest/gtest.h"
+#include "../src/model/Task.h"
+
+class TaskTest : public ::testing::Test{
+
+};
 
