@@ -19,13 +19,4 @@ private:
     int id_;
 };
 
-
-class IdGenerator{
-public:
-    IdGenerator();
-    TaskId CreateNewTaskId();
-private:
-    int last_id_;
-};
-
 #endif //SIMPLETASKMANAGER_TASKID_H

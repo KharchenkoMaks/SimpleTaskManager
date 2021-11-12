@@ -31,11 +31,3 @@ bool TaskId::operator==(const TaskId& t) const {
 bool TaskId::operator<(const TaskId& t) const {
     return this->id_ < t.id_;
 }
-
-IdGenerator::IdGenerator() {
-    this->last_id_ = 0;
-}
-
-TaskId IdGenerator::CreateNewTaskId() {
-    return TaskId::Create(last_id_++);
-}
