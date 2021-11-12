@@ -42,3 +42,6 @@ std::string Task::to_string() {
                     ", Due to: " + std::to_string(due_to_) + "\n";
 }
 
+std::string Task::GetTitle() {
+    return this->title_;
+}
