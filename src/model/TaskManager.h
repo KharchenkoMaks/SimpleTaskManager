@@ -7,6 +7,7 @@
 
 #include "Task.h"
 #include "TaskId.h"
+#include "IdGenerator.h"
 
 #include <map>
 #include <vector>
