@@ -13,12 +13,34 @@ class TaskTest : public ::testing::Test{
 
 // Creating Task object with title "title"
 // Task::GetTitle() should return "title"
-TEST_F(TaskTest, creatingTaskWithTitle_shouldReturnInitialTitle){
+TEST_F(TaskTest, GetTitle_shouldReturnTaskTitle){
     // Arrange
     std::string expected = "title";
     Task task = Task::Create(expected, Task::Priority::NONE, time(0));
     // Act
     std::string actual = task.GetTitle();
+    // Assert
+    EXPECT_EQ(expected, actual);
+}
+
+// Creating Task object with High Priority
+// GetPriority should return Priority::HIGH
+TEST_F(TaskTest, GetPriority_shouldReturnTaskPriority){
+    // Arrange
+    Task::Priority expected = Task::Priority::HIGH;
+    Task task = Task::Create("title", expected, time(0));
+    // Act
+    Task::Priority actual = task.GetPriority();
+    // Assert
+    EXPECT_EQ(expected, actual);
+}
+
+TEST_F(TaskTest, GetDueTime_shouldReturnDueTime){
+    // Arrange
+    time_t expected = 1636739250;
+    Task task = Task::Create("title", Task::Priority::NONE, 1636739250);
+    // Act
+    time_t actual = task.GetDueTime();
     // Assert
     EXPECT_EQ(expected, actual);
 }
