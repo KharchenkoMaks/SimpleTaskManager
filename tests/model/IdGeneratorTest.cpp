@@ -10,6 +10,8 @@ class IdGeneratorTest : public ::testing::Test{
 
 };
 
+// Creating new TaskIds using IdGenerator
+// Should return incremented TaskId
 TEST_F(IdGeneratorTest, CreateNewTaskId_shouldIncrementTaskId){
     // Arrange
     const int test_times = 5;
@@ -21,6 +23,8 @@ TEST_F(IdGeneratorTest, CreateNewTaskId_shouldIncrementTaskId){
     }
 }
 
+// Initializing IdGenerator with custom last_id
+// Should increment TaskId starting from given last_id
 TEST_F(IdGeneratorTest, InitializeIdGenerator_shouldIncrementTaskIdFromLastId){
     // Arrange
     const int last_id = 20;
@@ -33,6 +37,8 @@ TEST_F(IdGeneratorTest, InitializeIdGenerator_shouldIncrementTaskIdFromLastId){
     }
 }
 
+// Initializing IdGenerator with negative last_id
+// Should throw std::invalid_argument
 TEST_F(IdGeneratorTest, InitializeIdGeneratorWithNegativeLastId_shouldThrowInvalidArgument){
     EXPECT_THROW(IdGenerator generator(-4), std::invalid_argument);
 }
