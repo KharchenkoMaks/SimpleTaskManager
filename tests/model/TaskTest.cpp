@@ -6,6 +6,7 @@
 #include "../../src/model/Task.h"
 
 #include <ctime>
+#include <vector>
 
 class TaskTest : public ::testing::Test{
 
@@ -52,15 +53,23 @@ TEST_F(TaskTest, creatingTaskWithEmpyTitle_shouldThrowInvalidArgument){
 }
 
 // Creating Task with Title = "title"
-// Priority = HIGH and due_date = 1636739250
+// Different priorities and due_date = 1636739250
 // Should return correct string
 TEST_F(TaskTest, usingToStringTaskMethod_shouldReturnCorrectString){
     // Arrange
+    const int priorities_count = 4;
     time_t some_time = 1636739250;
-    Task task = Task::Create("title", Task::Priority::HIGH, some_time);
-    std::string expected = task.GetTitle() + ", Priority: High, Due to: 1636739250\n";
-    // Act
-    std::string actual = task.to_string();
-    // Assert
-    EXPECT_EQ(expected, actual);
+    std::vector<Task> tasks;
+    tasks.push_back(Task::Create("title", Task::Priority::HIGH, some_time));
+    tasks.push_back(Task::Create("title", Task::Priority::MEDIUM, some_time));
+    tasks.push_back(Task::Create("title", Task::Priority::LOW, some_time));
+    tasks.push_back(Task::Create("title", Task::Priority::NONE, some_time));
+    std::string priorities[priorities_count] { "High", "Medium", "Low", "None" };
+    // Act & Assert
+    for (int i = 0; i < priorities_count; ++i) {
+        std::string expected = tasks[i].GetTitle() + ", Priority: " +
+                priorities[i] + ", Due to: 1636739250\n";
+        std::string actual = tasks[i].to_string();
+        EXPECT_EQ(expected, actual);
+    }
 }
