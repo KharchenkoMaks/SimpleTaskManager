@@ -24,12 +24,12 @@ TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
     const std::string expected_title[] = { "task1", "task2" };
     const Task::Priority expected_priority[] =
             { Task::Priority::NONE,Task::Priority::LOW };
-
+    // Act
     TaskId task1 = task_manager.Create(Task::Create(expected_title[0],
                                      expected_priority[0], expected_time));
     TaskId task2 = task_manager.Create(Task::Create(expected_title[1],
                                      expected_priority[1], expected_time));
-    // Act
+
     std::vector<std::pair<TaskId, Task>> tasks = task_manager.Show();
     // Assert
     // Check equality of task1
@@ -46,7 +46,7 @@ TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
 
 // Editing existing Task in TaskManager
 // Should return edited task
-TEST_F(TaskManagerTest, EditingTasks_ShouldReturnEditedTask){
+TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
     // Arrange
     TaskManager task_manager;
     const std::string expected_title = "edited task";
@@ -65,4 +65,30 @@ TEST_F(TaskManagerTest, EditingTasks_ShouldReturnEditedTask){
     EXPECT_EQ(expected_title, actual.second.GetTitle());
     EXPECT_EQ(expected_priority, actual.second.GetPriority());
     EXPECT_EQ(expected_time, actual.second.GetDueTime());
+}
+
+// Creating two tasks in TaskManager
+// Deleting first task
+// Show method should return only second task
+TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
+    // Arrange
+    TaskManager task_manager;
+    const std::string expected_title = "second task";
+    const Task::Priority expected_priority = Task::Priority::NONE;
+    const time_t expected_time = time(0);
+    Task task1 = Task::Create("some title", Task::Priority::NONE, time(0));
+    Task task2 = Task::Create(expected_title, expected_priority, expected_time);
+    TaskId task_id_1 = task_manager.Create(task1);
+    TaskId task_id_2 = task_manager.Create(task2);
+    // Act
+    task_manager.Delete(task_id_1);
+    std::vector<std::pair<TaskId, Task>> tasks = task_manager.Show();
+    TaskId actual_task_id = tasks[0].first;
+    Task actual_task = tasks[0].second;
+    // Assert
+    EXPECT_TRUE(tasks.size() == 1);
+    EXPECT_TRUE(actual_task_id == task_id_2);
+    EXPECT_EQ(actual_task.GetTitle(), expected_title);
+    EXPECT_EQ(actual_task.GetPriority(), expected_priority);
+    EXPECT_EQ(actual_task.GetDueTime(), expected_time);
 }
