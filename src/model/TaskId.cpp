@@ -16,7 +16,7 @@ TaskId TaskId::Create(int id) {
     return TaskId(id);
 }
 
-TaskId TaskId::Create(std::string id) {
+TaskId TaskId::Create(const std::string& id) {
     return TaskId(std::stoi(id));
 }
 
