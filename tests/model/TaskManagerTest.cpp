@@ -17,12 +17,14 @@ class TaskManagerTest : public ::testing::Test{
 
 // Creating two tasks in TaskManager
 // Should return right tasks in Show() method
-TEST_F(TaskManagerTest, CreatingTasks_shouldReturnTaskVector){
+TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
     // Arrange
     TaskManager task_manager;
     const time_t expected_time = time(0);
     const std::string expected_title[] = { "task1", "task2" };
-    const Task::Priority expected_priority[] = { Task::Priority::NONE, Task::Priority::LOW };
+    const Task::Priority expected_priority[] =
+            { Task::Priority::NONE,Task::Priority::LOW };
+
     TaskId task1 = task_manager.Create(Task::Create(expected_title[0],
                                      expected_priority[0], expected_time));
     TaskId task2 = task_manager.Create(Task::Create(expected_title[1],
@@ -40,4 +42,27 @@ TEST_F(TaskManagerTest, CreatingTasks_shouldReturnTaskVector){
     EXPECT_EQ(tasks[1].second.GetTitle(), expected_title[1]);
     EXPECT_EQ(tasks[1].second.GetPriority(), expected_priority[1]);
     EXPECT_EQ(tasks[1].second.GetDueTime(), expected_time);
+}
+
+// Editing existing Task in TaskManager
+// Should return edited task
+TEST_F(TaskManagerTest, EditingTasks_ShouldReturnEditedTask){
+    // Arrange
+    TaskManager task_manager;
+    const std::string expected_title = "edited task";
+    const Task::Priority expected_priority = Task::Priority::HIGH;
+    const time_t expected_time = time(0);
+
+    TaskId task1 = task_manager.Create(Task::Create("title",
+                                                    Task::Priority::MEDIUM,
+                                                    time(0)));
+    // Act
+    task_manager.Edit(task1,
+                      Task::Create(expected_title, expected_priority, expected_time));
+    std::pair<TaskId, Task> actual = task_manager.Show()[0];
+    // Assert
+    EXPECT_TRUE(task1 == actual.first);
+    EXPECT_EQ(expected_title, actual.second.GetTitle());
+    EXPECT_EQ(expected_priority, actual.second.GetPriority());
+    EXPECT_EQ(expected_time, actual.second.GetDueTime());
 }
