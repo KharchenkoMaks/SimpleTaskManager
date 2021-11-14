@@ -16,14 +16,20 @@ public:
         LOW,
         NONE
     };
-
+public:
     std::string to_string();
     static Task Create(std::string title, Priority priority, time_t due_to);
+public:
+    // Getters
+    std::string GetTitle();
+    Task::Priority GetPriority();
+    time_t GetDueTime();
+private:
+    Task(std::string title, Priority priority, time_t due_to);
 private:
     std::string title_;
     Priority priority_;
     time_t due_to_;
-    Task(std::string title, Priority priority, time_t due_to);
 };
 
 

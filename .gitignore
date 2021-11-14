@@ -1,7 +1,9 @@
 #CLion
 .idea/
 cmake-build-debug/
+Cmake-build-debug-coverage/
 .DS_Store
+tests/lib/
 
 ### C++ template
 # Compiled Object files
