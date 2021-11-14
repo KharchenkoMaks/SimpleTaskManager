@@ -92,3 +92,24 @@ TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
     EXPECT_EQ(actual_task.GetPriority(), expected_priority);
     EXPECT_EQ(actual_task.GetDueTime(), expected_time);
 }
+
+// Giving unused TaskId to Edit() method
+// Should throw std::invalid_argument
+TEST_F(TaskManagerTest, TryEditingNonExistentTask_ShouldThrowInvalidArgument){
+    // Arrange
+    TaskManager task_manager;
+    TaskId task_id = TaskId::Create(5);
+    Task task = Task::Create("title", Task::Priority::NONE, time(0));
+    // Act & Assert
+    EXPECT_THROW(task_manager.Edit(task_id, task), std::invalid_argument);
+}
+
+// Giving unused TaskId to Delete method
+// Should throw std::invalid argument
+TEST_F(TaskManagerTest, TryDeletingNonExistentTask_ShouldThrowInvalidArgument){
+    // Arrange
+    TaskManager task_manager;
+    TaskId task_id = TaskId::Create(5);
+    // Act & Assert
+    EXPECT_THROW(task_manager.Delete(task_id), std::invalid_argument);
+}
