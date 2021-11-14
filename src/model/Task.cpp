@@ -4,12 +4,14 @@
 
 #include "Task.h"
 
-Task Task::Create(std::string title, Priority priority, time_t due_to) {
+Task Task::Create(const std::string& title,
+                  const Priority priority, const time_t due_to) {
     Task task(title, priority, due_to);
     return task;
 }
 
-Task::Task(std::string title, Priority priority, time_t due_to) {
+Task::Task(const std::string& title,
+           const Priority priority, const time_t due_to) {
     if (title.length() == 0){
         throw std::invalid_argument("Task title was empty.");
     }
@@ -19,7 +21,7 @@ Task::Task(std::string title, Priority priority, time_t due_to) {
 }
 
 std::string Task::to_string() {
-    std::string priority_string = "";
+    std::string priority_string;
     switch (priority_) {
         case Task::Priority::HIGH:{
             priority_string = "High";
