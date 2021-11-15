@@ -11,7 +11,9 @@ class TaskId {
 public:
     static TaskId Create(int id);
     static TaskId Create(const std::string& id);
+public:
     int GetId();
+
     bool operator== (const TaskId& t) const;
     bool operator< (const TaskId& t) const;
 private:
