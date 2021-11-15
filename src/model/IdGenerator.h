@@ -11,6 +11,7 @@ class IdGenerator{
 public:
     IdGenerator();
     explicit IdGenerator(int last_id);
+public:
     TaskId CreateNewTaskId();
 private:
     int last_id_;
