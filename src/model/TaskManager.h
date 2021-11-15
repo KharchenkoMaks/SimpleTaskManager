@@ -19,7 +19,9 @@ public:
     void Edit(const TaskId& id, const Task& t);
     void Delete(const TaskId& id);
     void Complete(const TaskId& id);
+
     std::vector<std::pair<TaskId, Task>> Show();
+public:
     TaskManager();
 private:
     std::map<TaskId, Task> tasks_;
