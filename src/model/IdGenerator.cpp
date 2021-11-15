@@ -9,7 +9,7 @@ IdGenerator::IdGenerator() {
 }
 
 
-IdGenerator::IdGenerator(int last_id) {
+IdGenerator::IdGenerator(const int last_id) {
     if (last_id < 0){
         throw std::invalid_argument("last_id was < 0");
     }
