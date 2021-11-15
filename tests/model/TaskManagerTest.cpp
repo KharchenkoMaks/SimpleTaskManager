@@ -3,8 +3,8 @@
 //
 
 #include "gtest/gtest.h"
-#include "../../src/model/TaskManager.h"
-#include "../../src/model/TaskId.h"
+#include "TaskManager.h"
+#include "TaskId.h"
 
 #include <ctime>
 #include <string>

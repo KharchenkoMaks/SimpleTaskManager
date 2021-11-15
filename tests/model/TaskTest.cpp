@@ -3,7 +3,7 @@
 //
 
 #include "gtest/gtest.h"
-#include "../../src/model/Task.h"
+#include "Task.h"
 
 #include <ctime>
 #include <vector>
