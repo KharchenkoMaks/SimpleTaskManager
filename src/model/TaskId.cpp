@@ -4,7 +4,7 @@
 
 #include "TaskId.h"
 
-TaskId::TaskId(int id) {
+TaskId::TaskId(const int id) {
     if (id >= 0){
         this->id_ = id;
     } else{
@@ -12,7 +12,7 @@ TaskId::TaskId(int id) {
     }
 }
 
-TaskId TaskId::Create(int id) {
+TaskId TaskId::Create(const int id) {
     return TaskId(id);
 }
 
