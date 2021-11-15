@@ -15,10 +15,10 @@
 
 class TaskManager {
 public:
-    TaskId Create(Task t);
-    void Edit(TaskId id, Task t);
-    void Delete(TaskId id);
-    void Complete(TaskId id);
+    TaskId Create(const Task& t);
+    void Edit(const TaskId& id, const Task& t);
+    void Delete(const TaskId& id);
+    void Complete(const TaskId& id);
     std::vector<std::pair<TaskId, Task>> Show();
     TaskManager();
 private:
