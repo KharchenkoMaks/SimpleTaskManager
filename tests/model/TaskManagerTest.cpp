@@ -3,13 +3,21 @@
 //
 
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
+
 #include "TaskManager.h"
+#include "IdGenerator.h"
 #include "TaskId.h"
 
 #include <ctime>
 #include <string>
 #include <vector>
 #include <utility>
+
+class MockIdGenerator : IdGenerator{
+public:
+    MOCK_METHOD(TaskId, CreateNewTaskId, (), (override));
+};
 
 class TaskManagerTest : public ::testing::Test{
 
@@ -32,6 +40,8 @@ TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
 
     std::vector<std::pair<TaskId, Task>> tasks = task_manager.Show();
     // Assert
+    // Check size of task vector equals 2
+    EXPECT_EQ(tasks.size(), 2);
     // Check equality of task1
     EXPECT_TRUE(tasks[0].first == task1);
     EXPECT_EQ(tasks[0].second.GetTitle(), expected_title[0]);
