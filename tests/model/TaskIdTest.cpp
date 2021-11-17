@@ -3,7 +3,7 @@
 //
 
 #include "gtest/gtest.h"
-#include "../../src/model/TaskId.h"
+#include "TaskId.h"
 
 class TaskIdTest : public ::testing::Test{
 protected:

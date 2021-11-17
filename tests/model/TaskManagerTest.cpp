@@ -3,13 +3,23 @@
 //
 
 #include "gtest/gtest.h"
-#include "../../src/model/TaskManager.h"
-#include "../../src/model/TaskId.h"
+#include "gmock/gmock.h"
+
+#include "TaskManager.h"
+#include "IdGenerator.h"
+#include "TaskId.h"
 
 #include <ctime>
 #include <string>
 #include <vector>
 #include <utility>
+
+using ::testing::Return;
+
+class MockIdGenerator : public IdGenerator{
+public:
+    MOCK_METHOD(TaskId, CreateNewTaskId, (), (override));
+};
 
 class TaskManagerTest : public ::testing::Test{
 
@@ -19,7 +29,14 @@ class TaskManagerTest : public ::testing::Test{
 // Should return right tasks in Show() method
 TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
     // Arrange
-    TaskManager task_manager;
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+        .Times(2)
+        .WillOnce(Return(TaskId::Create(1)))
+        .WillOnce(Return(TaskId::Create(2)));
+
+    TaskManager task_manager(std::move(gen));
+
     const time_t expected_time = time(0);
     const std::string expected_title[] = { "task1", "task2" };
     const Task::Priority expected_priority[] =
@@ -32,6 +49,8 @@ TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
 
     std::vector<std::pair<TaskId, Task>> tasks = task_manager.Show();
     // Assert
+    // Check size of task vector equals 2
+    EXPECT_EQ(tasks.size(), 2);
     // Check equality of task1
     EXPECT_TRUE(tasks[0].first == task1);
     EXPECT_EQ(tasks[0].second.GetTitle(), expected_title[0]);
@@ -48,7 +67,12 @@ TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
 // Should return edited task
 TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
     // Arrange
-    TaskManager task_manager;
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+        .Times(1)
+        .WillOnce(Return(TaskId::Create(0)));
+
+    TaskManager task_manager(std::move(gen));
     const std::string expected_title = "edited task";
     const Task::Priority expected_priority = Task::Priority::HIGH;
     const time_t expected_time = time(0);
@@ -72,7 +96,13 @@ TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
 // Show method should return only second task
 TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
     // Arrange
-    TaskManager task_manager;
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+        .Times(2)
+        .WillOnce(Return(TaskId::Create(1)))
+        .WillOnce(Return(TaskId::Create(10)));
+
+    TaskManager task_manager(std::move(gen));
     const std::string expected_title = "second task";
     const Task::Priority expected_priority = Task::Priority::NONE;
     const time_t expected_time = time(0);
@@ -97,7 +127,11 @@ TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
 // Should throw std::invalid_argument
 TEST_F(TaskManagerTest, TryEditingNonExistentTask_ShouldThrowInvalidArgument){
     // Arrange
-    TaskManager task_manager;
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+        .Times(0);
+
+    TaskManager task_manager(std::move(gen));
     TaskId task_id = TaskId::Create(5);
     Task task = Task::Create("title", Task::Priority::NONE, time(0));
     // Act & Assert
@@ -108,7 +142,11 @@ TEST_F(TaskManagerTest, TryEditingNonExistentTask_ShouldThrowInvalidArgument){
 // Should throw std::invalid argument
 TEST_F(TaskManagerTest, TryDeletingNonExistentTask_ShouldThrowInvalidArgument){
     // Arrange
-    TaskManager task_manager;
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+        .Times(0);
+
+    TaskManager task_manager(std::move(gen));
     TaskId task_id = TaskId::Create(5);
     // Act & Assert
     EXPECT_THROW(task_manager.Delete(task_id), std::invalid_argument);

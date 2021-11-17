@@ -12,18 +12,21 @@
 #include <map>
 #include <vector>
 #include <utility>
+#include <memory>
 
 class TaskManager {
 public:
-    TaskId Create(Task t);
-    void Edit(TaskId id, Task t);
-    void Delete(TaskId id);
-    void Complete(TaskId id);
+    TaskId Create(const Task& t);
+    void Edit(const TaskId& id, const Task& t);
+    void Delete(const TaskId& id);
+    void Complete(const TaskId& id);
+
     std::vector<std::pair<TaskId, Task>> Show();
-    TaskManager();
+public:
+    explicit TaskManager(std::unique_ptr<IdGenerator> generator);
 private:
     std::map<TaskId, Task> tasks_;
-    IdGenerator generator_;
+    std::unique_ptr<IdGenerator> generator_;
 };
 
 

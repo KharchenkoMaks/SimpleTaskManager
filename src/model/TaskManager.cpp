@@ -4,17 +4,18 @@
 
 #include "TaskManager.h"
 
-TaskManager::TaskManager() {
-    generator_ = IdGenerator();
+TaskManager::TaskManager(std::unique_ptr<IdGenerator> generator)
+    : generator_(std::move(generator)) {
+
 }
 
-TaskId TaskManager::Create(Task t) {
-    TaskId task_id = generator_.CreateNewTaskId();
+TaskId TaskManager::Create(const Task& t) {
+    TaskId task_id = generator_->CreateNewTaskId();
     tasks_.insert({ task_id, t });
     return task_id;
 }
 
-void TaskManager::Edit(TaskId id, Task t) {
+void TaskManager::Edit(const TaskId& id, const Task& t) {
     if (tasks_.find(id) != tasks_.end()) {
         tasks_.insert_or_assign(id, t);
     } else{
@@ -22,7 +23,7 @@ void TaskManager::Edit(TaskId id, Task t) {
     }
 }
 
-void TaskManager::Delete(TaskId id) {
+void TaskManager::Delete(const TaskId& id) {
     if (tasks_.find(id) != tasks_.end()) {
         tasks_.erase(id);
     } else{
@@ -30,7 +31,7 @@ void TaskManager::Delete(TaskId id) {
     }
 }
 
-void TaskManager::Complete(TaskId id) {
+void TaskManager::Complete(const TaskId& id) {
     this->Delete(id);
 }
 
