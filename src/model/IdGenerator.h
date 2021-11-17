@@ -13,7 +13,7 @@ public:
     explicit IdGenerator(int last_id);
 public:
     virtual TaskId CreateNewTaskId();
-    virtual ~IdGenerator() = default;
+    virtual ~IdGenerator();
 private:
     int last_id_;
 };
