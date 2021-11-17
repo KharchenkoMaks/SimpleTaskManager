@@ -4,8 +4,9 @@
 
 #include "TaskManager.h"
 
-TaskManager::TaskManager(std::unique_ptr<IdGenerator> generator) {
-    generator_ = std::move(generator);
+TaskManager::TaskManager(std::unique_ptr<IdGenerator> generator)
+    : generator_(std::move(generator)) {
+
 }
 
 TaskId TaskManager::Create(const Task& t) {
