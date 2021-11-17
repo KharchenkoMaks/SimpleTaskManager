@@ -12,6 +12,7 @@
 #include <map>
 #include <vector>
 #include <utility>
+#include <memory>
 
 class TaskManager {
 public:
@@ -22,10 +23,10 @@ public:
 
     std::vector<std::pair<TaskId, Task>> Show();
 public:
-    TaskManager();
+    explicit TaskManager(std::unique_ptr<IdGenerator> generator);
 private:
     std::map<TaskId, Task> tasks_;
-    IdGenerator generator_;
+    std::unique_ptr<IdGenerator> generator_;
 };
 
 
