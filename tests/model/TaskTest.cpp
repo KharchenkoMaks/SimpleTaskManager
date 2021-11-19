@@ -104,3 +104,20 @@ TEST_F(TaskTest, TryToCompleteCompletedTask_ShouldThrowRuntimeError){
     // Act & Assert
     EXPECT_THROW(task.Complete(), std::runtime_error);
 }
+
+TEST_F(TaskTest, shouldReturnRightTaskLabel){
+    // Arrange
+    std::string expected1 = "";
+    std::string expected2 = "some label";
+
+    Task task_without_label =
+            Task::Create("title", Task::Priority::HIGH, time(0));
+    Task task_with_label =
+            Task::Create("title", Task::Priority::HIGH, time(0), expected2);
+    // Act
+    std::string acutal1 = task_without_label.GetLabel();
+    std::string actual2 = task_with_label.GetLabel();
+    // Asset
+    EXPECT_EQ(expected1, acutal1);
+    EXPECT_EQ(expected2, actual2);
+}
