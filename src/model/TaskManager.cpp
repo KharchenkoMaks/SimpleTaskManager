@@ -32,7 +32,20 @@ void TaskManager::Delete(const TaskId& id) {
 }
 
 void TaskManager::Complete(const TaskId& id) {
-    this->Delete(id);
+    auto task_iterator = tasks_.find(id);
+
+    if (task_iterator != tasks_.end()) {
+        Task previous_task = task_iterator->second;
+        Task completed_task = Task::Create(previous_task.GetTitle(),
+                                           previous_task.GetPriority(),
+                                           previous_task.GetDueTime(),
+                                           true,
+                                           previous_task.GetLabel());
+
+        tasks_.insert_or_assign(id, completed_task);
+    } else{
+        throw std::invalid_argument("No task with such id.");
+    }
 }
 
 std::vector<std::pair<TaskId, Task>> TaskManager::Show() {
