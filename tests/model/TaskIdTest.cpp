@@ -61,3 +61,14 @@ TEST_F(TaskIdTest, TaskIdOperatorLess_ComparesObjectsCorrectly){
     EXPECT_FALSE(task1 < task2);
     EXPECT_FALSE(task2 < task1);
 }
+
+// NullTaskId should be -1
+TEST_F(TaskIdTest, NullTaskId_ShouldReturnIncorrectTaskId){
+    // Arrange & Act
+    TaskId task_id1 = TaskId::NullTaskId();
+    TaskId task_id2 = TaskId::NullTaskId();
+    // Assert
+    ASSERT_EQ(task_id1.GetId(), -1);
+    ASSERT_EQ(task_id2.GetId(), -1);
+    EXPECT_EQ(task_id1, task_id2);
+}
