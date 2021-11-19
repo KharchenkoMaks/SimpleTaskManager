@@ -152,6 +152,9 @@ TEST_F(TaskManagerTest, TryDeletingNonExistentTask_ShouldThrowInvalidArgument){
     EXPECT_THROW(task_manager.Delete(task_id), std::invalid_argument);
 }
 
+// Creating three tasks
+// Completing first and third task
+// First and third tasks should be completed
 TEST_F(TaskManagerTest, TryCompletingDifferentTasks_ShouldCompleteThoseTasks){
     // Arrange
     const time_t some_time = time(0);
@@ -186,6 +189,8 @@ TEST_F(TaskManagerTest, TryCompletingDifferentTasks_ShouldCompleteThoseTasks){
     EXPECT_EQ(expected_not_completed_task, actual_not_completed_task);
 }
 
+// Trying to complete non-existent TaskId
+// Should throw std::invalid_argument
 TEST_F(TaskManagerTest, TryCompletingNonExistentTask_ShouldThrowInvalidArgument){
     // Arrange
     std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);

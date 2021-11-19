@@ -12,6 +12,8 @@ class TaskTest : public ::testing::Test {
 
 };
 
+// Creating task with some parameters
+// All parameters should be correct
 TEST_F(TaskTest, NewTaskParametersShouldBeCorrect){
     // Arrange
     const std::string expected_title = "title";
@@ -110,6 +112,8 @@ TEST_F(TaskTest, newTaskShouldBeUncompleted){
     EXPECT_FALSE(task.IsCompleted());
 }
 
+// Creating task with task label
+// Label should be correct
 TEST_F(TaskTest, shouldReturnRightTaskLabel){
     // Arrange
     std::string expected1 = "";
@@ -127,6 +131,8 @@ TEST_F(TaskTest, shouldReturnRightTaskLabel){
     EXPECT_EQ(expected2, actual2);
 }
 
+// Creating two equal tasks
+// operator== should return true for those two
 TEST_F(TaskTest, OperatorEqualsShouldReturnTrueForEqualTasks){
     // Arrange
     const time_t some_time = time(0);
@@ -137,6 +143,8 @@ TEST_F(TaskTest, OperatorEqualsShouldReturnTrueForEqualTasks){
     EXPECT_TRUE(task2 == task1);
 }
 
+// Creating different tasks
+// operator== should return false when comparing them
 TEST_F(TaskTest, OperatorEqualsShouldReturnFalseForNotEqualTasks){
     // Arrange
     const time_t some_time = time(0);
