@@ -7,7 +7,7 @@
 Task Task::Create(const std::string& title,
                   const Priority priority,
                   const time_t due_to,
-                  const std::string& label = "") {
+                  const std::string& label) {
     Task task(title, priority, due_to, label);
     return task;
 }
@@ -15,7 +15,7 @@ Task Task::Create(const std::string& title,
 Task::Task(const std::string& title,
            const Priority priority,
            const time_t due_to,
-           const std::string& label = "") {
+           const std::string& label) {
     if (title.length() == 0){
         throw std::invalid_argument("Task title was empty.");
     }

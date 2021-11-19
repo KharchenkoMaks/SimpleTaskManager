@@ -20,7 +20,7 @@ public:
     static Task Create(const std::string& title,
                        Priority priority,
                        time_t due_to,
-                       const std::string& label);
+                       const std::string& label = std::string(""));
 public:
     // throws std::runtime_eror if task is already completed
     void Complete();
@@ -35,7 +35,7 @@ private:
     Task(const std::string& title,
          Priority priority,
          time_t due_to,
-         const std::string& label);
+         const std::string& label = std::string(""));
 private:
     std::string title_;
     Priority priority_;
