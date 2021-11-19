@@ -18,7 +18,7 @@ Task::Task(const std::string& title,
     this->title_ = title;
     this->priority_ = priority;
     this->due_to_ = due_to;
-    this->is_completed_ = false;
+    this->completed_ = false;
 }
 
 std::string Task::to_string() {
@@ -58,5 +58,13 @@ time_t Task::GetDueTime() {
 }
 
 bool Task::IsCompleted() {
-    return is_completed_;
+    return completed_;
+}
+
+void Task::Complete() {
+    if (completed_){
+        throw std::runtime_error("This task was already completed.");
+    } else{
+        completed_ = true;
+    }
 }

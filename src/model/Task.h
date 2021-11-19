@@ -20,6 +20,7 @@ public:
     static Task Create(const std::string& title,
                        Priority priority, time_t due_to);
 public:
+    void Complete();
     std::string to_string();
     // Getters
     std::string GetTitle();
@@ -32,7 +33,7 @@ private:
     std::string title_;
     Priority priority_;
     time_t due_to_;
-    bool is_completed_;
+    bool completed_;
 };
 
 
