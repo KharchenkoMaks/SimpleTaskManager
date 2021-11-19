@@ -5,19 +5,19 @@
 #include "TaskId.h"
 
 TaskId::TaskId(const int id) {
+    this->id_ = id;
+}
+
+TaskId TaskId::Create(const int id) {
     if (id >= 0){
-        this->id_ = id;
+        return TaskId(id);
     } else{
         throw std::invalid_argument("Id was < 0");
     }
 }
 
-TaskId TaskId::Create(const int id) {
-    return TaskId(id);
-}
-
 TaskId TaskId::Create(const std::string& id) {
-    return TaskId(std::stoi(id));
+    return TaskId::Create(std::stoi(id));
 }
 
 int TaskId::GetId() {
