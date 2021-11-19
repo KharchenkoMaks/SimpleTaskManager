@@ -20,6 +20,7 @@ public:
     static Task Create(const std::string& title,
                        Priority priority, time_t due_to);
 public:
+    // throws std::runtime_eror if task is already completed
     void Complete();
     std::string to_string();
     // Getters
