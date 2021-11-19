@@ -31,3 +31,7 @@ bool TaskId::operator==(const TaskId& t) const {
 bool TaskId::operator<(const TaskId& t) const {
     return this->id_ < t.id_;
 }
+
+TaskId TaskId::NullTaskId() {
+    return TaskId(-1);
+}
