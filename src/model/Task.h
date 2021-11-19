@@ -5,6 +5,8 @@
 #ifndef SIMPLETASKMANAGER_TASK_H
 #define SIMPLETASKMANAGER_TASK_H
 
+#include "TaskId.h"
+
 #include <string>
 #include <ctime>
 
@@ -31,6 +33,8 @@ public:
     time_t GetDueTime();
     bool IsCompleted();
     std::string GetLabel();
+
+    virtual TaskId GetParentTaskId();
 public:
     bool operator== (const Task& task) const;
 private:

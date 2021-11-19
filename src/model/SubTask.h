@@ -5,8 +5,9 @@
 #ifndef SIMPLETASKMANAGER_SUBTASK_H
 #define SIMPLETASKMANAGER_SUBTASK_H
 
+#include "Task.h"
 
-class SubTask {
+class SubTask : public Task {
 
 };
 

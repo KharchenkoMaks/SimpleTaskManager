@@ -79,3 +79,7 @@ bool Task::operator==(const Task& task) const {
         this->completed_ == task.completed_ &&
         this->label_ == task.label_;
 }
+
+TaskId Task::GetParentTaskId() {
+    return TaskId::NullTaskId();
+}
