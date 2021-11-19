@@ -20,10 +20,10 @@ public:
     static Task Create(const std::string& title,
                        Priority priority,
                        time_t due_to,
+                       bool completed = false,
                        const std::string& label = std::string(""));
 public:
     // throws std::runtime_eror if task is already completed
-    void Complete();
     std::string to_string();
 
     std::string GetTitle();
@@ -31,10 +31,13 @@ public:
     time_t GetDueTime();
     bool IsCompleted();
     std::string GetLabel();
+public:
+    bool operator== (const Task& task) const;
 private:
     Task(const std::string& title,
          Priority priority,
          time_t due_to,
+         bool completed = false,
          const std::string& label = std::string(""));
 private:
     std::string title_;

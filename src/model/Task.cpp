@@ -7,14 +7,16 @@
 Task Task::Create(const std::string& title,
                   const Priority priority,
                   const time_t due_to,
+                  const bool completed,
                   const std::string& label) {
-    Task task(title, priority, due_to, label);
+    Task task(title, priority, due_to, completed, label);
     return task;
 }
 
 Task::Task(const std::string& title,
            const Priority priority,
            const time_t due_to,
+           const bool completed,
            const std::string& label) {
     if (title.length() == 0){
         throw std::invalid_argument("Task title was empty.");
@@ -23,7 +25,7 @@ Task::Task(const std::string& title,
     this->priority_ = priority;
     this->due_to_ = due_to;
     this->label_ = label;
-    this->completed_ = false;
+    this->completed_ = completed;
 }
 
 std::string Task::to_string() {
@@ -66,14 +68,14 @@ bool Task::IsCompleted() {
     return completed_;
 }
 
-void Task::Complete() {
-    if (completed_){
-        throw std::runtime_error("This task was already completed.");
-    } else{
-        completed_ = true;
-    }
-}
-
 std::string Task::GetLabel() {
     return label_;
+}
+
+bool Task::operator==(const Task& task) const {
+    return this->title_ == task.title_ &&
+        this->priority_ == task.priority_ &&
+        this->due_to_ == task.due_to_ &&
+        this->completed_ == task.completed_ &&
+        this->label_ == task.label_;
 }
