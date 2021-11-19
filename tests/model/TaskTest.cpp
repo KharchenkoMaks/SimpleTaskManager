@@ -73,3 +73,34 @@ TEST_F(TaskTest, usingToStringTaskMethod_shouldReturnCorrectString){
         EXPECT_EQ(expected, actual);
     }
 }
+
+// Creating task and completing it
+// Task should be completed
+TEST_F(TaskTest, shouldCompleteUncompletedTask){
+    // Arrange
+    Task task = Task::Create("title", Task::Priority::HIGH, time(0));
+    // Act
+    task.Complete();
+    bool actual = task.IsCompleted();
+    // Assert
+    EXPECT_TRUE(actual);
+}
+
+// Creating new task
+// It should be uncompleted
+TEST_F(TaskTest, newTaskShouldBeUncompleted){
+    // Arrange
+    Task task = Task::Create("title", Task::Priority::HIGH, time(0));
+    // Assert
+    EXPECT_FALSE(task.IsCompleted());
+}
+
+// Creating new task and completing it twice
+// Should throw std::runtime_error
+TEST_F(TaskTest, TryToCompleteCompletedTask_ShouldThrowRuntimeError){
+    // Arrange
+    Task task = Task::Create("title", Task::Priority::HIGH, time(0));
+    task.Complete();
+    // Act & Assert
+    EXPECT_THROW(task.Complete(), std::runtime_error);
+}
