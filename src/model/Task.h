@@ -18,23 +18,30 @@ public:
     };
 public:
     static Task Create(const std::string& title,
-                       Priority priority, time_t due_to);
+                       Priority priority,
+                       time_t due_to,
+                       const std::string& label);
 public:
     // throws std::runtime_eror if task is already completed
     void Complete();
     std::string to_string();
-    // Getters
+
     std::string GetTitle();
     Task::Priority GetPriority();
     time_t GetDueTime();
     bool IsCompleted();
+    std::string GetLabel();
 private:
-    Task(const std::string& title, Priority priority, time_t due_to);
+    Task(const std::string& title,
+         Priority priority,
+         time_t due_to,
+         const std::string& label);
 private:
     std::string title_;
     Priority priority_;
     time_t due_to_;
     bool completed_;
+    std::string label_;
 };
 
 

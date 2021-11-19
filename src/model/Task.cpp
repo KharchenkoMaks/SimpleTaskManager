@@ -5,19 +5,24 @@
 #include "Task.h"
 
 Task Task::Create(const std::string& title,
-                  const Priority priority, const time_t due_to) {
-    Task task(title, priority, due_to);
+                  const Priority priority,
+                  const time_t due_to,
+                  const std::string& label = "") {
+    Task task(title, priority, due_to, label);
     return task;
 }
 
 Task::Task(const std::string& title,
-           const Priority priority, const time_t due_to) {
+           const Priority priority,
+           const time_t due_to,
+           const std::string& label) {
     if (title.length() == 0){
         throw std::invalid_argument("Task title was empty.");
     }
     this->title_ = title;
     this->priority_ = priority;
     this->due_to_ = due_to;
+    this->label_ = label;
     this->completed_ = false;
 }
 
@@ -67,4 +72,8 @@ void Task::Complete() {
     } else{
         completed_ = true;
     }
+}
+
+std::string Task::GetLabel() {
+    return label_;
 }
