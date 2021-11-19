@@ -151,3 +151,48 @@ TEST_F(TaskManagerTest, TryDeletingNonExistentTask_ShouldThrowInvalidArgument){
     // Act & Assert
     EXPECT_THROW(task_manager.Delete(task_id), std::invalid_argument);
 }
+
+TEST_F(TaskManagerTest, TryCompletingDifferentTasks_ShouldCompleteThoseTasks){
+    // Arrange
+    const time_t some_time = time(0);
+
+    TaskManager task_manager(std::make_unique<IdGenerator>());
+
+    Task expected_first_completed_task =
+            Task::Create("task1", Task::Priority::NONE, some_time, true);
+    Task expected_not_completed_task =
+            Task::Create("task2", Task::Priority::NONE, time(0), false);
+    Task expected_second_completed_task =
+            Task::Create("task3", Task::Priority::NONE, some_time, true);
+
+    TaskId task1 = task_manager.Create(
+            Task::Create("task1", Task::Priority::NONE, time(0)));
+    TaskId task2 = task_manager.Create(
+            Task::Create("task2", Task::Priority::NONE, time(0)));
+    TaskId task3 = task_manager.Create(
+            Task::Create("task3", Task::Priority::NONE, time(0)));
+    // Act
+    task_manager.Complete(task1);
+    task_manager.Complete(task3);
+    std::vector<std::pair<TaskId, Task>> tasks = task_manager.Show();
+    Task actual_first_completed_task = tasks[0].second;
+    Task actual_second_completed_task = tasks[2].second;
+    Task actual_not_completed_task = tasks[1].second;
+    // Assert
+    ASSERT_EQ(tasks.size(), 3);
+
+    EXPECT_EQ(expected_first_completed_task, actual_first_completed_task);
+    EXPECT_EQ(expected_second_completed_task, actual_second_completed_task);
+    EXPECT_EQ(expected_not_completed_task, actual_not_completed_task);
+}
+
+TEST_F(TaskManagerTest, TryCompletingNonExistentTask_ShouldThrowInvalidArgument){
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+            .Times(0);
+
+    TaskManager task_manager(std::move(gen));
+    // Act & Assert
+    EXPECT_THROW(task_manager.Complete(TaskId::Create(5)), std::invalid_argument);
+}
