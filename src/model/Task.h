@@ -25,12 +25,14 @@ public:
     std::string GetTitle();
     Task::Priority GetPriority();
     time_t GetDueTime();
+    bool IsCompleted();
 private:
     Task(const std::string& title, Priority priority, time_t due_to);
 private:
     std::string title_;
     Priority priority_;
     time_t due_to_;
+    bool is_completed_;
 };
 
 

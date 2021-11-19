@@ -18,6 +18,7 @@ Task::Task(const std::string& title,
     this->title_ = title;
     this->priority_ = priority;
     this->due_to_ = due_to;
+    this->is_completed_ = false;
 }
 
 std::string Task::to_string() {
@@ -54,4 +55,8 @@ Task::Priority Task::GetPriority() {
 
 time_t Task::GetDueTime() {
     return this->due_to_;
+}
+
+bool Task::IsCompleted() {
+    return is_completed_;
 }
