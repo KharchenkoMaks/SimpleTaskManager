@@ -17,10 +17,10 @@ public:
         NONE
     };
 public:
-    std::string to_string();
     static Task Create(const std::string& title,
                        Priority priority, time_t due_to);
 public:
+    std::string to_string();
     // Getters
     std::string GetTitle();
     Task::Priority GetPriority();
