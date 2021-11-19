@@ -12,7 +12,7 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 include_directories(src/model/)
 
-add_executable(SimpleTaskManager src/main.cpp src/model/Task.cpp src/model/Task.h src/model/TaskManager.cpp src/model/TaskManager.h src/model/TaskId.cpp src/model/TaskId.h src/model/IdGenerator.cpp src/model/IdGenerator.h)
+add_executable(SimpleTaskManager src/main.cpp src/model/Task.cpp src/model/Task.h src/model/TaskManager.cpp src/model/TaskManager.h src/model/TaskId.cpp src/model/TaskId.h src/model/IdGenerator.cpp src/model/IdGenerator.h src/model/SubTask.cpp src/model/SubTask.h)
 
 add_executable(SimpleTaskManager_test src/model/Task.cpp src/model/Task.h src/model/TaskId.cpp src/model/TaskId.h src/model/IdGenerator.cpp src/model/IdGenerator.h src/model/TaskManager.cpp src/model/TaskManager.h tests/model/TaskTest.cpp tests/model/TaskIdTest.cpp tests/model/IdGeneratorTest.cpp tests/model/TaskManagerTest.cpp)
 
