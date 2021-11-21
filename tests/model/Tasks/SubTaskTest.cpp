@@ -11,14 +11,16 @@ class SubTaskTest : public ::testing::Test {
 
 };
 
+// Creating two equal SubTasks
+// They should be equal
 TEST_F(SubTaskTest, CreatingTwoEqualSubTasks_AllParametersShouldBeRight){
     // Arrange
-    std::string expected_title = "title";
-    Task::Priority expected_priority = Task::Priority::MEDIUM;
-    time_t expected_due_time = time(0);
-    TaskId expected_parent = TaskId::Create(5);
-    bool expected_completion = true;
-    std::string expected_label = "some label";
+    const std::string expected_title = "title";
+    const Task::Priority expected_priority = Task::Priority::MEDIUM;
+    const time_t expected_due_time = time(0);
+    const TaskId expected_parent = TaskId::Create(5);
+    const bool expected_completion = true;
+    const std::string expected_label = "some label";
     // Act
     SubTask task1 = SubTask::Create(expected_title,
                                     expected_priority,
