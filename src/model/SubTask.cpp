@@ -5,7 +5,7 @@
 #include "SubTask.h"
 
 TaskId SubTask::GetParentTaskId() {
-    return Task::GetParentTaskId();
+    return parent_;
 }
 
 SubTask SubTask::Create(const std::string &title,
