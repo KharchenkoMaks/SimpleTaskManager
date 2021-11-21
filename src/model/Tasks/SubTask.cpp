@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 19.11.2021.
 //
 
-#include "SubTask.h"
+#include "Tasks/SubTask.h"
 
 TaskId SubTask::GetParentTaskId() {
     return parent_;
