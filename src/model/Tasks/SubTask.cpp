@@ -25,3 +25,12 @@ SubTask::SubTask(const std::string &title,
                  const std::string &label) : Task(title, priority, due_to, completed, label), parent_(parent) {
 
 }
+
+bool SubTask::operator==(const SubTask &task) const {
+    return this->title_ == task.title_ &&
+        this->priority_ == task.priority_ &&
+        this->due_to_ == task.due_to_ &&
+        this->completed_ == task.completed_ &&
+        this->label_ == task.label_ &&
+        this->parent_ == parent_;
+}

@@ -17,6 +17,8 @@ public:
                        const std::string& label = std::string(""));
 public:
     TaskId GetParentTaskId() override;
+public:
+    bool operator== (const SubTask& task) const;
 private:
     SubTask(const std::string& title,
          Priority priority,

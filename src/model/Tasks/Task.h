@@ -36,14 +36,14 @@ public:
 
     virtual TaskId GetParentTaskId();
 public:
-    bool operator== (const Task& task) const;
+    virtual bool operator== (const Task& task) const;
 protected:
     Task(const std::string& title,
          Priority priority,
          time_t due_to,
          bool completed = false,
          const std::string& label = std::string(""));
-private:
+protected:
     std::string title_;
     Priority priority_;
     time_t due_to_;
