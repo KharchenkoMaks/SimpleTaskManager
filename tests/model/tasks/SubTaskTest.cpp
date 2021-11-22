@@ -3,7 +3,7 @@
 //
 
 #include "gtest/gtest.h"
-#include "Tasks/SubTask.h"
+#include "tasks/SubTask.h"
 
 #include <ctime>
 
