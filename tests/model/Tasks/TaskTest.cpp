@@ -131,7 +131,7 @@ TEST_F(TaskTest, shouldReturnRightTaskLabel){
     EXPECT_EQ(expected2, actual2);
 }
 
-// Creating two equal tasks
+// Creating two equal Tasks
 // operator== should return true for those two
 TEST_F(TaskTest, OperatorEqualsShouldReturnTrueForEqualTasks){
     // Arrange
@@ -143,7 +143,7 @@ TEST_F(TaskTest, OperatorEqualsShouldReturnTrueForEqualTasks){
     EXPECT_TRUE(task2 == task1);
 }
 
-// Creating different tasks
+// Creating different Tasks
 // operator== should return false when comparing them
 TEST_F(TaskTest, OperatorEqualsShouldReturnFalseForNotEqualTasks){
     // Arrange

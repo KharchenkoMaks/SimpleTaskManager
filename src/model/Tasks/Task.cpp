@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 08.11.2021.
 //
 
-#include "Tasks/Task.h"
+#include "Task.h"
 
 Task Task::Create(const std::string& title,
                   const Priority priority,

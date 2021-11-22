@@ -25,8 +25,8 @@ class TaskManagerTest : public ::testing::Test{
 
 };
 
-// Creating two tasks in TaskManager
-// Should return right tasks in Show() method
+// Creating two Tasks in TaskManager
+// Should return right Tasks in Show() method
 TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
     // Arrange
     std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
@@ -91,7 +91,7 @@ TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
     EXPECT_EQ(expected_time, actual.second.GetDueTime());
 }
 
-// Creating two tasks in TaskManager
+// Creating two Tasks in TaskManager
 // Deleting first task
 // Show method should return only second task
 TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
@@ -152,9 +152,9 @@ TEST_F(TaskManagerTest, TryDeletingNonExistentTask_ShouldThrowInvalidArgument){
     EXPECT_THROW(task_manager.Delete(task_id), std::invalid_argument);
 }
 
-// Creating three tasks
+// Creating three Tasks
 // Completing first and third task
-// First and third tasks should be completed
+// First and third Tasks should be completed
 TEST_F(TaskManagerTest, TryCompletingDifferentTasks_ShouldCompleteThoseTasks){
     // Arrange
     const time_t some_time = time(0);
