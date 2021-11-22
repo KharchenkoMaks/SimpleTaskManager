@@ -18,6 +18,8 @@ public:
         LOW,
         NONE
     };
+
+    static std::string PriorityToString(Priority priority);
 public:
     static Task Create(const std::string& title,
                        Priority priority,

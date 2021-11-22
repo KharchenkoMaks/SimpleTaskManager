@@ -29,26 +29,7 @@ Task::Task(const std::string& title,
 }
 
 std::string Task::to_string() {
-    std::string priority_string;
-    switch (priority_) {
-        case Task::Priority::HIGH:{
-            priority_string = "High";
-            break;
-        }
-        case Task::Priority::MEDIUM:{
-            priority_string = "Medium";
-            break;
-        }
-        case Task::Priority::LOW:{
-            priority_string = "Low";
-            break;
-        }
-        case Task::Priority::NONE:{
-            priority_string = "None";
-            break;
-        }
-    }
-    return title_ + ", Priority: " + priority_string +
+    return title_ + ", Priority: " + PriorityToString(priority_) +
                     ", Due to: " + std::to_string(due_to_) + "\n";
 }
 
@@ -82,4 +63,27 @@ bool Task::operator==(const Task& task) const {
 
 TaskId Task::GetParentTaskId() {
     return TaskId::NullTaskId();
+}
+
+std::string Task::PriorityToString(Task::Priority priority) {
+    std::string priority_string;
+    switch (priority) {
+        case Task::Priority::HIGH:{
+            priority_string = "High";
+            break;
+        }
+        case Task::Priority::MEDIUM:{
+            priority_string = "Medium";
+            break;
+        }
+        case Task::Priority::LOW:{
+            priority_string = "Low";
+            break;
+        }
+        case Task::Priority::NONE:{
+            priority_string = "None";
+            break;
+        }
+    }
+    return priority_string;
 }
