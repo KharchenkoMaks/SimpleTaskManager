@@ -11,5 +11,12 @@ RootState::RootState(std::shared_ptr<ConsolePrinter> printer) : WizardStatePrint
 std::shared_ptr<IWizardState> RootState::Execute(std::shared_ptr<WizardContext> context) {
     printer_->Write("> ");
     std::string command = printer_->ReadLine();
-    return context->GetFactory()->CreateStateByCommand(command);
+    try {
+        std::shared_ptr<IWizardState> next_state =
+                context->GetFactory()->CreateStateByCommand(command);
+        return next_state;
+    } catch (std::invalid_argument){
+        printer_->WriteError("Unknown command! Use help.");
+        return context->GetFactory()->CreateRootState();
+    }
 }
