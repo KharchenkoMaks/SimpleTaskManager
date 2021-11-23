@@ -13,7 +13,8 @@ public:
     explicit WizardStatePrinter(const ConsolePrinter& printer);
     
     virtual ~WizardStatePrinter() = default;
-private:
+
+protected:
     ConsolePrinter printer_;
 };
 
