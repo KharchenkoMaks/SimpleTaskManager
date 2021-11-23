@@ -1,0 +1,14 @@
+//
+// Created by Maksym Kharchenko on 23.11.2021.
+//
+
+#ifndef SIMPLETASKMANAGER_CONSOLESTATEMACHINE_H
+#define SIMPLETASKMANAGER_CONSOLESTATEMACHINE_H
+
+
+class ConsoleStateMachine {
+
+};
+
+
+#endif //SIMPLETASKMANAGER_CONSOLESTATEMACHINE_H

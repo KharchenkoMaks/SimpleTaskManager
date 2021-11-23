@@ -1,0 +1,14 @@
+//
+// Created by Maksym Kharchenko on 23.11.2021.
+//
+
+#ifndef SIMPLETASKMANAGER_WIZARDCONTEXT_H
+#define SIMPLETASKMANAGER_WIZARDCONTEXT_H
+
+
+class WizardContext {
+
+};
+
+
+#endif //SIMPLETASKMANAGER_WIZARDCONTEXT_H
