@@ -9,8 +9,7 @@ RootState::RootState(std::shared_ptr<ConsolePrinter> printer) : WizardStatePrint
 }
 
 std::shared_ptr<IWizardState> RootState::Execute(std::shared_ptr<WizardContext> context) {
-    std::cout << ">";
-    std::string command = "";
-    std::cin >> command;
+    printer_->Write("> ");
+    std::string command = printer_->ReadLine();
     return context->GetFactory()->CreateStateByCommand(command);
 }
