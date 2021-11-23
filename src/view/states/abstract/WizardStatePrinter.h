@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_WIZARDSTATEPRINTER_H
 #define SIMPLETASKMANAGER_WIZARDSTATEPRINTER_H
 
-#include "IWizardState.h"
+#include "states/abstract/IWizardState.h"
 #include "printer/ConsolePrinter.h"
 
 class WizardStatePrinter : public IWizardState {

@@ -24,7 +24,7 @@ add_executable(SimpleTaskManager
         src/model/IdGenerator.cpp
         src/model/IdGenerator.h
         src/model/tasks/SubTask.cpp
-        src/model/tasks/SubTask.h src/view/ConsoleStateMachine.cpp src/view/ConsoleStateMachine.h src/view/WizardContext.cpp src/view/WizardContext.h src/view/states/IWizardState.h src/view/printer/ConsolePrinter.cpp src/view/printer/ConsolePrinter.h src/view/states/WizardStatePrinter.cpp src/view/states/WizardStatePrinter.h)
+        src/model/tasks/SubTask.h src/view/ConsoleStateMachine.cpp src/view/ConsoleStateMachine.h src/view/WizardContext.cpp src/view/WizardContext.h src/view/states/abstract/IWizardState.h src/view/printer/ConsolePrinter.cpp src/view/printer/ConsolePrinter.h src/view/states/abstract/WizardStatePrinter.cpp src/view/states/abstract/WizardStatePrinter.h)
 
 add_executable(SimpleTaskManager_test
         src/model/tasks/Task.cpp
