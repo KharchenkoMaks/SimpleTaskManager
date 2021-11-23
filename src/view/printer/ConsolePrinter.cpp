@@ -3,3 +3,11 @@
 //
 
 #include "ConsolePrinter.h"
+
+ConsolePrinter::ConsolePrinter() {
+
+}
+
+ConsolePrinter ConsolePrinter::Create() {
+    return ConsolePrinter();
+}

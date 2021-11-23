@@ -7,7 +7,10 @@
 
 
 class ConsolePrinter {
-
+public:
+    static ConsolePrinter Create();
+private:
+    ConsolePrinter();
 };
 
 
