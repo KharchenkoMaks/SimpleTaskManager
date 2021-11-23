@@ -8,7 +8,7 @@
 #include "abstract/WizardStatePrinter.h"
 #include "WizardContext.h"
 
-class RootState : WizardStatePrinter {
+class RootState : public WizardStatePrinter {
 public:
     std::shared_ptr<IWizardState> Execute(std::shared_ptr<WizardContext> context);
 public:

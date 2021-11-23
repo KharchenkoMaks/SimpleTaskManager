@@ -5,7 +5,7 @@
 #include "WizardStatesFactory.h"
 
 WizardStatesFactory::WizardStatesFactory() {
-    root_state_ = std::shared_ptr<RootState>(new RootState(ConsolePrinter::Create()));
+    root_state_ = std::make_shared<RootState>(ConsolePrinter::Create());
 }
 
 std::shared_ptr<RootState> WizardStatesFactory::CreateRootState() {
