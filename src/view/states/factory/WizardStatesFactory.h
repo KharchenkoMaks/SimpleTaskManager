@@ -14,6 +14,9 @@
 #include <memory>
 #include <string>
 
+class RootState;
+class HelpState;
+
 class WizardStatesFactory {
 public:
     WizardStatesFactory();

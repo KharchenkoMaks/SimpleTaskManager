@@ -5,9 +5,11 @@
 #ifndef SIMPLETASKMANAGER_WIZARDCONTEXT_H
 #define SIMPLETASKMANAGER_WIZARDCONTEXT_H
 
-#include "states/factory/WizardStatesFactory.h"
+// #include "states/factory/WizardStatesFactory.h"
 
 #include <memory>
+
+class WizardStatesFactory;
 
 class WizardContext {
 public:
