@@ -13,11 +13,16 @@ class WizardStatesFactory;
 
 class WizardContext {
 public:
-    WizardContext(std::shared_ptr<WizardStatesFactory> factory);
+    explicit WizardContext(std::shared_ptr<WizardStatesFactory> factory);
 public:
     std::shared_ptr<WizardStatesFactory> GetFactory();
+    bool IsWizardEnded();
+public:
+    void QuitWizard();
 private:
     std::shared_ptr<WizardStatesFactory> states_factory_;
+private:
+    bool wizard_quit_;
 };
 
 

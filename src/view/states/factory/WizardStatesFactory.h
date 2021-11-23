@@ -10,12 +10,14 @@
 
 #include "states/RootState.h"
 #include "states/HelpState.h"
+#include "states/QuitState.h"
 
 #include <memory>
 #include <string>
 
 class RootState;
 class HelpState;
+class QuitState;
 
 class WizardStatesFactory {
 public:
@@ -25,6 +27,7 @@ public:
 private:
     std::shared_ptr<RootState> root_state_;
     std::shared_ptr<HelpState> help_state_;
+    std::shared_ptr<QuitState> quit_state_;
 
     std::shared_ptr<ConsolePrinter> printer_;
 };
