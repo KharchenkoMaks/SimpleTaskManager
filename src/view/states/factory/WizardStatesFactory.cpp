@@ -27,7 +27,7 @@ std::shared_ptr<IWizardState> WizardStatesFactory::CreateStateByCommand(const st
     } else if (command == "show") {
         // show state
     } else if (command == "help") {
-        // help state
+        return help_state_;
     } else if (command == "quit") {
         // quit state
     } else {

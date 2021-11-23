@@ -9,6 +9,8 @@
 #include "WizardContext.h"
 #include "factory/WizardStatesFactory.h"
 
+#include <string>
+
 class RootState : public WizardStatePrinter {
 public:
     explicit RootState(std::shared_ptr<ConsolePrinter> printer);

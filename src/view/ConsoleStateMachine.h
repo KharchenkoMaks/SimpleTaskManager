@@ -7,6 +7,7 @@
 
 #include "WizardContext.h"
 #include "states/abstract/IWizardState.h"
+#include "states/factory/WizardStatesFactory.h"
 
 #include <memory>
 
