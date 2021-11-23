@@ -1,6 +1,9 @@
 #include <iostream>
 
+#include "ConsoleStateMachine.h"
+
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    ConsoleStateMachine state_machine;
+    state_machine.Run();
     return 0;
 }
