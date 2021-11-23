@@ -4,14 +4,6 @@
 
 #include "ConsolePrinter.h"
 
-ConsolePrinter::ConsolePrinter() {
-
-}
-
-ConsolePrinter ConsolePrinter::Create() {
-    return ConsolePrinter();
-}
-
 void ConsolePrinter::Write(const std::string &message) {
     std::cout << message;
 }

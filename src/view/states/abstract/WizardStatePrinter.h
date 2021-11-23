@@ -8,14 +8,16 @@
 #include "states/abstract/IWizardState.h"
 #include "printer/ConsolePrinter.h"
 
+#include <memory>
+
 class WizardStatePrinter : public IWizardState {
 public:
-    explicit WizardStatePrinter(const ConsolePrinter& printer);
+    explicit WizardStatePrinter(std::shared_ptr<ConsolePrinter> printer);
     
     virtual ~WizardStatePrinter() = default;
 
 protected:
-    ConsolePrinter printer_;
+   std::shared_ptr<ConsolePrinter> printer_;
 };
 
 

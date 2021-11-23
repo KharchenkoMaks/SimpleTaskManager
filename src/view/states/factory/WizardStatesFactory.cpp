@@ -5,8 +5,10 @@
 #include "WizardStatesFactory.h"
 
 WizardStatesFactory::WizardStatesFactory() {
-    root_state_ = std::make_shared<RootState>(ConsolePrinter::Create());
-    help_state_ = std::make_shared<HelpState>(ConsolePrinter::Create());
+    printer_ = std::make_shared<ConsolePrinter>();
+
+    root_state_ = std::make_shared<RootState>(printer_);
+    help_state_ = std::make_shared<HelpState>(printer_);
 }
 
 std::shared_ptr<RootState> WizardStatesFactory::CreateRootState() {

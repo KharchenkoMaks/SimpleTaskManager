@@ -11,9 +11,9 @@
 
 class RootState : public WizardStatePrinter {
 public:
-    std::shared_ptr<IWizardState> Execute(std::shared_ptr<WizardContext> context) override;
+    explicit RootState(std::shared_ptr<ConsolePrinter> printer);
 public:
-    explicit RootState(const ConsolePrinter& printer);
+    std::shared_ptr<IWizardState> Execute(std::shared_ptr<WizardContext> context) override;
 };
 
 

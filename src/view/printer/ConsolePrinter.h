@@ -10,13 +10,9 @@
 
 class ConsolePrinter {
 public:
-    static ConsolePrinter Create();
-public:
     void Write(const std::string& message);
     void WriteLine(const std::string& message);
     void WriteError(const std::string& message);
-private:
-    ConsolePrinter();
 };
 
 

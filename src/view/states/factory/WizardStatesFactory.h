@@ -22,6 +22,8 @@ public:
 private:
     std::shared_ptr<RootState> root_state_;
     std::shared_ptr<HelpState> help_state_;
+
+    std::shared_ptr<ConsolePrinter> printer_;
 };
 
 

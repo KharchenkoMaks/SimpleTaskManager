@@ -4,6 +4,7 @@
 
 #include "WizardStatePrinter.h"
 
-WizardStatePrinter::WizardStatePrinter(const ConsolePrinter &printer) : printer_(printer) {
+WizardStatePrinter::WizardStatePrinter(std::shared_ptr<ConsolePrinter> printer)
+    : printer_(printer) {
 
 }

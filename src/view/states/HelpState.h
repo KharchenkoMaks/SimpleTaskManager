@@ -14,7 +14,7 @@
 
 class HelpState : public WizardStatePrinter {
 public:
-    explicit HelpState(const ConsolePrinter& printer);
+    explicit HelpState(std::shared_ptr<ConsolePrinter> printer);
 public:
     std::shared_ptr<IWizardState> Execute(std::shared_ptr<WizardContext> context) override;
 };
