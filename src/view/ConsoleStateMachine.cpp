@@ -3,3 +3,10 @@
 //
 
 #include "ConsoleStateMachine.h"
+
+void ConsoleStateMachine::Run() {
+    while (true){
+        std::shared_ptr<IWizardState> next_state = state_->Execute(context_);
+        state_ = next_state;
+    }
+}
