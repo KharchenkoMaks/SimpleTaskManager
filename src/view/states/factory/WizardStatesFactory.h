@@ -10,10 +10,12 @@
 #include "printer/ConsolePrinter.h"
 
 #include <memory>
+#include <string>
 
 class WizardStatesFactory {
 public:
     WizardStatesFactory();
+    std::shared_ptr<IWizardState> CreateStateByCommand(const std::string& command);
     std::shared_ptr<RootState> CreateRootState();
 private:
     std::shared_ptr<RootState> root_state_;

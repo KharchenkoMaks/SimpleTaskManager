@@ -7,6 +7,7 @@
 
 #include "abstract/WizardStatePrinter.h"
 #include "WizardContext.h"
+#include "factory/WizardStatesFactory.h"
 
 class RootState : public WizardStatePrinter {
 public:
