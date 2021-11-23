@@ -15,3 +15,9 @@ void ConsolePrinter::WriteLine(const std::string &message) {
 void ConsolePrinter::WriteError(const std::string &message) {
     WriteLine("[Error]: " + message);
 }
+
+std::string ConsolePrinter::ReadLine() {
+    std::string line;
+    std::cin >> line;
+    return line;
+}
