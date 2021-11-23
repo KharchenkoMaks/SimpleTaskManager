@@ -24,7 +24,22 @@ add_executable(SimpleTaskManager
         src/model/IdGenerator.cpp
         src/model/IdGenerator.h
         src/model/tasks/SubTask.cpp
-        src/model/tasks/SubTask.h src/view/ConsoleStateMachine.cpp src/view/ConsoleStateMachine.h src/view/WizardContext.cpp src/view/WizardContext.h src/view/states/abstract/IWizardState.h src/view/printer/ConsolePrinter.cpp src/view/printer/ConsolePrinter.h src/view/states/abstract/WizardStatePrinter.cpp src/view/states/abstract/WizardStatePrinter.h src/view/states/RootState.cpp src/view/states/RootState.h src/view/states/factory/WizardStatesFactory.cpp src/view/states/factory/WizardStatesFactory.h)
+        src/model/tasks/SubTask.h
+        src/view/ConsoleStateMachine.cpp
+        src/view/ConsoleStateMachine.h
+        src/view/WizardContext.cpp
+        src/view/WizardContext.h
+        src/view/states/abstract/IWizardState.h
+        src/view/printer/ConsolePrinter.cpp
+        src/view/printer/ConsolePrinter.h
+        src/view/states/abstract/WizardStatePrinter.cpp
+        src/view/states/abstract/WizardStatePrinter.h
+        src/view/states/factory/WizardStatesFactory.cpp
+        src/view/states/factory/WizardStatesFactory.h
+        src/view/states/RootState.cpp
+        src/view/states/RootState.h
+        src/view/states/HelpState.cpp
+        src/view/states/HelpState.h)
 
 add_executable(SimpleTaskManager_test
         src/model/tasks/Task.cpp

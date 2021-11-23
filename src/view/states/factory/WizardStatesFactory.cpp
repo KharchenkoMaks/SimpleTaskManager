@@ -6,6 +6,7 @@
 
 WizardStatesFactory::WizardStatesFactory() {
     root_state_ = std::make_shared<RootState>(ConsolePrinter::Create());
+    help_state_ = std::make_shared<HelpState>(ConsolePrinter::Create());
 }
 
 std::shared_ptr<RootState> WizardStatesFactory::CreateRootState() {
