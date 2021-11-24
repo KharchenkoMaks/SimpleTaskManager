@@ -18,5 +18,5 @@ std::shared_ptr<IWizardState> HelpState::Execute(std::shared_ptr<WizardContext> 
     printer_->WriteLine("5. show");
     printer_->WriteLine("6. quit");
 
-    return state_factory->GetRootState();
+    return state_factory->GetState(WizardStatesFactory::States::kRootState);
 }
