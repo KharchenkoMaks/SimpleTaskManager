@@ -41,7 +41,7 @@ std::shared_ptr<IWizardState> WizardStatesFactory::GetStateByCommand(const std::
     }
 }
 
-std::shared_ptr<IWizardState> WizardStatesFactory::GetState(WizardStatesFactory::States state) {
+std::shared_ptr<IWizardState> WizardStatesFactory::GetState(const WizardStatesFactory::States state) {
     switch (state){
         case States::kRootState: {
             return root_state_;
