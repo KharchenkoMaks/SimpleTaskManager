@@ -13,6 +13,9 @@
 #include "states/quit/QuitState.h"
 #include "states/confirm/ConfirmState.h"
 #include "states/add_task/AddTaskState.h"
+#include "states/add_task/InputTaskTitleState.h"
+#include "states/add_task/InputTaskPriorityState.h"
+#include "states/add_task/InputTaskDueDateState.h"
 
 #include <memory>
 #include <string>
@@ -22,6 +25,9 @@ class HelpState;
 class QuitState;
 class ConfirmState;
 class AddTaskState;
+class InputTaskTitleState;
+class InputTaskPriorityState;
+class InputTaskDueDateState;
 
 class WizardStatesFactory {
 public:
@@ -30,7 +36,10 @@ public:
         kHelp,
         kQuit,
         kConfirm,
-        kAddTask
+        kAddTask,
+        kInputTaskTitle,
+        kInputTaskPriority,
+        kInputTaskDueDate
     };
 public:
     WizardStatesFactory();
@@ -42,7 +51,11 @@ private:
     std::shared_ptr<HelpState> help_state_;
     std::shared_ptr<QuitState> quit_state_;
     std::shared_ptr<ConfirmState> confirm_state_;
+
     std::shared_ptr<AddTaskState> add_task_state_;
+    std::shared_ptr<InputTaskTitleState> input_task_title_state_;
+    std::shared_ptr<InputTaskPriorityState> input_task_priority_state_;
+    std::shared_ptr<InputTaskDueDateState> input_task_due_date_state_;
 
     std::shared_ptr<ConsolePrinter> printer_;
 };
