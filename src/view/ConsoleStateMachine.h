@@ -13,7 +13,8 @@
 
 class ConsoleStateMachine {
 public:
-    void Run(WizardStatesFactory::States initial_state);
+    // Returns context after running end
+    WizardContext Run(WizardStatesFactory::States initial_state);
 private:
     std::shared_ptr<WizardContext> context_;
     std::shared_ptr<IWizardState> state_;
