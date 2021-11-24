@@ -23,8 +23,7 @@ WizardStatesFactory::WizardStatesFactory() {
 
 std::shared_ptr<IWizardState> WizardStatesFactory::GetStateByCommand(const std::string &command) {
     if (command == "add") {
-        // add state
-        throw std::invalid_argument("Wrong command was given.");
+        return add_task_state_;
     } else if (command == "edit") {
         // edit state
         throw std::invalid_argument("Wrong command was given.");
