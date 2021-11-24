@@ -11,7 +11,7 @@ std::shared_ptr<IWizardState> QuitState::Execute(std::shared_ptr<WizardContext> 
 
     std::shared_ptr<WizardStatesFactory> new_state_factory = std::make_shared<WizardStatesFactory>();
     std::shared_ptr<IWizardState> new_state =
-            new_state_factory->GetState(WizardStatesFactory::States::kConfirmState);
+            new_state_factory->GetState(WizardStatesFactory::States::kConfirm);
     std::shared_ptr<WizardContext> new_context = std::make_shared<WizardContext>();
     new_context->SetConfirmMessage("Are you sure you want to quit? No changes will be saved!");
     while (!new_context->IsStateMachineStopped()) {
@@ -21,10 +21,10 @@ std::shared_ptr<IWizardState> QuitState::Execute(std::shared_ptr<WizardContext> 
     switch (new_context->GetConfirmationStatus()) {
         case WizardContext::ConfirmationStatus::kConfirmed: {
             context->InterruptStateMachine();
-            return state_factory->GetState(WizardStatesFactory::States::kQuitState);
+            return state_factory->GetState(WizardStatesFactory::States::kQuit);
         }
         case WizardContext::ConfirmationStatus::kNotConfirmed: {
-            return state_factory->GetState(WizardStatesFactory::States::kRootState);
+            return state_factory->GetState(WizardStatesFactory::States::kRoot);
         }
         case WizardContext::ConfirmationStatus::kNone: {
             throw std::runtime_error("Confirmation process was failed.");

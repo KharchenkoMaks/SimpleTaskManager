@@ -26,10 +26,10 @@ class AddTaskState;
 class WizardStatesFactory {
 public:
     enum class States {
-        kRootState,
-        kHelpState,
-        kQuitState,
-        kConfirmState,
+        kRoot,
+        kHelp,
+        kQuit,
+        kConfirm,
         kAddTask
     };
 public:

@@ -27,7 +27,7 @@ std::shared_ptr<IWizardState> ConfirmState::Execute(std::shared_ptr<WizardContex
         context->NotConfirmAction();
     }
     context->InterruptStateMachine();
-    return state_factory->GetState(WizardStatesFactory::States::kQuitState);
+    return state_factory->GetState(WizardStatesFactory::States::kQuit);
 }
 
 bool ConfirmState::IsMessageConfirmed(const std::string& message) {

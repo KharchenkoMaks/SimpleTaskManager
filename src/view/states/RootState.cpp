@@ -18,6 +18,6 @@ std::shared_ptr<IWizardState> RootState::Execute(std::shared_ptr<WizardContext> 
         return next_state;
     } catch (std::invalid_argument){
         printer_->WriteError("Unknown command! Use help.");
-        return state_factory->GetState(WizardStatesFactory::States::kRootState);
+        return state_factory->GetState(WizardStatesFactory::States::kRoot);
     }
 }
