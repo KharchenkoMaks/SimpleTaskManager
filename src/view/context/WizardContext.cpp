@@ -88,6 +88,10 @@ void WizardContext::AddTaskDueTime(time_t due_time) {
                                added_task_->GetLabel());
 }
 
+void WizardContext::AddTask(const Task& task) {
+    added_task_ = task;
+}
+
 Task WizardContext::CreateDefaultTask() {
     return Task::Create("default_title", Task::Priority::NONE, 0);
 }
