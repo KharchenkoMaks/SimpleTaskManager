@@ -23,5 +23,6 @@ std::shared_ptr<IWizardState> InputTaskDueDateState::Execute(std::shared_ptr<Wiz
         return state_factory->GetState(WizardStatesFactory::States::kInputTaskDueDate);
     }
 
+    context->InterruptStateMachine();
     return state_factory->GetState(WizardStatesFactory::States::kQuit);
 }
