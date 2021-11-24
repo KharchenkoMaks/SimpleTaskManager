@@ -11,8 +11,18 @@
 
 class WizardContext {
 public:
+    enum class ConfirmationStatus{
+        kConfirmed,
+        kNotConfirmed,
+        kNone
+    };
+public:
     WizardContext();
 public:
+    void ConfirmAction();
+    void NotConfirmAction();
+    void ResetActionConfirmation();
+
     void SetConfirmMessage(const std::string& message);
     void ResetConfirmMessage();
     std::optional<std::string> GetConfirmMessage();
@@ -21,6 +31,8 @@ public:
     bool IsWizardEnded();
 private:
     bool wizard_quit_;
+
+    ConfirmationStatus confirmation_;
     std::optional<std::string> confirm_message_;
 };
 
