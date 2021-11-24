@@ -10,6 +10,7 @@
 #include "WizardContext.h"
 
 #include <string>
+#include <memory>
 
 class RootState : public WizardStatePrinter {
 public:

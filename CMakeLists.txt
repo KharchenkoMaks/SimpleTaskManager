@@ -39,7 +39,9 @@ add_executable(SimpleTaskManager
         src/view/states/RootState.cpp
         src/view/states/RootState.h
         src/view/states/HelpState.cpp
-        src/view/states/HelpState.h src/view/states/QuitState.cpp src/view/states/QuitState.h)
+        src/view/states/HelpState.h
+        src/view/states/QuitState.cpp
+        src/view/states/QuitState.h src/view/states/confirm/ConfirmState.cpp src/view/states/confirm/ConfirmState.h)
 
 add_executable(SimpleTaskManager_test
         src/model/tasks/Task.cpp

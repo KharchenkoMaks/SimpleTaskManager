@@ -9,6 +9,7 @@
 #include "factory/WizardStatesFactory.h"
 
 #include <string>
+#include <memory>
 
 class HelpState : public WizardStatePrinter {
 public:
