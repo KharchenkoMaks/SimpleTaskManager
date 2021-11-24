@@ -10,6 +10,7 @@
 
 #include <string>
 #include <memory>
+#include <optional>
 
 class ConfirmState : public WizardStatePrinter {
 public:
@@ -17,6 +18,8 @@ public:
 public:
     std::shared_ptr<IWizardState> Execute(std::shared_ptr<WizardContext> context,
                                           std::shared_ptr<WizardStatesFactory> state_factory) override;
+private:
+    bool IsMessageConfirmed(const std::string& message);
 };
 
 
