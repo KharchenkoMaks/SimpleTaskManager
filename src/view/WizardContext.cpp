@@ -46,3 +46,7 @@ void WizardContext::NotConfirmAction() {
 void WizardContext::ResetActionConfirmation() {
     confirmation_ = ConfirmationStatus::kNone;
 }
+
+WizardContext::ConfirmationStatus WizardContext::GetConfirmationStatus() {
+    return confirmation_;
+}

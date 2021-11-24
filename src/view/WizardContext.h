@@ -22,6 +22,7 @@ public:
     void ConfirmAction();
     void NotConfirmAction();
     void ResetActionConfirmation();
+    ConfirmationStatus GetConfirmationStatus();
 
     void SetConfirmMessage(const std::string& message);
     void ResetConfirmMessage();
