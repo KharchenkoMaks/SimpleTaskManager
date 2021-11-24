@@ -88,8 +88,12 @@ void WizardContext::AddTaskDueTime(time_t due_time) {
                                added_task_->GetLabel());
 }
 
-void WizardContext::AddTask(const Task& task) {
-    added_task_ = task;
+void WizardContext::AddTask(const std::optional<Task>& task) {
+    if (task.has_value()) {
+        added_task_ = task;
+    } else {
+        throw std::invalid_argument("Task was empty");
+    }
 }
 
 Task WizardContext::CreateDefaultTask() {

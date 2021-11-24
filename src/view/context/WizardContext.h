@@ -37,7 +37,7 @@ public: // Adding task information
     void AddTaskTitle(const std::string& title);
     void AddTaskPriority(Task::Priority priority);
     void AddTaskDueTime(time_t due_time);
-    void AddTask(const Task& task);
+    void AddTask(const std::optional<Task>& task);
     std::optional<Task> GetAddedTask();
     void ResetAddedTask();
 private:
