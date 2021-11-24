@@ -14,6 +14,7 @@ WizardStatesFactory::WizardStatesFactory() {
 
     // Not using printer
     quit_state_ = std::make_shared<QuitState>();
+    add_task_state_ = std::make_shared<AddTaskState>();
 }
 
 std::shared_ptr<IWizardState> WizardStatesFactory::GetStateByCommand(const std::string &command) {
@@ -54,6 +55,9 @@ std::shared_ptr<IWizardState> WizardStatesFactory::GetState(const WizardStatesFa
         }
         case States::kConfirmState: {
             return confirm_state_;
+        }
+        case States::kAddTask: {
+            return add_task_state_;
         }
     }
 }

@@ -12,6 +12,7 @@
 #include "states/HelpState.h"
 #include "states/quit/QuitState.h"
 #include "states/confirm/ConfirmState.h"
+#include "states/add_task/AddTaskState.h"
 
 #include <memory>
 #include <string>
@@ -20,6 +21,7 @@ class RootState;
 class HelpState;
 class QuitState;
 class ConfirmState;
+class AddTaskState;
 
 class WizardStatesFactory {
 public:
@@ -27,7 +29,8 @@ public:
         kRootState,
         kHelpState,
         kQuitState,
-        kConfirmState
+        kConfirmState,
+        kAddTask
     };
 public:
     WizardStatesFactory();
@@ -39,6 +42,7 @@ private:
     std::shared_ptr<HelpState> help_state_;
     std::shared_ptr<QuitState> quit_state_;
     std::shared_ptr<ConfirmState> confirm_state_;
+    std::shared_ptr<AddTaskState> add_task_state_;
 
     std::shared_ptr<ConsolePrinter> printer_;
 };
