@@ -23,4 +23,6 @@ AddTaskState::Execute(std::shared_ptr<WizardContext> context,
     } else {
         throw std::runtime_error("Task adding failed.");
     }
+
+    return state_factory->GetState(WizardStatesFactory::States::kRoot);
 }
