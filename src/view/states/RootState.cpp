@@ -14,10 +14,10 @@ std::shared_ptr<IWizardState> RootState::Execute(std::shared_ptr<WizardContext> 
     std::string command = printer_->ReadLine();
     try {
         std::shared_ptr<IWizardState> next_state =
-                state_factory->CreateStateByCommand(command);
+                state_factory->GetStateByCommand(command);
         return next_state;
     } catch (std::invalid_argument){
         printer_->WriteError("Unknown command! Use help.");
-        return state_factory->CreateRootState();
+        return state_factory->GetRootState();
     }
 }

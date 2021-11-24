@@ -7,5 +7,5 @@
 std::shared_ptr<IWizardState> QuitState::Execute(std::shared_ptr<WizardContext> context,
                                                  std::shared_ptr<WizardStatesFactory> state_factory) {
     context->QuitWizard();
-    return state_factory->CreateRootState();
+    return state_factory->GetRootState();
 }

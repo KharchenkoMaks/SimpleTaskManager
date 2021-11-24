@@ -15,11 +15,11 @@ WizardStatesFactory::WizardStatesFactory() {
     quit_state_ = std::make_shared<QuitState>();
 }
 
-std::shared_ptr<RootState> WizardStatesFactory::CreateRootState() {
+std::shared_ptr<RootState> WizardStatesFactory::GetRootState() {
     return root_state_;
 }
 
-std::shared_ptr<IWizardState> WizardStatesFactory::CreateStateByCommand(const std::string &command) {
+std::shared_ptr<IWizardState> WizardStatesFactory::GetStateByCommand(const std::string &command) {
     if (command == "add") {
         // add state
         throw std::invalid_argument("Wrong command was given.");
