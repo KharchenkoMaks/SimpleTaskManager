@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 23.11.2021.
 //
 
-#include "WizardContext.h"
+#include "context/WizardContext.h"
 
 WizardContext::WizardContext() {
     state_machine_stopped_ = false;

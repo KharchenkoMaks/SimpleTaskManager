@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_IWIZARDSTATE_H
 #define SIMPLETASKMANAGER_IWIZARDSTATE_H
 
-#include "WizardContext.h"
+#include "context/WizardContext.h"
 //#include "states/factory/WizardStatesFactory.h"
 
 #include <memory>

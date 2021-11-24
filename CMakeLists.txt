@@ -27,8 +27,8 @@ add_executable(SimpleTaskManager
         src/model/tasks/SubTask.h
         src/view/ConsoleStateMachine.cpp
         src/view/ConsoleStateMachine.h
-        src/view/WizardContext.cpp
-        src/view/WizardContext.h
+        src/view/context/WizardContext.cpp
+        src/view/context/WizardContext.h
         src/view/states/abstract/IWizardState.h
         src/view/printer/ConsolePrinter.cpp
         src/view/printer/ConsolePrinter.h
