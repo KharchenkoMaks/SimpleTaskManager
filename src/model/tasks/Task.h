@@ -20,6 +20,7 @@ public:
     };
 
     static std::string PriorityToString(Priority priority);
+    static Priority GetTaskPriority(const std::string& priority);
 public:
     static Task Create(const std::string& title,
                        Priority priority,

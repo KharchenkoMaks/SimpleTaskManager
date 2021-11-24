@@ -87,3 +87,17 @@ std::string Task::PriorityToString(Task::Priority priority) {
     }
     return priority_string;
 }
+
+Task::Priority Task::GetTaskPriority(const std::string& priority) {
+    if (priority == "High"){
+        return Priority::HIGH;
+    } else if (priority == "Medium"){
+        return Priority::MEDIUM;
+    } else if (priority == "Low"){
+        return Priority::LOW;
+    } else if (priority == "None"){
+        return Priority::NONE;
+    } else {
+        throw std::invalid_argument("Wrong priority was given!");
+    }
+}
