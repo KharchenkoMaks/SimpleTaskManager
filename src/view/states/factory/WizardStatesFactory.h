@@ -10,7 +10,7 @@
 
 #include "states/RootState.h"
 #include "states/HelpState.h"
-#include "states/QuitState.h"
+#include "states/quit/QuitState.h"
 #include "states/confirm/ConfirmState.h"
 
 #include <memory>

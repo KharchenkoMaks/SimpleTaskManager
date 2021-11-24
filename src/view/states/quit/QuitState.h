@@ -5,8 +5,8 @@
 #ifndef SIMPLETASKMANAGER_QUITSTATE_H
 #define SIMPLETASKMANAGER_QUITSTATE_H
 
-#include "abstract/IWizardState.h"
-#include "factory/WizardStatesFactory.h"
+#include "states/abstract/IWizardState.h"
+#include "states/factory/WizardStatesFactory.h"
 #include "WizardContext.h"
 
 #include <memory>
