@@ -41,14 +41,19 @@ std::shared_ptr<IWizardState> WizardStatesFactory::GetStateByCommand(const std::
     }
 }
 
-std::shared_ptr<RootState> WizardStatesFactory::GetRootState() {
-    return root_state_;
-}
-
-std::shared_ptr<QuitState> WizardStatesFactory::GetQuitState() {
-    return quit_state_;
-}
-
-std::shared_ptr<ConfirmState> WizardStatesFactory::GetConfirmState() {
-    return confirm_state_;
+std::shared_ptr<IWizardState> WizardStatesFactory::GetState(WizardStatesFactory::States state) {
+    switch (state){
+        case States::kRootState: {
+            return root_state_;
+        }
+        case States::kHelpState: {
+            return help_state_;
+        }
+        case States::kQuitState: {
+            return quit_state_;
+        }
+        case States::kConfirmState: {
+            return confirm_state_;
+        }
+    }
 }

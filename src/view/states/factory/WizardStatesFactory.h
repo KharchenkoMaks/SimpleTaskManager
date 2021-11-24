@@ -23,12 +23,17 @@ class ConfirmState;
 
 class WizardStatesFactory {
 public:
+    enum class States {
+        kRootState,
+        kHelpState,
+        kQuitState,
+        kConfirmState
+    };
+public:
     WizardStatesFactory();
     std::shared_ptr<IWizardState> GetStateByCommand(const std::string& command);
 
-    std::shared_ptr<RootState> GetRootState();
-    std::shared_ptr<QuitState> GetQuitState();
-    std::shared_ptr<ConfirmState> GetConfirmState();
+    std::shared_ptr<IWizardState> GetState(States state);
 private:
     std::shared_ptr<RootState> root_state_;
     std::shared_ptr<HelpState> help_state_;
