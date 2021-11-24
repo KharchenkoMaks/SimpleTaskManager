@@ -6,8 +6,8 @@
 #define SIMPLETASKMANAGER_ROOTSTATE_H
 
 #include "abstract/WizardStatePrinter.h"
-#include "WizardContext.h"
 #include "factory/WizardStatesFactory.h"
+#include "WizardContext.h"
 
 #include <string>
 
@@ -15,7 +15,8 @@ class RootState : public WizardStatePrinter {
 public:
     explicit RootState(std::shared_ptr<ConsolePrinter> printer);
 public:
-    std::shared_ptr<IWizardState> Execute(std::shared_ptr<WizardContext> context) override;
+    std::shared_ptr<IWizardState> Execute(std::shared_ptr<WizardContext> context,
+                                          std::shared_ptr<WizardStatesFactory> state_factory) override;
 };
 
 

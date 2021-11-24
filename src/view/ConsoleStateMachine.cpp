@@ -9,7 +9,7 @@ void ConsoleStateMachine::Run() {
     context_ = std::make_shared<WizardContext>();
     state_ = states_factory->CreateRootState();
     while (!context_->IsWizardEnded()){
-        std::shared_ptr<IWizardState> next_state = state_->Execute(context_);
+        std::shared_ptr<IWizardState> next_state = state_->Execute(context_, states_factory);
         state_ = next_state;
     }
 }

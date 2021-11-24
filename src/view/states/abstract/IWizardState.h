@@ -6,12 +6,16 @@
 #define SIMPLETASKMANAGER_IWIZARDSTATE_H
 
 #include "WizardContext.h"
+//#include "states/factory/WizardStatesFactory.h"
 
 #include <memory>
 
+class WizardStatesFactory;
+
 class IWizardState {
 public:
-    virtual std::shared_ptr<IWizardState> Execute(std::shared_ptr<WizardContext>) = 0;
+    virtual std::shared_ptr<IWizardState> Execute(std::shared_ptr<WizardContext>,
+            std::shared_ptr<WizardStatesFactory>) = 0;
 
     virtual ~IWizardState() = default;
 };
