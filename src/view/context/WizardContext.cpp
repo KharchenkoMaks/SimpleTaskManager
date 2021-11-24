@@ -9,6 +9,8 @@ WizardContext::WizardContext() {
 
     confirm_message_ = std::nullopt;
     confirmation_ = ConfirmationStatus::kNone;
+
+    added_task_ = std::nullopt;
 }
 
 // QuitState
@@ -49,4 +51,49 @@ void WizardContext::ResetActionConfirmation() {
 
 WizardContext::ConfirmationStatus WizardContext::GetConfirmationStatus() {
     return confirmation_;
+}
+
+std::optional<Task> WizardContext::GetAddedTask() {
+    return added_task_;
+}
+
+void WizardContext::ResetAddedTask() {
+    added_task_ = std::nullopt;
+}
+
+void WizardContext::AddTaskTitle(const std::string &title) {
+    AddedTaskInitialize();
+    added_task_ = Task::Create(title,
+                               added_task_->GetPriority(),
+                               added_task_->GetDueTime(),
+                               added_task_->IsCompleted(),
+                               added_task_->GetLabel());
+}
+
+void WizardContext::AddTaskPriority(const Task::Priority priority) {
+    AddedTaskInitialize();
+    added_task_ = Task::Create(added_task_->GetTitle(),
+                               priority,
+                               added_task_->GetDueTime(),
+                               added_task_->IsCompleted(),
+                               added_task_->GetLabel());
+}
+
+void WizardContext::AddTaskDueTime(time_t due_time) {
+    AddedTaskInitialize();
+    added_task_ = Task::Create(added_task_->GetTitle(),
+                               added_task_->GetPriority(),
+                               due_time,
+                               added_task_->IsCompleted(),
+                               added_task_->GetLabel());
+}
+
+Task WizardContext::CreateDefaultTask() {
+    return Task::Create("default_title", Task::Priority::NONE, 0);
+}
+
+void WizardContext::AddedTaskInitialize() {
+    if (!added_task_.has_value()){
+        added_task_ = CreateDefaultTask();
+    }
 }
