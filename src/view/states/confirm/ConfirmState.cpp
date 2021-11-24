@@ -30,5 +30,5 @@ std::shared_ptr<IWizardState> ConfirmState::Execute(std::shared_ptr<WizardContex
 }
 
 bool ConfirmState::IsMessageConfirmed(const std::string& message) {
-    return message == "y" || message == "Y"
+    return message == "y" || message == "Y";
 }
