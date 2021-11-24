@@ -10,13 +10,10 @@ WizardStatesFactory::WizardStatesFactory() {
     // Using printer
     root_state_ = std::make_shared<RootState>(printer_);
     help_state_ = std::make_shared<HelpState>(printer_);
+    confirm_state_ = std::make_shared<ConfirmState>(printer_);
 
     // Not using printer
     quit_state_ = std::make_shared<QuitState>();
-}
-
-std::shared_ptr<RootState> WizardStatesFactory::GetRootState() {
-    return root_state_;
 }
 
 std::shared_ptr<IWizardState> WizardStatesFactory::GetStateByCommand(const std::string &command) {
@@ -42,4 +39,16 @@ std::shared_ptr<IWizardState> WizardStatesFactory::GetStateByCommand(const std::
     } else {
         throw std::invalid_argument("Wrong command was given.");
     }
+}
+
+std::shared_ptr<RootState> WizardStatesFactory::GetRootState() {
+    return root_state_;
+}
+
+std::shared_ptr<QuitState> WizardStatesFactory::GetQuitState() {
+    return quit_state_;
+}
+
+std::shared_ptr<ConfirmState> WizardStatesFactory::GetConfirmState() {
+    return confirm_state_;
 }
