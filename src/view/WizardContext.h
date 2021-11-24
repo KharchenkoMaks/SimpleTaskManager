@@ -28,10 +28,10 @@ public:
     void ResetConfirmMessage();
     std::optional<std::string> GetConfirmMessage();
 public:
-    void QuitWizard();
-    bool IsWizardEnded();
+    void InterruptStateMachine();
+    bool IsStateMachineStopped();
 private:
-    bool wizard_quit_;
+    bool state_machine_stopped_;
 
     ConfirmationStatus confirmation_;
     std::optional<std::string> confirm_message_;

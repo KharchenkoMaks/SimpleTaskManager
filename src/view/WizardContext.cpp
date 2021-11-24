@@ -5,7 +5,7 @@
 #include "WizardContext.h"
 
 WizardContext::WizardContext() {
-    wizard_quit_ = false;
+    state_machine_stopped_ = false;
 
     confirm_message_ = std::nullopt;
     confirmation_ = ConfirmationStatus::kNone;
@@ -13,12 +13,12 @@ WizardContext::WizardContext() {
 
 // QuitState
 
-void WizardContext::QuitWizard() {
-    wizard_quit_ = true;
+void WizardContext::InterruptStateMachine() {
+    state_machine_stopped_ = true;
 }
 
-bool WizardContext::IsWizardEnded() {
-    return wizard_quit_;
+bool WizardContext::IsStateMachineStopped() {
+    return state_machine_stopped_;
 }
 
 // ConfirmState

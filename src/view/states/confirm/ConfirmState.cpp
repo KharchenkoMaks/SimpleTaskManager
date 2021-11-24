@@ -26,7 +26,7 @@ std::shared_ptr<IWizardState> ConfirmState::Execute(std::shared_ptr<WizardContex
         printer_->WriteLine("Aborting action....");
         context->NotConfirmAction();
     }
-    context->QuitWizard();
+    context->InterruptStateMachine();
     return state_factory->GetQuitState();
 }
 
