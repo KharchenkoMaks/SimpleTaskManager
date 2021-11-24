@@ -16,7 +16,7 @@ std::shared_ptr<IWizardState> ConfirmState::Execute(std::shared_ptr<WizardContex
     std::string default_confirm_message = "Are you sure?";
     printer_->WriteLine(confirm_message.value_or(default_confirm_message));
     context->ResetConfirmMessage();
-    printer_->Write("y/n>");
+    printer_->Write("y/n> ");
 
     std::string answer = printer_->ReadLine();
 
@@ -26,6 +26,7 @@ std::shared_ptr<IWizardState> ConfirmState::Execute(std::shared_ptr<WizardContex
         printer_->WriteLine("Aborting action....");
         context->NotConfirmAction();
     }
+    context->QuitWizard();
     return state_factory->GetQuitState();
 }
 
