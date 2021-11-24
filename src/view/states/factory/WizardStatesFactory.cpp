@@ -7,9 +7,12 @@
 WizardStatesFactory::WizardStatesFactory() {
     printer_ = std::make_shared<ConsolePrinter>();
 
+    // Using printer
     root_state_ = std::make_shared<RootState>(printer_);
     help_state_ = std::make_shared<HelpState>(printer_);
-    quit_state_ = std::make_shared<QuitState>(printer_);
+
+    // Not using printer
+    quit_state_ = std::make_shared<QuitState>();
 }
 
 std::shared_ptr<RootState> WizardStatesFactory::CreateRootState() {
