@@ -6,6 +6,7 @@
 
 WizardContext::WizardContext() {
     wizard_quit_ = false;
+    confirm_message_ = std::nullopt;
 }
 
 void WizardContext::QuitWizard() {
@@ -14,4 +15,16 @@ void WizardContext::QuitWizard() {
 
 bool WizardContext::IsWizardEnded() {
     return wizard_quit_;
+}
+
+void WizardContext::SetConfirmMessage(const std::string& message) {
+    confirm_message_ = message;
+}
+
+void WizardContext::ResetConfirmMessage() {
+    confirm_message_ = std::nullopt;
+}
+
+std::optional<std::string> WizardContext::GetConfirmMessage() {
+    return confirm_message_;
 }
