@@ -7,6 +7,8 @@
 std::shared_ptr<IWizardState> QuitState::Execute(std::shared_ptr<WizardContext> context,
                                                  std::shared_ptr<WizardStatesFactory> state_factory) {
 
+    // TODO (Maksym): make ConsoleStateMachine instead of this while
+
     std::shared_ptr<WizardStatesFactory> new_state_factory = std::make_shared<WizardStatesFactory>();
     std::shared_ptr<IWizardState> new_state =
             new_state_factory->GetState(WizardStatesFactory::States::kConfirmState);
