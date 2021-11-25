@@ -6,18 +6,18 @@
 #define SIMPLETASKMANAGER_WIZARDSTATEPRINTER_H
 
 #include "states/abstract/IWizardState.h"
-#include "ConsolePrinter.h"
+#include "ConsoleMultiFunctionalPrinter.h"
 
 #include <memory>
 
 class WizardStatePrinter : public IWizardState {
 public:
-    explicit WizardStatePrinter(const std::shared_ptr<ConsolePrinter>& printer);
+    explicit WizardStatePrinter(const std::shared_ptr<ConsoleMultiFunctionalPrinter>& printer);
     
     virtual ~WizardStatePrinter() = default;
 
 protected:
-   std::shared_ptr<ConsolePrinter> printer_;
+   std::shared_ptr<ConsoleMultiFunctionalPrinter> printer_;
 };
 
 

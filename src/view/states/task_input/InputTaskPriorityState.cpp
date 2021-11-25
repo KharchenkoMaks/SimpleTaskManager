@@ -4,7 +4,7 @@
 
 #include "states/task_input/InputTaskPriorityState.h"
 
-InputTaskPriorityState::InputTaskPriorityState(const std::shared_ptr<ConsolePrinter>& printer)
+InputTaskPriorityState::InputTaskPriorityState(const std::shared_ptr<ConsoleMultiFunctionalPrinter>& printer)
     : WizardStatePrinter(printer) {
 
 }

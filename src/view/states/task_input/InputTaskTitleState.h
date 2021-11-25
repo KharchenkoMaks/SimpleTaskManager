@@ -14,7 +14,7 @@
 
 class InputTaskTitleState : public WizardStatePrinter {
 public:
-    explicit InputTaskTitleState(const std::shared_ptr<ConsolePrinter>& printer);
+    explicit InputTaskTitleState(const std::shared_ptr<ConsoleMultiFunctionalPrinter>& printer);
 public:
     std::optional<std::shared_ptr<IWizardState>> Execute(std::shared_ptr<WizardContext> context,
                                           std::shared_ptr<WizardStatesFactory> state_factory) override;

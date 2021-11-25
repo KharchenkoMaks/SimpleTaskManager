@@ -20,6 +20,6 @@ bool QuitState::UserConfirm() {
     return users_answer == "Y" || users_answer == "y";
 }
 
-QuitState::QuitState(const std::shared_ptr<ConsolePrinter>& printer) : WizardStatePrinter(printer) {
+QuitState::QuitState(const std::shared_ptr<ConsoleMultiFunctionalPrinter>& printer) : WizardStatePrinter(printer) {
 
 }

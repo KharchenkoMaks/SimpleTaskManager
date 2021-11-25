@@ -5,7 +5,7 @@
 #include "WizardStatesFactory.h"
 
 WizardStatesFactory::WizardStatesFactory() {
-    printer_ = std::make_shared<ConsolePrinter>();
+    printer_ = std::make_shared<ConsoleMultiFunctionalPrinter>();
 
     // Using printer
     root_state_ = std::make_shared<RootState>(printer_);

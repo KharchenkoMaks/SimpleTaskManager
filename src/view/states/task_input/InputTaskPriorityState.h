@@ -14,7 +14,7 @@
 
 class InputTaskPriorityState : public WizardStatePrinter {
 public:
-    explicit InputTaskPriorityState(const std::shared_ptr<ConsolePrinter>& printer);
+    explicit InputTaskPriorityState(const std::shared_ptr<ConsoleMultiFunctionalPrinter>& printer);
 public:
     std::optional<std::shared_ptr<IWizardState>> Execute(std::shared_ptr<WizardContext> context,
                                           std::shared_ptr<WizardStatesFactory> state_factory) override;

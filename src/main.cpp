@@ -18,7 +18,7 @@ int main() {
 // TODO_DONE: Use state machine inside AddTaskState and EditTaskState - Done 25.11.2021
 // TODO: Make abstract State for states that run state machine inside?
 // TODO: Rename WizardStatePrinter abstract class
-// TODO: Rename Printer to PrinterWithScanner =)
+// TODO_DONE: Rename Printer to PrinterWithScanner =) - Done 25.11.2021
 // TODO: Make default methods in WizardStatePrinter to ask user for some input
 // TODO_DONE: Delete unnecessary directories - Done 25.11.2021
 // TODO: Change subtasks structure

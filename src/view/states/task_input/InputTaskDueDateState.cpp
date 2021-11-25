@@ -4,7 +4,7 @@
 
 #include "states/task_input/InputTaskDueDateState.h"
 
-InputTaskDueDateState::InputTaskDueDateState(const std::shared_ptr<ConsolePrinter>& printer)
+InputTaskDueDateState::InputTaskDueDateState(const std::shared_ptr<ConsoleMultiFunctionalPrinter>& printer)
     : WizardStatePrinter(printer) {
 
 }
