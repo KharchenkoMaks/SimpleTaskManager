@@ -21,7 +21,6 @@ public:
                                           std::shared_ptr<WizardStatesFactory> state_factory) override;
 private:
     std::string InputTaskIdToEdit();
-    std::shared_ptr<WizardContext> RunStateMachineToEditTask(const Task& task_to_edit);
 };
 
 
