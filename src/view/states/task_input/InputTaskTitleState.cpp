@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 24.11.2021.
 //
 
-#include "InputTaskTitleState.h"
+#include "states/task_input/InputTaskTitleState.h"
 
 InputTaskTitleState::InputTaskTitleState(std::shared_ptr<ConsolePrinter> printer) : WizardStatePrinter(printer) {
 

@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 24.11.2021.
 //
 
-#include "InputTaskPriorityState.h"
+#include "states/task_input/InputTaskPriorityState.h"
 
 InputTaskPriorityState::InputTaskPriorityState(std::shared_ptr<ConsolePrinter> printer)
     : WizardStatePrinter(printer) {

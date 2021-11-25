@@ -13,9 +13,9 @@
 #include "states/quit/QuitState.h"
 #include "states/confirm/ConfirmState.h"
 #include "states/add_task/AddTaskState.h"
-#include "states/add_task/InputTaskTitleState.h"
-#include "states/add_task/InputTaskPriorityState.h"
-#include "states/add_task/InputTaskDueDateState.h"
+#include "states/task_input/InputTaskTitleState.h"
+#include "states/task_input/InputTaskPriorityState.h"
+#include "states/task_input/InputTaskDueDateState.h"
 
 #include <memory>
 #include <string>

@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 24.11.2021.
 //
 
-#include "InputTaskDueDateState.h"
+#include "states/task_input/InputTaskDueDateState.h"
 
 InputTaskDueDateState::InputTaskDueDateState(std::shared_ptr<ConsolePrinter> printer)
     : WizardStatePrinter(printer) {
