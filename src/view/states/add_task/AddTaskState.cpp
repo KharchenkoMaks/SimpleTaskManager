@@ -21,6 +21,7 @@ AddTaskState::Execute(std::shared_ptr<WizardContext> context,
     if (new_context->GetAddedTask().has_value()) {
         context->AddTask(new_context->GetAddedTask());
         new_context->ResetAddedTask();
+        // TODO (Maksym): make task adding to TaskManager
     } else {
         throw std::runtime_error("Task adding failed.");
     }
