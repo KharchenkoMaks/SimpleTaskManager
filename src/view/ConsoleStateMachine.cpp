@@ -8,9 +8,8 @@ WizardContext ConsoleStateMachine::Run(const WizardStatesFactory::States initial
     std::shared_ptr<WizardStatesFactory> states_factory = std::make_shared<WizardStatesFactory>();
     context_ = std::make_shared<WizardContext>();
     state_ = states_factory->GetState(initial_state);
-    while (!context_->IsStateMachineStopped()){
-        std::shared_ptr<IWizardState> next_state = state_->Execute(context_, states_factory);
-        state_ = next_state;
+    while (state_.has_value()){
+        state_ = state_.value()->Execute(context_, states_factory);
     }
     if (context_.unique()) {
         // Copying context and returning it

@@ -43,7 +43,17 @@ add_executable(SimpleTaskManager
         src/view/states/quit/QuitState.cpp
         src/view/states/quit/QuitState.h
         src/view/states/confirm/ConfirmState.cpp
-        src/view/states/confirm/ConfirmState.h src/view/states/add_task/AddTaskState.cpp src/view/states/add_task/AddTaskState.h src/view/states/task_input/InputTaskTitleState.cpp src/view/states/task_input/InputTaskTitleState.h src/view/states/task_input/InputTaskPriorityState.cpp src/view/states/task_input/InputTaskPriorityState.h src/view/states/task_input/InputTaskDueDateState.cpp src/view/states/task_input/InputTaskDueDateState.h src/view/states/edit_task/EditTaskState.cpp src/view/states/edit_task/EditTaskState.h)
+        src/view/states/confirm/ConfirmState.h
+        src/view/states/add_task/AddTaskState.cpp
+        src/view/states/add_task/AddTaskState.h
+        src/view/states/task_input/InputTaskTitleState.cpp
+        src/view/states/task_input/InputTaskTitleState.h
+        src/view/states/task_input/InputTaskPriorityState.cpp
+        src/view/states/task_input/InputTaskPriorityState.h
+        src/view/states/task_input/InputTaskDueDateState.cpp
+        src/view/states/task_input/InputTaskDueDateState.h
+        src/view/states/edit_task/EditTaskState.cpp
+        src/view/states/edit_task/EditTaskState.h)
 
 add_executable(SimpleTaskManager_test
         src/model/tasks/Task.cpp

@@ -17,7 +17,7 @@ public:
     WizardContext Run(WizardStatesFactory::States initial_state);
 private:
     std::shared_ptr<WizardContext> context_;
-    std::shared_ptr<IWizardState> state_;
+    std::optional<std::shared_ptr<IWizardState> > state_;
 };
 
 

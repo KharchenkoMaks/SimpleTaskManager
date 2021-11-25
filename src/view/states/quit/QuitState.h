@@ -13,7 +13,7 @@
 
 class QuitState : public IWizardState {
 public:
-    std::shared_ptr<IWizardState> Execute(std::shared_ptr<WizardContext> context,
+    std::optional<std::shared_ptr<IWizardState> > Execute(std::shared_ptr<WizardContext> context,
                                           std::shared_ptr<WizardStatesFactory> state_factory) override;
 };
 
