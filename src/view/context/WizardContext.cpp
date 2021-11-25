@@ -108,10 +108,13 @@ void WizardContext::AddedTaskInitialize() {
 
 void WizardContext::SetEditingTaskId(const TaskId& task_id) {
     editing_task_id_ = task_id;
+
+    // TODO (Maksym): Get Task by it's id and put in added_task_
+    added_task_ = CreateDefaultTask();
 }
 
 void WizardContext::SetEditingTaskId(const std::string& task_id) {
-    editing_task_id_ = TaskId::Create(task_id);
+    SetEditingTaskId(TaskId::Create(task_id));
 }
 
 std::optional<TaskId> WizardContext::GetEditingTaskId() {
