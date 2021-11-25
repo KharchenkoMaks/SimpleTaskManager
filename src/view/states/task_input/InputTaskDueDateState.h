@@ -12,6 +12,7 @@
 #include <string>
 #include <memory>
 #include <ctime>
+#include <optional>
 
 class InputTaskDueDateState : public WizardStatePrinter {
 public:

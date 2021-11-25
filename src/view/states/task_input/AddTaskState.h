@@ -8,6 +8,7 @@
 #include "states/abstract/IWizardState.h"
 #include "states/factory/WizardStatesFactory.h"
 #include "context/WizardContext.h"
+//#include "ConsoleStateMachine.h"
 
 #include <memory>
 #include <optional>

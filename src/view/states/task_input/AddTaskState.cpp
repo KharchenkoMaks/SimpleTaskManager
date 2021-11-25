@@ -3,27 +3,17 @@
 //
 
 #include "states/task_input/AddTaskState.h"
+#include "ConsoleStateMachine.h"
 
 std::optional<std::shared_ptr<IWizardState>> AddTaskState::Execute(std::shared_ptr<WizardContext> context,
                       std::shared_ptr<WizardStatesFactory> state_factory) {
-    // TODO (Maksym): make ConsoleStateMachine instead of this while loop
 
-    std::shared_ptr<WizardStatesFactory> new_factory = std::make_shared<WizardStatesFactory>();
-    std::shared_ptr<WizardContext> new_context = std::make_shared<WizardContext>();
-    std::shared_ptr<IWizardState> new_state =
-            new_factory->GetState(WizardStatesFactory::States::kInputTaskTitle);
+    ConsoleStateMachine state_machine;
+    WizardContext new_context = state_machine.Run(WizardStatesFactory::States::kInputTaskTitle);
 
-    while (!new_context->IsStateMachineStopped()){
-        new_state = new_state->Execute(new_context, new_factory);
-    }
-
-    if (new_context->GetAddedTask().has_value()) {
-        context->AddTask(new_context->GetAddedTask());
-        new_context->ResetAddedTask();
-        // TODO (Maksym): make task adding to TaskManager
-    } else {
-        throw std::runtime_error("Task adding failed.");
-    }
+    context->AddTaskTitle(new_context.GetAddedTask().GetTitle());
+    context->AddTaskPriority(new_context.GetAddedTask().GetPriority());
+    context->AddTaskDueTime(new_context.GetAddedTask().GetDueTime());
 
     return state_factory->GetState(WizardStatesFactory::States::kRoot);
 }
