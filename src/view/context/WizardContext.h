@@ -6,7 +6,7 @@
 #define SIMPLETASKMANAGER_WIZARDCONTEXT_H
 
 #include "tasks/Task.h"
-#include "tasks/TaskId.h"
+#include "TaskId.h"
 
 #include <memory>
 #include <string>

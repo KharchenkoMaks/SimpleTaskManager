@@ -5,13 +5,15 @@
 #ifndef SIMPLETASKMANAGER_EDITTASKSTATE_H
 #define SIMPLETASKMANAGER_EDITTASKSTATE_H
 
-#include "states/abstract/IWizardState.h"
+#include "states/abstract/WizardStatePrinter.h"
 #include "states/factory/WizardStatesFactory.h"
 #include "context/WizardContext.h"
 
 #include <memory>
 
-class EditTaskState : public IWizardState {
+class EditTaskState : public WizardStatePrinter {
+public:
+    explicit EditTaskState(std::shared_ptr<ConsolePrinter> printer);
 public:
     std::shared_ptr<IWizardState> Execute(std::shared_ptr<WizardContext> context,
                                           std::shared_ptr<WizardStatesFactory> state_factory) override;
