@@ -43,6 +43,7 @@ public: // Adding task information
     void ResetAddedTask();
 
     void SetEditingTaskId(const TaskId& task_id);
+    void SetEditingTaskId(const std::string& task_id);
     std::optional<TaskId> GetEditingTaskId();
     void ResetEditingTaskId();
 private:
