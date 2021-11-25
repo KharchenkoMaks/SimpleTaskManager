@@ -4,7 +4,7 @@
 
 #include "states/task_input/EditTaskState.h"
 
-EditTaskState::EditTaskState(std::shared_ptr<ConsolePrinter> printer) : WizardStatePrinter(printer) {
+EditTaskState::EditTaskState(const std::shared_ptr<ConsolePrinter>& printer) : WizardStatePrinter(printer) {
 
 }
 

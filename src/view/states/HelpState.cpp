@@ -4,7 +4,7 @@
 
 #include "HelpState.h"
 
-HelpState::HelpState(std::shared_ptr<ConsolePrinter> printer) : WizardStatePrinter(printer) {
+HelpState::HelpState(const std::shared_ptr<ConsolePrinter>& printer) : WizardStatePrinter(printer) {
 
 }
 

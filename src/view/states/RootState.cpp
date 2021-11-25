@@ -4,7 +4,7 @@
 
 #include "RootState.h"
 
-RootState::RootState(std::shared_ptr<ConsolePrinter> printer) : WizardStatePrinter(printer) {
+RootState::RootState(const std::shared_ptr<ConsolePrinter>& printer) : WizardStatePrinter(printer) {
 
 }
 

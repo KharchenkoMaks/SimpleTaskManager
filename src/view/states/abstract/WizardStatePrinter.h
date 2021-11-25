@@ -12,7 +12,7 @@
 
 class WizardStatePrinter : public IWizardState {
 public:
-    explicit WizardStatePrinter(std::shared_ptr<ConsolePrinter> printer);
+    explicit WizardStatePrinter(const std::shared_ptr<ConsolePrinter>& printer);
     
     virtual ~WizardStatePrinter() = default;
 

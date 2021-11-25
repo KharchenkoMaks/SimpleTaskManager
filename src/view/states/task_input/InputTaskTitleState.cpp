@@ -4,7 +4,7 @@
 
 #include "states/task_input/InputTaskTitleState.h"
 
-InputTaskTitleState::InputTaskTitleState(std::shared_ptr<ConsolePrinter> printer) : WizardStatePrinter(printer) {
+InputTaskTitleState::InputTaskTitleState(const std::shared_ptr<ConsolePrinter>& printer) : WizardStatePrinter(printer) {
 
 }
 
