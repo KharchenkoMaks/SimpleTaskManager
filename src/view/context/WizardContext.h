@@ -6,6 +6,7 @@
 #define SIMPLETASKMANAGER_WIZARDCONTEXT_H
 
 #include "tasks/Task.h"
+#include "tasks/TaskId.h"
 
 #include <memory>
 #include <string>
@@ -40,6 +41,10 @@ public: // Adding task information
     void AddTask(const std::optional<Task>& task);
     std::optional<Task> GetAddedTask();
     void ResetAddedTask();
+
+    void SetEditingTaskId(const TaskId& task_id);
+    std::optional<TaskId> GetEditingTaskId();
+    void ResetEditingTaskId();
 private:
     Task CreateDefaultTask();
     void AddedTaskInitialize();
@@ -50,6 +55,7 @@ private:
     std::optional<std::string> confirm_message_;
 
     std::optional<Task> added_task_;
+    std::optional<TaskId> editing_task_id_;
 };
 
 
