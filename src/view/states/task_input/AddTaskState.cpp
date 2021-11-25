@@ -4,8 +4,7 @@
 
 #include "states/task_input/AddTaskState.h"
 
-std::shared_ptr<IWizardState>
-AddTaskState::Execute(std::shared_ptr<WizardContext> context,
+std::optional<std::shared_ptr<IWizardState>> AddTaskState::Execute(std::shared_ptr<WizardContext> context,
                       std::shared_ptr<WizardStatesFactory> state_factory) {
     // TODO (Maksym): make ConsoleStateMachine instead of this while loop
 

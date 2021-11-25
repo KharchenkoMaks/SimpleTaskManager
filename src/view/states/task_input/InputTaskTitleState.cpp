@@ -8,7 +8,7 @@ InputTaskTitleState::InputTaskTitleState(std::shared_ptr<ConsolePrinter> printer
 
 }
 
-std::shared_ptr<IWizardState> InputTaskTitleState::Execute(std::shared_ptr<WizardContext> context,
+std::optional<std::shared_ptr<IWizardState>> InputTaskTitleState::Execute(std::shared_ptr<WizardContext> context,
                                                            std::shared_ptr<WizardStatesFactory> state_factory) {
     printer_->WriteLine("Please, input task title:");
     printer_->Write("Add Task> ");

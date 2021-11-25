@@ -9,7 +9,7 @@ InputTaskPriorityState::InputTaskPriorityState(std::shared_ptr<ConsolePrinter> p
 
 }
 
-std::shared_ptr<IWizardState> InputTaskPriorityState::Execute(std::shared_ptr<WizardContext> context,
+std::optional<std::shared_ptr<IWizardState>> InputTaskPriorityState::Execute(std::shared_ptr<WizardContext> context,
                                                               std::shared_ptr<WizardStatesFactory> state_factory) {
     printer_->WriteLine("Please, input task priority (High, Medium, Low, None):");
     printer_->Write("Add Task> ");

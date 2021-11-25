@@ -9,7 +9,7 @@ InputTaskDueDateState::InputTaskDueDateState(std::shared_ptr<ConsolePrinter> pri
 
 }
 
-std::shared_ptr<IWizardState> InputTaskDueDateState::Execute(std::shared_ptr<WizardContext> context,
+std::optional<std::shared_ptr<IWizardState>> InputTaskDueDateState::Execute(std::shared_ptr<WizardContext> context,
                                                              std::shared_ptr<WizardStatesFactory> state_factory) {
     printer_->WriteLine("Please, input task due date:");
     printer_->Write("Add Task> ");

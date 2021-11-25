@@ -12,7 +12,7 @@ int main() {
 // TODO (Maksym): Make context inside StateMachine unique
 // TODO: Get rid of unnecessary fields in Context - Done 25.11.2021
 // TODO: Move factory, context out of state machine
-// TODO: Get rid of ConfirmState
+// TODO: Get rid of ConfirmState - Done 25.11.2021
 // TODO: Move next steps logic to states factory
 // TODO: Make lazy states initialization in states factory
 // TODO: Use state machine inside AddTaskState and EditTaskState

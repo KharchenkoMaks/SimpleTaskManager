@@ -8,7 +8,7 @@ HelpState::HelpState(std::shared_ptr<ConsolePrinter> printer) : WizardStatePrint
 
 }
 
-std::shared_ptr<IWizardState> HelpState::Execute(std::shared_ptr<WizardContext> context,
+std::optional<std::shared_ptr<IWizardState>> HelpState::Execute(std::shared_ptr<WizardContext> context,
                                                  std::shared_ptr<WizardStatesFactory> state_factory) {
     printer_->WriteLine("Available commands:");
     printer_->WriteLine("1. add");

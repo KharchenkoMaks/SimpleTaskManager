@@ -8,7 +8,7 @@ EditTaskState::EditTaskState(std::shared_ptr<ConsolePrinter> printer) : WizardSt
 
 }
 
-std::shared_ptr<IWizardState> EditTaskState::Execute(std::shared_ptr<WizardContext> context,
+std::optional<std::shared_ptr<IWizardState>> EditTaskState::Execute(std::shared_ptr<WizardContext> context,
                                                      std::shared_ptr<WizardStatesFactory> state_factory) {
     try {
         context->SetEditingTaskId(InputTaskIdToEdit());
