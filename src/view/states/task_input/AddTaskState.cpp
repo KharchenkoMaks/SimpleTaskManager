@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 24.11.2021.
 //
 
-#include "AddTaskState.h"
+#include "states/task_input/AddTaskState.h"
 
 std::shared_ptr<IWizardState>
 AddTaskState::Execute(std::shared_ptr<WizardContext> context,

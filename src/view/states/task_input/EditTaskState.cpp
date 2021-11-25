@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 25.11.2021.
 //
 
-#include "EditTaskState.h"
+#include "states/task_input/EditTaskState.h"
 
 EditTaskState::EditTaskState(std::shared_ptr<ConsolePrinter> printer) : WizardStatePrinter(printer) {
 
