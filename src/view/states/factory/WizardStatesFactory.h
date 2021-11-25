@@ -35,7 +35,6 @@ public:
         kRoot,
         kHelp,
         kQuit,
-        kConfirm,
         kAddTask,
         kEditTask,
         kInputTaskTitle,
