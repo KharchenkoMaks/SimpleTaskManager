@@ -6,11 +6,11 @@
 #define SIMPLETASKMANAGER_WIZARDSTATESFACTORY_H
 
 #include "states/abstract/IWizardState.h"
-#include "printer/ConsolePrinter.h"
+#include "ConsolePrinter.h"
 
 #include "states/RootState.h"
 #include "states/HelpState.h"
-#include "states/quit/QuitState.h"
+#include "states/QuitState.h"
 #include "states/task_input/AddTaskState.h"
 #include "states/task_input/EditTaskState.h"
 #include "states/task_input/InputTaskTitleState.h"

@@ -27,11 +27,11 @@ add_executable(SimpleTaskManager
         src/model/tasks/SubTask.h
         src/view/ConsoleStateMachine.cpp
         src/view/ConsoleStateMachine.h
-        src/view/context/WizardContext.cpp
-        src/view/context/WizardContext.h
+        src/view/WizardContext.cpp
+        src/view/WizardContext.h
         src/view/states/abstract/IWizardState.h
-        src/view/printer/ConsolePrinter.cpp
-        src/view/printer/ConsolePrinter.h
+        src/view/ConsolePrinter.cpp
+        src/view/ConsolePrinter.h
         src/view/states/abstract/WizardStatePrinter.cpp
         src/view/states/abstract/WizardStatePrinter.h
         src/view/states/factory/WizardStatesFactory.cpp
@@ -40,8 +40,8 @@ add_executable(SimpleTaskManager
         src/view/states/RootState.h
         src/view/states/HelpState.cpp
         src/view/states/HelpState.h
-        src/view/states/quit/QuitState.cpp
-        src/view/states/quit/QuitState.h
+        src/view/states/QuitState.cpp
+        src/view/states/QuitState.h
         src/view/states/task_input/AddTaskState.cpp
         src/view/states/task_input/AddTaskState.h
         src/view/states/task_input/InputTaskTitleState.cpp

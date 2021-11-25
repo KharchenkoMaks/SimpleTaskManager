@@ -6,7 +6,7 @@
 #define SIMPLETASKMANAGER_CONSOLESTATEMACHINE_H
 
 #include "states/factory/WizardStatesFactory.h"
-#include "context/WizardContext.h"
+#include "WizardContext.h"
 #include "states/abstract/IWizardState.h"
 
 #include <memory>

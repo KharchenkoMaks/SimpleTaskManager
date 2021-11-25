@@ -6,7 +6,7 @@
 #define SIMPLETASKMANAGER_WIZARDSTATEPRINTER_H
 
 #include "states/abstract/IWizardState.h"
-#include "printer/ConsolePrinter.h"
+#include "ConsolePrinter.h"
 
 #include <memory>
 

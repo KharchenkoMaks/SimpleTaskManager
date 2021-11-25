@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 23.11.2021.
 //
 
-#include "context/WizardContext.h"
+#include "WizardContext.h"
 
 WizardContext::WizardContext() :
     added_task_(CreateDefaultTask()),

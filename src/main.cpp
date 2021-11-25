@@ -20,5 +20,5 @@ int main() {
 // TODO: Rename WizardStatePrinter abstract class
 // TODO: Rename Printer to PrinterWithScanner =)
 // TODO: Make default methods in WizardStatePrinter to ask user for some input
-// TODO: Delete unnecessary directories
+// TODO_DONE: Delete unnecessary directories - Done 25.11.2021
 // TODO: Change subtasks structure
