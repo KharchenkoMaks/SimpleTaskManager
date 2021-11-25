@@ -13,6 +13,7 @@
 #include "states/quit/QuitState.h"
 #include "states/confirm/ConfirmState.h"
 #include "states/add_task/AddTaskState.h"
+#include "states/edit_task/EditTaskState.h"
 #include "states/task_input/InputTaskTitleState.h"
 #include "states/task_input/InputTaskPriorityState.h"
 #include "states/task_input/InputTaskDueDateState.h"
@@ -25,6 +26,7 @@ class HelpState;
 class QuitState;
 class ConfirmState;
 class AddTaskState;
+class EditTaskState;
 class InputTaskTitleState;
 class InputTaskPriorityState;
 class InputTaskDueDateState;
@@ -37,6 +39,7 @@ public:
         kQuit,
         kConfirm,
         kAddTask,
+        kEditTask,
         kInputTaskTitle,
         kInputTaskPriority,
         kInputTaskDueDate
@@ -53,6 +56,8 @@ private:
     std::shared_ptr<ConfirmState> confirm_state_;
 
     std::shared_ptr<AddTaskState> add_task_state_;
+    std::shared_ptr<EditTaskState> edit_task_state_;
+
     std::shared_ptr<InputTaskTitleState> input_task_title_state_;
     std::shared_ptr<InputTaskPriorityState> input_task_priority_state_;
     std::shared_ptr<InputTaskDueDateState> input_task_due_date_state_;

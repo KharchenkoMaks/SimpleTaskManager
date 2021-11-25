@@ -12,6 +12,8 @@ WizardStatesFactory::WizardStatesFactory() {
     help_state_ = std::make_shared<HelpState>(printer_);
     confirm_state_ = std::make_shared<ConfirmState>(printer_);
 
+    edit_task_state_ = std::make_shared<EditTaskState>(printer_);
+
     input_task_title_state_ = std::make_shared<InputTaskTitleState>(printer_);
     input_task_priority_state_ = std::make_shared<InputTaskPriorityState>(printer_);
     input_task_due_date_state_ = std::make_shared<InputTaskDueDateState>(printer_);
@@ -25,8 +27,7 @@ std::shared_ptr<IWizardState> WizardStatesFactory::GetStateByCommand(const std::
     if (command == "add") {
         return add_task_state_;
     } else if (command == "edit") {
-        // edit state
-        throw std::invalid_argument("Wrong command was given.");
+        return edit_task_state_;
     } else if (command == "delete") {
         // delete state
         throw std::invalid_argument("Wrong command was given.");
@@ -61,6 +62,9 @@ std::shared_ptr<IWizardState> WizardStatesFactory::GetState(const WizardStatesFa
         }
         case States::kAddTask: {
             return add_task_state_;
+        }
+        case States::kEditTask: {
+            return edit_task_state_;
         }
         case States::kInputTaskTitle: {
             return input_task_title_state_;
