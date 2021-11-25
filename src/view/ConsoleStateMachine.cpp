@@ -11,11 +11,7 @@ WizardContext ConsoleStateMachine::Run(const WizardStatesFactory::States initial
     while (state_.has_value()){
         state_ = state_.value()->Execute(context_, states_factory);
     }
-    if (context_.unique()) {
-        // Copying context and returning it
-        return WizardContext(*(context_.get()));
-    }
-    else {
-        throw std::runtime_error("Context leak in StateMachine");
-    }
+
+    // Returns copy of context
+    return WizardContext(*(context_.get()));
 }
