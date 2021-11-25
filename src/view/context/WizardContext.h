@@ -15,48 +15,22 @@
 
 class WizardContext {
 public:
-    enum class ConfirmationStatus{
-        kConfirmed,
-        kNotConfirmed,
-        kNone
-    };
-public:
     WizardContext();
-public: // User confirmation information
-    void ConfirmAction();
-    void NotConfirmAction();
-    void ResetActionConfirmation();
-    ConfirmationStatus GetConfirmationStatus();
-
-    void SetConfirmMessage(const std::string& message);
-    void ResetConfirmMessage();
-    std::optional<std::string> GetConfirmMessage();
-public: // StateMachine interruption information
-    void InterruptStateMachine();
-    bool IsStateMachineStopped();
 public: // Adding task information
     void AddTaskTitle(const std::string& title);
     void AddTaskPriority(Task::Priority priority);
     void AddTaskDueTime(time_t due_time);
-    void AddTask(const std::optional<Task>& task);
-    std::optional<Task> GetAddedTask();
-    void ResetAddedTask();
+    Task GetAddedTask();
 
     void SetEditingTaskId(const TaskId& task_id);
     void SetEditingTaskId(const std::string& task_id);
-    std::optional<TaskId> GetEditingTaskId();
-    void ResetEditingTaskId();
+    TaskId GetEditingTaskId();
 private:
     Task CreateDefaultTask();
-    void AddedTaskInitialize();
+    TaskId CreateDefaultTaskId();
 private:
-    bool state_machine_stopped_;
-
-    ConfirmationStatus confirmation_;
-    std::optional<std::string> confirm_message_;
-
-    std::optional<Task> added_task_;
-    std::optional<TaskId> editing_task_id_;
+    Task added_task_;
+    TaskId editing_task_id_;
 };
 
 
