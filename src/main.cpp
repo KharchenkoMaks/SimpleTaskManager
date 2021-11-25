@@ -10,6 +10,7 @@ int main() {
 }
 
 // TODO (Maksym): Make context inside StateMachine unique
+// TODO: Get rid of unnecessary fields in Context
 // TODO: Move factory, context out of state machine
 // TODO: Get rid of ConfirmState
 // TODO: Move next steps logic to states factory
