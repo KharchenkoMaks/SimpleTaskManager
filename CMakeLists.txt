@@ -42,8 +42,6 @@ add_executable(SimpleTaskManager
         src/view/states/HelpState.h
         src/view/states/quit/QuitState.cpp
         src/view/states/quit/QuitState.h
-        src/view/states/confirm/ConfirmState.cpp
-        src/view/states/confirm/ConfirmState.h
         src/view/states/task_input/AddTaskState.cpp
         src/view/states/task_input/AddTaskState.h
         src/view/states/task_input/InputTaskTitleState.cpp

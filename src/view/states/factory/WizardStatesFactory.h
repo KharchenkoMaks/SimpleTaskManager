@@ -11,7 +11,6 @@
 #include "states/RootState.h"
 #include "states/HelpState.h"
 #include "states/quit/QuitState.h"
-#include "states/confirm/ConfirmState.h"
 #include "states/task_input/AddTaskState.h"
 #include "states/task_input/EditTaskState.h"
 #include "states/task_input/InputTaskTitleState.h"
@@ -24,7 +23,6 @@
 class RootState;
 class HelpState;
 class QuitState;
-class ConfirmState;
 class AddTaskState;
 class EditTaskState;
 class InputTaskTitleState;
@@ -53,7 +51,6 @@ private:
     std::shared_ptr<RootState> root_state_;
     std::shared_ptr<HelpState> help_state_;
     std::shared_ptr<QuitState> quit_state_;
-    std::shared_ptr<ConfirmState> confirm_state_;
 
     std::shared_ptr<AddTaskState> add_task_state_;
     std::shared_ptr<EditTaskState> edit_task_state_;

@@ -10,7 +10,7 @@ WizardStatesFactory::WizardStatesFactory() {
     // Using printer
     root_state_ = std::make_shared<RootState>(printer_);
     help_state_ = std::make_shared<HelpState>(printer_);
-    confirm_state_ = std::make_shared<ConfirmState>(printer_);
+    quit_state_ = std::make_shared<QuitState>(printer_);
 
     edit_task_state_ = std::make_shared<EditTaskState>(printer_);
 
@@ -19,7 +19,6 @@ WizardStatesFactory::WizardStatesFactory() {
     input_task_due_date_state_ = std::make_shared<InputTaskDueDateState>(printer_);
 
     // Not using printer
-    quit_state_ = std::make_shared<QuitState>();
     add_task_state_ = std::make_shared<AddTaskState>();
 }
 
@@ -56,9 +55,6 @@ std::shared_ptr<IWizardState> WizardStatesFactory::GetState(const WizardStatesFa
         }
         case States::kQuit: {
             return quit_state_;
-        }
-        case States::kConfirm: {
-            return confirm_state_;
         }
         case States::kAddTask: {
             return add_task_state_;
