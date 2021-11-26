@@ -10,3 +10,11 @@ WizardStateConsole::WizardStateConsole(const std::shared_ptr<ConsolePrinter>& pr
                                        console_reader_(reader) {
 
 }
+
+const std::shared_ptr<ConsolePrinter>& WizardStateConsole::GetConsolePrinter() const {
+    return console_printer_;
+}
+
+const std::shared_ptr<ConsoleReader> &WizardStateConsole::GetConsoleReader() const {
+    return console_reader_;
+}

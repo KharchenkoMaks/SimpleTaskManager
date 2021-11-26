@@ -14,9 +14,9 @@ std::optional<std::shared_ptr<IWizardState>> QuitState::Execute(std::shared_ptr<
 }
 
 bool QuitState::UserConfirm() {
-    console_printer_->WriteLine("Are you sure you want to quit?");
-    console_printer_->Write("Y/N> ");
-    std::string users_answer = console_reader_->ReadLine();
+    GetConsolePrinter()->WriteLine("Are you sure you want to quit?");
+    GetConsolePrinter()->Write("Y/N> ");
+    std::string users_answer = GetConsoleReader()->ReadLine();
     return users_answer == "Y" || users_answer == "y";
 }
 

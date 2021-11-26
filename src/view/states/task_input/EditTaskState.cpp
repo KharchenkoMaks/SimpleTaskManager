@@ -16,7 +16,7 @@ std::optional<std::shared_ptr<IWizardState>> EditTaskState::Execute(std::shared_
     try {
         context->SetEditingTaskId(InputTaskIdToEdit());
     } catch (std::invalid_argument) {
-        console_printer_->WriteLine("Wrong task id was given, try again!");
+        GetConsolePrinter()->WriteLine("Wrong task id was given, try again!");
         return state_factory->GetState(WizardStatesFactory::States::kEditTask);
     }
 
@@ -31,8 +31,8 @@ std::optional<std::shared_ptr<IWizardState>> EditTaskState::Execute(std::shared_
 }
 
 std::string EditTaskState::InputTaskIdToEdit() {
-    console_printer_->WriteLine("Please, input id of task you want to edit:");
-    console_printer_->Write("Edit Task> ");
-    std::string task_id_to_edit = console_reader_->ReadLine();
+    GetConsolePrinter()->WriteLine("Please, input id of task you want to edit:");
+    GetConsolePrinter()->Write("Edit Task> ");
+    std::string task_id_to_edit = GetConsoleReader()->ReadLine();
     return task_id_to_edit;
 }

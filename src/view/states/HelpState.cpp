@@ -12,13 +12,13 @@ HelpState::HelpState(const std::shared_ptr<ConsolePrinter>& printer,
 
 std::optional<std::shared_ptr<IWizardState>> HelpState::Execute(std::shared_ptr<WizardContext> context,
                                                  std::shared_ptr<WizardStatesFactory> state_factory) {
-    console_printer_->WriteLine("Available commands:");
-    console_printer_->WriteLine("1. add");
-    console_printer_->WriteLine("2. edit");
-    console_printer_->WriteLine("3. delete");
-    console_printer_->WriteLine("4. complete");
-    console_printer_->WriteLine("5. show");
-    console_printer_->WriteLine("6. quit");
+    GetConsolePrinter()->WriteLine("Available commands:");
+    GetConsolePrinter()->WriteLine("1. add");
+    GetConsolePrinter()->WriteLine("2. edit");
+    GetConsolePrinter()->WriteLine("3. delete");
+    GetConsolePrinter()->WriteLine("4. complete");
+    GetConsolePrinter()->WriteLine("5. show");
+    GetConsolePrinter()->WriteLine("6. quit");
 
     return state_factory->GetState(WizardStatesFactory::States::kRoot);
 }

@@ -18,10 +18,11 @@ int main() {
 // TODO: Get rid of states enum in states factory
 // TODO_DONE: Use state machine inside AddTaskState and EditTaskState - Done 25.11.2021
 // TODO: Make abstract State for states that run state machine inside?
-// TODO: Rename WizardStateConsole abstract class
+// TODO_DONE: Rename WizardStateConsole abstract class - Done 26.11.2021
 // TODO_DONE: Rename Printer to PrinterWithScanner =) - Done 25.11.2021
 // TODO: Make default methods in WizardStateConsole to ask user for some input
 // TODO_DONE: Delete unnecessary directories - Done 25.11.2021
 // TODO: Change subtasks structure
 // TODO: Move Task::Priority converter out of Task class
 // TODO_DONE: Split MultiFunctionalPrinter to printer and reader - Done 26.11.2021
+// TODO_DONE: Make printer and reader private in WizardStateConsole - Done 26.11.2021

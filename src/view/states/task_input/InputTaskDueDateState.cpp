@@ -12,15 +12,15 @@ InputTaskDueDateState::InputTaskDueDateState(const std::shared_ptr<ConsolePrinte
 
 std::optional<std::shared_ptr<IWizardState>> InputTaskDueDateState::Execute(std::shared_ptr<WizardContext> context,
                                                              std::shared_ptr<WizardStatesFactory> state_factory) {
-    console_printer_->WriteLine("Please, input task due date:");
-    console_printer_->Write("Add Task> ");
-    const std::string due_date = console_reader_->ReadLine();
+    GetConsolePrinter()->WriteLine("Please, input task due date:");
+    GetConsolePrinter()->Write("Add Task> ");
+    const std::string due_date = GetConsoleReader()->ReadLine();
 
     try {
         time_t task_due_date = std::stoi(due_date);
         context->AddTaskDueTime(task_due_date);
     } catch (std::invalid_argument) {
-        console_printer_->WriteError("Wrong due date was given, please, try again!");
+        GetConsolePrinter()->WriteError("Wrong due date was given, please, try again!");
         return state_factory->GetState(WizardStatesFactory::States::kInputTaskDueDate);
     }
 

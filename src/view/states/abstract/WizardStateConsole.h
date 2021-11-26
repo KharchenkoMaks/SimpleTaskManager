@@ -15,10 +15,15 @@ class WizardStateConsole : public IWizardState {
 public:
     explicit WizardStateConsole(const std::shared_ptr<ConsolePrinter>& printer,
                                 const std::shared_ptr<ConsoleReader>& reader);
-    
+
+public:
+    const std::shared_ptr<ConsolePrinter>& GetConsolePrinter() const;
+    const std::shared_ptr<ConsoleReader>& GetConsoleReader() const;
+
+public:
     virtual ~WizardStateConsole() = default;
 
-protected:
+private:
    std::shared_ptr<ConsolePrinter> console_printer_;
    std::shared_ptr<ConsoleReader> console_reader_;
 };
