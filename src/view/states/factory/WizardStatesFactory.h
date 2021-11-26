@@ -20,6 +20,7 @@
 
 #include <memory>
 #include <string>
+#include <optional>
 
 class RootState;
 class HelpState;
@@ -32,21 +33,28 @@ class InputTaskDueDateState;
 
 class WizardStatesFactory {
 public:
-    enum class States {
-        kRoot,
-        kHelp,
-        kQuit,
-        kAddTask,
-        kEditTask,
-        kInputTaskTitle,
-        kInputTaskPriority,
-        kInputTaskDueDate
-    };
-public:
     WizardStatesFactory();
+
+public:
     std::shared_ptr<IWizardState> GetStateByCommand(const std::string& command);
 
-    std::shared_ptr<IWizardState> GetState(States state);
+    std::shared_ptr<IWizardState> GetInitialState();
+
+    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const RootState& state);
+    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const HelpState& state);
+    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const QuitState& state);
+    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const AddTaskState& state);
+    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const EditTaskState& state);
+    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const InputTaskTitleState& state);
+    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const InputTaskPriorityState& state);
+    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const InputTaskDueDateState& state);
+
+    std::optional<std::shared_ptr<IWizardState>> GetNextState(const QuitState& state);
+    std::optional<std::shared_ptr<IWizardState>> GetNextState(const AddTaskState& state);
+    std::optional<std::shared_ptr<IWizardState>> GetNextState(const EditTaskState& state);
+    std::optional<std::shared_ptr<IWizardState>> GetNextState(const InputTaskTitleState& state);
+    std::optional<std::shared_ptr<IWizardState>> GetNextState(const InputTaskPriorityState& state);
+    std::optional<std::shared_ptr<IWizardState>> GetNextState(const InputTaskDueDateState& state);
 private:
     std::shared_ptr<RootState> root_state_;
     std::shared_ptr<HelpState> help_state_;
