@@ -22,3 +22,4 @@ int main() {
 // TODO: Make default methods in WizardStatePrinter to ask user for some input
 // TODO_DONE: Delete unnecessary directories - Done 25.11.2021
 // TODO: Change subtasks structure
+// TODO: Move Task::Priority converter out of Task class

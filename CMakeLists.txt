@@ -30,8 +30,8 @@ add_executable(SimpleTaskManager
         src/view/WizardContext.cpp
         src/view/WizardContext.h
         src/view/states/abstract/IWizardState.h
-        src/view/ConsoleMultiFunctionalPrinter.cpp
-        src/view/ConsoleMultiFunctionalPrinter.h
+        src/view/console_io/ConsolePrinter.cpp
+        src/view/console_io/ConsolePrinter.h
         src/view/states/abstract/WizardStatePrinter.cpp
         src/view/states/abstract/WizardStatePrinter.h
         src/view/states/factory/WizardStatesFactory.cpp
@@ -51,7 +51,7 @@ add_executable(SimpleTaskManager
         src/view/states/task_input/InputTaskDueDateState.cpp
         src/view/states/task_input/InputTaskDueDateState.h
         src/view/states/task_input/EditTaskState.cpp
-        src/view/states/task_input/EditTaskState.h)
+        src/view/states/task_input/EditTaskState.h src/view/console_io/ConsoleReader.cpp src/view/console_io/ConsoleReader.h)
 
 add_executable(SimpleTaskManager_test
         src/model/tasks/Task.cpp

@@ -5,7 +5,9 @@
 #include "states/task_input/EditTaskState.h"
 #include "ConsoleStateMachine.h"
 
-EditTaskState::EditTaskState(const std::shared_ptr<ConsoleMultiFunctionalPrinter>& printer) : WizardStatePrinter(printer) {
+EditTaskState::EditTaskState(const std::shared_ptr<ConsolePrinter>& printer,
+                             const std::shared_ptr<ConsoleReader>& reader) :
+                             WizardStatePrinter(printer, reader) {
 
 }
 
@@ -14,7 +16,7 @@ std::optional<std::shared_ptr<IWizardState>> EditTaskState::Execute(std::shared_
     try {
         context->SetEditingTaskId(InputTaskIdToEdit());
     } catch (std::invalid_argument) {
-        printer_->WriteLine("Wrong task id was given, try again!");
+        console_printer_->WriteLine("Wrong task id was given, try again!");
         return state_factory->GetState(WizardStatesFactory::States::kEditTask);
     }
 
@@ -29,9 +31,8 @@ std::optional<std::shared_ptr<IWizardState>> EditTaskState::Execute(std::shared_
 }
 
 std::string EditTaskState::InputTaskIdToEdit() {
-    printer_->WriteLine("Please, input id of task you want to edit:");
-    printer_->Write("Edit Task> ");
-    std::string task_id_to_edit;
-    std::cin >> task_id_to_edit;
+    console_printer_->WriteLine("Please, input id of task you want to edit:");
+    console_printer_->Write("Edit Task> ");
+    std::string task_id_to_edit = console_reader_->ReadLine();
     return task_id_to_edit;
 }

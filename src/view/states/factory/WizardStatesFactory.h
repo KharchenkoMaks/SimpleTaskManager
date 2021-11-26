@@ -6,7 +6,8 @@
 #define SIMPLETASKMANAGER_WIZARDSTATESFACTORY_H
 
 #include "states/abstract/IWizardState.h"
-#include "ConsoleMultiFunctionalPrinter.h"
+#include "console_io/ConsolePrinter.h"
+#include "console_io/ConsoleReader.h"
 
 #include "states/RootState.h"
 #include "states/HelpState.h"
@@ -58,7 +59,8 @@ private:
     std::shared_ptr<InputTaskPriorityState> input_task_priority_state_;
     std::shared_ptr<InputTaskDueDateState> input_task_due_date_state_;
 
-    std::shared_ptr<ConsoleMultiFunctionalPrinter> printer_;
+    std::shared_ptr<ConsoleReader> reader_;
+    std::shared_ptr<ConsolePrinter> printer_;
 };
 
 
