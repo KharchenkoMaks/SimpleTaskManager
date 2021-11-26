@@ -142,3 +142,11 @@ std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(c
     }
 }
 
+std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const RootState &state, WizardStatesFactory::MoveType move_type) {
+    switch (move_type) {
+        default: {
+            return root_state_;
+        }
+    }
+}
+

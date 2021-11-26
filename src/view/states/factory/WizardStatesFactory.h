@@ -46,6 +46,7 @@ public:
 
     std::shared_ptr<IWizardState> GetInitialState();
 
+    std::optional<std::shared_ptr<IWizardState>> GetNextState(const RootState& state, MoveType move_type);
     std::optional<std::shared_ptr<IWizardState>> GetNextState(const HelpState& state, MoveType move_type);
     std::optional<std::shared_ptr<IWizardState>> GetNextState(const QuitState& state, MoveType move_type);
     std::optional<std::shared_ptr<IWizardState>> GetNextState(const AddTaskState& state, MoveType move_type);

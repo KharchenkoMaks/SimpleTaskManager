@@ -20,5 +20,5 @@ std::optional<std::shared_ptr<IWizardState>> HelpState::Execute(std::shared_ptr<
     GetConsolePrinter()->WriteLine("5. show");
     GetConsolePrinter()->WriteLine("6. quit");
 
-    return state_factory->GetState(WizardStatesFactory::States::kRoot);
+    return state_factory->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }

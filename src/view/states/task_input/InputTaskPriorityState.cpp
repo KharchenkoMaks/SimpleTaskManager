@@ -19,8 +19,8 @@ std::optional<std::shared_ptr<IWizardState>> InputTaskPriorityState::Execute(std
         context->AddTaskPriority(task_priority);
     } catch (std::invalid_argument) {
         GetConsolePrinter()->WriteError("Wrong task priority was given, try [High, Medium, Low, None]!");
-        return state_factory->GetState(WizardStatesFactory::States::kInputTaskPriority);
+        return state_factory->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    return state_factory->GetState(WizardStatesFactory::States::kInputTaskDueDate);
+    return state_factory->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }

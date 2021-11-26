@@ -19,8 +19,8 @@ std::optional<std::shared_ptr<IWizardState>> InputTaskDueDateState::Execute(std:
         context->AddTaskDueTime(task_due_date);
     } catch (std::invalid_argument) {
         GetConsolePrinter()->WriteError("Wrong due date was given, please, try again!");
-        return state_factory->GetState(WizardStatesFactory::States::kInputTaskDueDate);
+        return state_factory->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    return std::nullopt;
+    return state_factory->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }

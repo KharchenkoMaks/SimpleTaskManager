@@ -11,12 +11,12 @@ std::optional<std::shared_ptr<IWizardState>> AddTaskState::Execute(std::shared_p
     std::shared_ptr<WizardContext> context_with_added_task = std::make_shared<WizardContext>();
     ConsoleStateMachine state_machine(context_with_added_task,
                                       state_factory,
-                                      state_factory->GetNextState(*this));
+                                      state_factory->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
     state_machine.Run();
 
     context->AddTaskTitle(context_with_added_task->GetAddedTask().GetTitle());
     context->AddTaskPriority(context_with_added_task->GetAddedTask().GetPriority());
     context->AddTaskDueTime(context_with_added_task->GetAddedTask().GetDueTime());
 
-    return state_factory->GetState(WizardStatesFactory::States::kRoot);
+    return state_factory->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
 }

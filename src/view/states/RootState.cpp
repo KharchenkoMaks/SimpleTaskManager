@@ -14,11 +14,9 @@ std::optional<std::shared_ptr<IWizardState>> RootState::Execute(std::shared_ptr<
                                                  std::shared_ptr<WizardStatesFactory> state_factory) {
     std::string command = GetUserInput("");
     try {
-        std::shared_ptr<IWizardState> next_state =
-                state_factory->GetStateByCommand(command);
-        return next_state;
+        return state_factory->GetStateByCommand(command);;
     } catch (std::invalid_argument){
         GetConsolePrinter()->WriteError("Unknown command! Use help.");
-        return state_factory->GetState(WizardStatesFactory::States::kRoot);
+        return state_factory->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 }

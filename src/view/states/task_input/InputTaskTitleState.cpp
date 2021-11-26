@@ -18,8 +18,8 @@ std::optional<std::shared_ptr<IWizardState>> InputTaskTitleState::Execute(std::s
         context->AddTaskTitle(task_title);
     } catch (std::invalid_argument) {
         GetConsolePrinter()->WriteError("Task title was wrong, please, try again!");
-        return state_factory->GetState(WizardStatesFactory::States::kInputTaskTitle);
+        return state_factory->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    return state_factory->GetState(WizardStatesFactory::States::kInputTaskPriority);
+    return state_factory->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }
