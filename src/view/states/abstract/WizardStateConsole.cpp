@@ -18,3 +18,10 @@ const std::shared_ptr<ConsolePrinter>& WizardStateConsole::GetConsolePrinter() c
 const std::shared_ptr<ConsoleReader> &WizardStateConsole::GetConsoleReader() const {
     return console_reader_;
 }
+
+std::string WizardStateConsole::GetUserInput(const std::string& invitation_message) {
+    console_printer_->Write(invitation_message + "> ");
+    std::string user_input;
+    std::cin >> user_input;
+    return user_input;
+}

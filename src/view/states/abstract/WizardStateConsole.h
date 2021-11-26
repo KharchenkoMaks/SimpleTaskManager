@@ -21,6 +21,9 @@ public:
     const std::shared_ptr<ConsoleReader>& GetConsoleReader() const;
 
 public:
+    std::string GetUserInput(const std::string& invitation_message);
+
+public:
     virtual ~WizardStateConsole() = default;
 
 private:
