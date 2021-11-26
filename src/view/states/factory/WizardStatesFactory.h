@@ -33,6 +33,12 @@ class InputTaskDueDateState;
 
 class WizardStatesFactory {
 public:
+    enum class MoveType{
+        PREVIOUS,
+        ERROR,
+        NEXT
+    };
+public:
     WizardStatesFactory();
 
 public:
@@ -40,21 +46,13 @@ public:
 
     std::shared_ptr<IWizardState> GetInitialState();
 
-    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const RootState& state);
-    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const HelpState& state);
-    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const QuitState& state);
-    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const AddTaskState& state);
-    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const EditTaskState& state);
-    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const InputTaskTitleState& state);
-    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const InputTaskPriorityState& state);
-    std::optional<std::shared_ptr<IWizardState>> GetPreviousState(const InputTaskDueDateState& state);
-
-    std::optional<std::shared_ptr<IWizardState>> GetNextState(const QuitState& state);
-    std::optional<std::shared_ptr<IWizardState>> GetNextState(const AddTaskState& state);
-    std::optional<std::shared_ptr<IWizardState>> GetNextState(const EditTaskState& state);
-    std::optional<std::shared_ptr<IWizardState>> GetNextState(const InputTaskTitleState& state);
-    std::optional<std::shared_ptr<IWizardState>> GetNextState(const InputTaskPriorityState& state);
-    std::optional<std::shared_ptr<IWizardState>> GetNextState(const InputTaskDueDateState& state);
+    std::optional<std::shared_ptr<IWizardState>> GetNextState(const HelpState& state, MoveType move_type);
+    std::optional<std::shared_ptr<IWizardState>> GetNextState(const QuitState& state, MoveType move_type);
+    std::optional<std::shared_ptr<IWizardState>> GetNextState(const AddTaskState& state, MoveType move_type);
+    std::optional<std::shared_ptr<IWizardState>> GetNextState(const EditTaskState& state, MoveType move_type);
+    std::optional<std::shared_ptr<IWizardState>> GetNextState(const InputTaskTitleState& state, MoveType move_type);
+    std::optional<std::shared_ptr<IWizardState>> GetNextState(const InputTaskPriorityState& state, MoveType move_type);
+    std::optional<std::shared_ptr<IWizardState>> GetNextState(const InputTaskDueDateState& state, MoveType move_type);
 private:
     std::shared_ptr<RootState> root_state_;
     std::shared_ptr<HelpState> help_state_;

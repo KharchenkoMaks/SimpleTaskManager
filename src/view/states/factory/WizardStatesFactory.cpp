@@ -50,59 +50,95 @@ std::shared_ptr<IWizardState> WizardStatesFactory::GetInitialState() {
     return root_state_;
 }
 
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetPreviousState(const HelpState &state) {
-    return root_state_;
+std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const QuitState& state, const MoveType move_type) {
+    switch (move_type) {
+        case MoveType::PREVIOUS: {
+            return root_state_;
+        }
+        case MoveType::ERROR: {
+            return root_state_;
+        }
+        case MoveType::NEXT: {
+            return std::nullopt;
+        }
+    }
 }
 
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetPreviousState(const QuitState &state) {
-    return root_state_;
+std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const AddTaskState &state, const MoveType move_type) {
+    switch (move_type) {
+        case MoveType::PREVIOUS: {
+            return root_state_;
+        }
+        case MoveType::ERROR: {
+            return add_task_state_;
+        }
+        case MoveType::NEXT: {
+            return input_task_title_state_;
+        }
+    }
 }
 
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetPreviousState(const RootState& state) {
-    return root_state_;
+std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const EditTaskState &state, const MoveType move_type) {
+    switch (move_type) {
+        case MoveType::PREVIOUS: {
+            return root_state_;
+        }
+        case MoveType::ERROR: {
+            return edit_task_state_;
+        }
+        case MoveType::NEXT: {
+            return input_task_title_state_;
+        }
+    }
 }
 
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetPreviousState(const AddTaskState &state) {
-    return root_state_
+std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const InputTaskTitleState &state, const MoveType move_type) {
+    switch (move_type) {
+        case MoveType::PREVIOUS: {
+            throw std::invalid_argument("No previous state for given state.");
+        }
+        case MoveType::ERROR: {
+            return input_task_title_state_;
+        }
+        case MoveType::NEXT: {
+            return input_task_priority_state_;
+        }
+    };
 }
 
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetPreviousState(const EditTaskState &state) {
-    return root_state_;
+std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const InputTaskPriorityState &state, const MoveType move_type) {
+    switch (move_type) {
+        case MoveType::PREVIOUS: {
+            return input_task_title_state_;
+        }
+        case MoveType::ERROR: {
+            return input_task_priority_state_;
+        }
+        case MoveType::NEXT: {
+            return input_task_due_date_state_;
+        }
+    }
 }
 
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetPreviousState(const InputTaskTitleState &state) {
-    return input_task_title_state_;
+std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const InputTaskDueDateState &state, const MoveType move_type) {
+    switch (move_type) {
+        case MoveType::PREVIOUS: {
+            return input_task_priority_state_;
+        }
+        case MoveType::ERROR: {
+            return input_task_due_date_state_;
+        }
+        case MoveType::NEXT: {
+            return std::nullopt;
+        }
+    }
 }
 
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetPreviousState(const InputTaskPriorityState &state) {
-    return input_task_priority_state_;
-}
-
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetPreviousState(const InputTaskDueDateState &state) {
-    return input_task_due_date_state_;
-}
-
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const QuitState& state) {
-    return std::nullopt;
-}
-
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const AddTaskState &state) {
-    return input_task_title_state_;
-}
-
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const EditTaskState &state) {
-    return input_task_title_state_;
-}
-
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const InputTaskTitleState &state) {
-    return input_task_priority_state_;
-}
-
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const InputTaskPriorityState &state) {
-    return input_task_due_date_state_;
-}
-
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const InputTaskDueDateState &state) {
-    return std::nullopt;
+std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const HelpState &state, const MoveType move_type) {
+    switch (move_type) {
+        default: {
+            return root_state_;
+        }
+    }
 }
 
