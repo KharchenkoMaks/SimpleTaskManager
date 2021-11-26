@@ -20,12 +20,15 @@ std::optional<std::shared_ptr<IWizardState>> EditTaskState::Execute(std::shared_
         return state_factory->GetState(WizardStatesFactory::States::kEditTask);
     }
 
+    std::shared_ptr<WizardContext> context_with_edited_task = std::make_shared<WizardContext>();
     ConsoleStateMachine state_machine;
-    WizardContext new_context = state_machine.Run(WizardStatesFactory::States::kInputTaskTitle);
+    state_machine.Run(WizardStatesFactory::States::kInputTaskTitle,
+                      context_with_edited_task,
+                      state_factory);
 
-    context->AddTaskTitle(new_context.GetAddedTask().GetTitle());
-    context->AddTaskPriority(new_context.GetAddedTask().GetPriority());
-    context->AddTaskDueTime(new_context.GetAddedTask().GetDueTime());
+    context->AddTaskTitle(context_with_edited_task->GetAddedTask().GetTitle());
+    context->AddTaskPriority(context_with_edited_task->GetAddedTask().GetPriority());
+    context->AddTaskDueTime(context_with_edited_task->GetAddedTask().GetDueTime());
 
     return state_factory->GetState(WizardStatesFactory::States::kRoot);
 }
