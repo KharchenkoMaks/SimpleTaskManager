@@ -9,10 +9,10 @@ std::optional<std::shared_ptr<IWizardState>> AddTaskState::Execute(std::shared_p
                       std::shared_ptr<WizardStatesFactory> state_factory) {
 
     std::shared_ptr<WizardContext> context_with_added_task = std::make_shared<WizardContext>();
-    ConsoleStateMachine state_machine;
-    state_machine.Run(WizardStatesFactory::States::kInputTaskTitle,
-                      context_with_added_task,
-                      state_factory);
+    ConsoleStateMachine state_machine(context_with_added_task,
+                                      state_factory,
+                                      state_factory->GetNextState(*this));
+    state_machine.Run();
 
     context->AddTaskTitle(context_with_added_task->GetAddedTask().GetTitle());
     context->AddTaskPriority(context_with_added_task->GetAddedTask().GetPriority());
