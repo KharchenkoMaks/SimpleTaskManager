@@ -5,14 +5,14 @@
 #ifndef SIMPLETASKMANAGER_INPUTTASKPRIORITYSTATE_H
 #define SIMPLETASKMANAGER_INPUTTASKPRIORITYSTATE_H
 
-#include "states/abstract/WizardStatePrinter.h"
+#include "states/abstract/WizardStateConsole.h"
 #include "states/factory/WizardStatesFactory.h"
 #include "WizardContext.h"
 
 #include <string>
 #include <memory>
 
-class InputTaskPriorityState : public WizardStatePrinter {
+class InputTaskPriorityState : public WizardStateConsole {
 public:
     explicit InputTaskPriorityState(const std::shared_ptr<ConsolePrinter>& printer,
                                     const std::shared_ptr<ConsoleReader>& reader);

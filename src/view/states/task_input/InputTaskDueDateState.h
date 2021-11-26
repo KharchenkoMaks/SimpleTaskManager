@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_INPUTTASKDUEDATESTATE_H
 #define SIMPLETASKMANAGER_INPUTTASKDUEDATESTATE_H
 
-#include "states/abstract/WizardStatePrinter.h"
+#include "states/abstract/WizardStateConsole.h"
 #include "states/factory/WizardStatesFactory.h"
 #include "WizardContext.h"
 
@@ -14,7 +14,7 @@
 #include <ctime>
 #include <optional>
 
-class InputTaskDueDateState : public WizardStatePrinter {
+class InputTaskDueDateState : public WizardStateConsole {
 public:
     explicit InputTaskDueDateState(const std::shared_ptr<ConsolePrinter>& printer,
                                    const std::shared_ptr<ConsoleReader>& reader);

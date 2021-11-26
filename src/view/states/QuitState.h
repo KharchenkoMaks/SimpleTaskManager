@@ -5,14 +5,14 @@
 #ifndef SIMPLETASKMANAGER_QUITSTATE_H
 #define SIMPLETASKMANAGER_QUITSTATE_H
 
-#include "states/abstract/WizardStatePrinter.h"
+#include "states/abstract/WizardStateConsole.h"
 #include "states/factory/WizardStatesFactory.h"
 #include "WizardContext.h"
 
 #include <memory>
 #include <string>
 
-class QuitState : public WizardStatePrinter {
+class QuitState : public WizardStateConsole {
 public:
     explicit QuitState(const std::shared_ptr<ConsolePrinter>& printer,
                        const std::shared_ptr<ConsoleReader>& reader);

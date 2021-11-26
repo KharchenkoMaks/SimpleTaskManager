@@ -5,14 +5,14 @@
 #ifndef SIMPLETASKMANAGER_ROOTSTATE_H
 #define SIMPLETASKMANAGER_ROOTSTATE_H
 
-#include "abstract/WizardStatePrinter.h"
+#include "abstract/WizardStateConsole.h"
 #include "factory/WizardStatesFactory.h"
 #include "WizardContext.h"
 
 #include <string>
 #include <memory>
 
-class RootState : public WizardStatePrinter {
+class RootState : public WizardStateConsole {
 public:
     explicit RootState(const std::shared_ptr<ConsolePrinter>& printer,
                        const std::shared_ptr<ConsoleReader>& reader);

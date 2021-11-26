@@ -7,7 +7,7 @@
 
 EditTaskState::EditTaskState(const std::shared_ptr<ConsolePrinter>& printer,
                              const std::shared_ptr<ConsoleReader>& reader) :
-                             WizardStatePrinter(printer, reader) {
+                             WizardStateConsole(printer, reader) {
 
 }
 

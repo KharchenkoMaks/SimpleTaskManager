@@ -5,13 +5,13 @@
 #ifndef SIMPLETASKMANAGER_HELPSTATE_H
 #define SIMPLETASKMANAGER_HELPSTATE_H
 
-#include "abstract/WizardStatePrinter.h"
+#include "abstract/WizardStateConsole.h"
 #include "factory/WizardStatesFactory.h"
 
 #include <string>
 #include <memory>
 
-class HelpState : public WizardStatePrinter {
+class HelpState : public WizardStateConsole {
 public:
     explicit HelpState(const std::shared_ptr<ConsolePrinter>& printer,
                        const std::shared_ptr<ConsoleReader>& reader);

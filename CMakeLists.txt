@@ -32,8 +32,8 @@ add_executable(SimpleTaskManager
         src/view/states/abstract/IWizardState.h
         src/view/console_io/ConsolePrinter.cpp
         src/view/console_io/ConsolePrinter.h
-        src/view/states/abstract/WizardStatePrinter.cpp
-        src/view/states/abstract/WizardStatePrinter.h
+        src/view/states/abstract/WizardStateConsole.cpp
+        src/view/states/abstract/WizardStateConsole.h
         src/view/states/factory/WizardStatesFactory.cpp
         src/view/states/factory/WizardStatesFactory.h
         src/view/states/RootState.cpp

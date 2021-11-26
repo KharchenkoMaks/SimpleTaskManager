@@ -5,14 +5,14 @@
 #ifndef SIMPLETASKMANAGER_INPUTTASKTITLESTATE_H
 #define SIMPLETASKMANAGER_INPUTTASKTITLESTATE_H
 
-#include "states/abstract/WizardStatePrinter.h"
+#include "states/abstract/WizardStateConsole.h"
 #include "states/factory/WizardStatesFactory.h"
 #include "WizardContext.h"
 
 #include <string>
 #include <memory>
 
-class InputTaskTitleState : public WizardStatePrinter {
+class InputTaskTitleState : public WizardStateConsole {
 public:
     explicit InputTaskTitleState(const std::shared_ptr<ConsolePrinter>& printer,
                                  const std::shared_ptr<ConsoleReader>& reader);

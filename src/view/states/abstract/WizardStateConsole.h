@@ -2,8 +2,8 @@
 // Created by Maksym Kharchenko on 23.11.2021.
 //
 
-#ifndef SIMPLETASKMANAGER_WIZARDSTATEPRINTER_H
-#define SIMPLETASKMANAGER_WIZARDSTATEPRINTER_H
+#ifndef SIMPLETASKMANAGER_WIZARDSTATECONSOLE_H
+#define SIMPLETASKMANAGER_WIZARDSTATECONSOLE_H
 
 #include "states/abstract/IWizardState.h"
 #include "console_io/ConsolePrinter.h"
@@ -11,12 +11,12 @@
 
 #include <memory>
 
-class WizardStatePrinter : public IWizardState {
+class WizardStateConsole : public IWizardState {
 public:
-    explicit WizardStatePrinter(const std::shared_ptr<ConsolePrinter>& printer,
+    explicit WizardStateConsole(const std::shared_ptr<ConsolePrinter>& printer,
                                 const std::shared_ptr<ConsoleReader>& reader);
     
-    virtual ~WizardStatePrinter() = default;
+    virtual ~WizardStateConsole() = default;
 
 protected:
    std::shared_ptr<ConsolePrinter> console_printer_;
@@ -24,4 +24,4 @@ protected:
 };
 
 
-#endif //SIMPLETASKMANAGER_WIZARDSTATEPRINTER_H
+#endif //SIMPLETASKMANAGER_WIZARDSTATECONSOLE_H
