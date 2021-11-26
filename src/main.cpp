@@ -9,7 +9,7 @@ int main() {
     std::shared_ptr<WizardContext> wizard_context = std::make_shared<WizardContext>();
     std::shared_ptr<WizardStatesFactory> states_factory = std::make_shared<WizardStatesFactory>();
     ConsoleStateMachine state_machine;
-    state_machine.Run(WizardStatesFactory::States::kRoot, wizard_context, states_factory);
+    state_machine.Run(wizard_context, states_factory, states_factory->GetInitialState());
     return 0;
 }
 
