@@ -14,9 +14,9 @@ EditTaskState::EditTaskState(const std::shared_ptr<ConsolePrinter>& printer,
 std::optional<std::shared_ptr<IWizardState>> EditTaskState::Execute(std::shared_ptr<WizardContext> context,
                                                      std::shared_ptr<WizardStatesFactory> state_factory) {
     try {
-        context->SetEditingTaskId(InputTaskIdToEdit());
+        context->SetEditingTaskId(GetUserInput("Edit Task ID"));
     } catch (std::invalid_argument) {
-        GetConsolePrinter()->WriteLine("Wrong task id was given, try again!");
+        GetConsolePrinter()->WriteError("Wrong task id was given, try again!");
         return state_factory->GetState(WizardStatesFactory::States::kEditTask);
     }
 
@@ -28,11 +28,4 @@ std::optional<std::shared_ptr<IWizardState>> EditTaskState::Execute(std::shared_
     context->AddTaskDueTime(new_context.GetAddedTask().GetDueTime());
 
     return state_factory->GetState(WizardStatesFactory::States::kRoot);
-}
-
-std::string EditTaskState::InputTaskIdToEdit() {
-    GetConsolePrinter()->WriteLine("Please, input id of task you want to edit:");
-    GetConsolePrinter()->Write("Edit Task> ");
-    std::string task_id_to_edit = GetConsoleReader()->ReadLine();
-    return task_id_to_edit;
 }

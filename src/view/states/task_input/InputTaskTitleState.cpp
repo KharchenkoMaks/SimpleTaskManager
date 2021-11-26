@@ -12,9 +12,7 @@ InputTaskTitleState::InputTaskTitleState(const std::shared_ptr<ConsolePrinter>& 
 
 std::optional<std::shared_ptr<IWizardState>> InputTaskTitleState::Execute(std::shared_ptr<WizardContext> context,
                                                            std::shared_ptr<WizardStatesFactory> state_factory) {
-    GetConsolePrinter()->WriteLine("Please, input task title:");
-    GetConsolePrinter()->Write("Add Task> ");
-    const std::string task_title = GetConsoleReader()->ReadLine();
+    const std::string task_title = GetUserInput("Title");
 
     try {
         context->AddTaskTitle(task_title);

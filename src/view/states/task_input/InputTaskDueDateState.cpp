@@ -12,9 +12,7 @@ InputTaskDueDateState::InputTaskDueDateState(const std::shared_ptr<ConsolePrinte
 
 std::optional<std::shared_ptr<IWizardState>> InputTaskDueDateState::Execute(std::shared_ptr<WizardContext> context,
                                                              std::shared_ptr<WizardStatesFactory> state_factory) {
-    GetConsolePrinter()->WriteLine("Please, input task due date:");
-    GetConsolePrinter()->Write("Add Task> ");
-    const std::string due_date = GetConsoleReader()->ReadLine();
+    const std::string due_date = GetUserInput("Due Date");
 
     try {
         time_t task_due_date = std::stoi(due_date);

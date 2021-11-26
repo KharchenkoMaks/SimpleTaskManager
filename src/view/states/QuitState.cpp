@@ -9,14 +9,12 @@ std::optional<std::shared_ptr<IWizardState>> QuitState::Execute(std::shared_ptr<
     if (UserConfirm()) {
         return std::nullopt;
     } else {
-        return state_factory->GetState(WizardStatesFactory::States::kQuit);
+        return state_factory->GetState(WizardStatesFactory::States::kRoot);
     }
 }
 
 bool QuitState::UserConfirm() {
-    GetConsolePrinter()->WriteLine("Are you sure you want to quit?");
-    GetConsolePrinter()->Write("Y/N> ");
-    std::string users_answer = GetConsoleReader()->ReadLine();
+    std::string users_answer = GetUserInput("Are you sure? y/n");
     return users_answer == "Y" || users_answer == "y";
 }
 

@@ -12,9 +12,7 @@ InputTaskPriorityState::InputTaskPriorityState(const std::shared_ptr<ConsolePrin
 
 std::optional<std::shared_ptr<IWizardState>> InputTaskPriorityState::Execute(std::shared_ptr<WizardContext> context,
                                                               std::shared_ptr<WizardStatesFactory> state_factory) {
-    GetConsolePrinter()->WriteLine("Please, input task priority (High, Medium, Low, None):");
-    GetConsolePrinter()->Write("Add Task> ");
-    const std::string priority = GetConsoleReader()->ReadLine();
+    const std::string priority = GetUserInput("Priority (High, Medium, Low, None)");
 
     try {
         Task::Priority task_priority = Task::GetTaskPriority(priority);

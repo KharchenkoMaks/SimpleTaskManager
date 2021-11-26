@@ -12,8 +12,7 @@ RootState::RootState(const std::shared_ptr<ConsolePrinter>& printer,
 
 std::optional<std::shared_ptr<IWizardState>> RootState::Execute(std::shared_ptr<WizardContext> context,
                                                  std::shared_ptr<WizardStatesFactory> state_factory) {
-    GetConsolePrinter()->Write("> ");
-    std::string command = GetConsoleReader()->ReadLine();
+    std::string command = GetUserInput("");
     try {
         std::shared_ptr<IWizardState> next_state =
                 state_factory->GetStateByCommand(command);

@@ -20,7 +20,7 @@ int main() {
 // TODO: Make abstract State for states that run state machine inside?
 // TODO_DONE: Rename WizardStateConsole abstract class - Done 26.11.2021
 // TODO_DONE: Rename Printer to PrinterWithScanner =) - Done 25.11.2021
-// TODO: Make default methods in WizardStateConsole to ask user for some input
+// TODO_DONE: Make default methods in WizardStateConsole to ask user for some input - Done 26.11.2021
 // TODO_DONE: Delete unnecessary directories - Done 25.11.2021
 // TODO: Change subtasks structure
 // TODO: Move Task::Priority converter out of Task class
