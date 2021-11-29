@@ -51,7 +51,7 @@ add_executable(SimpleTaskManager
         src/view/states/task_input/InputTaskDueDateState.cpp
         src/view/states/task_input/InputTaskDueDateState.h
         src/view/states/task_input/EditTaskState.cpp
-        src/view/states/task_input/EditTaskState.h src/view/console_io/ConsoleReader.cpp src/view/console_io/ConsoleReader.h src/view/states/abstract/IWizardState.cpp)
+        src/view/states/task_input/EditTaskState.h src/view/console_io/ConsoleReader.cpp src/view/console_io/ConsoleReader.h src/view/states/abstract/IWizardState.cpp src/controller/Controller.cpp src/controller/Controller.h)
 
 add_executable(SimpleTaskManager_test
         src/model/tasks/Task.cpp
