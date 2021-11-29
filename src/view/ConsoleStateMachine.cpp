@@ -6,7 +6,7 @@
 
 void ConsoleStateMachine::Run() {
     while (state_.has_value()){
-        state_ = state_.value()->Execute(context_, states_factory_);
+        state_ = state_.value()->Execute(context_);
     }
 }
 

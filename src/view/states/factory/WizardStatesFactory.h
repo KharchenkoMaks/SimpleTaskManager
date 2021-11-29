@@ -41,6 +41,9 @@ public:
 public:
     WizardStatesFactory();
 
+    // TODO: Replace this method to lazy initialization
+    void Init();
+
 public:
     std::shared_ptr<IWizardState> GetStateByCommand(const std::string& command);
 
