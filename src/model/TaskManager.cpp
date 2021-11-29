@@ -16,7 +16,7 @@ TaskId TaskManager::Create(const Task& t) {
 }
 
 void TaskManager::Edit(const TaskId& id, const Task& t) {
-    if (tasks_.find(id) != tasks_.end()) {
+    if (IsTaskIdExist(id)) {
         tasks_.insert_or_assign(id, t);
     } else{
         throw std::invalid_argument("No task with such id.");
@@ -24,7 +24,7 @@ void TaskManager::Edit(const TaskId& id, const Task& t) {
 }
 
 void TaskManager::Delete(const TaskId& id) {
-    if (tasks_.find(id) != tasks_.end()) {
+    if (IsTaskIdExist(id)) {
         tasks_.erase(id);
     } else{
         throw std::invalid_argument("No task with such id.");
@@ -32,9 +32,9 @@ void TaskManager::Delete(const TaskId& id) {
 }
 
 void TaskManager::Complete(const TaskId& id) {
-    auto task_iterator = tasks_.find(id);
+    if (IsTaskIdExist(id)) {
+        auto task_iterator = tasks_.find(id);
 
-    if (task_iterator != tasks_.end()) {
         Task previous_task = task_iterator->second;
         Task completed_task = Task::Create(previous_task.GetTitle(),
                                            previous_task.GetPriority(),
@@ -43,7 +43,7 @@ void TaskManager::Complete(const TaskId& id) {
                                            previous_task.GetLabel());
 
         tasks_.insert_or_assign(id, completed_task);
-    } else{
+    } else {
         throw std::invalid_argument("No task with such id.");
     }
 }
@@ -54,4 +54,8 @@ std::vector<std::pair<TaskId, Task>> TaskManager::Show() {
         tasks.push_back(std::pair<TaskId, Task>(item.first, item.second));
     }
     return tasks;
+}
+
+bool TaskManager::IsTaskIdExist(const TaskId &task_id) {
+    return tasks_.find(task_id) != tasks_.end();
 }

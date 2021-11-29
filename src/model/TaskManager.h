@@ -23,6 +23,9 @@ public:
 
     std::vector<std::pair<TaskId, Task>> Show();
 public:
+    bool IsTaskIdExist(const TaskId& task_id);
+
+public:
     explicit TaskManager(std::unique_ptr<IdGenerator> generator);
 private:
     std::map<TaskId, Task> tasks_;
