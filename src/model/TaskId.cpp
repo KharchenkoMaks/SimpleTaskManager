@@ -20,7 +20,7 @@ TaskId TaskId::Create(const std::string& id) {
     return TaskId::Create(std::stoi(id));
 }
 
-int TaskId::GetId() {
+int TaskId::GetId() const {
     return id_;
 }
 

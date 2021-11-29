@@ -14,7 +14,7 @@ public:
 
     static TaskId NullTaskId();
 public:
-    int GetId();
+    int GetId() const;
 
     bool operator== (const TaskId& t) const;
     bool operator< (const TaskId& t) const;
