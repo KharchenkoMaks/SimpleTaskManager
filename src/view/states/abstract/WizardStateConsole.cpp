@@ -4,8 +4,10 @@
 
 #include "WizardStateConsole.h"
 
-WizardStateConsole::WizardStateConsole(const std::shared_ptr<ConsolePrinter>& printer,
+WizardStateConsole::WizardStateConsole(const std::shared_ptr<WizardStatesFactory>& states_factory,
+                                       const std::shared_ptr<ConsolePrinter>& printer,
                                        const std::shared_ptr<ConsoleReader>& reader) :
+                                       IWizardState(states_factory),
                                        console_printer_(printer),
                                        console_reader_(reader) {
 

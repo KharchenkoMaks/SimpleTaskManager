@@ -13,7 +13,8 @@
 
 class WizardStateConsole : public IWizardState {
 public:
-    explicit WizardStateConsole(const std::shared_ptr<ConsolePrinter>& printer,
+    explicit WizardStateConsole(const std::shared_ptr<WizardStatesFactory>& states_factory,
+                                const std::shared_ptr<ConsolePrinter>& printer,
                                 const std::shared_ptr<ConsoleReader>& reader);
 
 public:

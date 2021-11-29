@@ -15,10 +15,10 @@ class WizardStatesFactory;
 
 class IWizardState {
 public:
-    explicit IWizardState(std::shared_ptr<WizardStatesFactory> states_factory);
+    explicit IWizardState(const std::shared_ptr<WizardStatesFactory>& states_factory);
 public:
     virtual std::optional<std::shared_ptr<IWizardState>> Execute(std::shared_ptr<WizardContext>) = 0;
-    
+
     std::shared_ptr<WizardStatesFactory> GetFactory();
 public:
     virtual ~IWizardState() = default;
