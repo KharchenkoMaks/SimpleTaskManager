@@ -32,3 +32,5 @@ int main() {
 // TODO_DONE: Move factory to states' parameters - Done 29.11.2021
 // TODO_DONE: Make read id method in WizardStateConsole - Done 29.11.2021
 // TODO: Make start_from enum parameter in state machine?
+// TODO_DONE: Make controller and validator for tasks - Done 29.11.2021
+// TODO: Inject controller to state machine and states
