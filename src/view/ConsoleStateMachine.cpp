@@ -4,15 +4,14 @@
 
 #include "ConsoleStateMachine.h"
 
-void ConsoleStateMachine::Run() {
+std::shared_ptr<WizardContext> ConsoleStateMachine::Run() {
     while (state_.has_value()){
         state_ = state_.value()->Execute(context_);
     }
+    return context_;
 }
 
-ConsoleStateMachine::ConsoleStateMachine(const std::shared_ptr<WizardContext>& context,
-                                         const std::optional<std::shared_ptr<IWizardState>>& initial_state) :
-                                         context_(context),
+ConsoleStateMachine::ConsoleStateMachine(const std::optional<std::shared_ptr<IWizardState>>& initial_state) :
                                          state_(initial_state) {
-
+    context_ = std::make_shared<WizardContext>();
 }

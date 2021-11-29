@@ -6,9 +6,8 @@
 #include <memory>
 
 int main() {
-    std::shared_ptr<WizardContext> wizard_context = std::make_shared<WizardContext>();
     std::shared_ptr<WizardStatesFactory> states_factory = std::make_shared<WizardStatesFactory>();
-    ConsoleStateMachine state_machine(wizard_context, states_factory->GetInitialState());
+    ConsoleStateMachine state_machine(states_factory->GetInitialState());
     state_machine.Run();
     return 0;
 }
