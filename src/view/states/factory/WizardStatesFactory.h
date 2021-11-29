@@ -38,11 +38,6 @@ public:
         ERROR,
         NEXT
     };
-public:
-    WizardStatesFactory();
-
-    // TODO: Replace this method to lazy initialization
-    void Init();
 
 public:
     std::shared_ptr<IWizardState> GetStateByCommand(const std::string& command);
@@ -57,6 +52,19 @@ public:
     std::optional<std::shared_ptr<IWizardState>> GetNextState(const InputTaskTitleState& state, MoveType move_type);
     std::optional<std::shared_ptr<IWizardState>> GetNextState(const InputTaskPriorityState& state, MoveType move_type);
     std::optional<std::shared_ptr<IWizardState>> GetNextState(const InputTaskDueDateState& state, MoveType move_type);
+private:
+    enum class States {
+        kRoot,
+        kHelp,
+        kQuit,
+        kAddTask,
+        kEditTask,
+        kInputTaskTitle,
+        kInputTaskPriority,
+        kInputTaskDueDate
+    };
+private:
+    std::shared_ptr<IWizardState> GetLazyStateByStatesEnum(States state);
 private:
     std::shared_ptr<RootState> root_state_;
     std::shared_ptr<HelpState> help_state_;
