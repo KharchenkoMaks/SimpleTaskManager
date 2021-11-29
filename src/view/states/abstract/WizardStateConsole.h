@@ -10,6 +10,7 @@
 #include "console_io/ConsoleReader.h"
 
 #include <memory>
+#include <optional>
 
 class WizardStateConsole : public IWizardState {
 public:
@@ -23,7 +24,8 @@ public:
 
 public:
     std::string GetUserInput(const std::string& invitation_message);
-    TaskId GetTaskIdFromUser();
+    // Returns std::nullopt if invalid task_id was given
+    std::optional<TaskId> GetTaskIdFromUser();
 
 public:
     virtual ~WizardStateConsole() = default;

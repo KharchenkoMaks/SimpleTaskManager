@@ -13,9 +13,8 @@ EditTaskState::EditTaskState(const std::shared_ptr<WizardStatesFactory>& states_
 }
 
 std::optional<std::shared_ptr<IWizardState>> EditTaskState::Execute(std::shared_ptr<WizardContext> context) {
-    try {
-        context->SetEditingTaskId(GetTaskIdFromUser());
-    } catch (std::invalid_argument) {
+    std::optional<TaskId> editing_task_id = GetTaskIdFromUser();
+    if (!editing_task_id){
         GetConsolePrinter()->WriteError("Wrong task id was given, try again!");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }

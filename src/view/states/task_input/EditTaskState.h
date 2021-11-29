@@ -12,6 +12,7 @@
 #include "TaskId.h"
 
 #include <memory>
+#include <optional>
 
 class EditTaskState : public WizardStateConsole {
 public:

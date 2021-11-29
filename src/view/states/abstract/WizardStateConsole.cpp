@@ -28,7 +28,11 @@ std::string WizardStateConsole::GetUserInput(const std::string& invitation_messa
     return user_input;
 }
 
-TaskId WizardStateConsole::GetTaskIdFromUser() {
+std::optional<TaskId> WizardStateConsole::GetTaskIdFromUser() {
     std::string task_id_str = GetUserInput("Task ID");
-    return TaskId::Create(task_id_str);
+    try {
+        return TaskId::Create(task_id_str);
+    } catch (std::invalid_argument) {
+        return std::nullopt;
+    }
 }
