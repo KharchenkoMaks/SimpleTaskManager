@@ -7,3 +7,7 @@
 IWizardState::IWizardState(std::shared_ptr<WizardStatesFactory> states_factory) : states_factory_(states_factory) {
 
 }
+
+std::shared_ptr<WizardStatesFactory> IWizardState::GetFactory() {
+    return states_factory_;
+}
