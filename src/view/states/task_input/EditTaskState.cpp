@@ -19,10 +19,8 @@ std::optional<std::shared_ptr<IWizardState>> EditTaskState::Execute(std::shared_
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    std::shared_ptr<WizardContext> context_with_edited_task = std::make_shared<WizardContext>();
-    ConsoleStateMachine state_machine(context_with_edited_task,
-                                      GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
-    state_machine.Run();
+    ConsoleStateMachine state_machine(GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
+    std::shared_ptr<WizardContext> context_with_edited_task = state_machine.Run();
 
     context->AddTaskTitle(context_with_edited_task->GetAddedTask().GetTitle());
     context->AddTaskPriority(context_with_edited_task->GetAddedTask().GetPriority());
