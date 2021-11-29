@@ -18,7 +18,7 @@ int main() {
 // TODO_DONE: Move factory, context out of state machine - Done 26.11.2021
 // TODO_DONE: Get rid of ConfirmState - Done 25.11.2021
 // TODO_DONE: Move next steps logic to states factory - Done 26.11.2021
-// TODO_DONE: Make lazy states initialization in states factory - Done 27.11.2021
+// TODO_DONE: Make lazy states initialization in states factory - Done 29.11.2021
 // TODO_DONE: Get rid of states enum in states factory - Done 26.11.2021
 // TODO_DONE: Use state machine inside AddTaskState and EditTaskState - Done 25.11.2021
 // TODO: Make abstract State for states that run state machine inside?
@@ -30,5 +30,6 @@ int main() {
 // TODO: Move Task::Priority converter out of Task class
 // TODO_DONE: Split MultiFunctionalPrinter to printer and reader - Done 26.11.2021
 // TODO_DONE: Make printer and reader private in WizardStateConsole - Done 26.11.2021
-// TODO: Move factory to states' parameters
+// TODO_DONE: Move factory to states' parameters - Done 29.11.2021
 // TODO: Make state ReadId
+// TODO: Make start_from enum parameter in state machine?
