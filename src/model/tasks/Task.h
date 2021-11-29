@@ -31,11 +31,11 @@ public:
     // throws std::runtime_eror if task is already completed
     std::string to_string();
 
-    std::string GetTitle();
-    Task::Priority GetPriority();
-    time_t GetDueTime();
-    bool IsCompleted();
-    std::string GetLabel();
+    std::string GetTitle() const;
+    Task::Priority GetPriority() const;
+    time_t GetDueTime() const;
+    bool IsCompleted() const;
+    std::string GetLabel() const;
 
     virtual TaskId GetParentTaskId();
 public:

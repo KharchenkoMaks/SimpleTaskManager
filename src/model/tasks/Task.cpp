@@ -33,23 +33,23 @@ std::string Task::to_string() {
                     ", Due to: " + std::to_string(due_to_) + "\n";
 }
 
-std::string Task::GetTitle() {
+std::string Task::GetTitle() const {
     return this->title_;
 }
 
-Task::Priority Task::GetPriority() {
+Task::Priority Task::GetPriority() const {
     return this->priority_;
 }
 
-time_t Task::GetDueTime() {
+time_t Task::GetDueTime() const {
     return this->due_to_;
 }
 
-bool Task::IsCompleted() {
+bool Task::IsCompleted() const {
     return completed_;
 }
 
-std::string Task::GetLabel() {
+std::string Task::GetLabel() const {
     return label_;
 }
 
