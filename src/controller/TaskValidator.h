@@ -8,10 +8,16 @@
 #include "tasks/Task.h"
 #include "TaskId.h"
 
+#include <ctime>
+#include <string>
+
 class TaskValidator {
 public:
     bool ValidateTask(const Task& task);
     bool ValidateTaskId(const TaskId& task_id);
+private:
+    bool ValidateTitle(const std::string& title);
+    bool ValidateDueDate(time_t due_date);
 };
 
 
