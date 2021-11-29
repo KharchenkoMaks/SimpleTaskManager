@@ -23,6 +23,7 @@ public:
 
 public:
     std::string GetUserInput(const std::string& invitation_message);
+    TaskId GetTaskIdFromUser();
 
 public:
     virtual ~WizardStateConsole() = default;
