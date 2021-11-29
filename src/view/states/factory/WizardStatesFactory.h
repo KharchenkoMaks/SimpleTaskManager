@@ -31,7 +31,7 @@ class InputTaskTitleState;
 class InputTaskPriorityState;
 class InputTaskDueDateState;
 
-class WizardStatesFactory {
+class WizardStatesFactory : public std::enable_shared_from_this<WizardStatesFactory> {
 public:
     enum class MoveType{
         PREVIOUS,

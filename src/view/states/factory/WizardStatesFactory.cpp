@@ -9,18 +9,18 @@ WizardStatesFactory::WizardStatesFactory() {
     reader_ = std::make_shared<ConsoleReader>();
 
     // Using printer
-    root_state_ = std::make_shared<RootState>(printer_, reader_);
-    help_state_ = std::make_shared<HelpState>(printer_, reader_);
-    quit_state_ = std::make_shared<QuitState>(printer_, reader_);
+    root_state_ = std::make_shared<RootState>(shared_from_this(), printer_, reader_);
+    help_state_ = std::make_shared<HelpState>(shared_from_this(), printer_, reader_);
+    quit_state_ = std::make_shared<QuitState>(shared_from_this(), printer_, reader_);
 
-    edit_task_state_ = std::make_shared<EditTaskState>(printer_, reader_);
+    edit_task_state_ = std::make_shared<EditTaskState>(shared_from_this(), printer_, reader_);
 
-    input_task_title_state_ = std::make_shared<InputTaskTitleState>(printer_, reader_);
-    input_task_priority_state_ = std::make_shared<InputTaskPriorityState>(printer_, reader_);
-    input_task_due_date_state_ = std::make_shared<InputTaskDueDateState>(printer_, reader_);
+    input_task_title_state_ = std::make_shared<InputTaskTitleState>(shared_from_this(), printer_, reader_);
+    input_task_priority_state_ = std::make_shared<InputTaskPriorityState>(shared_from_this(), printer_, reader_);
+    input_task_due_date_state_ = std::make_shared<InputTaskDueDateState>(shared_from_this(), printer_, reader_);
 
     // Not using printer
-    add_task_state_ = std::make_shared<AddTaskState>();
+    add_task_state_ = std::make_shared<AddTaskState>(shared_from_this());
 }
 
 std::shared_ptr<IWizardState> WizardStatesFactory::GetStateByCommand(const std::string &command) {
