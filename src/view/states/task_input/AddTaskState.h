@@ -15,8 +15,9 @@
 
 class AddTaskState : public IWizardState {
 public:
-    std::optional<std::shared_ptr<IWizardState>> Execute(std::shared_ptr<WizardContext> context,
-                                          std::shared_ptr<WizardStatesFactory> state_factory) override;
+    AddTaskState(const std::shared_ptr<WizardStatesFactory>& states_factory);
+public:
+    std::optional<std::shared_ptr<IWizardState>> Execute(std::shared_ptr<WizardContext> context) override;
 };
 
 

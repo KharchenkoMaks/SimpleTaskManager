@@ -19,7 +19,7 @@ public:
 public:
     virtual std::optional<std::shared_ptr<IWizardState>> Execute(std::shared_ptr<WizardContext>) = 0;
 
-    std::shared_ptr<WizardStatesFactory> GetFactory();
+    std::shared_ptr<WizardStatesFactory> GetStatesFactory();
 public:
     virtual ~IWizardState() = default;
 private:

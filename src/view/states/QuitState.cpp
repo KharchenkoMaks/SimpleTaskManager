@@ -4,12 +4,11 @@
 
 #include "QuitState.h"
 
-std::optional<std::shared_ptr<IWizardState>> QuitState::Execute(std::shared_ptr<WizardContext> context,
-                                                 std::shared_ptr<WizardStatesFactory> state_factory) {
+std::optional<std::shared_ptr<IWizardState>> QuitState::Execute(std::shared_ptr<WizardContext> context) {
     if (UserConfirm()) {
-        return state_factory->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
     } else {
-        return state_factory->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
     }
 }
 
@@ -18,8 +17,9 @@ bool QuitState::UserConfirm() {
     return users_answer == "Y" || users_answer == "y";
 }
 
-QuitState::QuitState(const std::shared_ptr<ConsolePrinter>& printer,
+QuitState::QuitState(const std::shared_ptr<WizardStatesFactory>& states_factory,
+                     const std::shared_ptr<ConsolePrinter>& printer,
                      const std::shared_ptr<ConsoleReader>& reader) :
-                     WizardStateConsole(printer, reader) {
+                     WizardStateConsole(states_factory, printer, reader) {
 
 }

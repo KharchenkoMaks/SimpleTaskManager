@@ -4,14 +4,14 @@
 
 #include "states/task_input/InputTaskPriorityState.h"
 
-InputTaskPriorityState::InputTaskPriorityState(const std::shared_ptr<ConsolePrinter>& printer,
+InputTaskPriorityState::InputTaskPriorityState(const std::shared_ptr<WizardStatesFactory>& states_factory,
+                                               const std::shared_ptr<ConsolePrinter>& printer,
                                                const std::shared_ptr<ConsoleReader>& reader) :
-                                               WizardStateConsole(printer, reader) {
+                                               WizardStateConsole(states_factory, printer, reader) {
 
 }
 
-std::optional<std::shared_ptr<IWizardState>> InputTaskPriorityState::Execute(std::shared_ptr<WizardContext> context,
-                                                              std::shared_ptr<WizardStatesFactory> state_factory) {
+std::optional<std::shared_ptr<IWizardState>> InputTaskPriorityState::Execute(std::shared_ptr<WizardContext> context) {
     const std::string priority = GetUserInput("Priority (High, Medium, Low, None)");
 
     try {
@@ -19,8 +19,8 @@ std::optional<std::shared_ptr<IWizardState>> InputTaskPriorityState::Execute(std
         context->AddTaskPriority(task_priority);
     } catch (std::invalid_argument) {
         GetConsolePrinter()->WriteError("Wrong task priority was given, try [High, Medium, Low, None]!");
-        return state_factory->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    return state_factory->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+    return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }

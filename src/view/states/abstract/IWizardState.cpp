@@ -9,6 +9,6 @@ IWizardState::IWizardState(const std::shared_ptr<WizardStatesFactory>& states_fa
 
 }
 
-std::shared_ptr<WizardStatesFactory> IWizardState::GetFactory() {
+std::shared_ptr<WizardStatesFactory> IWizardState::GetStatesFactory() {
     return states_factory_;
 }

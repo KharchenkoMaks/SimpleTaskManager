@@ -4,14 +4,14 @@
 
 #include "HelpState.h"
 
-HelpState::HelpState(const std::shared_ptr<ConsolePrinter>& printer,
+HelpState::HelpState(const std::shared_ptr<WizardStatesFactory>& states_factory,
+                     const std::shared_ptr<ConsolePrinter>& printer,
                      const std::shared_ptr<ConsoleReader>& reader) :
-                     WizardStateConsole(printer, reader) {
+                     WizardStateConsole(states_factory, printer, reader) {
 
 }
 
-std::optional<std::shared_ptr<IWizardState>> HelpState::Execute(std::shared_ptr<WizardContext> context,
-                                                 std::shared_ptr<WizardStatesFactory> state_factory) {
+std::optional<std::shared_ptr<IWizardState>> HelpState::Execute(std::shared_ptr<WizardContext> context) {
     GetConsolePrinter()->WriteLine("Available commands:");
     GetConsolePrinter()->WriteLine("1. add");
     GetConsolePrinter()->WriteLine("2. edit");
@@ -20,5 +20,5 @@ std::optional<std::shared_ptr<IWizardState>> HelpState::Execute(std::shared_ptr<
     GetConsolePrinter()->WriteLine("5. show");
     GetConsolePrinter()->WriteLine("6. quit");
 
-    return state_factory->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+    return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }

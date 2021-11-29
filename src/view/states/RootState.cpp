@@ -4,19 +4,19 @@
 
 #include "RootState.h"
 
-RootState::RootState(const std::shared_ptr<ConsolePrinter>& printer,
+RootState::RootState(const std::shared_ptr<WizardStatesFactory>& states_factory,
+                     const std::shared_ptr<ConsolePrinter>& printer,
                      const std::shared_ptr<ConsoleReader>& reader) :
-                     WizardStateConsole(printer, reader) {
+                     WizardStateConsole(states_factory, printer, reader) {
 
 }
 
-std::optional<std::shared_ptr<IWizardState>> RootState::Execute(std::shared_ptr<WizardContext> context,
-                                                 std::shared_ptr<WizardStatesFactory> state_factory) {
+std::optional<std::shared_ptr<IWizardState>> RootState::Execute(std::shared_ptr<WizardContext> context) {
     std::string command = GetUserInput("");
     try {
-        return state_factory->GetStateByCommand(command);;
+        return GetStatesFactory()->GetStateByCommand(command);;
     } catch (std::invalid_argument){
         GetConsolePrinter()->WriteError("Unknown command! Use help.");
-        return state_factory->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 }
