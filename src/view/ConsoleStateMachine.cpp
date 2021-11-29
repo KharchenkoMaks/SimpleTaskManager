@@ -11,10 +11,8 @@ void ConsoleStateMachine::Run() {
 }
 
 ConsoleStateMachine::ConsoleStateMachine(const std::shared_ptr<WizardContext>& context,
-                                         const std::shared_ptr<WizardStatesFactory>& states_factory,
                                          const std::optional<std::shared_ptr<IWizardState>>& initial_state) :
                                          context_(context),
-                                         states_factory_(states_factory),
                                          state_(initial_state) {
 
 }

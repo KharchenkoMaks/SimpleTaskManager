@@ -22,7 +22,6 @@ std::optional<std::shared_ptr<IWizardState>> EditTaskState::Execute(std::shared_
 
     std::shared_ptr<WizardContext> context_with_edited_task = std::make_shared<WizardContext>();
     ConsoleStateMachine state_machine(context_with_edited_task,
-                                      GetStatesFactory(),
                                       GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
     state_machine.Run();
 

@@ -9,7 +9,6 @@ std::optional<std::shared_ptr<IWizardState>> AddTaskState::Execute(std::shared_p
 
     std::shared_ptr<WizardContext> context_with_added_task = std::make_shared<WizardContext>();
     ConsoleStateMachine state_machine(context_with_added_task,
-                                      GetStatesFactory(),
                                       GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
     state_machine.Run();
 

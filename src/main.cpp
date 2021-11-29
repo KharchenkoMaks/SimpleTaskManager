@@ -8,7 +8,7 @@
 int main() {
     std::shared_ptr<WizardContext> wizard_context = std::make_shared<WizardContext>();
     std::shared_ptr<WizardStatesFactory> states_factory = std::make_shared<WizardStatesFactory>();
-    ConsoleStateMachine state_machine(wizard_context, states_factory, states_factory->GetInitialState());
+    ConsoleStateMachine state_machine(wizard_context, states_factory->GetInitialState());
     state_machine.Run();
     return 0;
 }
@@ -18,7 +18,7 @@ int main() {
 // TODO_DONE: Move factory, context out of state machine - Done 26.11.2021
 // TODO_DONE: Get rid of ConfirmState - Done 25.11.2021
 // TODO_DONE: Move next steps logic to states factory - Done 26.11.2021
-// TODO: Make lazy states initialization in states factory
+// TODO_DONE: Make lazy states initialization in states factory - Done 27.11.2021
 // TODO_DONE: Get rid of states enum in states factory - Done 26.11.2021
 // TODO_DONE: Use state machine inside AddTaskState and EditTaskState - Done 25.11.2021
 // TODO: Make abstract State for states that run state machine inside?
