@@ -52,3 +52,14 @@ void Controller::CompleteTask(const TaskId &task_id) {
 std::optional<Task> Controller::GetTask(const TaskId &task_id) const {
     return task_manager_->GetTask(task_id);
 }
+
+std::string Controller::GetAllTasks() {
+    std::string answer = "";
+
+    auto tasks = task_manager_->Show();
+    for (auto t : tasks){
+        answer.append("ID: " + std::to_string(t.first.GetId()) + ", " + t.second.to_string());
+    }
+
+    return answer;
+}
