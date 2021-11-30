@@ -22,7 +22,7 @@ std::optional<std::shared_ptr<WizardStateConsole>> InputTaskDueDateState::Execut
     }
 
     try {
-        time_t task_due_date = std::stoi(user_input);
+        DueTime task_due_date = DueTime::Create(user_input);
         context->AddTaskDueTime(task_due_date);
     } catch (std::invalid_argument) {
         GetConsolePrinter()->WriteError("Wrong due date was given, try again!");
@@ -33,13 +33,13 @@ std::optional<std::shared_ptr<WizardStateConsole>> InputTaskDueDateState::Execut
 }
 
 std::string InputTaskDueDateState::GetUserInputForDueDateEdit(const Task &task) {
-    std::string user_input = GetUserInput("Due Date, default: " + std::to_string(task.GetDueTime()));
+    std::string user_input = GetUserInput("Due Date, default: " + task.GetDueTime().GetTimeString());
     if (user_input.empty()){
-        return std::to_string(task.GetDueTime());
+        return task.GetDueTime().GetTimeString();
     }
     return user_input;
 }
 
 std::string InputTaskDueDateState::GetUserInputForDueDateAdd() {
-    return GetUserInput("Due Date");
+    return GetUserInput("Due Date, format: 12:00 01.01.2000");
 }

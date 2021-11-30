@@ -32,7 +32,7 @@ void WizardContext::AddTaskPriority(const Task::Priority priority) {
                                added_task_.value().GetLabel());
 }
 
-void WizardContext::AddTaskDueTime(const time_t due_time) {
+void WizardContext::AddTaskDueTime(const DueTime due_time) {
     InitializeTask();
     added_task_ = Task::Create(added_task_.value().GetTitle(),
                                added_task_.value().GetPriority(),
@@ -42,7 +42,7 @@ void WizardContext::AddTaskDueTime(const time_t due_time) {
 }
 
 Task WizardContext::CreateDefaultTask() {
-    return Task::Create("default_title", Task::Priority::NONE, 0);
+    return Task::Create("default_title", Task::Priority::NONE, DueTime::Create(0));
 }
 
 void WizardContext::SetEditingTask(const TaskId& task_id, const Task& task) {

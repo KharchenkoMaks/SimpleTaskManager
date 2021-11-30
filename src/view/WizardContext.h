@@ -7,6 +7,7 @@
 
 #include "tasks/Task.h"
 #include "TaskId.h"
+#include "DueTime.h"
 
 #include <memory>
 #include <string>
@@ -19,7 +20,7 @@ public:
 public: // Adding task information
     void AddTaskTitle(const std::string& title);
     void AddTaskPriority(Task::Priority priority);
-    void AddTaskDueTime(time_t due_time);
+    void AddTaskDueTime(DueTime due_time);
     std::optional<Task> GetTask() const;
 
     void SetEditingTask(const TaskId& task_id, const Task& task);

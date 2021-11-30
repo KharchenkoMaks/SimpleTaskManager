@@ -17,7 +17,7 @@ public:
     bool ValidateTaskId(const TaskId& task_id);
 private:
     bool ValidateTitle(const std::string& title);
-    bool ValidateDueDate(time_t due_date);
+    bool ValidateDueDate(DueTime due_date);
 };
 
 
