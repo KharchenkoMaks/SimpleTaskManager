@@ -6,7 +6,7 @@
 
 Task Task::Create(const std::string& title,
                   const Priority priority,
-                  const time_t due_to,
+                  const DueTime due_to,
                   const bool completed,
                   const std::string& label) {
     Task task(title, priority, due_to, completed, label);
@@ -15,22 +15,23 @@ Task Task::Create(const std::string& title,
 
 Task::Task(const std::string& title,
            const Priority priority,
-           const time_t due_to,
+           const DueTime due_to,
            const bool completed,
-           const std::string& label) {
+           const std::string& label) :
+           title_(title),
+           priority_(priority),
+           due_to_(due_to),
+           completed_(completed),
+           label_(label) {
     if (title.length() == 0){
         throw std::invalid_argument("Task title was empty.");
     }
-    this->title_ = title;
-    this->priority_ = priority;
-    this->due_to_ = due_to;
-    this->label_ = label;
-    this->completed_ = completed;
+
 }
 
 std::string Task::to_string() const {
     return title_ + ", Priority: " + PriorityToString(priority_) +
-                    ", Due to: " + std::to_string(due_to_) + "\n";
+                    ", Due to: " + due_to_.GetTimeString() + "\n";
 }
 
 std::string Task::GetTitle() const {
@@ -41,7 +42,7 @@ Task::Priority Task::GetPriority() const {
     return this->priority_;
 }
 
-time_t Task::GetDueTime() const {
+DueTime Task::GetDueTime() const {
     return this->due_to_;
 }
 

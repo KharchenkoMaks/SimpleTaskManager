@@ -6,6 +6,7 @@
 #define SIMPLETASKMANAGER_TASK_H
 
 #include "TaskId.h"
+#include "DueTime.h"
 
 #include <string>
 #include <ctime>
@@ -24,7 +25,7 @@ public:
 public:
     static Task Create(const std::string& title,
                        Priority priority,
-                       time_t due_to,
+                       DueTime due_to,
                        bool completed = false,
                        const std::string& label = std::string(""));
 public:
@@ -33,7 +34,7 @@ public:
 
     std::string GetTitle() const;
     Task::Priority GetPriority() const;
-    time_t GetDueTime() const;
+    DueTime GetDueTime() const;
     bool IsCompleted() const;
     std::string GetLabel() const;
 
@@ -43,13 +44,13 @@ public:
 protected:
     Task(const std::string& title,
          Priority priority,
-         time_t due_to,
+         DueTime due_to,
          bool completed = false,
          const std::string& label = std::string(""));
 protected:
     std::string title_;
     Priority priority_;
-    time_t due_to_;
+    DueTime due_to_;
     bool completed_;
     std::string label_;
 };
