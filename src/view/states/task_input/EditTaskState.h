@@ -16,7 +16,7 @@
 
 class EditTaskState : public WizardStateController {
 public:
-    explicit EditTaskState(const std::shared_ptr<Controller>& controller,
+    EditTaskState(const std::shared_ptr<Controller>& controller,
                            const std::shared_ptr<WizardStatesFactory>& states_factory,
                            const std::shared_ptr<ConsolePrinter>& printer,
                            const std::shared_ptr<ConsoleReader>& reader);

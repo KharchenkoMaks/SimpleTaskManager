@@ -21,7 +21,7 @@ std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetStateByCommand(const
         throw std::invalid_argument("Wrong command was given.");
     } else if (command == "show") {
         // show state
-        throw std::invalid_argument("Wrong command was given.");
+        return GetLazyStateByStatesEnum(States::kShow);
     } else if (command == "help") {
         return GetLazyStateByStatesEnum(States::kHelp);
     } else if (command == "quit") {
@@ -135,6 +135,14 @@ std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextS
     }
 }
 
+std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextState(const ShowState &state, WizardStatesFactory::MoveType move_type) {
+    switch (move_type) {
+        default: {
+            return GetLazyStateByStatesEnum(States::kRoot);
+        }
+    }
+}
+
 std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetLazyStateByStatesEnum(States state) {
     switch (state) {
         case States::kRoot: {
@@ -184,6 +192,12 @@ std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetLazyStateByStatesEnu
                 input_task_due_date_state_ = std::make_shared<InputTaskDueDateState>(shared_from_this(), printer_, reader_);
             }
             return input_task_due_date_state_;
+        }
+        case States::kShow: {
+            if (!show_state_) {
+                show_state_ = std::make_shared<ShowState>(controller_, shared_from_this(), printer_, reader_);
+            }
+            return show_state_;
         }
     }
 }
