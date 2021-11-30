@@ -34,3 +34,11 @@ std::string DueTime::GetTimeString(const std::string& format = "%H:%M %d.%m.%Y")
 time_t DueTime::GetTime() const {
     return due_time_;
 }
+
+DueTime DueTime::Create(time_t time) {
+    return DueTime(time);
+}
+
+DueTime::DueTime(time_t due_time) : due_time_(due_time) {
+
+}
