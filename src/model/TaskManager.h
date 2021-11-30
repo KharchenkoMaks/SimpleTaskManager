@@ -13,6 +13,7 @@
 #include <vector>
 #include <utility>
 #include <memory>
+#include <optional>
 
 class TaskManager {
 public:
@@ -23,8 +24,9 @@ public:
 
     std::vector<std::pair<TaskId, Task>> Show();
 public:
-    bool IsTaskIdExist(const TaskId& task_id);
+    bool IsTaskIdExist(const TaskId& task_id) const;
 
+    std::optional<Task> GetTask(const TaskId& task_id) const;
 public:
     explicit TaskManager(std::unique_ptr<IdGenerator> generator);
 private:
