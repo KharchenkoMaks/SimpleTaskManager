@@ -64,6 +64,8 @@ add_executable(SimpleTaskManager_test
         src/model/TaskManager.h
         src/model/tasks/SubTask.h
         src/model/tasks/SubTask.cpp
+        src/model/DueTime.cpp
+        src/model/DueTime.h
         tests/model/tasks/TaskTest.cpp
         tests/model/TaskIdTest.cpp
         tests/model/IdGeneratorTest.cpp

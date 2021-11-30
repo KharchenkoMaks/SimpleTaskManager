@@ -10,7 +10,7 @@ TaskId SubTask::GetParentTaskId() {
 
 SubTask SubTask::Create(const std::string &title,
                         Task::Priority priority,
-                        time_t due_to,
+                        DueTime due_to,
                         const TaskId &parent,
                         bool completed,
                         const std::string &label) {
@@ -19,7 +19,7 @@ SubTask SubTask::Create(const std::string &title,
 
 SubTask::SubTask(const std::string &title,
                  Task::Priority priority,
-                 time_t due_to,
+                 DueTime due_to,
                  const TaskId &parent,
                  bool completed,
                  const std::string &label) : Task(title, priority, due_to, completed, label), parent_(parent) {

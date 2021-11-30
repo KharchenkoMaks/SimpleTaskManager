@@ -8,6 +8,7 @@
 #include "TaskManager.h"
 #include "IdGenerator.h"
 #include "TaskId.h"
+#include "DueTime.h"
 
 #include <ctime>
 #include <string>
@@ -37,7 +38,7 @@ TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
 
     TaskManager task_manager(std::move(gen));
 
-    const time_t expected_time = time(0);
+    const DueTime expected_time = DueTime::Create(time(0));
     const std::string expected_title[] = { "task1", "task2" };
     const Task::Priority expected_priority[] =
             { Task::Priority::NONE,Task::Priority::LOW };
@@ -75,11 +76,11 @@ TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
     TaskManager task_manager(std::move(gen));
     const std::string expected_title = "edited task";
     const Task::Priority expected_priority = Task::Priority::HIGH;
-    const time_t expected_time = time(0);
+    const DueTime expected_time = DueTime::Create(time(0));
 
     TaskId task1 = task_manager.Create(Task::Create("title",
                                                     Task::Priority::MEDIUM,
-                                                    time(0)));
+                                                    DueTime::Create(time(0))));
     // Act
     task_manager.Edit(task1,
                       Task::Create(expected_title, expected_priority, expected_time));
@@ -105,8 +106,8 @@ TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
     TaskManager task_manager(std::move(gen));
     const std::string expected_title = "second task";
     const Task::Priority expected_priority = Task::Priority::NONE;
-    const time_t expected_time = time(0);
-    Task task1 = Task::Create("some title", Task::Priority::NONE, time(0));
+    const DueTime expected_time = DueTime::Create(time(0));
+    Task task1 = Task::Create("some title", Task::Priority::NONE, DueTime::Create(time(0)));
     Task task2 = Task::Create(expected_title, expected_priority, expected_time);
     TaskId task_id_1 = task_manager.Create(task1);
     TaskId task_id_2 = task_manager.Create(task2);
@@ -133,7 +134,7 @@ TEST_F(TaskManagerTest, TryEditingNonExistentTask_ShouldThrowInvalidArgument){
 
     TaskManager task_manager(std::move(gen));
     TaskId task_id = TaskId::Create(5);
-    Task task = Task::Create("title", Task::Priority::NONE, time(0));
+    Task task = Task::Create("title", Task::Priority::NONE, DueTime::Create(time(0)));
     // Act & Assert
     EXPECT_THROW(task_manager.Edit(task_id, task), std::invalid_argument);
 }
@@ -157,23 +158,23 @@ TEST_F(TaskManagerTest, TryDeletingNonExistentTask_ShouldThrowInvalidArgument){
 // First and third Tasks should be completed
 TEST_F(TaskManagerTest, TryCompletingDifferentTasks_ShouldCompleteThoseTasks){
     // Arrange
-    const time_t some_time = time(0);
+    const DueTime some_time = DueTime::Create(time(0));
 
     TaskManager task_manager(std::make_unique<IdGenerator>());
 
     Task expected_first_completed_task =
             Task::Create("task1", Task::Priority::NONE, some_time, true);
     Task expected_not_completed_task =
-            Task::Create("task2", Task::Priority::NONE, time(0), false);
+            Task::Create("task2", Task::Priority::NONE, DueTime::Create(time(0)), false);
     Task expected_second_completed_task =
             Task::Create("task3", Task::Priority::NONE, some_time, true);
 
     TaskId task1 = task_manager.Create(
-            Task::Create("task1", Task::Priority::NONE, time(0)));
+            Task::Create("task1", Task::Priority::NONE, DueTime::Create(time(0))));
     TaskId task2 = task_manager.Create(
-            Task::Create("task2", Task::Priority::NONE, time(0)));
+            Task::Create("task2", Task::Priority::NONE, DueTime::Create(time(0))));
     TaskId task3 = task_manager.Create(
-            Task::Create("task3", Task::Priority::NONE, time(0)));
+            Task::Create("task3", Task::Priority::NONE, DueTime::Create(time(0))));
     // Act
     task_manager.Complete(task1);
     task_manager.Complete(task3);

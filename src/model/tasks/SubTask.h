@@ -6,12 +6,13 @@
 #define SIMPLETASKMANAGER_SUBTASK_H
 
 #include "tasks/Task.h"
+#include "DueTime.h"
 
 class SubTask : public Task {
 public:
     static SubTask Create(const std::string& title,
                        Priority priority,
-                       time_t due_to,
+                       DueTime due_to,
                        const TaskId& parent,
                        bool completed = false,
                        const std::string& label = std::string(""));
@@ -22,7 +23,7 @@ public:
 private:
     SubTask(const std::string& title,
          Priority priority,
-         time_t due_to,
+         DueTime due_to,
          const TaskId& parent,
          bool completed = false,
          const std::string& label = std::string(""));

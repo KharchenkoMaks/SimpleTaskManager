@@ -4,6 +4,7 @@
 
 #include "gtest/gtest.h"
 #include "tasks/Task.h"
+#include "DueTime.h"
 
 #include <ctime>
 #include <vector>
@@ -18,7 +19,7 @@ TEST_F(TaskTest, NewTaskParametersShouldBeCorrect){
     // Arrange
     const std::string expected_title = "title";
     const Task::Priority expected_priority = Task::Priority::MEDIUM;
-    const time_t expected_time = time(0);
+    const DueTime expected_time = DueTime::Create(time(0));
     const bool expected_completion = true;
     const std::string expected_label = "some label";
     // Act
@@ -30,7 +31,7 @@ TEST_F(TaskTest, NewTaskParametersShouldBeCorrect){
 
     const std::string actual_title = task.GetTitle();
     const Task::Priority actual_priority = task.GetPriority();
-    const time_t actual_time = task.GetDueTime();
+    const DueTime actual_time = task.GetDueTime();
     const bool actual_completion = task.IsCompleted();
     const std::string actual_label = task.GetLabel();
     // Assert
@@ -46,7 +47,7 @@ TEST_F(TaskTest, NewTaskParametersShouldBeCorrect){
 TEST_F(TaskTest, GetTitle_shouldReturnTaskTitle){
     // Arrange
     std::string expected = "title";
-    Task task = Task::Create(expected, Task::Priority::NONE, time(0));
+    Task task = Task::Create(expected, Task::Priority::NONE, DueTime::Create(time(0)));
     // Act
     std::string actual = task.GetTitle();
     // Assert
@@ -58,7 +59,7 @@ TEST_F(TaskTest, GetTitle_shouldReturnTaskTitle){
 TEST_F(TaskTest, GetPriority_shouldReturnTaskPriority){
     // Arrange
     Task::Priority expected = Task::Priority::HIGH;
-    Task task = Task::Create("title", expected, time(0));
+    Task task = Task::Create("title", expected, DueTime::Create(time(0)));
     // Act
     Task::Priority actual = task.GetPriority();
     // Assert
@@ -67,10 +68,10 @@ TEST_F(TaskTest, GetPriority_shouldReturnTaskPriority){
 
 TEST_F(TaskTest, GetDueTime_shouldReturnDueTime){
     // Arrange
-    time_t expected = 1636739250;
-    Task task = Task::Create("title", Task::Priority::NONE, 1636739250);
+    DueTime expected = DueTime::Create(1636739250);
+    Task task = Task::Create("title", Task::Priority::NONE, expected);
     // Act
-    time_t actual = task.GetDueTime();
+    DueTime actual = task.GetDueTime();
     // Assert
     EXPECT_EQ(expected, actual);
 }
@@ -78,7 +79,7 @@ TEST_F(TaskTest, GetDueTime_shouldReturnDueTime){
 // Using Task::Create giving empty title
 // Throws std::invalid_argument
 TEST_F(TaskTest, creatingTaskWithEmpyTitle_shouldThrowInvalidArgument){
-    EXPECT_THROW(Task::Create("", Task::Priority::NONE, time(0)), std::invalid_argument);
+    EXPECT_THROW(Task::Create("", Task::Priority::NONE, DueTime::Create(time(0))), std::invalid_argument);
 }
 
 // Creating Task with Title = "title"
@@ -87,7 +88,7 @@ TEST_F(TaskTest, creatingTaskWithEmpyTitle_shouldThrowInvalidArgument){
 TEST_F(TaskTest, usingToStringTaskMethod_shouldReturnCorrectString){
     // Arrange
     const int priorities_count = 4;
-    time_t some_time = 1636739250;
+    DueTime some_time = DueTime::Create(1636739250);
     std::vector<Task> tasks;
     tasks.push_back(Task::Create("title", Task::Priority::HIGH, some_time));
     tasks.push_back(Task::Create("title", Task::Priority::MEDIUM, some_time));
@@ -97,7 +98,7 @@ TEST_F(TaskTest, usingToStringTaskMethod_shouldReturnCorrectString){
     // Act & Assert
     for (int i = 0; i < priorities_count; ++i) {
         std::string expected = tasks[i].GetTitle() + ", Priority: " +
-                priorities[i] + ", Due to: 1636739250\n";
+                priorities[i] + ", Due to: " + some_time.GetTimeString() + "\n";
         std::string actual = tasks[i].to_string();
         EXPECT_EQ(expected, actual);
     }
@@ -107,7 +108,7 @@ TEST_F(TaskTest, usingToStringTaskMethod_shouldReturnCorrectString){
 // It should be uncompleted
 TEST_F(TaskTest, newTaskShouldBeUncompleted){
     // Arrange
-    Task task = Task::Create("title", Task::Priority::HIGH, time(0));
+    Task task = Task::Create("title", Task::Priority::HIGH, DueTime::Create(time(0)));
     // Assert
     EXPECT_FALSE(task.IsCompleted());
 }
@@ -120,9 +121,9 @@ TEST_F(TaskTest, shouldReturnRightTaskLabel){
     std::string expected2 = "some label";
 
     Task task_without_label =
-            Task::Create("title", Task::Priority::HIGH, time(0));
+            Task::Create("title", Task::Priority::HIGH, DueTime::Create(time(0)));
     Task task_with_label =
-            Task::Create("title", Task::Priority::HIGH, time(0), false, expected2);
+            Task::Create("title", Task::Priority::HIGH, DueTime::Create(time(0)), false, expected2);
     // Act
     std::string acutal1 = task_without_label.GetLabel();
     std::string actual2 = task_with_label.GetLabel();
@@ -135,7 +136,7 @@ TEST_F(TaskTest, shouldReturnRightTaskLabel){
 // operator== should return true for those two
 TEST_F(TaskTest, OperatorEqualsShouldReturnTrueForEqualTasks){
     // Arrange
-    const time_t some_time = time(0);
+    const DueTime some_time = DueTime::Create(time(0));
     Task task1 = Task::Create("title", Task::Priority::NONE, some_time);
     Task task2 = Task::Create("title", Task::Priority::NONE, some_time);
     // Act & Assert
@@ -147,11 +148,11 @@ TEST_F(TaskTest, OperatorEqualsShouldReturnTrueForEqualTasks){
 // operator== should return false when comparing them
 TEST_F(TaskTest, OperatorEqualsShouldReturnFalseForNotEqualTasks){
     // Arrange
-    const time_t some_time = time(0);
+    const DueTime some_time = DueTime::Create(time(0));
     Task task1 = Task::Create("title", Task::Priority::NONE, some_time);
     Task task2 = Task::Create("title2", Task::Priority::NONE, some_time);
     Task task3 = Task::Create("title", Task::Priority::LOW, some_time);
-    Task task4 = Task::Create("title", Task::Priority::NONE, some_time + 5);
+    Task task4 = Task::Create("title", Task::Priority::NONE, DueTime::Create(some_time.GetTime() + 5));
     Task task5 = Task::Create("title", Task::Priority::NONE, some_time, true);
     Task task6 = Task::Create("title", Task::Priority::NONE, some_time, false, "some label");
     // Act & Assert
