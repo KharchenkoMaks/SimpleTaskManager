@@ -31,6 +31,7 @@ int main() {
 // TODO_DONE: Delete unnecessary directories - Done 25.11.2021
 // TODO: Change subtasks structure
 // TODO: Move Task::Priority converter out of Task class
+// TODO: Make due date converter
 // TODO_DONE: Split MultiFunctionalPrinter to printer and reader - Done 26.11.2021
 // TODO_DONE: Make printer and reader private in WizardStateConsole - Done 26.11.2021
 // TODO_DONE: Move factory to states' parameters - Done 29.11.2021
@@ -39,3 +40,8 @@ int main() {
 // TODO_DONE: Make controller and validator for tasks - Done 29.11.2021
 // TODO_DONE: Inject controller to state machine and states - Done 30.11.2021
 // TODO_DONE: Make WizardStatesConsole base class of states? - Done 30.11.2021
+// TODO: Give user choice to keep value of editing task
+// TODO: Implement complete command
+// TODO: Implement delete command
+// TODO: Implement show command
+// TODO: Implement add_subtask command
