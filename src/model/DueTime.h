@@ -13,10 +13,12 @@
 class DueTime {
 public:
     static DueTime Create(time_t due_time);
-    static DueTime Create(const std::string& due_time, const std::string& format);
+    static DueTime Create(const std::string& due_time, const std::string& format = "%H:%M %d.%m.%Y");
 public:
-    std::string GetTimeString(const std::string& format) const;
+    std::string GetTimeString(const std::string& format = "%H:%M %d.%m.%Y") const;
     time_t GetTime() const;
+public:
+    bool operator== (const DueTime& due_time) const;
 private:
     DueTime(const std::string& due_time, const std::string& format);
     explicit DueTime(time_t due_time);

@@ -4,7 +4,7 @@
 
 #include "DueTime.h"
 
-DueTime DueTime::Create(const std::string& due_time, const std::string& format = "%H:%M %d.%m.%Y") {
+DueTime DueTime::Create(const std::string& due_time, const std::string& format) {
     return DueTime(due_time, format);
 }
 
@@ -27,7 +27,7 @@ std::string DueTime::TimeToString(time_t time, const std::string& format = "%H:%
     return buffer;
 }
 
-std::string DueTime::GetTimeString(const std::string& format = "%H:%M %d.%m.%Y") const {
+std::string DueTime::GetTimeString(const std::string& format) const {
     return TimeToString(due_time_, format);
 }
 
@@ -41,4 +41,8 @@ DueTime DueTime::Create(time_t time) {
 
 DueTime::DueTime(time_t due_time) : due_time_(due_time) {
 
+}
+
+bool DueTime::operator==(const DueTime &due_time) const {
+    return this->due_time_ == due_time.due_time_;
 }
