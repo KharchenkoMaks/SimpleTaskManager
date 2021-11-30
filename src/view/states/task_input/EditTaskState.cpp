@@ -20,7 +20,8 @@ std::optional<std::shared_ptr<WizardStateConsole>> EditTaskState::Execute(std::s
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    ConsoleStateMachine state_machine(GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
+    ConsoleStateMachine state_machine(std::make_shared<WizardContext>(),
+            GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
     std::shared_ptr<WizardContext> context_with_edited_task = state_machine.Run();
 
 //    context->AddTaskTitle(context_with_edited_task->GetAddedTask().GetTitle());

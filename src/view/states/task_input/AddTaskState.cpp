@@ -6,7 +6,8 @@
 #include "ConsoleStateMachine.h"
 
 std::optional<std::shared_ptr<WizardStateConsole>> AddTaskState::Execute(std::shared_ptr<WizardContext> context) {
-    ConsoleStateMachine state_machine(GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
+    ConsoleStateMachine state_machine(std::make_shared<WizardContext>(),
+            GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
     std::shared_ptr<WizardContext> context_with_added_task = state_machine.Run();
 
 //    context->AddTaskTitle(context_with_added_task->GetAddedTask().GetTitle());
