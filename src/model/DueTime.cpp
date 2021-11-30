@@ -18,7 +18,7 @@ time_t DueTime::StringToTime(const std::string& time_string, const std::string& 
     std::istringstream ss(time_string);
     ss >> std::get_time(&t, format.c_str());
     time_t some_time = mktime(&t);
-    if (some_time >= 0) {
+    if (some_time >= 0 || t.tm_year > 1000) {
         return some_time;
     } else {
         throw std::invalid_argument("Time string format was wrong!");
