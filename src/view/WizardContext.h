@@ -23,6 +23,7 @@ public: // Adding task information
     std::optional<Task> GetTask() const;
 
     void SetEditingTask(const TaskId& task_id, const Task& task);
+    std::optional<TaskId> GetTaskId() const;
 private:
     Task CreateDefaultTask();
     TaskId CreateDefaultTaskId();

@@ -50,3 +50,7 @@ void WizardContext::SetEditingTask(const TaskId& task_id, const Task& task) {
 TaskId WizardContext::CreateDefaultTaskId() {
     return TaskId::Create(0);
 }
+
+std::optional<TaskId> WizardContext::GetTaskId() const {
+    return editing_task_id_;
+}
