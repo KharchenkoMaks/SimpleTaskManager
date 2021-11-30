@@ -20,6 +20,8 @@ public:
     void EditTask(const TaskId& task_id, const Task& task);
     void DeleteTask(const TaskId& task_id);
     void CompleteTask(const TaskId& task_id);
+public:
+    std::optional<Task> GetTask(const TaskId& task_id) const;
 private:
     std::unique_ptr<TaskManager> task_manager_;
 

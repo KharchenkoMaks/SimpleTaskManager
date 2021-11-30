@@ -48,3 +48,7 @@ void Controller::CompleteTask(const TaskId &task_id) {
         throw std::invalid_argument("Invalid task_id was given.");
     }
 }
+
+std::optional<Task> Controller::GetTask(const TaskId &task_id) const {
+    return task_manager_->GetTask(task_id);
+}
