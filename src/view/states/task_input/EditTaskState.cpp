@@ -17,7 +17,7 @@ std::optional<std::shared_ptr<WizardStateConsole>> EditTaskState::Execute(std::s
     std::optional<TaskId> editing_task_id = GetTaskIdFromUser();
     if (!editing_task_id){
         GetConsolePrinter()->WriteError("Wrong task id was given, try again!");
-        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
     }
 
     std::optional<Task> task_to_edit = GetController()->GetTask(editing_task_id.value());

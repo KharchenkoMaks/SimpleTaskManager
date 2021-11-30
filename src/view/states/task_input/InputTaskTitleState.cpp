@@ -12,14 +12,29 @@ InputTaskTitleState::InputTaskTitleState(const std::shared_ptr<WizardStatesFacto
 }
 
 std::optional<std::shared_ptr<WizardStateConsole>> InputTaskTitleState::Execute(std::shared_ptr<WizardContext> context) {
-    const std::string task_title = GetUserInput("Title");
+    std::string user_input;
+
+    if (context->GetTaskId().has_value()) {
+        user_input = GetUserInputForTitleEdit(context->GetTask().value());
+    } else {
+        user_input = GetUserInputForTitleAdd();
+    }
 
     try {
-        context->AddTaskTitle(task_title);
+        context->AddTaskTitle(user_input);
     } catch (std::invalid_argument) {
         GetConsolePrinter()->WriteError("Task title was wrong, please, try again!");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
     return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+}
+
+std::string InputTaskTitleState::GetUserInputForTitleAdd() {
+    return GetUserInput("Title");
+}
+
+std::string InputTaskTitleState::GetUserInputForTitleEdit(const Task &task) {
+    GetConsolePrinter()->WriteLine("Leave empty for default value.");
+    return GetUserInput("Title, default: " + task.GetTitle());
 }

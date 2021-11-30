@@ -19,6 +19,9 @@ public:
                                     const std::shared_ptr<ConsoleReader>& reader);
 public:
     std::optional<std::shared_ptr<WizardStateConsole>> Execute(std::shared_ptr<WizardContext> context) override;
+private:
+    std::string GetUserInputForPriorityAdd();
+    std::string GetUserInputForPriorityEdit(const Task& task);
 };
 
 

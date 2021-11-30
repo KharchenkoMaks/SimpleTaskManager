@@ -12,15 +12,31 @@ InputTaskDueDateState::InputTaskDueDateState(const std::shared_ptr<WizardStatesF
 }
 
 std::optional<std::shared_ptr<WizardStateConsole>> InputTaskDueDateState::Execute(std::shared_ptr<WizardContext> context) {
-    const std::string due_date = GetUserInput("Due Date");
+    std::string user_input;
+    if (context->GetTaskId().has_value()) {
+        // If TaskId has value in context, then we are editing task
+        user_input = GetUserInputForDueDateEdit(context->GetTask().value());
+    } else {
+        // If TaskId is nullopt, then we are adding new task
+        user_input = GetUserInputForDueDateAdd();
+    }
 
     try {
-        time_t task_due_date = std::stoi(due_date);
+        time_t task_due_date = std::stoi(user_input);
         context->AddTaskDueTime(task_due_date);
     } catch (std::invalid_argument) {
-        GetConsolePrinter()->WriteError("Wrong due date was given, please, try again!");
+        GetConsolePrinter()->WriteError("Wrong due date was given, try again!");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
     return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+}
+
+std::string InputTaskDueDateState::GetUserInputForDueDateEdit(const Task &task) {
+    GetConsolePrinter()->WriteLine("Leave empty for default value.");
+    return GetUserInput("Due Date, default: " + std::to_string(task.GetDueTime()));
+}
+
+std::string InputTaskDueDateState::GetUserInputForDueDateAdd() {
+    return GetUserInput("Due Date");
 }

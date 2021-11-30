@@ -12,10 +12,16 @@ InputTaskPriorityState::InputTaskPriorityState(const std::shared_ptr<WizardState
 }
 
 std::optional<std::shared_ptr<WizardStateConsole>> InputTaskPriorityState::Execute(std::shared_ptr<WizardContext> context) {
-    const std::string priority = GetUserInput("Priority (High, Medium, Low, None)");
+    std::string user_input;
+
+    if (context->GetTaskId().has_value()) {
+        user_input = GetUserInputForPriorityEdit(context->GetTask().value());
+    } else {
+        user_input = GetUserInputForPriorityAdd();
+    }
 
     try {
-        Task::Priority task_priority = Task::GetTaskPriority(priority);
+        Task::Priority task_priority = Task::GetTaskPriority(user_input);
         context->AddTaskPriority(task_priority);
     } catch (std::invalid_argument) {
         GetConsolePrinter()->WriteError("Wrong task priority was given, try [High, Medium, Low, None]!");
@@ -23,4 +29,13 @@ std::optional<std::shared_ptr<WizardStateConsole>> InputTaskPriorityState::Execu
     }
 
     return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+}
+
+std::string InputTaskPriorityState::GetUserInputForPriorityAdd() {
+    return GetUserInput("Priority (High, Medium, Low, None)");
+}
+
+std::string InputTaskPriorityState::GetUserInputForPriorityEdit(const Task &task) {
+    GetConsolePrinter()->WriteLine("Leave empty for default value.");
+    return GetUserInput("Priority, default: " + Task::PriorityToString(task.GetPriority()));
 }
