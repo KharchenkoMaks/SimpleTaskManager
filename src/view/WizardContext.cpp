@@ -15,27 +15,30 @@ std::optional<Task> WizardContext::GetTask() const {
 }
 
 void WizardContext::AddTaskTitle(const std::string &title) {
+    InitializeTask();
     added_task_ = Task::Create(title,
-                               added_task_.GetPriority(),
-                               added_task_.GetDueTime(),
-                               added_task_.IsCompleted(),
-                               added_task_.GetLabel());
+                               added_task_.value().GetPriority(),
+                               added_task_.value().GetDueTime(),
+                               added_task_.value().IsCompleted(),
+                               added_task_.value().GetLabel());
 }
 
 void WizardContext::AddTaskPriority(const Task::Priority priority) {
-    added_task_ = Task::Create(added_task_.GetTitle(),
+    InitializeTask();
+    added_task_ = Task::Create(added_task_.value().GetTitle(),
                                priority,
-                               added_task_.GetDueTime(),
-                               added_task_.IsCompleted(),
-                               added_task_.GetLabel());
+                               added_task_.value().GetDueTime(),
+                               added_task_.value().IsCompleted(),
+                               added_task_.value().GetLabel());
 }
 
 void WizardContext::AddTaskDueTime(const time_t due_time) {
-    added_task_ = Task::Create(added_task_.GetTitle(),
-                               added_task_.GetPriority(),
+    InitializeTask();
+    added_task_ = Task::Create(added_task_.value().GetTitle(),
+                               added_task_.value().GetPriority(),
                                due_time,
-                               added_task_.IsCompleted(),
-                               added_task_.GetLabel());
+                               added_task_.value().IsCompleted(),
+                               added_task_.value().GetLabel());
 }
 
 Task WizardContext::CreateDefaultTask() {
@@ -53,4 +56,10 @@ TaskId WizardContext::CreateDefaultTaskId() {
 
 std::optional<TaskId> WizardContext::GetTaskId() const {
     return editing_task_id_;
+}
+
+void WizardContext::InitializeTask() {
+    if (!added_task_.has_value()){
+        added_task_ = CreateDefaultTask();
+    }
 }

@@ -27,6 +27,8 @@ public: // Adding task information
 private:
     Task CreateDefaultTask();
     TaskId CreateDefaultTaskId();
+
+    void InitializeTask();
 private:
     std::optional<Task> added_task_;
     std::optional<TaskId> editing_task_id_;
