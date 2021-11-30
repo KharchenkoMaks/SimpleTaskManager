@@ -16,7 +16,7 @@ std::optional<std::shared_ptr<WizardStateConsole>> AddTaskState::Execute(std::sh
 
     // Giving task to controller
     try {
-        GetController()->AddTask(context_with_added_task->GetAddedTask());
+        GetController()->AddTask(context_with_added_task->GetTask().value());
     } catch (std::invalid_argument) {
         GetConsolePrinter()->WriteError("Given task wasn't saved, try again.");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
