@@ -11,7 +11,7 @@ InputTaskTitleState::InputTaskTitleState(const std::shared_ptr<WizardStatesFacto
 
 }
 
-std::optional<std::shared_ptr<IWizardState>> InputTaskTitleState::Execute(std::shared_ptr<WizardContext> context) {
+std::optional<std::shared_ptr<WizardStateConsole>> InputTaskTitleState::Execute(std::shared_ptr<WizardContext> context) {
     const std::string task_title = GetUserInput("Title");
 
     try {

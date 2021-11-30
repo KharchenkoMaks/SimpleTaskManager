@@ -4,7 +4,7 @@
 
 #include "WizardStatesFactory.h"
 
-std::shared_ptr<IWizardState> WizardStatesFactory::GetStateByCommand(const std::string &command) {
+std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetStateByCommand(const std::string &command) {
     if (command == "add") {
         return GetLazyStateByStatesEnum(States::kAddTask);
     } else if (command == "edit") {
@@ -27,11 +27,11 @@ std::shared_ptr<IWizardState> WizardStatesFactory::GetStateByCommand(const std::
     }
 }
 
-std::shared_ptr<IWizardState> WizardStatesFactory::GetInitialState() {
+std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetInitialState() {
     return GetLazyStateByStatesEnum(States::kRoot);
 }
 
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const QuitState& state, const MoveType move_type) {
+std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextState(const QuitState& state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -45,7 +45,7 @@ std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(c
     }
 }
 
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const AddTaskState &state, const MoveType move_type) {
+std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextState(const AddTaskState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -59,7 +59,7 @@ std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(c
     }
 }
 
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const EditTaskState &state, const MoveType move_type) {
+std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextState(const EditTaskState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -73,7 +73,7 @@ std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(c
     }
 }
 
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const InputTaskTitleState &state, const MoveType move_type) {
+std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextState(const InputTaskTitleState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             throw std::invalid_argument("No previous state for given state.");
@@ -87,7 +87,7 @@ std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(c
     };
 }
 
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const InputTaskPriorityState &state, const MoveType move_type) {
+std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextState(const InputTaskPriorityState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kInputTaskTitle);
@@ -101,7 +101,7 @@ std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(c
     }
 }
 
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const InputTaskDueDateState &state, const MoveType move_type) {
+std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextState(const InputTaskDueDateState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kInputTaskPriority);
@@ -115,7 +115,7 @@ std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(c
     }
 }
 
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const HelpState &state, const MoveType move_type) {
+std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextState(const HelpState &state, const MoveType move_type) {
     switch (move_type) {
         default: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -123,7 +123,7 @@ std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(c
     }
 }
 
-std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(const RootState &state, WizardStatesFactory::MoveType move_type) {
+std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextState(const RootState &state, WizardStatesFactory::MoveType move_type) {
     switch (move_type) {
         default: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -131,7 +131,7 @@ std::optional<std::shared_ptr<IWizardState>> WizardStatesFactory::GetNextState(c
     }
 }
 
-std::shared_ptr<IWizardState> WizardStatesFactory::GetLazyStateByStatesEnum(States state) {
+std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetLazyStateByStatesEnum(States state) {
     switch (state) {
         case States::kRoot: {
             if (!root_state_){
@@ -153,7 +153,7 @@ std::shared_ptr<IWizardState> WizardStatesFactory::GetLazyStateByStatesEnum(Stat
         }
         case States::kAddTask: {
             if (!add_task_state_){
-                add_task_state_ = std::make_shared<AddTaskState>(shared_from_this());
+                add_task_state_ = std::make_shared<AddTaskState>(shared_from_this(), printer_, reader_);
             }
             return add_task_state_;
         }

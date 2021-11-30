@@ -5,7 +5,7 @@
 #include "states/task_input/AddTaskState.h"
 #include "ConsoleStateMachine.h"
 
-std::optional<std::shared_ptr<IWizardState>> AddTaskState::Execute(std::shared_ptr<WizardContext> context) {
+std::optional<std::shared_ptr<WizardStateConsole>> AddTaskState::Execute(std::shared_ptr<WizardContext> context) {
     ConsoleStateMachine state_machine(GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
     std::shared_ptr<WizardContext> context_with_added_task = state_machine.Run();
 
@@ -16,6 +16,9 @@ std::optional<std::shared_ptr<IWizardState>> AddTaskState::Execute(std::shared_p
     return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
 }
 
-AddTaskState::AddTaskState(const std::shared_ptr<WizardStatesFactory> &states_factory) : IWizardState(states_factory) {
+AddTaskState::AddTaskState(const std::shared_ptr<WizardStatesFactory>& states_factory,
+                           const std::shared_ptr<ConsolePrinter>& printer,
+                           const std::shared_ptr<ConsoleReader>& reader) :
+                           WizardStateConsole(states_factory, printer, reader) {
 
 }

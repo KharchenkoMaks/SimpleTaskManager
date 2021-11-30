@@ -11,7 +11,7 @@ InputTaskPriorityState::InputTaskPriorityState(const std::shared_ptr<WizardState
 
 }
 
-std::optional<std::shared_ptr<IWizardState>> InputTaskPriorityState::Execute(std::shared_ptr<WizardContext> context) {
+std::optional<std::shared_ptr<WizardStateConsole>> InputTaskPriorityState::Execute(std::shared_ptr<WizardContext> context) {
     const std::string priority = GetUserInput("Priority (High, Medium, Low, None)");
 
     try {

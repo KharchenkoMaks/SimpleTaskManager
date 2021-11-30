@@ -4,7 +4,7 @@
 
 #include "QuitState.h"
 
-std::optional<std::shared_ptr<IWizardState>> QuitState::Execute(std::shared_ptr<WizardContext> context) {
+std::optional<std::shared_ptr<WizardStateConsole>> QuitState::Execute(std::shared_ptr<WizardContext> context) {
     if (UserConfirm()) {
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
     } else {

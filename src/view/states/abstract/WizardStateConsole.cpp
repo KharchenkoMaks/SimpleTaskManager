@@ -7,7 +7,7 @@
 WizardStateConsole::WizardStateConsole(const std::shared_ptr<WizardStatesFactory>& states_factory,
                                        const std::shared_ptr<ConsolePrinter>& printer,
                                        const std::shared_ptr<ConsoleReader>& reader) :
-                                       IWizardState(states_factory),
+                                       states_factory_(states_factory),
                                        console_printer_(printer),
                                        console_reader_(reader) {
 
@@ -35,4 +35,8 @@ std::optional<TaskId> WizardStateConsole::GetTaskIdFromUser() {
     } catch (std::invalid_argument) {
         return std::nullopt;
     }
+}
+
+std::shared_ptr<WizardStatesFactory> WizardStateConsole::GetStatesFactory() const {
+    return states_factory_;
 }

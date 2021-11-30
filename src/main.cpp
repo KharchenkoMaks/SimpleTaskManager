@@ -34,3 +34,4 @@ int main() {
 // TODO: Make start_from enum parameter in state machine?
 // TODO_DONE: Make controller and validator for tasks - Done 29.11.2021
 // TODO: Inject controller to state machine and states
+// TODO: Make WizardStatesConsole base class of states?

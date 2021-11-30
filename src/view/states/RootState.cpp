@@ -11,7 +11,7 @@ RootState::RootState(const std::shared_ptr<WizardStatesFactory>& states_factory,
 
 }
 
-std::optional<std::shared_ptr<IWizardState>> RootState::Execute(std::shared_ptr<WizardContext> context) {
+std::optional<std::shared_ptr<WizardStateConsole>> RootState::Execute(std::shared_ptr<WizardContext> context) {
     std::string command = GetUserInput("");
     try {
         return GetStatesFactory()->GetStateByCommand(command);;

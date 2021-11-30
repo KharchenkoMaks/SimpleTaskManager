@@ -11,7 +11,7 @@ std::shared_ptr<WizardContext> ConsoleStateMachine::Run() {
     return context_;
 }
 
-ConsoleStateMachine::ConsoleStateMachine(const std::optional<std::shared_ptr<IWizardState>>& initial_state) :
+ConsoleStateMachine::ConsoleStateMachine(const std::optional<std::shared_ptr<WizardStateConsole>>& initial_state) :
                                          state_(initial_state) {
     context_ = std::make_shared<WizardContext>();
 }

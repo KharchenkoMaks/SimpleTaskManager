@@ -11,7 +11,7 @@ InputTaskDueDateState::InputTaskDueDateState(const std::shared_ptr<WizardStatesF
 
 }
 
-std::optional<std::shared_ptr<IWizardState>> InputTaskDueDateState::Execute(std::shared_ptr<WizardContext> context) {
+std::optional<std::shared_ptr<WizardStateConsole>> InputTaskDueDateState::Execute(std::shared_ptr<WizardContext> context) {
     const std::string due_date = GetUserInput("Due Date");
 
     try {

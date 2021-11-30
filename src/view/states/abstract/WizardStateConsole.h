@@ -5,25 +5,34 @@
 #ifndef SIMPLETASKMANAGER_WIZARDSTATECONSOLE_H
 #define SIMPLETASKMANAGER_WIZARDSTATECONSOLE_H
 
-#include "states/abstract/IWizardState.h"
+#include "WizardContext.h"
 #include "console_io/ConsolePrinter.h"
 #include "console_io/ConsoleReader.h"
 
 #include <memory>
 #include <optional>
 
-class WizardStateConsole : public IWizardState {
+class WizardStatesFactory;
+
+class WizardStateConsole {
 public:
-    explicit WizardStateConsole(const std::shared_ptr<WizardStatesFactory>& states_factory,
-                                const std::shared_ptr<ConsolePrinter>& printer,
-                                const std::shared_ptr<ConsoleReader>& reader);
+    explicit WizardStateConsole(const std::shared_ptr<WizardStatesFactory> &states_factory,
+                                const std::shared_ptr<ConsolePrinter> &printer,
+                                const std::shared_ptr<ConsoleReader> &reader);
 
 public:
-    const std::shared_ptr<ConsolePrinter>& GetConsolePrinter() const;
-    const std::shared_ptr<ConsoleReader>& GetConsoleReader() const;
+    virtual std::optional<std::shared_ptr<WizardStateConsole>> Execute(std::shared_ptr<WizardContext>) = 0;
 
 public:
-    std::string GetUserInput(const std::string& invitation_message);
+    std::shared_ptr<WizardStatesFactory> GetStatesFactory() const;
+
+    const std::shared_ptr<ConsolePrinter> &GetConsolePrinter() const;
+
+    const std::shared_ptr<ConsoleReader> &GetConsoleReader() const;
+
+public:
+    std::string GetUserInput(const std::string &invitation_message);
+
     // Returns std::nullopt if invalid task_id was given
     std::optional<TaskId> GetTaskIdFromUser();
 
@@ -31,8 +40,10 @@ public:
     virtual ~WizardStateConsole() = default;
 
 private:
-   std::shared_ptr<ConsolePrinter> console_printer_;
-   std::shared_ptr<ConsoleReader> console_reader_;
+    std::shared_ptr<WizardStatesFactory> states_factory_;
+
+    std::shared_ptr<ConsolePrinter> console_printer_;
+    std::shared_ptr<ConsoleReader> console_reader_;
 };
 
 

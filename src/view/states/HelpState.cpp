@@ -11,7 +11,7 @@ HelpState::HelpState(const std::shared_ptr<WizardStatesFactory>& states_factory,
 
 }
 
-std::optional<std::shared_ptr<IWizardState>> HelpState::Execute(std::shared_ptr<WizardContext> context) {
+std::optional<std::shared_ptr<WizardStateConsole>> HelpState::Execute(std::shared_ptr<WizardContext> context) {
     GetConsolePrinter()->WriteLine("Available commands:");
     GetConsolePrinter()->WriteLine("1. add");
     GetConsolePrinter()->WriteLine("2. edit");
