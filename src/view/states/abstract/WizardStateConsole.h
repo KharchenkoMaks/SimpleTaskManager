@@ -16,9 +16,9 @@ class WizardStatesFactory;
 
 class WizardStateConsole {
 public:
-    explicit WizardStateConsole(const std::shared_ptr<WizardStatesFactory> &states_factory,
-                                const std::shared_ptr<ConsolePrinter> &printer,
-                                const std::shared_ptr<ConsoleReader> &reader);
+    explicit WizardStateConsole(const std::shared_ptr<WizardStatesFactory>& states_factory,
+                                const std::shared_ptr<ConsolePrinter>& printer,
+                                const std::shared_ptr<ConsoleReader>& reader);
 
 public:
     virtual std::optional<std::shared_ptr<WizardStateConsole>> Execute(std::shared_ptr<WizardContext>) = 0;

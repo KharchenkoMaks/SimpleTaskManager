@@ -12,6 +12,7 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 include_directories(src/model/)
 include_directories(src/view/)
+include_directories(src/controller/)
 
 add_executable(SimpleTaskManager
         src/main.cpp
@@ -50,7 +51,7 @@ add_executable(SimpleTaskManager
         src/view/states/task_input/InputTaskDueDateState.cpp
         src/view/states/task_input/InputTaskDueDateState.h
         src/view/states/task_input/EditTaskState.cpp
-        src/view/states/task_input/EditTaskState.h src/view/console_io/ConsoleReader.cpp src/view/console_io/ConsoleReader.h src/controller/Controller.cpp src/controller/Controller.h src/controller/TaskValidator.cpp src/controller/TaskValidator.h)
+        src/view/states/task_input/EditTaskState.h src/view/console_io/ConsoleReader.cpp src/view/console_io/ConsoleReader.h src/controller/Controller.cpp src/controller/Controller.h src/controller/TaskValidator.cpp src/controller/TaskValidator.h src/view/states/abstract/WizardStateController.cpp src/view/states/abstract/WizardStateController.h)
 
 add_executable(SimpleTaskManager_test
         src/model/tasks/Task.cpp
