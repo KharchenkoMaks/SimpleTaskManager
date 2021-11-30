@@ -29,7 +29,7 @@ public:
                        const std::string& label = std::string(""));
 public:
     // throws std::runtime_eror if task is already completed
-    std::string to_string();
+    std::string to_string() const;
 
     std::string GetTitle() const;
     Task::Priority GetPriority() const;

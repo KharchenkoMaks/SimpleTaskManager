@@ -28,7 +28,7 @@ Task::Task(const std::string& title,
     this->completed_ = completed;
 }
 
-std::string Task::to_string() {
+std::string Task::to_string() const {
     return title_ + ", Priority: " + PriorityToString(priority_) +
                     ", Due to: " + std::to_string(due_to_) + "\n";
 }

@@ -9,9 +9,17 @@ std::optional<std::shared_ptr<WizardStateConsole>> AddTaskState::Execute(std::sh
     ConsoleStateMachine state_machine(GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
     std::shared_ptr<WizardContext> context_with_added_task = state_machine.Run();
 
-    context->AddTaskTitle(context_with_added_task->GetAddedTask().GetTitle());
-    context->AddTaskPriority(context_with_added_task->GetAddedTask().GetPriority());
-    context->AddTaskDueTime(context_with_added_task->GetAddedTask().GetDueTime());
+//    context->AddTaskTitle(context_with_added_task->GetAddedTask().GetTitle());
+//    context->AddTaskPriority(context_with_added_task->GetAddedTask().GetPriority());
+//    context->AddTaskDueTime(context_with_added_task->GetAddedTask().GetDueTime());
+
+    // Giving task to controller
+    try {
+        GetController()->AddTask(context_with_added_task->GetAddedTask());
+    } catch (std::invalid_argument) {
+        GetConsolePrinter()->WriteError("Given task wasn't saved, try again.");
+        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+    }
 
     return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
 }

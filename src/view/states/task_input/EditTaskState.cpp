@@ -23,9 +23,9 @@ std::optional<std::shared_ptr<WizardStateConsole>> EditTaskState::Execute(std::s
     ConsoleStateMachine state_machine(GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
     std::shared_ptr<WizardContext> context_with_edited_task = state_machine.Run();
 
-    context->AddTaskTitle(context_with_edited_task->GetAddedTask().GetTitle());
-    context->AddTaskPriority(context_with_edited_task->GetAddedTask().GetPriority());
-    context->AddTaskDueTime(context_with_edited_task->GetAddedTask().GetDueTime());
+//    context->AddTaskTitle(context_with_edited_task->GetAddedTask().GetTitle());
+//    context->AddTaskPriority(context_with_edited_task->GetAddedTask().GetPriority());
+//    context->AddTaskDueTime(context_with_edited_task->GetAddedTask().GetDueTime());
 
     return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
 }

@@ -2,11 +2,15 @@
 
 #include "ConsoleStateMachine.h"
 #include "states/factory/WizardStatesFactory.h"
+#include "Controller.h"
 
 #include <memory>
 
 int main() {
-    std::shared_ptr<WizardStatesFactory> states_factory = std::make_shared<WizardStatesFactory>();
+    std::shared_ptr<Controller> controller =
+            std::make_shared<Controller>(std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
+                            std::make_unique<TaskValidator>());
+    std::shared_ptr<WizardStatesFactory> states_factory = std::make_shared<WizardStatesFactory>(controller);
     ConsoleStateMachine state_machine(states_factory->GetInitialState());
     state_machine.Run();
     return 0;
@@ -33,5 +37,5 @@ int main() {
 // TODO_DONE: Make read id method in WizardStateConsole - Done 29.11.2021
 // TODO: Make start_from enum parameter in state machine?
 // TODO_DONE: Make controller and validator for tasks - Done 29.11.2021
-// TODO: Inject controller to state machine and states
+// TODO_DONE: Inject controller to state machine and states - Done 30.11.2021
 // TODO_DONE: Make WizardStatesConsole base class of states? - Done 30.11.2021
