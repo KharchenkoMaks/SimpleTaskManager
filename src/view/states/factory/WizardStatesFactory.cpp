@@ -4,6 +4,10 @@
 
 #include "WizardStatesFactory.h"
 
+WizardStatesFactory::WizardStatesFactory(const std::shared_ptr<Controller>& controller) : controller_(controller) {
+
+}
+
 std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetStateByCommand(const std::string &command) {
     if (command == "add") {
         return GetLazyStateByStatesEnum(States::kAddTask);
@@ -153,13 +157,13 @@ std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetLazyStateByStatesEnu
         }
         case States::kAddTask: {
             if (!add_task_state_){
-                add_task_state_ = std::make_shared<AddTaskState>(shared_from_this(), printer_, reader_);
+                add_task_state_ = std::make_shared<AddTaskState>(controller_, shared_from_this(), printer_, reader_);
             }
             return add_task_state_;
         }
         case States::kEditTask: {
             if (!edit_task_state_){
-                edit_task_state_ = std::make_shared<EditTaskState>(shared_from_this(), printer_, reader_);
+                edit_task_state_ = std::make_shared<EditTaskState>(controller_, shared_from_this(), printer_, reader_);
             }
             return edit_task_state_;
         }
@@ -183,4 +187,3 @@ std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetLazyStateByStatesEnu
         }
     }
 }
-

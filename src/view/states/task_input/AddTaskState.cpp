@@ -16,9 +16,10 @@ std::optional<std::shared_ptr<WizardStateConsole>> AddTaskState::Execute(std::sh
     return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
 }
 
-AddTaskState::AddTaskState(const std::shared_ptr<WizardStatesFactory>& states_factory,
+AddTaskState::AddTaskState(const std::shared_ptr<Controller>& controller,
+                           const std::shared_ptr<WizardStatesFactory>& states_factory,
                            const std::shared_ptr<ConsolePrinter>& printer,
                            const std::shared_ptr<ConsoleReader>& reader) :
-                           WizardStateConsole(states_factory, printer, reader) {
+                           WizardStateController(controller, states_factory, printer, reader) {
 
 }

@@ -8,6 +8,7 @@
 #include "states/abstract/WizardStateConsole.h"
 #include "console_io/ConsolePrinter.h"
 #include "console_io/ConsoleReader.h"
+#include "Controller.h"
 
 #include "states/RootState.h"
 #include "states/HelpState.h"
@@ -38,6 +39,9 @@ public:
         ERROR,
         NEXT
     };
+
+public:
+    explicit WizardStatesFactory(const std::shared_ptr<Controller>& controller);
 
 public:
     std::shared_ptr<WizardStateConsole> GetStateByCommand(const std::string& command);
@@ -80,6 +84,8 @@ private:
 
     std::shared_ptr<ConsoleReader> reader_;
     std::shared_ptr<ConsolePrinter> printer_;
+
+    std::shared_ptr<Controller> controller_;
 };
 
 
