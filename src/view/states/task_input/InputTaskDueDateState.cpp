@@ -33,8 +33,11 @@ std::optional<std::shared_ptr<WizardStateConsole>> InputTaskDueDateState::Execut
 }
 
 std::string InputTaskDueDateState::GetUserInputForDueDateEdit(const Task &task) {
-    GetConsolePrinter()->WriteLine("Leave empty for default value.");
-    return GetUserInput("Due Date, default: " + std::to_string(task.GetDueTime()));
+    std::string user_input = GetUserInput("Due Date, default: " + std::to_string(task.GetDueTime()));
+    if (user_input.empty()){
+        return std::to_string(task.GetDueTime());
+    }
+    return user_input;
 }
 
 std::string InputTaskDueDateState::GetUserInputForDueDateAdd() {

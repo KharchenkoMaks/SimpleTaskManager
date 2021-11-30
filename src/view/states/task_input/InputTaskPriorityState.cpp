@@ -36,6 +36,9 @@ std::string InputTaskPriorityState::GetUserInputForPriorityAdd() {
 }
 
 std::string InputTaskPriorityState::GetUserInputForPriorityEdit(const Task &task) {
-    GetConsolePrinter()->WriteLine("Leave empty for default value.");
-    return GetUserInput("Priority, default: " + Task::PriorityToString(task.GetPriority()));
+    std::string user_input = GetUserInput("Priority, default: " + Task::PriorityToString(task.GetPriority()));
+    if (user_input.empty()){
+        return Task::PriorityToString(task.GetPriority());
+    }
+    return user_input;
 }
