@@ -20,9 +20,23 @@ std::optional<std::shared_ptr<WizardStateConsole>> EditTaskState::Execute(std::s
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    ConsoleStateMachine state_machine(std::make_shared<WizardContext>(),
+    std::optional<Task> task_to_edit = GetController()->GetTask(editing_task_id.value());
+    if (!task_to_edit.has_value()) {
+        GetConsolePrinter()->WriteError("No task with such task id was found, try again.");
+        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+    }
+
+    // Creating new context
+    std::shared_ptr<WizardContext> context_task_editing = std::make_shared<WizardContext>();
+
+    context_task_editing->SetEditingTask(editing_task_id.value(), task_to_edit.value());
+
+    ConsoleStateMachine state_machine(context_task_editing,
             GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
-    std::shared_ptr<WizardContext> context_with_edited_task = state_machine.Run();
+    context_task_editing = state_machine.Run();
+
+    // Giving edited task to controller
+    GetController()->EditTask(context_task_editing->GetTaskId().value(), context_task_editing->GetTask().value());
 
 //    context->AddTaskTitle(context_with_edited_task->GetAddedTask().GetTitle());
 //    context->AddTaskPriority(context_with_edited_task->GetAddedTask().GetPriority());
