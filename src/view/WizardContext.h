@@ -20,17 +20,15 @@ public: // Adding task information
     void AddTaskTitle(const std::string& title);
     void AddTaskPriority(Task::Priority priority);
     void AddTaskDueTime(time_t due_time);
-    Task GetAddedTask();
+    std::optional<Task> GetTask() const;
 
-    void SetEditingTaskId(const TaskId& task_id);
-    void SetEditingTaskId(const std::string& task_id);
-    TaskId GetEditingTaskId();
+    void SetEditingTask(const TaskId& task_id, const Task& task);
 private:
     Task CreateDefaultTask();
     TaskId CreateDefaultTaskId();
 private:
-    Task added_task_;
-    TaskId editing_task_id_;
+    std::optional<Task> added_task_;
+    std::optional<TaskId> editing_task_id_;
 };
 
 

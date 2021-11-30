@@ -5,12 +5,12 @@
 #include "WizardContext.h"
 
 WizardContext::WizardContext() :
-    added_task_(CreateDefaultTask()),
-    editing_task_id_(CreateDefaultTaskId()) {
+    added_task_(std::nullopt),
+    editing_task_id_(std::nullopt) {
 
 }
 
-Task WizardContext::GetAddedTask() {
+std::optional<Task> WizardContext::GetTask() const {
     return added_task_;
 }
 
@@ -42,20 +42,9 @@ Task WizardContext::CreateDefaultTask() {
     return Task::Create("default_title", Task::Priority::NONE, 0);
 }
 
-// TODO (Maksym): Get Task by it's id and put in added_task_
-// TODO: Method needs to be reworked!!!
-void WizardContext::SetEditingTaskId(const TaskId& task_id) {
+void WizardContext::SetEditingTask(const TaskId& task_id, const Task& task) {
     editing_task_id_ = task_id;
-
-    added_task_ = CreateDefaultTask();
-}
-
-void WizardContext::SetEditingTaskId(const std::string& task_id) {
-    SetEditingTaskId(TaskId::Create(task_id));
-}
-
-TaskId WizardContext::GetEditingTaskId() {
-    return editing_task_id_;
+    added_task_ = task;
 }
 
 TaskId WizardContext::CreateDefaultTaskId() {
