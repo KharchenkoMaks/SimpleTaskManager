@@ -13,10 +13,11 @@ DueTime::DueTime(const std::string& due_time, const std::string& format) {
 }
 
 time_t DueTime::StringToTime(const std::string& time_string, const std::string& format = "%H:%M %d.%m.%Y") const {
-    struct std::tm tm;
+    std::tm t;
+    t.tm_sec = 0;
     std::istringstream ss(time_string);
-    ss >> std::get_time(&tm, format.c_str());
-    time_t some_time = mktime(&tm);
+    ss >> std::get_time(&t, format.c_str());
+    time_t some_time = mktime(&t);
     if (some_time >= 0) {
         return some_time;
     } else {
