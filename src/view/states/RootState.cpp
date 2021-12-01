@@ -13,9 +13,11 @@ RootState::RootState(const std::shared_ptr<WizardStatesFactory>& states_factory,
 
 std::optional<std::shared_ptr<WizardStateConsole>> RootState::Execute(std::shared_ptr<WizardContext> context) {
     std::string command = GetUserInput("");
-    try {
-        return GetStatesFactory()->GetStateByCommand(command);;
-    } catch (std::invalid_argument){
+    std::optional<std::shared_ptr<WizardStateConsole>> next_state =
+            GetStatesFactory()->GetStateByCommand(command);
+    if (next_state.has_value()) {
+        return next_state.value();
+    } else {
         GetConsolePrinter()->WriteError("Unknown command! Use help.");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }

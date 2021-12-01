@@ -8,14 +8,14 @@ WizardStatesFactory::WizardStatesFactory(const std::shared_ptr<Controller>& cont
 
 }
 
-std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetStateByCommand(const std::string &command) {
+std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetStateByCommand(const std::string &command) {
     if (command == "add") {
         return GetLazyStateByStatesEnum(States::kAddTask);
     } else if (command == "edit") {
         return GetLazyStateByStatesEnum(States::kEditTask);
     } else if (command == "delete") {
         // delete state
-        throw std::invalid_argument("Wrong command was given.");
+        return std::nullopt;
     } else if (command == "complete") {
         // complete state
         return GetLazyStateByStatesEnum(States::kComplete);
@@ -27,7 +27,7 @@ std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetStateByCommand(const
     } else if (command == "quit") {
         return GetLazyStateByStatesEnum(States::kQuit);
     } else {
-        throw std::invalid_argument("Wrong command was given.");
+        return std::nullopt;
     }
 }
 

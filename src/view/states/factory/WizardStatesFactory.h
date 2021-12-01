@@ -48,7 +48,7 @@ public:
     explicit WizardStatesFactory(const std::shared_ptr<Controller>& controller);
 
 public:
-    std::shared_ptr<WizardStateConsole> GetStateByCommand(const std::string& command);
+    std::optional<std::shared_ptr<WizardStateConsole>> GetStateByCommand(const std::string& command);
 
     std::shared_ptr<WizardStateConsole> GetInitialState();
 
