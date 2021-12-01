@@ -19,7 +19,7 @@ TEST_F(DueTimeTest, CreatingDueTimeDifferentWays_ShouldCreateRightDueTime){
     const std::string expected_string = "17:29 30.11.2021";
     // Act
     DueTime time1 = DueTime::Create(expected_time);
-    DueTime time2 = DueTime::Create(expected_string);
+    DueTime time2 = DueTime::Create(expected_string).value();
     const time_t actual_time1 = time1.GetTime();
     const time_t actual_time2 = time2.GetTime();
     const std::string actual_string1 = time1.GetTimeString();
@@ -34,13 +34,13 @@ TEST_F(DueTimeTest, CreatingDueTimeDifferentWays_ShouldCreateRightDueTime){
     EXPECT_EQ(expected_string, actual_string2);
 }
 
-TEST_F(DueTimeTest, CreatingDueTimeWithIncorrectTimeString_ShouldThrowInvalidArgument){
-    EXPECT_THROW(DueTime::Create("34"), std::invalid_argument);
-    EXPECT_THROW(DueTime::Create("17:30"), std::invalid_argument);
-    EXPECT_THROW(DueTime::Create("17:30 01.10"), std::invalid_argument);
-    EXPECT_THROW(DueTime::Create("-17:30 01.10.2021"), std::invalid_argument);
-    EXPECT_THROW(DueTime::Create("17:30 01.2021"), std::invalid_argument);
-    EXPECT_THROW(DueTime::Create("17:30 01.10.-2021"), std::invalid_argument);
-    EXPECT_THROW(DueTime::Create("17:30 01.."), std::invalid_argument);
-    EXPECT_THROW(DueTime::Create("17.30 01.10.2021"), std::invalid_argument);
+TEST_F(DueTimeTest, CreatingDueTimeWithIncorrectTimeString_ShouldReturnNullOpt){
+    EXPECT_EQ(DueTime::Create("34"), std::nullopt);
+    EXPECT_EQ(DueTime::Create("17:30"), std::nullopt);
+    EXPECT_EQ(DueTime::Create("17:30 01.10"), std::nullopt);
+    EXPECT_EQ(DueTime::Create("-17:30 01.10.2021"), std::nullopt);
+    EXPECT_EQ(DueTime::Create("17:30 01.2021"), std::nullopt);
+    EXPECT_EQ(DueTime::Create("17:30 01.10.-2021"), std::nullopt);
+    EXPECT_EQ(DueTime::Create("17:30 01.."), std::nullopt);
+    EXPECT_EQ(DueTime::Create("17.30 01.10.2021"), std::nullopt);
 }

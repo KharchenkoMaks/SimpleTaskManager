@@ -18,9 +18,9 @@
 class TaskManager {
 public:
     std::optional<TaskId> Add(const Task& t);
-    void Edit(const TaskId& id, const Task& t);
-    void Delete(const TaskId& id);
-    void Complete(const TaskId& id);
+    bool Edit(const TaskId& id, const Task& t);
+    bool Delete(const TaskId& id);
+    bool Complete(const TaskId& id);
 
     std::vector<std::pair<TaskId, Task>> Show();
 public:

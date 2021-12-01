@@ -44,9 +44,9 @@ TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
             { Task::Priority::NONE,Task::Priority::LOW };
     // Act
     TaskId task1 = task_manager.Add(Task::Create(expected_title[0],
-                                                 expected_priority[0], expected_time));
+                                                 expected_priority[0], expected_time)).value();
     TaskId task2 = task_manager.Add(Task::Create(expected_title[1],
-                                                 expected_priority[1], expected_time));
+                                                 expected_priority[1], expected_time)).value();
 
     std::vector<std::pair<TaskId, Task>> tasks = task_manager.Show();
     // Assert
@@ -80,7 +80,7 @@ TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
 
     TaskId task1 = task_manager.Add(Task::Create("title",
                                                  Task::Priority::MEDIUM,
-                                                 DueTime::Create(time(0))));
+                                                 DueTime::Create(time(0)))).value();
     // Act
     task_manager.Edit(task1,
                       Task::Create(expected_title, expected_priority, expected_time));
@@ -109,8 +109,8 @@ TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
     const DueTime expected_time = DueTime::Create(time(0));
     Task task1 = Task::Create("some title", Task::Priority::NONE, DueTime::Create(time(0)));
     Task task2 = Task::Create(expected_title, expected_priority, expected_time);
-    TaskId task_id_1 = task_manager.Add(task1);
-    TaskId task_id_2 = task_manager.Add(task2);
+    TaskId task_id_1 = task_manager.Add(task1).value();
+    TaskId task_id_2 = task_manager.Add(task2).value();
     // Act
     task_manager.Delete(task_id_1);
     std::vector<std::pair<TaskId, Task>> tasks = task_manager.Show();
@@ -125,8 +125,8 @@ TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
 }
 
 // Giving unused TaskId to Edit() method
-// Should throw std::invalid_argument
-TEST_F(TaskManagerTest, TryEditingNonExistentTask_ShouldThrowInvalidArgument){
+// Should return false
+TEST_F(TaskManagerTest, TryEditingNonExistentTask_ShouldReturnFalse){
     // Arrange
     std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
     EXPECT_CALL(*gen, CreateNewTaskId())
@@ -136,12 +136,12 @@ TEST_F(TaskManagerTest, TryEditingNonExistentTask_ShouldThrowInvalidArgument){
     TaskId task_id = TaskId::Create(5);
     Task task = Task::Create("title", Task::Priority::NONE, DueTime::Create(time(0)));
     // Act & Assert
-    EXPECT_THROW(task_manager.Edit(task_id, task), std::invalid_argument);
+    EXPECT_FALSE(task_manager.Edit(task_id, task));
 }
 
 // Giving unused TaskId to Delete method
-// Should throw std::invalid argument
-TEST_F(TaskManagerTest, TryDeletingNonExistentTask_ShouldThrowInvalidArgument){
+// Should return false
+TEST_F(TaskManagerTest, TryDeletingNonExistentTask_ShouldReturnFalse){
     // Arrange
     std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
     EXPECT_CALL(*gen, CreateNewTaskId())
@@ -150,7 +150,7 @@ TEST_F(TaskManagerTest, TryDeletingNonExistentTask_ShouldThrowInvalidArgument){
     TaskManager task_manager(std::move(gen));
     TaskId task_id = TaskId::Create(5);
     // Act & Assert
-    EXPECT_THROW(task_manager.Delete(task_id), std::invalid_argument);
+    EXPECT_FALSE(task_manager.Delete(task_id));
 }
 
 // Creating three Tasks
@@ -170,11 +170,11 @@ TEST_F(TaskManagerTest, TryCompletingDifferentTasks_ShouldCompleteThoseTasks){
             Task::Create("task3", Task::Priority::NONE, some_time, true);
 
     TaskId task1 = task_manager.Add(
-            Task::Create("task1", Task::Priority::NONE, DueTime::Create(time(0))));
+            Task::Create("task1", Task::Priority::NONE, DueTime::Create(time(0)))).value();
     TaskId task2 = task_manager.Add(
-            Task::Create("task2", Task::Priority::NONE, DueTime::Create(time(0))));
+            Task::Create("task2", Task::Priority::NONE, DueTime::Create(time(0)))).value();
     TaskId task3 = task_manager.Add(
-            Task::Create("task3", Task::Priority::NONE, DueTime::Create(time(0))));
+            Task::Create("task3", Task::Priority::NONE, DueTime::Create(time(0)))).value();
     // Act
     task_manager.Complete(task1);
     task_manager.Complete(task3);
@@ -191,8 +191,8 @@ TEST_F(TaskManagerTest, TryCompletingDifferentTasks_ShouldCompleteThoseTasks){
 }
 
 // Trying to complete non-existent TaskId
-// Should throw std::invalid_argument
-TEST_F(TaskManagerTest, TryCompletingNonExistentTask_ShouldThrowInvalidArgument){
+// Should return false
+TEST_F(TaskManagerTest, TryCompletingNonExistentTask_ShouldReturnFalse){
     // Arrange
     std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
     EXPECT_CALL(*gen, CreateNewTaskId())
@@ -200,5 +200,5 @@ TEST_F(TaskManagerTest, TryCompletingNonExistentTask_ShouldThrowInvalidArgument)
 
     TaskManager task_manager(std::move(gen));
     // Act & Assert
-    EXPECT_THROW(task_manager.Complete(TaskId::Create(5)), std::invalid_argument);
+    EXPECT_FALSE(task_manager.Complete(TaskId::Create(5)));
 }

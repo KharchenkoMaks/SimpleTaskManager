@@ -14,15 +14,14 @@ std::optional<DueTime> DueTime::Create(const std::string& due_time, const std::s
 }
 
 std::optional<time_t> DueTime::StringToTime(const std::string& time_string, const std::string& format = "%H:%M %d.%m.%Y") {
-    std::tm t;
-    t.tm_sec = 0;
+    std::tm t = { 0 };
     std::istringstream ss(time_string);
     ss >> std::get_time(&t, format.c_str());
     time_t some_time = mktime(&t);
-    if (some_time >= 0 && t.tm_year < 1000) {
+    if (some_time >= 0 && t.tm_year > 0) {
         return some_time;
     } else {
-        throw std::invalid_argument("Time string format was wrong!");
+        return std::nullopt;
     }
 }
 

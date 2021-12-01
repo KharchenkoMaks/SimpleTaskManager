@@ -22,8 +22,7 @@ std::optional<TaskId> Controller::AddTask(const Task &task) {
 bool Controller::EditTask(const TaskId &task_id, const Task &task) {
     if (task_validator_->ValidateTask(task) && task_validator_->ValidateTaskId(task_id)) {
         if (task_manager_->IsTaskIdExist(task_id)) {
-            task_manager_->Edit(task_id, task);
-            return true;
+            return task_manager_->Edit(task_id, task);
         }
     }
     return false;
@@ -32,8 +31,7 @@ bool Controller::EditTask(const TaskId &task_id, const Task &task) {
 bool Controller::DeleteTask(const TaskId &task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
         if (task_manager_->IsTaskIdExist(task_id)){
-            task_manager_->Delete(task_id);
-            return true;
+            return task_manager_->Delete(task_id);
         }
     }
     return false;
@@ -42,8 +40,7 @@ bool Controller::DeleteTask(const TaskId &task_id) {
 bool Controller::CompleteTask(const TaskId &task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
         if (task_manager_->IsTaskIdExist(task_id)){
-            task_manager_->Complete(task_id);
-            return true;
+            return task_manager_->Complete(task_id);
         }
     }
     return false;
