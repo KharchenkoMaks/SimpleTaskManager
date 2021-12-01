@@ -28,7 +28,7 @@ int main() {
 // TODO_DONE: Rename WizardStateConsole abstract class - Done 26.11.2021
 // TODO_DONE: Rename Printer to PrinterWithScanner =) - Done 25.11.2021
 // TODO_DONE: Make default methods in WizardStateConsole to ask user for some input - Done 26.11.2021
-// TODO_DONE: Delete unnecessary directories - Done 25.11.2021
+// TODO_DONE: DeleteTask unnecessary directories - Done 25.11.2021
 // TODO: Change subtasks structure
 // TODO: Move Task::Priority converter out of Task class
 // TODO_DONE: Make Task due time wrapper - Done 30.11.2021
@@ -45,7 +45,7 @@ int main() {
 // TODO: Implement delete command
 // TODO_DONE: Implement show command - Done 30.11.2021
 // TODO: Implement add_subtask command
-// TODO: Add WizardStateMachine for states that starts state machine?
+// TODO: AddTask WizardStateMachine for states that starts state machine?
 // TODO_DONE: Make DueTime validator in controller - Done 01.01.2021
 // TODO_DONE: Get rid of exceptions in task manager API - Done 01.01.2021
 // TODO: Make general model interface

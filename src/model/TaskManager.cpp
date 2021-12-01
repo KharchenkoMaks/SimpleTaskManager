@@ -9,7 +9,7 @@ TaskManager::TaskManager(std::unique_ptr<IdGenerator> generator)
 
 }
 
-std::optional<TaskId> TaskManager::Add(const Task& t) {
+std::optional<TaskId> TaskManager::AddTask(const Task& t) {
     if (t.GetTitle().empty()){
         return std::nullopt;
     }
@@ -18,7 +18,7 @@ std::optional<TaskId> TaskManager::Add(const Task& t) {
     return task_id;
 }
 
-bool TaskManager::Edit(const TaskId& id, const Task& t) {
+bool TaskManager::EditTask(const TaskId& id, const Task& t) {
     if (IsTaskIdExist(id)) {
         tasks_.insert_or_assign(id, t);
         return true;
@@ -26,7 +26,7 @@ bool TaskManager::Edit(const TaskId& id, const Task& t) {
     return false;
 }
 
-bool TaskManager::Delete(const TaskId& id) {
+bool TaskManager::DeleteTask(const TaskId& id) {
     if (IsTaskIdExist(id)) {
         tasks_.erase(id);
         return true;
@@ -34,7 +34,7 @@ bool TaskManager::Delete(const TaskId& id) {
     return false;
 }
 
-bool TaskManager::Complete(const TaskId& id) {
+bool TaskManager::CompleteTask(const TaskId& id) {
     if (IsTaskIdExist(id)) {
         auto task_iterator = tasks_.find(id);
 
@@ -54,7 +54,7 @@ bool TaskManager::Complete(const TaskId& id) {
     return false;
 }
 
-std::vector<std::pair<TaskId, Task>> TaskManager::Show() {
+std::vector<std::pair<TaskId, Task>> TaskManager::GetTasks() {
     std::vector<std::pair<TaskId, Task>> tasks;
     for (std::pair<const TaskId, Task>& item : tasks_){
         tasks.push_back(std::pair<TaskId, Task>(item.first, item.second));

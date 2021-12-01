@@ -27,7 +27,7 @@ class TaskManagerTest : public ::testing::Test{
 };
 
 // Creating two Tasks in TaskManager
-// Should return right Tasks in Show() method
+// Should return right Tasks in GetTasks() method
 TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
     // Arrange
     std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
@@ -43,12 +43,12 @@ TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
     const Task::Priority expected_priority[] =
             { Task::Priority::NONE,Task::Priority::LOW };
     // Act
-    TaskId task1 = task_manager.Add(Task::Create(expected_title[0],
-                                                 expected_priority[0], expected_time)).value();
-    TaskId task2 = task_manager.Add(Task::Create(expected_title[1],
-                                                 expected_priority[1], expected_time)).value();
+    TaskId task1 = task_manager.AddTask(Task::Create(expected_title[0],
+                                                     expected_priority[0], expected_time)).value();
+    TaskId task2 = task_manager.AddTask(Task::Create(expected_title[1],
+                                                     expected_priority[1], expected_time)).value();
 
-    std::vector<std::pair<TaskId, Task>> tasks = task_manager.Show();
+    std::vector<std::pair<TaskId, Task>> tasks = task_manager.GetTasks();
     // Assert
     // Check size of task vector equals 2
     EXPECT_EQ(tasks.size(), 2);
@@ -78,13 +78,13 @@ TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
     const Task::Priority expected_priority = Task::Priority::HIGH;
     const DueTime expected_time = DueTime::Create(time(0));
 
-    TaskId task1 = task_manager.Add(Task::Create("title",
-                                                 Task::Priority::MEDIUM,
-                                                 DueTime::Create(time(0)))).value();
+    TaskId task1 = task_manager.AddTask(Task::Create("title",
+                                                     Task::Priority::MEDIUM,
+                                                     DueTime::Create(time(0)))).value();
     // Act
-    task_manager.Edit(task1,
-                      Task::Create(expected_title, expected_priority, expected_time));
-    std::pair<TaskId, Task> actual = task_manager.Show()[0];
+    task_manager.EditTask(task1,
+                          Task::Create(expected_title, expected_priority, expected_time));
+    std::pair<TaskId, Task> actual = task_manager.GetTasks()[0];
     // Assert
     EXPECT_TRUE(task1 == actual.first);
     EXPECT_EQ(expected_title, actual.second.GetTitle());
@@ -94,7 +94,7 @@ TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
 
 // Creating two Tasks in TaskManager
 // Deleting first task
-// Show method should return only second task
+// GetTasks method should return only second task
 TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
     // Arrange
     std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
@@ -109,11 +109,11 @@ TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
     const DueTime expected_time = DueTime::Create(time(0));
     Task task1 = Task::Create("some title", Task::Priority::NONE, DueTime::Create(time(0)));
     Task task2 = Task::Create(expected_title, expected_priority, expected_time);
-    TaskId task_id_1 = task_manager.Add(task1).value();
-    TaskId task_id_2 = task_manager.Add(task2).value();
+    TaskId task_id_1 = task_manager.AddTask(task1).value();
+    TaskId task_id_2 = task_manager.AddTask(task2).value();
     // Act
-    task_manager.Delete(task_id_1);
-    std::vector<std::pair<TaskId, Task>> tasks = task_manager.Show();
+    task_manager.DeleteTask(task_id_1);
+    std::vector<std::pair<TaskId, Task>> tasks = task_manager.GetTasks();
     TaskId actual_task_id = tasks[0].first;
     Task actual_task = tasks[0].second;
     // Assert
@@ -124,7 +124,7 @@ TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
     EXPECT_EQ(actual_task.GetDueTime(), expected_time);
 }
 
-// Giving unused TaskId to Edit() method
+// Giving unused TaskId to EditTask() method
 // Should return false
 TEST_F(TaskManagerTest, TryEditingNonExistentTask_ShouldReturnFalse){
     // Arrange
@@ -136,10 +136,10 @@ TEST_F(TaskManagerTest, TryEditingNonExistentTask_ShouldReturnFalse){
     TaskId task_id = TaskId::Create(5);
     Task task = Task::Create("title", Task::Priority::NONE, DueTime::Create(time(0)));
     // Act & Assert
-    EXPECT_FALSE(task_manager.Edit(task_id, task));
+    EXPECT_FALSE(task_manager.EditTask(task_id, task));
 }
 
-// Giving unused TaskId to Delete method
+// Giving unused TaskId to DeleteTask method
 // Should return false
 TEST_F(TaskManagerTest, TryDeletingNonExistentTask_ShouldReturnFalse){
     // Arrange
@@ -150,7 +150,7 @@ TEST_F(TaskManagerTest, TryDeletingNonExistentTask_ShouldReturnFalse){
     TaskManager task_manager(std::move(gen));
     TaskId task_id = TaskId::Create(5);
     // Act & Assert
-    EXPECT_FALSE(task_manager.Delete(task_id));
+    EXPECT_FALSE(task_manager.DeleteTask(task_id));
 }
 
 // Creating three Tasks
@@ -169,16 +169,16 @@ TEST_F(TaskManagerTest, TryCompletingDifferentTasks_ShouldCompleteThoseTasks){
     Task expected_second_completed_task =
             Task::Create("task3", Task::Priority::NONE, some_time, true);
 
-    TaskId task1 = task_manager.Add(
+    TaskId task1 = task_manager.AddTask(
             Task::Create("task1", Task::Priority::NONE, DueTime::Create(time(0)))).value();
-    TaskId task2 = task_manager.Add(
+    TaskId task2 = task_manager.AddTask(
             Task::Create("task2", Task::Priority::NONE, DueTime::Create(time(0)))).value();
-    TaskId task3 = task_manager.Add(
+    TaskId task3 = task_manager.AddTask(
             Task::Create("task3", Task::Priority::NONE, DueTime::Create(time(0)))).value();
     // Act
-    task_manager.Complete(task1);
-    task_manager.Complete(task3);
-    std::vector<std::pair<TaskId, Task>> tasks = task_manager.Show();
+    task_manager.CompleteTask(task1);
+    task_manager.CompleteTask(task3);
+    std::vector<std::pair<TaskId, Task>> tasks = task_manager.GetTasks();
     Task actual_first_completed_task = tasks[0].second;
     Task actual_second_completed_task = tasks[2].second;
     Task actual_not_completed_task = tasks[1].second;
@@ -200,5 +200,5 @@ TEST_F(TaskManagerTest, TryCompletingNonExistentTask_ShouldReturnFalse){
 
     TaskManager task_manager(std::move(gen));
     // Act & Assert
-    EXPECT_FALSE(task_manager.Complete(TaskId::Create(5)));
+    EXPECT_FALSE(task_manager.CompleteTask(TaskId::Create(5)));
 }

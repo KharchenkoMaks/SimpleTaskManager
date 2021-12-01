@@ -17,12 +17,12 @@
 
 class TaskManager {
 public:
-    std::optional<TaskId> Add(const Task& t);
-    bool Edit(const TaskId& id, const Task& t);
-    bool Delete(const TaskId& id);
-    bool Complete(const TaskId& id);
+    std::optional<TaskId> AddTask(const Task& t);
+    bool EditTask(const TaskId& id, const Task& t);
+    bool DeleteTask(const TaskId& id);
+    bool CompleteTask(const TaskId& id);
 
-    std::vector<std::pair<TaskId, Task>> Show();
+    std::vector<std::pair<TaskId, Task>> GetTasks();
 public:
     bool IsTaskIdExist(const TaskId& task_id) const;
 
