@@ -7,14 +7,16 @@
 
 #include "TaskId.h"
 #include "tasks/Task.h"
-#include "TaskManager.h"
+#include "IModel.h"
 #include "TaskValidator.h"
 
 #include <memory>
+#include <utility>
+#include <vector>
 
 class Controller {
 public:
-    Controller(std::unique_ptr<TaskManager> task_manager, std::unique_ptr<TaskValidator> task_validator);
+    Controller(std::unique_ptr<IModel> model, std::unique_ptr<TaskValidator> task_validator);
 public:
     std::optional<TaskId> AddTask(const Task& task);
     bool EditTask(const TaskId& task_id, const Task& task);
@@ -25,7 +27,7 @@ public:
 public:
     std::optional<Task> GetTask(const TaskId& task_id) const;
 private:
-    std::unique_ptr<TaskManager> task_manager_;
+    std::unique_ptr<IModel> model_;
 
     std::unique_ptr<TaskValidator> task_validator_;
 };

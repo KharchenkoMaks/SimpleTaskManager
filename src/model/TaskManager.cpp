@@ -62,11 +62,11 @@ std::vector<std::pair<TaskId, Task>> TaskManager::GetTasks() {
     return tasks;
 }
 
-bool TaskManager::IsTaskIdExist(const TaskId &task_id) const {
+bool TaskManager::IsTaskIdExist(const TaskId &task_id) {
     return tasks_.find(task_id) != tasks_.end();
 }
 
-std::optional<Task> TaskManager::GetTask(const TaskId& task_id) const {
+std::optional<Task> TaskManager::GetTask(const TaskId& task_id) {
     if (IsTaskIdExist(task_id)){
         auto task_iterator = tasks_.find(task_id);
         return task_iterator->second;

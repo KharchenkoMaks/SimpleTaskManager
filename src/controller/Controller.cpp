@@ -4,16 +4,16 @@
 
 #include "Controller.h"
 
-Controller::Controller(std::unique_ptr<TaskManager> task_manager,
+Controller::Controller(std::unique_ptr<IModel> model,
                        std::unique_ptr<TaskValidator> task_validator) :
-                       task_manager_(std::move(task_manager)),
+                       model_(std::move(model)),
                        task_validator_(std::move(task_validator)) {
 
 }
 
 std::optional<TaskId> Controller::AddTask(const Task &task) {
     if (task_validator_->ValidateTask(task)){
-        return task_manager_->AddTask(task);
+        return model_->AddTask(task);
     } else {
         return std::nullopt;
     }
@@ -21,8 +21,8 @@ std::optional<TaskId> Controller::AddTask(const Task &task) {
 
 bool Controller::EditTask(const TaskId &task_id, const Task &task) {
     if (task_validator_->ValidateTask(task) && task_validator_->ValidateTaskId(task_id)) {
-        if (task_manager_->IsTaskIdExist(task_id)) {
-            return task_manager_->EditTask(task_id, task);
+        if (model_->IsTaskIdExist(task_id)) {
+            return model_->EditTask(task_id, task);
         }
     }
     return false;
@@ -30,8 +30,8 @@ bool Controller::EditTask(const TaskId &task_id, const Task &task) {
 
 bool Controller::DeleteTask(const TaskId &task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
-        if (task_manager_->IsTaskIdExist(task_id)){
-            return task_manager_->DeleteTask(task_id);
+        if (model_->IsTaskIdExist(task_id)){
+            return model_->DeleteTask(task_id);
         }
     }
     return false;
@@ -39,21 +39,21 @@ bool Controller::DeleteTask(const TaskId &task_id) {
 
 bool Controller::CompleteTask(const TaskId &task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
-        if (task_manager_->IsTaskIdExist(task_id)){
-            return task_manager_->CompleteTask(task_id);
+        if (model_->IsTaskIdExist(task_id)){
+            return model_->CompleteTask(task_id);
         }
     }
     return false;
 }
 
 std::optional<Task> Controller::GetTask(const TaskId &task_id) const {
-    return task_manager_->GetTask(task_id);
+    return model_->GetTask(task_id);
 }
 
 std::string Controller::GetAllTasks() {
     std::string answer = "";
 
-    auto tasks = task_manager_->GetTasks();
+    auto tasks = model_->GetTasks();
     for (auto t : tasks){
         answer.append("ID: " + std::to_string(t.first.GetId()) + ", " + t.second.to_string());
     }

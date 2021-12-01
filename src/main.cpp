@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "TaskManager.h"
 #include "ConsoleStateMachine.h"
 #include "states/factory/WizardStatesFactory.h"
 #include "Controller.h"
@@ -46,7 +47,7 @@ int main() {
 // TODO_DONE: Implement show command - Done 30.11.2021
 // TODO: Implement add_subtask command
 // TODO: AddTask WizardStateMachine for states that starts state machine?
-// TODO_DONE: Make DueTime validator in controller - Done 01.01.2021
-// TODO_DONE: Get rid of exceptions in task manager API - Done 01.01.2021
-// TODO: Make general model interface
+// TODO_DONE: Make DueTime validator in controller - Done 01.12.2021
+// TODO_DONE: Get rid of exceptions in task manager API - Done 01.12.2021
+// TODO_DONE: Make general model interface - Done 01.12.2021
 // TODO: Make general controller interface?

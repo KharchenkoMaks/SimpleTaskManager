@@ -5,6 +5,7 @@
 #ifndef SIMPLETASKMANAGER_TASKMANAGER_H
 #define SIMPLETASKMANAGER_TASKMANAGER_H
 
+#include "IModel.h"
 #include "tasks/Task.h"
 #include "TaskId.h"
 #include "IdGenerator.h"
@@ -15,18 +16,18 @@
 #include <memory>
 #include <optional>
 
-class TaskManager {
+class TaskManager : public IModel {
 public:
-    std::optional<TaskId> AddTask(const Task& t);
-    bool EditTask(const TaskId& id, const Task& t);
-    bool DeleteTask(const TaskId& id);
-    bool CompleteTask(const TaskId& id);
+    std::optional<TaskId> AddTask(const Task& t) override;
+    bool EditTask(const TaskId& id, const Task& t) override;
+    bool DeleteTask(const TaskId& id) override;
+    bool CompleteTask(const TaskId& id) override;
 
-    std::vector<std::pair<TaskId, Task>> GetTasks();
+    std::vector<std::pair<TaskId, Task>> GetTasks() override;
 public:
-    bool IsTaskIdExist(const TaskId& task_id) const;
+    bool IsTaskIdExist(const TaskId& task_id) override;
 
-    std::optional<Task> GetTask(const TaskId& task_id) const;
+    std::optional<Task> GetTask(const TaskId& task_id) override;
 public:
     explicit TaskManager(std::unique_ptr<IdGenerator> generator);
 private:
