@@ -15,10 +15,10 @@ std::optional<std::shared_ptr<WizardStateConsole>> AddTaskState::Execute(std::sh
 //    context->AddTaskDueTime(context_with_added_task->GetAddedTask().GetDueTime());
 
     // Giving task to controller
-    try {
-        TaskId added_task_id = GetController()->AddTask(context_with_added_task->GetTask().value());
-        ShowAddedTaskId(added_task_id);
-    } catch (std::invalid_argument) {
+    std::optional<TaskId> added_task_id = GetController()->AddTask(context_with_added_task->GetTask().value());
+    if (added_task_id.has_value()) {
+        ShowAddedTaskId(added_task_id.value());
+    } else {
         GetConsolePrinter()->WriteError("Given task wasn't saved, try again.");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
     }

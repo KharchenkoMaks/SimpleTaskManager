@@ -11,11 +11,11 @@ Controller::Controller(std::unique_ptr<TaskManager> task_manager,
 
 }
 
-TaskId Controller::AddTask(const Task &task) {
+std::optional<TaskId> Controller::AddTask(const Task &task) {
     if (task_validator_->ValidateTask(task)){
         return task_manager_->Create(task);
     } else {
-        throw std::invalid_argument("Invalid task was given.");
+        return std::nullopt;
     }
 }
 

@@ -16,7 +16,7 @@ class Controller {
 public:
     Controller(std::unique_ptr<TaskManager> task_manager, std::unique_ptr<TaskValidator> task_validator);
 public:
-    TaskId AddTask(const Task& task);
+    std::optional<TaskId> AddTask(const Task& task);
     void EditTask(const TaskId& task_id, const Task& task);
     void DeleteTask(const TaskId& task_id);
     void CompleteTask(const TaskId& task_id);
