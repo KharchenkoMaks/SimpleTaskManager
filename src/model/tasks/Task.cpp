@@ -23,9 +23,6 @@ Task::Task(const std::string& title,
            due_to_(due_to),
            completed_(completed),
            label_(label) {
-    if (title.length() == 0){
-        throw std::invalid_argument("Task title was empty.");
-    }
 
 }
 

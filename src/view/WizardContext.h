@@ -17,10 +17,13 @@
 class WizardContext {
 public:
     WizardContext();
-public: // Adding task information
-    void AddTaskTitle(const std::string& title);
-    void AddTaskPriority(Task::Priority priority);
-    void AddTaskDueTime(DueTime due_time);
+public:
+    // Returns false if title isn't added
+    bool AddTaskTitle(const std::string& title);
+    // Returns false if priority isn't added
+    bool AddTaskPriority(Task::Priority priority);
+    // Returns false if due time isn't added
+    bool AddTaskDueTime(DueTime due_time);
     std::optional<Task> GetTask() const;
 
     void SetEditingTask(const TaskId& task_id, const Task& task);

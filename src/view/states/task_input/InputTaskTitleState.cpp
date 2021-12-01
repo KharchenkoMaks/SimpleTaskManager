@@ -20,9 +20,7 @@ std::optional<std::shared_ptr<WizardStateConsole>> InputTaskTitleState::Execute(
         user_input = GetUserInputForTitleAdd();
     }
 
-    try {
-        context->AddTaskTitle(user_input);
-    } catch (std::invalid_argument) {
+    if (!context->AddTaskTitle(user_input)) {
         GetConsolePrinter()->WriteError("Task title was wrong, please, try again!");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }

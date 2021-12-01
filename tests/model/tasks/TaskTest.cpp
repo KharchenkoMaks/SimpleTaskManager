@@ -76,12 +76,6 @@ TEST_F(TaskTest, GetDueTime_shouldReturnDueTime){
     EXPECT_EQ(expected, actual);
 }
 
-// Using Task::Create giving empty title
-// Throws std::invalid_argument
-TEST_F(TaskTest, creatingTaskWithEmpyTitle_shouldThrowInvalidArgument){
-    EXPECT_THROW(Task::Create("", Task::Priority::NONE, DueTime::Create(time(0))), std::invalid_argument);
-}
-
 // Creating Task with Title = "title"
 // Different priorities and due_date = 1636739250
 // Should return correct string

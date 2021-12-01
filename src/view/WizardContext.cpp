@@ -14,31 +14,41 @@ std::optional<Task> WizardContext::GetTask() const {
     return added_task_;
 }
 
-void WizardContext::AddTaskTitle(const std::string &title) {
+bool WizardContext::AddTaskTitle(const std::string &title) {
+    if (title.empty()){
+        return false;
+    }
     InitializeTask();
     added_task_ = Task::Create(title,
                                added_task_.value().GetPriority(),
                                added_task_.value().GetDueTime(),
                                added_task_.value().IsCompleted(),
                                added_task_.value().GetLabel());
+    return true;
 }
 
-void WizardContext::AddTaskPriority(const Task::Priority priority) {
+bool WizardContext::AddTaskPriority(const Task::Priority priority) {
     InitializeTask();
     added_task_ = Task::Create(added_task_.value().GetTitle(),
                                priority,
                                added_task_.value().GetDueTime(),
                                added_task_.value().IsCompleted(),
                                added_task_.value().GetLabel());
+    return true;
 }
 
-void WizardContext::AddTaskDueTime(const DueTime due_time) {
-    InitializeTask();
-    added_task_ = Task::Create(added_task_.value().GetTitle(),
-                               added_task_.value().GetPriority(),
-                               due_time,
-                               added_task_.value().IsCompleted(),
-                               added_task_.value().GetLabel());
+bool WizardContext::AddTaskDueTime(const DueTime due_time) {
+    if (due_time > time(0)) {
+        InitializeTask();
+        added_task_ = Task::Create(added_task_.value().GetTitle(),
+                                   added_task_.value().GetPriority(),
+                                   due_time,
+                                   added_task_.value().IsCompleted(),
+                                   added_task_.value().GetLabel());
+        return true;
+    } else {
+        return false;
+    }
 }
 
 Task WizardContext::CreateDefaultTask() {
