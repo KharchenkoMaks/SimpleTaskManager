@@ -10,6 +10,7 @@
 
 #include <string>
 #include <ctime>
+#include <optional>
 
 class Task {
 public:
@@ -21,7 +22,7 @@ public:
     };
 
     static std::string PriorityToString(Priority priority);
-    static Priority GetTaskPriority(const std::string& priority);
+    static std::optional<Priority> GetTaskPriority(const std::string& priority);
 public:
     static Task Create(const std::string& title,
                        Priority priority,
