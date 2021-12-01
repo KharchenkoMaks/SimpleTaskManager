@@ -4,15 +4,16 @@
 
 #include "DueTime.h"
 
-DueTime DueTime::Create(const std::string& due_time, const std::string& format) {
-    return DueTime(due_time, format);
+std::optional<DueTime> DueTime::Create(const std::string& due_time, const std::string& format) {
+    std::optional<time_t> converted_time = StringToTime(due_time, format);
+    if (converted_time.has_value()) {
+        return DueTime(converted_time.value());
+    } else {
+        return std::nullopt;
+    }
 }
 
-DueTime::DueTime(const std::string& due_time, const std::string& format) {
-    due_time_ = StringToTime(due_time, format);
-}
-
-time_t DueTime::StringToTime(const std::string& time_string, const std::string& format = "%H:%M %d.%m.%Y") const {
+std::optional<time_t> DueTime::StringToTime(const std::string& time_string, const std::string& format = "%H:%M %d.%m.%Y") {
     std::tm t;
     t.tm_sec = 0;
     std::istringstream ss(time_string);
@@ -25,7 +26,7 @@ time_t DueTime::StringToTime(const std::string& time_string, const std::string& 
     }
 }
 
-std::string DueTime::TimeToString(time_t time, const std::string& format = "%H:%M %d.%m.%Y") const {
+std::string DueTime::TimeToString(time_t time, const std::string& format = "%H:%M %d.%m.%Y") {
     char buffer[32];
     std::tm *t = std::localtime(&time);
     std::strftime(buffer, 32, format.c_str(), t);

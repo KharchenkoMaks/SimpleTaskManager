@@ -9,11 +9,12 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <optional>
 
 class DueTime {
 public:
     static DueTime Create(time_t due_time);
-    static DueTime Create(const std::string& due_time, const std::string& format = "%H:%M %d.%m.%Y");
+    static std::optional<DueTime> Create(const std::string& due_time, const std::string& format = "%H:%M %d.%m.%Y");
 public:
     std::string GetTimeString(const std::string& format = "%H:%M %d.%m.%Y") const;
     time_t GetTime() const;
@@ -21,11 +22,10 @@ public:
     bool operator== (const DueTime& due_time) const;
     bool operator> (const time_t& time) const;
 private:
-    DueTime(const std::string& due_time, const std::string& format);
     explicit DueTime(time_t due_time);
 private:
-    time_t StringToTime(const std::string& time_string, const std::string& format) const;
-    std::string TimeToString(time_t time, const std::string& format) const;
+    static std::optional<time_t> StringToTime(const std::string& time_string, const std::string& format);
+    static std::string TimeToString(time_t time, const std::string& format);
 private:
     time_t due_time_;
 };

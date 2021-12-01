@@ -21,10 +21,10 @@ std::optional<std::shared_ptr<WizardStateConsole>> InputTaskDueDateState::Execut
         user_input = GetUserInputForDueDateAdd();
     }
 
-    try {
-        DueTime task_due_date = DueTime::Create(user_input);
-        context->AddTaskDueTime(task_due_date);
-    } catch (std::invalid_argument) {
+    std::optional<DueTime> task_due_date = DueTime::Create(user_input);
+    if (task_due_date.has_value()) {
+        context->AddTaskDueTime(task_due_date.value());
+    } else {
         GetConsolePrinter()->WriteError("Wrong due date was given, try again!");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
