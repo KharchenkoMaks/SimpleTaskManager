@@ -45,7 +45,7 @@ int main() {
 // TODO: Implement delete command
 // TODO_DONE: Implement show command - Done 30.11.2021
 // TODO: Implement add_subtask command
-// TODO: Create WizardStateMachine for states that starts state machine?
+// TODO: Add WizardStateMachine for states that starts state machine?
 // TODO_DONE: Make DueTime validator in controller - Done 01.01.2021
 // TODO: Get rid of exceptions in task manager API
 // TODO: Make general model interface

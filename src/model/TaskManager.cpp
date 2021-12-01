@@ -9,7 +9,10 @@ TaskManager::TaskManager(std::unique_ptr<IdGenerator> generator)
 
 }
 
-TaskId TaskManager::Create(const Task& t) {
+std::optional<TaskId> TaskManager::Add(const Task& t) {
+    if (t.GetTitle().empty()){
+        return std::nullopt;
+    }
     TaskId task_id = generator_->CreateNewTaskId();
     tasks_.insert({ task_id, t });
     return task_id;

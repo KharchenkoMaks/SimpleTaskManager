@@ -7,15 +7,15 @@
 
 class TaskIdTest : public ::testing::Test{
 protected:
-    // TaskId::Create(10)
+    // TaskId::Add(10)
     const TaskId task1 = TaskId::Create(10);
-    // TaskId::Create("10")
+    // TaskId::Add("10")
     const TaskId task2 = TaskId::Create("10");
-    // TaskId::Create(5)
+    // TaskId::Add(5)
     const TaskId task3 = TaskId::Create(5);
 };
 
-// Creating task using int and string Create methods
+// Creating task using int and string Add methods
 TEST_F(TaskIdTest, TaskIdCreate_shouldCreateTaskWithRightId){
     // Arrange
     int expected = 10;
@@ -25,9 +25,9 @@ TEST_F(TaskIdTest, TaskIdCreate_shouldCreateTaskWithRightId){
     int actual1 = task1.GetId();
     int actual2 = task2.GetId();
     // Assert
-    // Assert for TaskId::Create(int)
+    // Assert for TaskId::Add(int)
     EXPECT_EQ(expected, actual1);
-    // Assert for TaskId::Create(std::string)
+    // Assert for TaskId::Add(std::string)
     EXPECT_EQ(expected, actual2);
 }
 

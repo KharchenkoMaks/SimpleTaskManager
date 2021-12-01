@@ -13,7 +13,7 @@ Controller::Controller(std::unique_ptr<TaskManager> task_manager,
 
 std::optional<TaskId> Controller::AddTask(const Task &task) {
     if (task_validator_->ValidateTask(task)){
-        return task_manager_->Create(task);
+        return task_manager_->Add(task);
     } else {
         return std::nullopt;
     }

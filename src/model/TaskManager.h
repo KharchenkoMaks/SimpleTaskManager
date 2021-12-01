@@ -17,7 +17,7 @@
 
 class TaskManager {
 public:
-    TaskId Create(const Task& t);
+    std::optional<TaskId> Add(const Task& t);
     void Edit(const TaskId& id, const Task& t);
     void Delete(const TaskId& id);
     void Complete(const TaskId& id);

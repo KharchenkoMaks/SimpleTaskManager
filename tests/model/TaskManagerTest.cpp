@@ -43,10 +43,10 @@ TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
     const Task::Priority expected_priority[] =
             { Task::Priority::NONE,Task::Priority::LOW };
     // Act
-    TaskId task1 = task_manager.Create(Task::Create(expected_title[0],
-                                     expected_priority[0], expected_time));
-    TaskId task2 = task_manager.Create(Task::Create(expected_title[1],
-                                     expected_priority[1], expected_time));
+    TaskId task1 = task_manager.Add(Task::Create(expected_title[0],
+                                                 expected_priority[0], expected_time));
+    TaskId task2 = task_manager.Add(Task::Create(expected_title[1],
+                                                 expected_priority[1], expected_time));
 
     std::vector<std::pair<TaskId, Task>> tasks = task_manager.Show();
     // Assert
@@ -78,9 +78,9 @@ TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
     const Task::Priority expected_priority = Task::Priority::HIGH;
     const DueTime expected_time = DueTime::Create(time(0));
 
-    TaskId task1 = task_manager.Create(Task::Create("title",
-                                                    Task::Priority::MEDIUM,
-                                                    DueTime::Create(time(0))));
+    TaskId task1 = task_manager.Add(Task::Create("title",
+                                                 Task::Priority::MEDIUM,
+                                                 DueTime::Create(time(0))));
     // Act
     task_manager.Edit(task1,
                       Task::Create(expected_title, expected_priority, expected_time));
@@ -109,8 +109,8 @@ TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
     const DueTime expected_time = DueTime::Create(time(0));
     Task task1 = Task::Create("some title", Task::Priority::NONE, DueTime::Create(time(0)));
     Task task2 = Task::Create(expected_title, expected_priority, expected_time);
-    TaskId task_id_1 = task_manager.Create(task1);
-    TaskId task_id_2 = task_manager.Create(task2);
+    TaskId task_id_1 = task_manager.Add(task1);
+    TaskId task_id_2 = task_manager.Add(task2);
     // Act
     task_manager.Delete(task_id_1);
     std::vector<std::pair<TaskId, Task>> tasks = task_manager.Show();
@@ -169,11 +169,11 @@ TEST_F(TaskManagerTest, TryCompletingDifferentTasks_ShouldCompleteThoseTasks){
     Task expected_second_completed_task =
             Task::Create("task3", Task::Priority::NONE, some_time, true);
 
-    TaskId task1 = task_manager.Create(
+    TaskId task1 = task_manager.Add(
             Task::Create("task1", Task::Priority::NONE, DueTime::Create(time(0))));
-    TaskId task2 = task_manager.Create(
+    TaskId task2 = task_manager.Add(
             Task::Create("task2", Task::Priority::NONE, DueTime::Create(time(0))));
-    TaskId task3 = task_manager.Create(
+    TaskId task3 = task_manager.Add(
             Task::Create("task3", Task::Priority::NONE, DueTime::Create(time(0))));
     // Act
     task_manager.Complete(task1);
