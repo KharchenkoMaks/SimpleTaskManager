@@ -51,3 +51,7 @@ DueTime::DueTime(time_t due_time) : due_time_(due_time) {
 bool DueTime::operator==(const DueTime &due_time) const {
     return this->due_time_ == due_time.due_time_;
 }
+
+bool DueTime::operator<(const time_t &time) const {
+    return this->due_time_ < time;
+}

@@ -19,6 +19,7 @@ public:
     time_t GetTime() const;
 public:
     bool operator== (const DueTime& due_time) const;
+    bool operator< (const time_t& time) const;
 private:
     DueTime(const std::string& due_time, const std::string& format);
     explicit DueTime(time_t due_time);
