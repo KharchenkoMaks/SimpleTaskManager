@@ -36,11 +36,10 @@ std::optional<std::shared_ptr<WizardStateConsole>> EditTaskState::Execute(std::s
     context_task_editing = state_machine.Run();
 
     // Giving edited task to controller
-    GetController()->EditTask(context_task_editing->GetTaskId().value(), context_task_editing->GetTask().value());
-
-//    context->AddTaskTitle(context_with_edited_task->GetAddedTask().GetTitle());
-//    context->AddTaskPriority(context_with_edited_task->GetAddedTask().GetPriority());
-//    context->AddTaskDueTime(context_with_edited_task->GetAddedTask().GetDueTime());
+    if (!GetController()->EditTask(context_task_editing->GetTaskId().value(), context_task_editing->GetTask().value())) {
+        GetConsolePrinter()->WriteError("Task wasn't edited, try again.");
+        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+    }
 
     return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
 }

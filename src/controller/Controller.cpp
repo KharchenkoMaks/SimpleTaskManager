@@ -19,34 +19,34 @@ std::optional<TaskId> Controller::AddTask(const Task &task) {
     }
 }
 
-void Controller::EditTask(const TaskId &task_id, const Task &task) {
+bool Controller::EditTask(const TaskId &task_id, const Task &task) {
     if (task_validator_->ValidateTask(task) && task_validator_->ValidateTaskId(task_id)) {
         if (task_manager_->IsTaskIdExist(task_id)) {
             task_manager_->Edit(task_id, task);
+            return true;
         }
-    } else {
-        throw std::invalid_argument("Invalid task or task_id was given.");
     }
+    return false;
 }
 
-void Controller::DeleteTask(const TaskId &task_id) {
+bool Controller::DeleteTask(const TaskId &task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
         if (task_manager_->IsTaskIdExist(task_id)){
             task_manager_->Delete(task_id);
+            return true;
         }
-    } else {
-        throw std::invalid_argument("Invalid task_id was given.");
     }
+    return false;
 }
 
-void Controller::CompleteTask(const TaskId &task_id) {
+bool Controller::CompleteTask(const TaskId &task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
         if (task_manager_->IsTaskIdExist(task_id)){
             task_manager_->Complete(task_id);
+            return true;
         }
-    } else {
-        throw std::invalid_argument("Invalid task_id was given.");
     }
+    return false;
 }
 
 std::optional<Task> Controller::GetTask(const TaskId &task_id) const {
