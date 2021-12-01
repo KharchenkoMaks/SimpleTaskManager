@@ -42,7 +42,7 @@ int main() {
 // TODO_DONE: Inject controller to state machine and states - Done 30.11.2021
 // TODO_DONE: Make WizardStatesConsole base class of states? - Done 30.11.2021
 // TODO_DONE: Give user choice to keep value of editing task - Done 30.11.2021
-// TODO: Implement complete command
+// TODO_DONE: Implement complete command - Done 01.12.2021
 // TODO: Implement delete command
 // TODO_DONE: Implement show command - Done 30.11.2021
 // TODO: Implement add_subtask command

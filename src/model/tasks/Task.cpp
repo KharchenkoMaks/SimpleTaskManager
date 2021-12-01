@@ -27,8 +27,14 @@ Task::Task(const std::string& title,
 }
 
 std::string Task::to_string() const {
-    return title_ + ", Priority: " + PriorityToString(priority_) +
-                    ", Due to: " + due_to_.GetTimeString() + "\n";
+    std::string answer = title_ + ", Priority: " + PriorityToString(priority_) +
+                    ", Due to: " + due_to_.GetTimeString() + ", Completed: ";
+    if (IsCompleted()) {
+        answer += "Yes\n";
+    } else {
+        answer += "No\n";
+    }
+    return answer;
 }
 
 std::string Task::GetTitle() const {

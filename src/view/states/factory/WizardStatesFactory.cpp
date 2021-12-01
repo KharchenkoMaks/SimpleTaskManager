@@ -18,7 +18,7 @@ std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetStateByCommand(const
         throw std::invalid_argument("Wrong command was given.");
     } else if (command == "complete") {
         // complete state
-        throw std::invalid_argument("Wrong command was given.");
+        return GetLazyStateByStatesEnum(States::kComplete);
     } else if (command == "show") {
         // show state
         return GetLazyStateByStatesEnum(States::kShow);
@@ -143,6 +143,18 @@ std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextS
     }
 }
 
+std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextState(const CompleteTaskState &state, WizardStatesFactory::MoveType move_type) {
+    switch (move_type) {
+        case MoveType::ERROR: {
+            return GetLazyStateByStatesEnum(States::kComplete);
+        }
+        default: {
+            return GetLazyStateByStatesEnum(States::kRoot);
+        }
+    }
+}
+
+
 std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetLazyStateByStatesEnum(States state) {
     switch (state) {
         case States::kRoot: {
@@ -198,6 +210,12 @@ std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetLazyStateByStatesEnu
                 show_state_ = std::make_shared<ShowState>(controller_, shared_from_this(), printer_, reader_);
             }
             return show_state_;
+        }
+        case States::kComplete: {
+            if (!complete_state_) {
+                complete_state_ = std::make_shared<CompleteTaskState>(controller_, shared_from_this(), printer_, reader_);
+            }
+            return complete_state_;
         }
     }
 }
