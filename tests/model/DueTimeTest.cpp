@@ -26,8 +26,8 @@ TEST_F(DueTimeTest, CreatingDueTimeDifferentWays_ShouldCreateRightDueTime){
     const std::string actual_string2 = time2.GetTimeString();
     // Assert
     ASSERT_EQ(time1, time2);
-    EXPECT_TRUE(time1 < expected_time + 5);
-    EXPECT_TRUE(time2 < expected_time + 5);
+    EXPECT_TRUE(time1 > expected_time - 5);
+    EXPECT_TRUE(time2 > expected_time - 5);
     EXPECT_EQ(expected_time, actual_time1);
     EXPECT_EQ(expected_time, actual_time2);
     EXPECT_EQ(expected_string, actual_string1);

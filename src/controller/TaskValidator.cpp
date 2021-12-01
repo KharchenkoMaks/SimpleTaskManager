@@ -13,7 +13,7 @@ bool TaskValidator::ValidateTaskId(const TaskId &task_id) {
 }
 
 bool TaskValidator::ValidateDueDate(DueTime due_date) {
-    return due_date < time(0);
+    return due_date > time(0);
 }
 
 bool TaskValidator::ValidateTitle(const std::string& title) {
