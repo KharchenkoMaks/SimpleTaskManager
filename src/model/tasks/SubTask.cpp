@@ -4,7 +4,7 @@
 
 #include "SubTask.h"
 
-TaskId SubTask::GetParentTaskId() {
+TaskId SubTask::GetParentTaskId() const {
     return parent_;
 }
 
@@ -22,15 +22,20 @@ SubTask::SubTask(const std::string &title,
                  DueTime due_to,
                  const TaskId &parent,
                  bool completed,
-                 const std::string &label) : Task(title, priority, due_to, completed, label), parent_(parent) {
+                 const std::string &label) : task_(Task::Create(title, priority, due_to, completed, label)),
+                                             parent_(parent) {
 
 }
 
 bool SubTask::operator==(const SubTask &task) const {
-    return this->title_ == task.title_ &&
-        this->priority_ == task.priority_ &&
-        this->due_to_ == task.due_to_ &&
-        this->completed_ == task.completed_ &&
-        this->label_ == task.label_ &&
-        this->parent_ == parent_;
+    return this->task_ == task.task_ &&
+    this->parent_ == task.parent_;
+}
+
+SubTask SubTask::Create(const Task& task, const TaskId& parent) {
+    return SubTask(task.GetTitle(), task.GetPriority(), task.GetDueTime(), parent, task.IsCompleted(), task.GetLabel());
+}
+
+Task SubTask::GetTaskParameters() const {
+    return task_;
 }

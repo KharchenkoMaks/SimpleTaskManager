@@ -32,6 +32,7 @@ int main() {
 // TODO_DONE: DeleteTask unnecessary directories - Done 25.11.2021
 // TODO: Change subtasks structure
 // TODO: Move Task::Priority converter out of Task class
+// TODO: Make functionality for task deleting
 // TODO_DONE: Make Task due time wrapper - Done 30.11.2021
 // TODO_DONE: Split MultiFunctionalPrinter to printer and reader - Done 26.11.2021
 // TODO_DONE: Make printer and reader private in WizardStateConsole - Done 26.11.2021

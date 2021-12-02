@@ -8,27 +8,30 @@
 #include "tasks/Task.h"
 #include "DueTime.h"
 
-class SubTask : public Task {
+class SubTask {
 public:
     static SubTask Create(const std::string& title,
-                       Priority priority,
+                       Task::Priority priority,
                        DueTime due_to,
                        const TaskId& parent,
                        bool completed = false,
                        const std::string& label = std::string(""));
+    static SubTask Create(const Task& task, const TaskId& parent);
 public:
-    TaskId GetParentTaskId() override;
+    Task GetTaskParameters() const;
+    TaskId GetParentTaskId() const;
 public:
     bool operator== (const SubTask& task) const;
 private:
     SubTask(const std::string& title,
-         Priority priority,
+         Task::Priority priority,
          DueTime due_to,
          const TaskId& parent,
          bool completed = false,
          const std::string& label = std::string(""));
 private:
     TaskId parent_;
+    Task task_;
 };
 
 
