@@ -7,7 +7,7 @@
 
 #include "TaskId.h"
 #include "tasks/Task.h"
-#include "IModel.h"
+#include "abstract_model/IModel.h"
 #include "TaskValidator.h"
 
 #include <memory>

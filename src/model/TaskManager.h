@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_TASKMANAGER_H
 #define SIMPLETASKMANAGER_TASKMANAGER_H
 
-#include "IModel.h"
+#include "abstract_model/IModel.h"
 #include "tasks/Task.h"
 #include "TaskId.h"
 #include "IdGenerator.h"
