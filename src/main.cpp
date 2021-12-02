@@ -30,7 +30,7 @@ int main() {
 // TODO_DONE: Rename Printer to PrinterWithScanner =) - Done 25.11.2021
 // TODO_DONE: Make default methods in WizardStateConsole to ask user for some input - Done 26.11.2021
 // TODO_DONE: DeleteTask unnecessary directories - Done 25.11.2021
-// TODO: Change subtasks structure
+// TODO_DONE: Change subtasks structure - Done 02.12.2021
 // TODO: Move Task::Priority converter out of Task class
 // TODO: Make functionality for task deleting
 // TODO_DONE: Make Task due time wrapper - Done 30.11.2021
