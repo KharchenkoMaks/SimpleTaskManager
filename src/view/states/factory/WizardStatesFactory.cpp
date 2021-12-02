@@ -16,7 +16,7 @@ std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetState
     } else if (command == "edit") {
         return GetLazyStateByStatesEnum(States::kEditTask);
     } else if (command == "delete") {
-        return std::nullopt;
+        return GetLazyStateByStatesEnum(States::kDelete);
     } else if (command == "complete") {
         return GetLazyStateByStatesEnum(States::kComplete);
     } else if (command == "show") {
@@ -167,6 +167,17 @@ std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextS
     }
 }
 
+std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextState(const DeleteTaskState& state, const MoveType move_type) {
+    switch (move_type) {
+        case MoveType::ERROR: {
+            return GetLazyStateByStatesEnum(States::kDelete);
+        }
+        default: {
+            return GetLazyStateByStatesEnum(States::kRoot);
+        }
+    }
+}
+
 std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetLazyStateByStatesEnum(States state) {
     switch (state) {
         case States::kRoot: {
@@ -234,6 +245,12 @@ std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetLazyStateByStatesEnu
                 complete_state_ = std::make_shared<CompleteTaskState>(controller_, shared_from_this(), printer_, reader_);
             }
             return complete_state_;
+        }
+        case States::kDelete: {
+            if (!delete_state_) {
+                delete_state_ = std::make_shared<DeleteTaskState>(controller_, shared_from_this(), printer_, reader_);
+            }
+            return delete_state_;
         }
     }
 }

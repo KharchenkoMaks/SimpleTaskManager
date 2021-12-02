@@ -21,6 +21,7 @@
 #include "states/ShowState.h"
 #include "states/CompleteTaskState.h"
 #include "states/task_input/AddSubTaskState.h"
+#include "states/DeleteTaskState.h"
 
 #include <memory>
 #include <string>
@@ -37,6 +38,7 @@ class InputTaskDueDateState;
 class ShowState;
 class CompleteTaskState;
 class AddSubTaskState;
+class DeleteTaskState;
 
 class WizardStatesFactory : public std::enable_shared_from_this<WizardStatesFactory> {
 public:
@@ -65,6 +67,7 @@ public:
     std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const ShowState& state, MoveType move_type);
     std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const CompleteTaskState& state, MoveType move_type);
     std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const AddSubTaskState& state, MoveType move_type);
+    std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const DeleteTaskState& state, MoveType move_type);
 
 private:
     enum class States {
@@ -78,7 +81,8 @@ private:
         kInputTaskPriority,
         kInputTaskDueDate,
         kShow,
-        kComplete
+        kComplete,
+        kDelete
     };
 private:
     std::shared_ptr<WizardStateConsole> GetLazyStateByStatesEnum(States state);
@@ -94,6 +98,7 @@ private:
 
     std::shared_ptr<ShowState> show_state_;
     std::shared_ptr<CompleteTaskState> complete_state_;
+    std::shared_ptr<DeleteTaskState> delete_state_;
 
     std::shared_ptr<InputTaskTitleState> input_task_title_state_;
     std::shared_ptr<InputTaskPriorityState> input_task_priority_state_;
