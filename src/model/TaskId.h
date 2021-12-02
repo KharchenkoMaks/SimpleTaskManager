@@ -16,6 +16,8 @@ public:
 public:
     int GetId() const;
 
+    std::string to_string() const;
+public:
     bool operator== (const TaskId& t) const;
     bool operator< (const TaskId& t) const;
 private:

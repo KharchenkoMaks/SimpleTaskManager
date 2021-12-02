@@ -60,7 +60,7 @@ std::string Controller::GetAllTasks() {
 
     auto tasks = model_->GetTasks();
     for (auto t : tasks){
-        answer.append("ID: " + std::to_string(t.GetTaskId().GetId()) + ", " + t.GetTask().to_string());
+        answer.append(t.GetTaskId().to_string() + ", " + t.GetTask().to_string());
     }
 
     return answer;

@@ -35,3 +35,7 @@ bool TaskId::operator<(const TaskId& t) const {
 TaskId TaskId::NullTaskId() {
     return TaskId(-1);
 }
+
+std::string TaskId::to_string() const {
+    return std::string("ID: " + std::to_string(id_));
+}
