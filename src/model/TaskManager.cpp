@@ -76,7 +76,7 @@ std::vector<std::pair<TaskId, Task>> TaskManager::GetTasks() {
 }
 
 bool TaskManager::IsTaskIdExist(const TaskId &task_id) {
-    return tasks_.find(task_id) != tasks_.end();
+    return tasks_.find(task_id) != tasks_.end() || subtasks_.find(task_id) != subtasks_.end();
 }
 
 std::optional<Task> TaskManager::GetTask(const TaskId& task_id) {
@@ -85,5 +85,15 @@ std::optional<Task> TaskManager::GetTask(const TaskId& task_id) {
         return task_iterator->second;
     } else {
         return std::nullopt;
+    }
+}
+
+TaskManager::TaskType TaskManager::GetTaskType(const TaskId& task_id) const {
+    if (tasks_.find(task_id) != tasks_.end()) {
+        return TaskType::Parent;
+    } else if (subtasks_.find(task_id) != subtasks_.end()) {
+        return TaskType::Child;
+    } else {
+        return TaskType::None;
     }
 }
