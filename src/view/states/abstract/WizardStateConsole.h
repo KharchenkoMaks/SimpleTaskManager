@@ -33,9 +33,6 @@ public:
 public:
     std::string GetUserInput(const std::string &invitation_message);
 
-    // Returns std::nullopt if invalid task_id was given
-    std::optional<TaskId> GetTaskIdFromUser();
-
 public:
     virtual ~WizardStateConsole() = default;
 

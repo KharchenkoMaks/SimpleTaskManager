@@ -9,8 +9,20 @@
 #include "Controller.h"
 
 #include <memory>
+#include <optional>
 
 class WizardStateController : public WizardStateConsole {
+public:
+    struct TaskIdFromUser {
+        enum class AnswerStatus {
+            kSuccess,
+            kNotValid,
+            kNoSuchTask
+        };
+
+        std::optional<TaskId> task_id_;
+        AnswerStatus answer_status_;
+    };
 public:
     WizardStateController(const std::shared_ptr<Controller>& controller,
                           const std::shared_ptr<WizardStatesFactory>& states_factory,
@@ -19,6 +31,9 @@ public:
 
 public:
     std::shared_ptr<Controller> GetController() const;
+
+    // Returns std::nullopt if invalid task_id was given
+    TaskIdFromUser GetTaskIdFromUser(const std::string& invitation_string = "Task ID");
 
 private:
     std::shared_ptr<Controller> controller_;

@@ -28,15 +28,6 @@ std::string WizardStateConsole::GetUserInput(const std::string& invitation_messa
     return user_input;
 }
 
-std::optional<TaskId> WizardStateConsole::GetTaskIdFromUser() {
-    std::string task_id_str = GetUserInput("Task ID");
-    try {
-        return TaskId::Create(task_id_str);
-    } catch (std::invalid_argument) {
-        return std::nullopt;
-    }
-}
-
 std::shared_ptr<WizardStatesFactory> WizardStateConsole::GetStatesFactory() const {
     return states_factory_;
 }

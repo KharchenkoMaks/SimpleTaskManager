@@ -16,20 +16,16 @@ CompleteTaskState::CompleteTaskState(const std::shared_ptr<Controller> &controll
 }
 
 std::optional<std::shared_ptr<WizardStateConsole>> CompleteTaskState::Execute(std::shared_ptr<WizardContext> context) {
-    // TODO (Maksym): Move task_id checks to method in WizardStateController
-    std::optional<TaskId> task_id = GetTaskIdFromUser();
-    if (!task_id.has_value()){
+    WizardStateController::TaskIdFromUser task_id = GetTaskIdFromUser();
+    if (task_id.answer_status_ == WizardStateController::TaskIdFromUser::AnswerStatus::kNotValid){
         GetConsolePrinter()->WriteError("Wrong task id was given, try again!");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
-    }
-
-    std::optional<Task> task_to_edit = GetController()->GetTask(task_id.value());
-    if (!task_to_edit.has_value()) {
+    } else if (task_id.answer_status_ == WizardStateController::TaskIdFromUser::AnswerStatus::kNoSuchTask) {
         GetConsolePrinter()->WriteError("No task with such task id was found, try again.");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    if (!GetController()->CompleteTask(task_id.value())){
+    if (!GetController()->CompleteTask(task_id.task_id_.value())){
         GetConsolePrinter()->WriteError("Task wasn't completed, try again.");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
     }

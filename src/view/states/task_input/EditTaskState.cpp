@@ -14,14 +14,11 @@ EditTaskState::EditTaskState(const std::shared_ptr<Controller>& controller,
 }
 
 std::optional<std::shared_ptr<WizardStateConsole>> EditTaskState::Execute(std::shared_ptr<WizardContext> context) {
-    std::optional<TaskId> editing_task_id = GetTaskIdFromUser();
-    if (!editing_task_id.has_value()){
+    WizardStateController::TaskIdFromUser editing_task_id = GetTaskIdFromUser();
+    if (editing_task_id.answer_status_ == WizardStateController::TaskIdFromUser::AnswerStatus::kNoSuchTask) {
         GetConsolePrinter()->WriteError("Wrong task id was given, try again!");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
-    }
-
-    std::optional<Task> task_to_edit = GetController()->GetTask(editing_task_id.value());
-    if (!task_to_edit.has_value()) {
+    } else if (editing_task_id.answer_status_ == WizardStateController::TaskIdFromUser::AnswerStatus::kNotValid) {
         GetConsolePrinter()->WriteError("No task with such task id was found, try again.");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
@@ -29,7 +26,8 @@ std::optional<std::shared_ptr<WizardStateConsole>> EditTaskState::Execute(std::s
     // Creating new context
     std::shared_ptr<WizardContext> context_task_editing = std::make_shared<WizardContext>();
 
-    context_task_editing->SetEditingTask(editing_task_id.value(), task_to_edit.value());
+    context_task_editing->SetEditingTask(editing_task_id.task_id_.value(),
+                                         GetController()->GetTask(editing_task_id.task_id_.value()).value());
 
     ConsoleStateMachine state_machine(context_task_editing,
             GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));

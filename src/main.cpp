@@ -54,4 +54,5 @@ int main() {
 // TODO_DONE: Make general model interface - Done 01.12.2021
 // TODO: Make general controller interface?
 // TODO_DONE: Make to_string method for TaskId - Done 02.12.2021
-// TODO: Rework GetIdFromUser method to get invitation string and do controller checks
+// TODO_DONE: Rework GetIdFromUser method to get invitation string and do controller checks - Done 02.12.2021
+// TODO: Make TaskId::Create not throw exception on incorrect string
