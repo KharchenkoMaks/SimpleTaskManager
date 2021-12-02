@@ -7,6 +7,7 @@
 
 #include "TaskId.h"
 #include "tasks/Task.h"
+#include "TaskTransfer.h"
 
 #include <optional>
 
@@ -18,9 +19,9 @@ public:
     virtual bool DeleteTask(const TaskId& id) = 0;
     virtual bool CompleteTask(const TaskId& id) = 0;
 
-    virtual std::vector<std::pair<TaskId, Task>> GetTasks() = 0;
+    virtual std::vector<TaskTransfer> GetTasks() = 0;
 
-    virtual std::optional<Task> GetTask(const TaskId& task_id) = 0;
+    virtual std::optional<TaskTransfer> GetTask(const TaskId& task_id) = 0;
 
     virtual bool IsTaskIdExist(const TaskId& task_id) = 0;
 

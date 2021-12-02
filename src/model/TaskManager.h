@@ -6,6 +6,7 @@
 #define SIMPLETASKMANAGER_TASKMANAGER_H
 
 #include "abstract_model/IModel.h"
+#include "abstract_model/TaskTransfer.h"
 #include "tasks/Task.h"
 #include "TaskId.h"
 #include "IdGenerator.h"
@@ -25,11 +26,11 @@ public:
     bool DeleteTask(const TaskId& id) override;
     bool CompleteTask(const TaskId& id) override;
 
-    std::vector<std::pair<TaskId, Task>> GetTasks() override;
+    std::vector<TaskTransfer> GetTasks() override;
 public:
     bool IsTaskIdExist(const TaskId& task_id) override;
 
-    std::optional<Task> GetTask(const TaskId& task_id) override;
+    std::optional<TaskTransfer> GetTask(const TaskId& task_id) override;
 public:
     explicit TaskManager(std::unique_ptr<IdGenerator> generator);
 
@@ -41,7 +42,11 @@ private:
     };
 private:
     TaskType GetTaskType(const TaskId& task_id) const;
-    std::optional<SubTask> GetSubTask(const TaskId& task_id) const;
+    std::optional<SubTask> GetSubTaskById(const TaskId& task_id) const;
+    std::optional<Task> GetTaskById(const TaskId& task_id) const;
+
+    std::optional<std::vector<TaskTransfer>> GetTaskSubTasks(const TaskId& task_id) const;
+
     Task MakeTaskCompleted(const Task& task);
 private:
     std::map<TaskId, Task> tasks_;

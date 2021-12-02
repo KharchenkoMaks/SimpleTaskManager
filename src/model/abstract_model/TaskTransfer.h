@@ -14,7 +14,7 @@ class TaskTransfer {
 public:
     static TaskTransfer Create(const TaskId& task_id,
                                const Task& task,
-                               const std::optional<TaskId>& parent_id);
+                               const std::optional<TaskId>& parent_id = std::nullopt);
 public:
     TaskId GetTaskId() const;
     Task GetTask() const;

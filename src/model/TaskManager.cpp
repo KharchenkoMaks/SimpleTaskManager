@@ -38,7 +38,7 @@ bool TaskManager::EditTask(const TaskId& id, const Task& t) {
             return true;
         }
         case TaskType::Child: {
-            std::optional<SubTask> subtask = GetSubTask(id);
+            std::optional<SubTask> subtask = GetSubTaskById(id);
             if (!subtask.has_value()) {
                 return false;
             }
@@ -71,8 +71,11 @@ bool TaskManager::DeleteTask(const TaskId& id) {
 bool TaskManager::CompleteTask(const TaskId& id) {
     switch (GetTaskType(id)){
         case TaskType::Parent: {
-            Task task = tasks_.find(id)->second;
-            tasks_.insert_or_assign(id, MakeTaskCompleted(task));
+            std::optional<Task> task_to_complete = GetTaskById(id);
+            if (!task_to_complete.has_value()) {
+                return false;
+            }
+            tasks_.insert_or_assign(id, MakeTaskCompleted(task_to_complete.value()));
             return true;
         }
         case TaskType::Child: {
@@ -89,10 +92,13 @@ bool TaskManager::CompleteTask(const TaskId& id) {
     }
 }
 
-std::vector<std::pair<TaskId, Task>> TaskManager::GetTasks() {
-    std::vector<std::pair<TaskId, Task>> tasks;
-    for (std::pair<const TaskId, Task>& item : tasks_){
-        tasks.push_back(std::pair<TaskId, Task>(item.first, item.second));
+std::vector<TaskTransfer> TaskManager::GetTasks() {
+    std::vector<TaskTransfer> tasks;
+    for (const auto& task_item : tasks_) {
+        tasks.push_back(TaskTransfer::Create(task_item.first, task_item.second));
+        for (const auto& subtask_item : GetTaskSubTasks(task_item.first).value()) {
+            tasks.push_back(subtask_item);
+        }
     }
     return tasks;
 }
@@ -101,12 +107,21 @@ bool TaskManager::IsTaskIdExist(const TaskId &task_id) {
     return tasks_.find(task_id) != tasks_.end() || subtasks_.find(task_id) != subtasks_.end();
 }
 
-std::optional<Task> TaskManager::GetTask(const TaskId& task_id) {
-    if (IsTaskIdExist(task_id)){
-        auto task_iterator = tasks_.find(task_id);
-        return task_iterator->second;
-    } else {
-        return std::nullopt;
+std::optional<TaskTransfer> TaskManager::GetTask(const TaskId& task_id) {
+    switch (GetTaskType(task_id)) {
+        case TaskType::Parent: {
+            auto task_iterator = tasks_.find(task_id);
+            return TaskTransfer::Create(task_iterator->first, task_iterator->second);
+        }
+        case TaskType::Child: {
+            auto subtask_iterator = subtasks_.find(task_id);
+            return TaskTransfer::Create(subtask_iterator->first,
+                                        subtask_iterator->second.GetTaskParameters(),
+                                        subtask_iterator->second.GetParentTaskId());
+        }
+        case TaskType::None: {
+            return std::nullopt;
+        }
     }
 }
 
@@ -120,7 +135,7 @@ TaskManager::TaskType TaskManager::GetTaskType(const TaskId& task_id) const {
     }
 }
 
-std::optional<SubTask> TaskManager::GetSubTask(const TaskId& task_id) const {
+std::optional<SubTask> TaskManager::GetSubTaskById(const TaskId& task_id) const {
     if (GetTaskType(task_id) == TaskType::Child){
         auto task_iterator = subtasks_.find(task_id);
         return task_iterator->second;
@@ -129,6 +144,28 @@ std::optional<SubTask> TaskManager::GetSubTask(const TaskId& task_id) const {
     }
 }
 
+std::optional<Task> TaskManager::GetTaskById(const TaskId& task_id) const {
+    if (GetTaskType(task_id) == TaskType::Parent){
+        auto task_iterator = tasks_.find(task_id);
+        return task_iterator->second;
+    } else {
+        return std::nullopt;
+    }
+}
+
 Task TaskManager::MakeTaskCompleted(const Task& task) {
     return Task::Create(task.GetTitle(), task.GetPriority(), task.GetDueTime(), true, task.GetLabel());
+}
+
+std::optional<std::vector<TaskTransfer>> TaskManager::GetTaskSubTasks(const TaskId& parent_task_id) const {
+    std::vector<TaskTransfer> subtasks;
+    if (GetTaskType(parent_task_id) != TaskType::Parent){
+        return std::nullopt;
+    }
+    for (const auto& item : subtasks_) {
+        if (item.second.GetParentTaskId() == parent_task_id) {
+            subtasks.push_back(TaskTransfer::Create(item.first, item.second.GetTaskParameters(), item.second.GetParentTaskId()));
+        }
+    }
+    return subtasks;
 }
