@@ -13,6 +13,7 @@
 class IModel{
 public:
     virtual std::optional<TaskId> AddTask(const Task& t) = 0;
+    virtual std::optional<TaskId> AddSubTask(const Task& task, const TaskId& parent_id) = 0;
     virtual bool EditTask(const TaskId& id, const Task& t) = 0;
     virtual bool DeleteTask(const TaskId& id) = 0;
     virtual bool CompleteTask(const TaskId& id) = 0;

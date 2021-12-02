@@ -18,6 +18,19 @@ std::optional<TaskId> TaskManager::AddTask(const Task& t) {
     return task_id;
 }
 
+std::optional<TaskId> TaskManager::AddSubTask(const Task& task, const TaskId& parent_id) {
+    if (task.GetTitle().empty()){
+        return std::nullopt;
+    }
+    if (!IsTaskIdExist(parent_id)){
+        return std::nullopt;
+    }
+    SubTask subtask = SubTask::Create(task, parent_id);
+    TaskId task_id = generator_->CreateNewTaskId();
+    subtasks_.insert({ task_id, subtask });
+    return task_id;
+}
+
 bool TaskManager::EditTask(const TaskId& id, const Task& t) {
     if (IsTaskIdExist(id)) {
         tasks_.insert_or_assign(id, t);

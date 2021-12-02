@@ -9,6 +9,7 @@
 #include "tasks/Task.h"
 #include "TaskId.h"
 #include "IdGenerator.h"
+#include "tasks/SubTask.h"
 
 #include <map>
 #include <vector>
@@ -19,6 +20,7 @@
 class TaskManager : public IModel {
 public:
     std::optional<TaskId> AddTask(const Task& t) override;
+    std::optional<TaskId> AddSubTask(const Task& task, const TaskId& parent_id) override;
     bool EditTask(const TaskId& id, const Task& t) override;
     bool DeleteTask(const TaskId& id) override;
     bool CompleteTask(const TaskId& id) override;
@@ -32,6 +34,8 @@ public:
     explicit TaskManager(std::unique_ptr<IdGenerator> generator);
 private:
     std::map<TaskId, Task> tasks_;
+    std::map<TaskId, SubTask> subtasks_;
+
     std::unique_ptr<IdGenerator> generator_;
 };
 
