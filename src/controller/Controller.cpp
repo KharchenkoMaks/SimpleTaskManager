@@ -46,8 +46,13 @@ bool Controller::CompleteTask(const TaskId &task_id) {
     return false;
 }
 
-std::optional<Task> Controller::GetTask(const TaskId &task_id) const {
-    return model_->GetTask(task_id);
+std::optional<Task> Controller::GetTask(const TaskId& task_id) const {
+    std::optional<TaskTransfer> task = model_->GetTask(task_id);
+    if (task.has_value()){
+        return task->GetTask();
+    } else {
+        return std::nullopt;
+    }
 }
 
 std::string Controller::GetAllTasks() {
@@ -55,7 +60,7 @@ std::string Controller::GetAllTasks() {
 
     auto tasks = model_->GetTasks();
     for (auto t : tasks){
-        answer.append("ID: " + std::to_string(t.first.GetId()) + ", " + t.second.to_string());
+        answer.append("ID: " + std::to_string(t.GetTaskId().GetId()) + ", " + t.GetTask().to_string());
     }
 
     return answer;

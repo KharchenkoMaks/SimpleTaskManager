@@ -96,7 +96,8 @@ std::vector<TaskTransfer> TaskManager::GetTasks() {
     std::vector<TaskTransfer> tasks;
     for (const auto& task_item : tasks_) {
         tasks.push_back(TaskTransfer::Create(task_item.first, task_item.second));
-        for (const auto& subtask_item : GetTaskSubTasks(task_item.first).value()) {
+        std::vector<TaskTransfer> subtasks = GetTaskSubTasks(task_item.first).value();
+        for (const auto& subtask_item : subtasks) {
             tasks.push_back(subtask_item);
         }
     }
