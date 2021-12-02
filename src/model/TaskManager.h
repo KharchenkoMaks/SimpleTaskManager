@@ -42,6 +42,7 @@ private:
 private:
     TaskType GetTaskType(const TaskId& task_id) const;
     std::optional<SubTask> GetSubTask(const TaskId& task_id) const;
+    Task MakeTaskCompleted(const Task& task);
 private:
     std::map<TaskId, Task> tasks_;
     std::map<TaskId, SubTask> subtasks_;

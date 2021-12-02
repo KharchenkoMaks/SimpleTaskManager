@@ -69,23 +69,24 @@ bool TaskManager::DeleteTask(const TaskId& id) {
 }
 
 bool TaskManager::CompleteTask(const TaskId& id) {
-    if (IsTaskIdExist(id)) {
-        auto task_iterator = tasks_.find(id);
-
-        Task previous_task = task_iterator->second;
-        if (previous_task.IsCompleted()){
+    switch (GetTaskType(id)){
+        case TaskType::Parent: {
+            Task task = tasks_.find(id)->second;
+            tasks_.insert_or_assign(id, MakeTaskCompleted(task));
+            return true;
+        }
+        case TaskType::Child: {
+            SubTask subtask = subtasks_.find(id)->second;
+            subtasks_.insert_or_assign(id,
+                                       SubTask::Create(
+                                               MakeTaskCompleted(subtask.GetTaskParameters()),
+                                               subtask.GetParentTaskId()));
+            return true;
+        }
+        case TaskType::None: {
             return false;
         }
-        Task completed_task = Task::Create(previous_task.GetTitle(),
-                                           previous_task.GetPriority(),
-                                           previous_task.GetDueTime(),
-                                           true,
-                                           previous_task.GetLabel());
-
-        tasks_.insert_or_assign(id, completed_task);
-        return true;
     }
-    return false;
 }
 
 std::vector<std::pair<TaskId, Task>> TaskManager::GetTasks() {
@@ -126,4 +127,8 @@ std::optional<SubTask> TaskManager::GetSubTask(const TaskId& task_id) const {
     } else {
         return std::nullopt;
     }
+}
+
+Task TaskManager::MakeTaskCompleted(const Task& task) {
+    return Task::Create(task.GetTitle(), task.GetPriority(), task.GetDueTime(), true, task.GetLabel());
 }
