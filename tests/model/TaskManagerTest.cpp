@@ -9,6 +9,7 @@
 #include "IdGenerator.h"
 #include "TaskId.h"
 #include "DueTime.h"
+#include "abstract_model/TaskTransfer.h"
 
 #include <ctime>
 #include <string>
@@ -48,20 +49,20 @@ TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
     TaskId task2 = task_manager.AddTask(Task::Create(expected_title[1],
                                                      expected_priority[1], expected_time)).value();
 
-    std::vector<std::pair<TaskId, Task>> tasks = task_manager.GetTasks();
+    std::vector<TaskTransfer> tasks = task_manager.GetTasks();
     // Assert
     // Check size of task vector equals 2
     EXPECT_EQ(tasks.size(), 2);
     // Check equality of task1
-    EXPECT_TRUE(tasks[0].first == task1);
-    EXPECT_EQ(tasks[0].second.GetTitle(), expected_title[0]);
-    EXPECT_EQ(tasks[0].second.GetPriority(), expected_priority[0]);
-    EXPECT_EQ(tasks[0].second.GetDueTime(), expected_time);
+    EXPECT_TRUE(tasks[0].GetTaskId() == task1);
+    EXPECT_EQ(tasks[0].GetTask().GetTitle(), expected_title[0]);
+    EXPECT_EQ(tasks[0].GetTask().GetPriority(), expected_priority[0]);
+    EXPECT_EQ(tasks[0].GetTask().GetDueTime(), expected_time);
     // Check equality of task2
-    EXPECT_TRUE(tasks[1].first == task2);
-    EXPECT_EQ(tasks[1].second.GetTitle(), expected_title[1]);
-    EXPECT_EQ(tasks[1].second.GetPriority(), expected_priority[1]);
-    EXPECT_EQ(tasks[1].second.GetDueTime(), expected_time);
+    EXPECT_TRUE(tasks[1].GetTaskId() == task2);
+    EXPECT_EQ(tasks[1].GetTask().GetTitle(), expected_title[1]);
+    EXPECT_EQ(tasks[1].GetTask().GetPriority(), expected_priority[1]);
+    EXPECT_EQ(tasks[1].GetTask().GetDueTime(), expected_time);
 }
 
 // Editing existing Task in TaskManager
@@ -84,12 +85,12 @@ TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
     // Act
     task_manager.EditTask(task1,
                           Task::Create(expected_title, expected_priority, expected_time));
-    std::pair<TaskId, Task> actual = task_manager.GetTasks()[0];
+    TaskTransfer actual = task_manager.GetTasks()[0];
     // Assert
-    EXPECT_TRUE(task1 == actual.first);
-    EXPECT_EQ(expected_title, actual.second.GetTitle());
-    EXPECT_EQ(expected_priority, actual.second.GetPriority());
-    EXPECT_EQ(expected_time, actual.second.GetDueTime());
+    EXPECT_TRUE(task1 == actual.GetTaskId());
+    EXPECT_EQ(expected_title, actual.GetTask().GetTitle());
+    EXPECT_EQ(expected_priority, actual.GetTask().GetPriority());
+    EXPECT_EQ(expected_time, actual.GetTask().GetDueTime());
 }
 
 // Creating two Tasks in TaskManager
@@ -113,9 +114,9 @@ TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
     TaskId task_id_2 = task_manager.AddTask(task2).value();
     // Act
     task_manager.DeleteTask(task_id_1);
-    std::vector<std::pair<TaskId, Task>> tasks = task_manager.GetTasks();
-    TaskId actual_task_id = tasks[0].first;
-    Task actual_task = tasks[0].second;
+    std::vector<TaskTransfer> tasks = task_manager.GetTasks();
+    TaskId actual_task_id = tasks[0].GetTaskId();
+    Task actual_task = tasks[0].GetTask();
     // Assert
     EXPECT_TRUE(tasks.size() == 1);
     EXPECT_TRUE(actual_task_id == task_id_2);
@@ -178,10 +179,10 @@ TEST_F(TaskManagerTest, TryCompletingDifferentTasks_ShouldCompleteThoseTasks){
     // Act
     task_manager.CompleteTask(task1);
     task_manager.CompleteTask(task3);
-    std::vector<std::pair<TaskId, Task>> tasks = task_manager.GetTasks();
-    Task actual_first_completed_task = tasks[0].second;
-    Task actual_second_completed_task = tasks[2].second;
-    Task actual_not_completed_task = tasks[1].second;
+    std::vector<TaskTransfer> tasks = task_manager.GetTasks();
+    Task actual_first_completed_task = tasks[0].GetTask();
+    Task actual_second_completed_task = tasks[2].GetTask();
+    Task actual_not_completed_task = tasks[1].GetTask();
     // Assert
     ASSERT_EQ(tasks.size(), 3);
 
