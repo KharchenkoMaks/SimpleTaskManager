@@ -65,10 +65,6 @@ bool Task::operator==(const Task& task) const {
         this->label_ == task.label_;
 }
 
-TaskId Task::GetParentTaskId() {
-    return TaskId::NullTaskId();
-}
-
 std::string Task::PriorityToString(Task::Priority priority) {
     std::string priority_string;
     switch (priority) {

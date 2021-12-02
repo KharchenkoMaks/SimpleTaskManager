@@ -39,9 +39,8 @@ public:
     bool IsCompleted() const;
     std::string GetLabel() const;
 
-    virtual TaskId GetParentTaskId();
 public:
-    virtual bool operator== (const Task& task) const;
+    bool operator== (const Task& task) const;
 protected:
     Task(const std::string& title,
          Priority priority,

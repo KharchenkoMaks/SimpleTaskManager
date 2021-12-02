@@ -92,13 +92,13 @@ TEST_F(TaskTest, usingToStringTaskMethod_shouldReturnCorrectString){
     // Act & Assert
     for (int i = 0; i < priorities_count; ++i) {
         std::string expected_not_completed = tasks[i].GetTitle() + ", Priority: " +
-                priorities[i] + ", Due to: " + some_time.GetTimeString() + ", Completed: No\n";
+                priorities[i] + ", Due to: " + some_time.GetTimeString() + ", Completed: No";
         std::string actual_not_completed = tasks[i].to_string();
 
         tasks[i] = Task::Create(tasks[i].GetTitle(), tasks[i].GetPriority(), tasks[i].GetDueTime(), true);
 
         std::string expected_completed = tasks[i].GetTitle() + ", Priority: " +
-                                             priorities[i] + ", Due to: " + some_time.GetTimeString() + ", Completed: Yes\n";
+                                             priorities[i] + ", Due to: " + some_time.GetTimeString() + ", Completed: Yes";
         std::string actual_completed = tasks[i].to_string();
         EXPECT_EQ(expected_not_completed, actual_not_completed);
         EXPECT_EQ(expected_completed, actual_completed);

@@ -44,7 +44,7 @@ int main() {
 // TODO_DONE: Make WizardStatesConsole base class of states? - Done 30.11.2021
 // TODO_DONE: Give user choice to keep value of editing task - Done 30.11.2021
 // TODO_DONE: Implement complete command - Done 01.12.2021
-// TODO: Implement delete command
+// TODO_DONE: Implement delete command - Done 02.12.2021
 // TODO_DONE: Implement show command - Done 30.11.2021
 // TODO_DONE: Implement add_subtask command - Done 02.12.2021
 // TODO: Make complete method work with subtasks
@@ -56,3 +56,4 @@ int main() {
 // TODO_DONE: Make to_string method for TaskId - Done 02.12.2021
 // TODO_DONE: Rework GetIdFromUser method to get invitation string and do controller checks - Done 02.12.2021
 // TODO: Make TaskId::Create not throw exception on incorrect string
+// TODO_DONE: Delete NullTaskId constant - Done 02.12.2021

@@ -12,7 +12,6 @@ public:
     static TaskId Create(int id);
     static TaskId Create(const std::string& id);
 
-    static TaskId NullTaskId();
 public:
     int GetId() const;
 
