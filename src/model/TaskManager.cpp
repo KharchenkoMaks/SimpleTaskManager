@@ -19,10 +19,10 @@ std::optional<TaskId> TaskManager::AddTask(const Task& t) {
 }
 
 std::optional<TaskId> TaskManager::AddSubTask(const Task& task, const TaskId& parent_id) {
-    if (task.GetTitle().empty()){
+    if (task.GetTitle().empty()) {
         return std::nullopt;
     }
-    if (!IsTaskIdExist(parent_id)){
+    if (GetTaskType(parent_id) != TaskType::Parent) {
         return std::nullopt;
     }
     SubTask subtask = SubTask::Create(task, parent_id);
@@ -32,11 +32,24 @@ std::optional<TaskId> TaskManager::AddSubTask(const Task& task, const TaskId& pa
 }
 
 bool TaskManager::EditTask(const TaskId& id, const Task& t) {
-    if (IsTaskIdExist(id)) {
-        tasks_.insert_or_assign(id, t);
-        return true;
+    switch (GetTaskType(id)){
+        case TaskType::Parent: {
+            tasks_.insert_or_assign(id, t);
+            return true;
+        }
+        case TaskType::Child: {
+            std::optional<SubTask> subtask = GetSubTask(id);
+            if (!subtask.has_value()) {
+                return false;
+            }
+            SubTask new_subtask = SubTask::Create(t, subtask.value().GetParentTaskId());
+            subtasks_.insert_or_assign(id, new_subtask);
+            return true;
+        }
+        case TaskType::None: {
+            return false;
+        }
     }
-    return false;
 }
 
 bool TaskManager::DeleteTask(const TaskId& id) {
@@ -95,5 +108,14 @@ TaskManager::TaskType TaskManager::GetTaskType(const TaskId& task_id) const {
         return TaskType::Child;
     } else {
         return TaskType::None;
+    }
+}
+
+std::optional<SubTask> TaskManager::GetSubTask(const TaskId& task_id) const {
+    if (GetTaskType(task_id) == TaskType::Child){
+        auto task_iterator = subtasks_.find(task_id);
+        return task_iterator->second;
+    } else {
+        return std::nullopt;
     }
 }

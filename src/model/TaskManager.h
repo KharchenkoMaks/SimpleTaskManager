@@ -19,12 +19,6 @@
 
 class TaskManager : public IModel {
 public:
-    enum class TaskType {
-        Parent,
-        Child,
-        None
-    };
-public:
     std::optional<TaskId> AddTask(const Task& t) override;
     std::optional<TaskId> AddSubTask(const Task& task, const TaskId& parent_id) override;
     bool EditTask(const TaskId& id, const Task& t) override;
@@ -38,8 +32,16 @@ public:
     std::optional<Task> GetTask(const TaskId& task_id) override;
 public:
     explicit TaskManager(std::unique_ptr<IdGenerator> generator);
+
+private:
+    enum class TaskType {
+        Parent,
+        Child,
+        None
+    };
 private:
     TaskType GetTaskType(const TaskId& task_id) const;
+    std::optional<SubTask> GetSubTask(const TaskId& task_id) const;
 private:
     std::map<TaskId, Task> tasks_;
     std::map<TaskId, SubTask> subtasks_;
