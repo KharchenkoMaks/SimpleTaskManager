@@ -53,11 +53,19 @@ bool TaskManager::EditTask(const TaskId& id, const Task& t) {
 }
 
 bool TaskManager::DeleteTask(const TaskId& id) {
-    if (IsTaskIdExist(id)) {
-        tasks_.erase(id);
-        return true;
+    switch (GetTaskType(id)) {
+        case TaskType::Parent: {
+            tasks_.erase(id);
+            return true;
+        }
+        case TaskType::Child: {
+            subtasks_.erase(id);
+            return true;
+        }
+        case TaskType::None: {
+            return false;
+        }
     }
-    return false;
 }
 
 bool TaskManager::CompleteTask(const TaskId& id) {
