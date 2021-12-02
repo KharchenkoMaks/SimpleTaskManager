@@ -13,9 +13,9 @@
 class WizardStateController : public WizardStateConsole {
 public:
     WizardStateController(const std::shared_ptr<Controller>& controller,
-                          const std::shared_ptr<WizardStatesFactory> &states_factory,
-                          const std::shared_ptr<ConsolePrinter> &printer,
-                          const std::shared_ptr<ConsoleReader> &reader);
+                          const std::shared_ptr<WizardStatesFactory>& states_factory,
+                          const std::shared_ptr<ConsolePrinter>& printer,
+                          const std::shared_ptr<ConsoleReader>& reader);
 
 public:
     std::shared_ptr<Controller> GetController() const;

@@ -14,11 +14,12 @@ HelpState::HelpState(const std::shared_ptr<WizardStatesFactory>& states_factory,
 std::optional<std::shared_ptr<WizardStateConsole>> HelpState::Execute(std::shared_ptr<WizardContext> context) {
     GetConsolePrinter()->WriteLine("Available commands:");
     GetConsolePrinter()->WriteLine("1. add");
-    GetConsolePrinter()->WriteLine("2. edit");
-    GetConsolePrinter()->WriteLine("3. delete");
-    GetConsolePrinter()->WriteLine("4. complete");
-    GetConsolePrinter()->WriteLine("5. show");
-    GetConsolePrinter()->WriteLine("6. quit");
+    GetConsolePrinter()->WriteLine("2. add_subtask");
+    GetConsolePrinter()->WriteLine("3. edit");
+    GetConsolePrinter()->WriteLine("4. delete");
+    GetConsolePrinter()->WriteLine("5. complete");
+    GetConsolePrinter()->WriteLine("6. show");
+    GetConsolePrinter()->WriteLine("7. quit");
 
     return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }

@@ -11,16 +11,15 @@ WizardStatesFactory::WizardStatesFactory(const std::shared_ptr<Controller>& cont
 std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetStateByCommand(const std::string &command) {
     if (command == "add") {
         return GetLazyStateByStatesEnum(States::kAddTask);
+    } else if (command == "add_subtask") {
+        return GetLazyStateByStatesEnum(States::kAddSubTask);
     } else if (command == "edit") {
         return GetLazyStateByStatesEnum(States::kEditTask);
     } else if (command == "delete") {
-        // delete state
         return std::nullopt;
     } else if (command == "complete") {
-        // complete state
         return GetLazyStateByStatesEnum(States::kComplete);
     } else if (command == "show") {
-        // show state
         return GetLazyStateByStatesEnum(States::kShow);
     } else if (command == "help") {
         return GetLazyStateByStatesEnum(States::kHelp);
@@ -56,6 +55,20 @@ std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextS
         }
         case MoveType::ERROR: {
             return GetLazyStateByStatesEnum(States::kAddTask);
+        }
+        case MoveType::NEXT: {
+            return GetLazyStateByStatesEnum(States::kInputTaskTitle);
+        }
+    }
+}
+
+std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextState(const AddSubTaskState& state, const MoveType move_type) {
+    switch (move_type) {
+        case MoveType::PREVIOUS: {
+            return GetLazyStateByStatesEnum(States::kRoot);
+        }
+        case MoveType::ERROR: {
+            return GetLazyStateByStatesEnum(States::kAddSubTask);
         }
         case MoveType::NEXT: {
             return GetLazyStateByStatesEnum(States::kInputTaskTitle);
@@ -154,7 +167,6 @@ std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextS
     }
 }
 
-
 std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetLazyStateByStatesEnum(States state) {
     switch (state) {
         case States::kRoot: {
@@ -176,10 +188,16 @@ std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetLazyStateByStatesEnu
             return quit_state_;
         }
         case States::kAddTask: {
-            if (!add_task_state_){
+            if (!add_task_state_) {
                 add_task_state_ = std::make_shared<AddTaskState>(controller_, shared_from_this(), printer_, reader_);
             }
             return add_task_state_;
+        }
+        case States::kAddSubTask: {
+            if (!add_subtask_state_) {
+                add_subtask_state_ = std::make_shared<AddSubTaskState>(controller_, shared_from_this(), printer_, reader_);
+            }
+            return add_subtask_state_;
         }
         case States::kEditTask: {
             if (!edit_task_state_){

@@ -10,10 +10,6 @@ std::optional<std::shared_ptr<WizardStateConsole>> AddTaskState::Execute(std::sh
             GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
     std::shared_ptr<WizardContext> context_with_added_task = state_machine.Run();
 
-//    context->AddTaskTitle(context_with_added_task->GetAddedTask().GetTitle());
-//    context->AddTaskPriority(context_with_added_task->GetAddedTask().GetPriority());
-//    context->AddTaskDueTime(context_with_added_task->GetAddedTask().GetDueTime());
-
     // Giving task to controller
     std::optional<TaskId> added_task_id = GetController()->AddTask(context_with_added_task->GetTask().value());
     if (added_task_id.has_value()) {

@@ -20,6 +20,7 @@
 #include "states/task_input/InputTaskDueDateState.h"
 #include "states/ShowState.h"
 #include "states/CompleteTaskState.h"
+#include "states/task_input/AddSubTaskState.h"
 
 #include <memory>
 #include <string>
@@ -35,6 +36,7 @@ class InputTaskPriorityState;
 class InputTaskDueDateState;
 class ShowState;
 class CompleteTaskState;
+class AddSubTaskState;
 
 class WizardStatesFactory : public std::enable_shared_from_this<WizardStatesFactory> {
 public:
@@ -62,6 +64,7 @@ public:
     std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const InputTaskDueDateState& state, MoveType move_type);
     std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const ShowState& state, MoveType move_type);
     std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const CompleteTaskState& state, MoveType move_type);
+    std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const AddSubTaskState& state, MoveType move_type);
 
 private:
     enum class States {
@@ -69,6 +72,7 @@ private:
         kHelp,
         kQuit,
         kAddTask,
+        kAddSubTask,
         kEditTask,
         kInputTaskTitle,
         kInputTaskPriority,
@@ -85,6 +89,7 @@ private:
     std::shared_ptr<QuitState> quit_state_;
 
     std::shared_ptr<AddTaskState> add_task_state_;
+    std::shared_ptr<AddSubTaskState> add_subtask_state_;
     std::shared_ptr<EditTaskState> edit_task_state_;
 
     std::shared_ptr<ShowState> show_state_;

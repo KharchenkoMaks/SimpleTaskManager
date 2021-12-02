@@ -24,9 +24,8 @@ std::optional<TaskId> Controller::AddSubTask(const Task& task, const TaskId& par
         if (model_->IsTaskIdExist(parent_id)) {
             return model_->AddSubTask(task, parent_id);
         }
-    } else {
-        return std::nullopt;
     }
+    return std::nullopt;
 }
 
 bool Controller::EditTask(const TaskId &task_id, const Task &task) {

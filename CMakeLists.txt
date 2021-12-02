@@ -51,7 +51,7 @@ add_executable(SimpleTaskManager
         src/view/states/task_input/InputTaskDueDateState.cpp
         src/view/states/task_input/InputTaskDueDateState.h
         src/view/states/task_input/EditTaskState.cpp
-        src/view/states/task_input/EditTaskState.h src/view/console_io/ConsoleReader.cpp src/view/console_io/ConsoleReader.h src/controller/Controller.cpp src/controller/Controller.h src/controller/TaskValidator.cpp src/controller/TaskValidator.h src/view/states/abstract/WizardStateController.cpp src/view/states/abstract/WizardStateController.h src/view/states/ShowState.cpp src/view/states/ShowState.h src/model/DueTime.cpp src/model/DueTime.h src/model/abstract_model/IModel.h src/view/states/CompleteTaskState.cpp src/view/states/CompleteTaskState.h src/model/abstract_model/TaskTransfer.cpp src/model/abstract_model/TaskTransfer.h)
+        src/view/states/task_input/EditTaskState.h src/view/console_io/ConsoleReader.cpp src/view/console_io/ConsoleReader.h src/controller/Controller.cpp src/controller/Controller.h src/controller/TaskValidator.cpp src/controller/TaskValidator.h src/view/states/abstract/WizardStateController.cpp src/view/states/abstract/WizardStateController.h src/view/states/ShowState.cpp src/view/states/ShowState.h src/model/DueTime.cpp src/model/DueTime.h src/model/abstract_model/IModel.h src/view/states/CompleteTaskState.cpp src/view/states/CompleteTaskState.h src/model/abstract_model/TaskTransfer.cpp src/model/abstract_model/TaskTransfer.h src/view/states/task_input/AddSubTaskState.cpp src/view/states/task_input/AddSubTaskState.h)
 
 add_executable(SimpleTaskManager_test
         src/model/tasks/Task.cpp
