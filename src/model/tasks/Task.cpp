@@ -30,9 +30,9 @@ std::string Task::to_string() const {
     std::string answer = title_ + ", Priority: " + PriorityToString(priority_) +
                     ", Due to: " + due_to_.GetTimeString() + ", Completed: ";
     if (IsCompleted()) {
-        answer += "Yes\n";
+        answer += "Yes";
     } else {
-        answer += "No\n";
+        answer += "No";
     }
     return answer;
 }

@@ -19,6 +19,16 @@ std::optional<TaskId> Controller::AddTask(const Task &task) {
     }
 }
 
+std::optional<TaskId> Controller::AddSubTask(const Task& task, const TaskId& parent_id) {
+    if (task_validator_->ValidateTask(task)) {
+        if (model_->IsTaskIdExist(parent_id)) {
+            return model_->AddSubTask(task, parent_id);
+        }
+    } else {
+        return std::nullopt;
+    }
+}
+
 bool Controller::EditTask(const TaskId &task_id, const Task &task) {
     if (task_validator_->ValidateTask(task) && task_validator_->ValidateTaskId(task_id)) {
         if (model_->IsTaskIdExist(task_id)) {
@@ -60,7 +70,11 @@ std::string Controller::GetAllTasks() {
 
     auto tasks = model_->GetTasks();
     for (auto t : tasks){
-        answer.append(t.GetTaskId().to_string() + ", " + t.GetTask().to_string());
+        if (!t.GetParentTaskId().has_value()) {
+            answer.append(t.GetTaskId().to_string() + ", " + t.GetTask().to_string() + "\n");
+        } else {
+            answer.append("\t" + t.GetTaskId().to_string() + ", " + t.GetTask().to_string() + "\n");
+        }
     }
 
     return answer;
