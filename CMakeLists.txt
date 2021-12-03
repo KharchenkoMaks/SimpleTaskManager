@@ -138,6 +138,6 @@ add_executable(SimpleTaskManager_test
         tests/model/TaskManagerTest.cpp
         tests/model/DueTimeTest.cpp
         tests/model/tasks/SubTaskTest.cpp
-        tests/view/states/StatesTests.cpp tests/view/mocks/MockWizardStatesFactory.h tests/view/mocks/MockController.h tests/view/mocks/MockTaskValidator.h)
+        tests/view/states/StatesTests.cpp tests/view/mocks/MockWizardStatesFactory.h tests/view/mocks/MockController.h tests/view/mocks/MockTaskValidator.h tests/view/mocks/MockModel.h tests/view/mocks/MockConsolePrinter.h tests/view/mocks/MockConsoleReader.h)
 
 target_link_libraries(SimpleTaskManager_test GTest::gtest GTest::gmock GTest::gmock_main)

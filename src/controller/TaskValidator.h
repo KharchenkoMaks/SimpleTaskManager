@@ -15,6 +15,8 @@ class TaskValidator {
 public:
     virtual bool ValidateTask(const Task& task);
     virtual bool ValidateTaskId(const TaskId& task_id);
+public:
+    virtual ~TaskValidator() = default;
 private:
     bool ValidateTitle(const std::string& title);
     bool ValidateDueDate(DueTime due_date);

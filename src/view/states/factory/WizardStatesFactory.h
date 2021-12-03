@@ -49,7 +49,9 @@ public:
     };
 
 public:
-    explicit WizardStatesFactory(const std::shared_ptr<Controller>& controller);
+    WizardStatesFactory(const std::shared_ptr<Controller>& controller,
+                        const std::shared_ptr<ConsolePrinter>& printer,
+                        const std::shared_ptr<ConsoleReader>& reader);
 
 public:
     std::optional<std::shared_ptr<WizardStateConsole>> GetStateByCommand(const std::string& command);
@@ -68,6 +70,9 @@ public:
     virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const CompleteTaskState& state, MoveType move_type);
     virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const AddSubTaskState& state, MoveType move_type);
     virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const DeleteTaskState& state, MoveType move_type);
+
+public:
+    virtual ~WizardStatesFactory() = default;
 
 private:
     enum class States {

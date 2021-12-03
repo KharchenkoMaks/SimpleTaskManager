@@ -11,7 +11,9 @@ int main() {
     std::shared_ptr<Controller> controller =
             std::make_shared<Controller>(std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
                             std::make_unique<TaskValidator>());
-    std::shared_ptr<WizardStatesFactory> states_factory = std::make_shared<WizardStatesFactory>(controller);
+    std::shared_ptr<WizardStatesFactory> states_factory = std::make_shared<WizardStatesFactory>(controller,
+                                                                                                std::make_shared<ConsolePrinter>(),
+                                                                                                std::make_shared<ConsoleReader>());
     ConsoleStateMachine state_machine(std::make_shared<WizardContext>(), states_factory->GetInitialState());
     state_machine.Run();
     return 0;

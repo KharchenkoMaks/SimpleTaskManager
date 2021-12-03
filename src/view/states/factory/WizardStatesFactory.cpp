@@ -4,7 +4,12 @@
 
 #include "WizardStatesFactory.h"
 
-WizardStatesFactory::WizardStatesFactory(const std::shared_ptr<Controller>& controller) : controller_(controller) {
+WizardStatesFactory::WizardStatesFactory(const std::shared_ptr<Controller>& controller,
+                                         const std::shared_ptr<ConsolePrinter>& printer,
+                                         const std::shared_ptr<ConsoleReader>& reader) :
+                                         controller_(controller),
+                                         printer_(printer),
+                                         reader_(reader) {
 
 }
 

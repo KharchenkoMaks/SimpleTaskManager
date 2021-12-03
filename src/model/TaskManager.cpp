@@ -46,7 +46,7 @@ bool TaskManager::EditTask(const TaskId& id, const Task& t) {
             subtasks_.insert_or_assign(id, new_subtask);
             return true;
         }
-        case TaskType::kNone: {
+        default: {
             return false;
         }
     }
