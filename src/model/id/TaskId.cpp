@@ -8,16 +8,21 @@ TaskId::TaskId(const int id) {
     this->id_ = id;
 }
 
-TaskId TaskId::Create(const int id) {
+std::optional<TaskId> TaskId::Create(const int id) {
     if (id >= 0){
         return TaskId(id);
-    } else{
-        throw std::invalid_argument("Id was < 0");
+    } else {
+        return std::nullopt;
     }
 }
 
-TaskId TaskId::Create(const std::string& id) {
-    return TaskId::Create(std::stoi(id));
+std::optional<TaskId> TaskId::Create(const std::string& id) {
+    try {
+        int casted_id = std::stoi(id);
+        return TaskId::Create(casted_id);
+    } catch (std::invalid_argument) {
+        return std::nullopt;
+    }
 }
 
 int TaskId::GetId() const {

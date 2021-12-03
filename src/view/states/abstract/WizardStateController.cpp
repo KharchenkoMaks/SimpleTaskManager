@@ -19,18 +19,16 @@ std::shared_ptr<Controller> WizardStateController::GetController() const {
 
 WizardStateController::TaskIdFromUser WizardStateController::GetTaskIdFromUser(const std::string& invitation_string) {
     std::string task_id_str = GetUserInput(invitation_string);
-    try {
-        WizardStateController::TaskIdFromUser answer;
-        answer.task_id_ = TaskId::Create(task_id_str);
-        if (GetController()->GetTask(answer.task_id_.value()) == std::nullopt) {
-            answer.answer_status_ = WizardStateController::TaskIdFromUser::AnswerStatus::kNoSuchTask;
-        } else {
-            answer.answer_status_ = WizardStateController::TaskIdFromUser::AnswerStatus::kSuccess;
-        }
-        return answer;
-    } catch (std::invalid_argument) {
+    WizardStateController::TaskIdFromUser answer;
+    answer.task_id_ = TaskId::Create(task_id_str);
+    if (answer.task_id_ == std::nullopt) {
         return WizardStateController::TaskIdFromUser
-        { std::nullopt,
-          WizardStateController::TaskIdFromUser::AnswerStatus::kNotValid };
+                { std::nullopt,
+                  WizardStateController::TaskIdFromUser::AnswerStatus::kNotValid };
+    } else if (GetController()->GetTask(answer.task_id_.value()) == std::nullopt) {
+        answer.answer_status_ = WizardStateController::TaskIdFromUser::AnswerStatus::kNoSuchTask;
+    } else {
+        answer.answer_status_ = WizardStateController::TaskIdFromUser::AnswerStatus::kSuccess;
     }
+    return answer;
 }

@@ -90,7 +90,7 @@ bool TaskManager::CompleteTask(const TaskId& id) {
                                                subtask.GetParentTaskId()));
             return true;
         }
-        case TaskType::kNone: {
+        default: {
             return false;
         }
     }

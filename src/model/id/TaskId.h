@@ -6,11 +6,12 @@
 #define SIMPLETASKMANAGER_TASKID_H
 
 #include <string>
+#include <optional>
 
 class TaskId {
 public:
-    static TaskId Create(int id);
-    static TaskId Create(const std::string& id);
+    static std::optional<TaskId> Create(int id);
+    static std::optional<TaskId> Create(const std::string& id);
 
 public:
     int GetId() const;
