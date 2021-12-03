@@ -81,7 +81,7 @@ std::string Task::PriorityToString(Task::Priority priority) {
             break;
         }
         case Task::Priority::NONE:{
-            priority_string = "None";
+            priority_string = "kNone";
             break;
         }
     }
@@ -95,7 +95,7 @@ std::optional<Task::Priority> Task::GetTaskPriority(const std::string& priority)
         return Priority::MEDIUM;
     } else if (priority == "Low"){
         return Priority::LOW;
-    } else if (priority == "None"){
+    } else if (priority == "kNone"){
         return Priority::NONE;
     } else {
         return std::nullopt;

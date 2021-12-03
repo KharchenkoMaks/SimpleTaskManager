@@ -22,7 +22,7 @@ std::optional<TaskId> TaskManager::AddSubTask(const Task& task, const TaskId& pa
     if (task.GetTitle().empty()) {
         return std::nullopt;
     }
-    if (GetTaskType(parent_id) != TaskType::Parent) {
+    if (GetTaskType(parent_id) != TaskType::kParent) {
         return std::nullopt;
     }
     SubTask subtask = SubTask::Create(task, parent_id);
@@ -33,11 +33,11 @@ std::optional<TaskId> TaskManager::AddSubTask(const Task& task, const TaskId& pa
 
 bool TaskManager::EditTask(const TaskId& id, const Task& t) {
     switch (GetTaskType(id)){
-        case TaskType::Parent: {
+        case TaskType::kParent: {
             tasks_.insert_or_assign(id, t);
             return true;
         }
-        case TaskType::Child: {
+        case TaskType::kChild: {
             std::optional<SubTask> subtask = GetSubTaskById(id);
             if (!subtask.has_value()) {
                 return false;
@@ -46,7 +46,7 @@ bool TaskManager::EditTask(const TaskId& id, const Task& t) {
             subtasks_.insert_or_assign(id, new_subtask);
             return true;
         }
-        case TaskType::None: {
+        case TaskType::kNone: {
             return false;
         }
     }
@@ -54,15 +54,19 @@ bool TaskManager::EditTask(const TaskId& id, const Task& t) {
 
 bool TaskManager::DeleteTask(const TaskId& id) {
     switch (GetTaskType(id)) {
-        case TaskType::Parent: {
-            tasks_.erase(id);
+        case TaskType::kParent: {
+            auto task_iterator = tasks_.find(id);
+            tasks_.erase(task_iterator);
+            deleted_tasks_.insert_or_assign(task_iterator->first, task_iterator->second);
             return true;
         }
-        case TaskType::Child: {
-            subtasks_.erase(id);
+        case TaskType::kChild: {
+            auto subtask_iterator = subtasks_.find(id);
+            subtasks_.erase(subtask_iterator);
+            deleted_subtasks_.insert_or_assign(subtask_iterator->first, subtask_iterator->second);
             return true;
         }
-        case TaskType::None: {
+        default: {
             return false;
         }
     }
@@ -70,7 +74,7 @@ bool TaskManager::DeleteTask(const TaskId& id) {
 
 bool TaskManager::CompleteTask(const TaskId& id) {
     switch (GetTaskType(id)){
-        case TaskType::Parent: {
+        case TaskType::kParent: {
             std::optional<Task> task_to_complete = GetTaskById(id);
             if (!task_to_complete.has_value()) {
                 return false;
@@ -78,7 +82,7 @@ bool TaskManager::CompleteTask(const TaskId& id) {
             tasks_.insert_or_assign(id, MakeTaskCompleted(task_to_complete.value()));
             return true;
         }
-        case TaskType::Child: {
+        case TaskType::kChild: {
             SubTask subtask = subtasks_.find(id)->second;
             subtasks_.insert_or_assign(id,
                                        SubTask::Create(
@@ -86,7 +90,7 @@ bool TaskManager::CompleteTask(const TaskId& id) {
                                                subtask.GetParentTaskId()));
             return true;
         }
-        case TaskType::None: {
+        case TaskType::kNone: {
             return false;
         }
     }
@@ -105,39 +109,42 @@ std::vector<TaskTransfer> TaskManager::GetTasks() {
 }
 
 bool TaskManager::IsTaskIdExist(const TaskId &task_id) {
-    return tasks_.find(task_id) != tasks_.end() || subtasks_.find(task_id) != subtasks_.end();
+    auto task_type = GetTaskType(task_id);
+    return task_type == TaskType::kParent || task_type == TaskType::kChild;
 }
 
 std::optional<TaskTransfer> TaskManager::GetTask(const TaskId& task_id) {
     switch (GetTaskType(task_id)) {
-        case TaskType::Parent: {
+        case TaskType::kParent: {
             auto task_iterator = tasks_.find(task_id);
             return TaskTransfer::Create(task_iterator->first, task_iterator->second);
         }
-        case TaskType::Child: {
+        case TaskType::kChild: {
             auto subtask_iterator = subtasks_.find(task_id);
             return TaskTransfer::Create(subtask_iterator->first,
                                         subtask_iterator->second.GetTaskParameters(),
                                         subtask_iterator->second.GetParentTaskId());
         }
-        case TaskType::None: {
+        default: {
             return std::nullopt;
         }
     }
 }
 
 TaskManager::TaskType TaskManager::GetTaskType(const TaskId& task_id) const {
-    if (tasks_.find(task_id) != tasks_.end()) {
-        return TaskType::Parent;
+    if (deleted_tasks_.find(task_id) != deleted_tasks_.end() || deleted_subtasks_.find(task_id) != deleted_subtasks_.end()) {
+        return TaskType::kDeleted;
+    } else if (tasks_.find(task_id) != tasks_.end()) {
+        return TaskType::kParent;
     } else if (subtasks_.find(task_id) != subtasks_.end()) {
-        return TaskType::Child;
+        return TaskType::kChild;
     } else {
-        return TaskType::None;
+        return TaskType::kNone;
     }
 }
 
 std::optional<SubTask> TaskManager::GetSubTaskById(const TaskId& task_id) const {
-    if (GetTaskType(task_id) == TaskType::Child){
+    if (GetTaskType(task_id) == TaskType::kChild){
         auto task_iterator = subtasks_.find(task_id);
         return task_iterator->second;
     } else {
@@ -146,7 +153,7 @@ std::optional<SubTask> TaskManager::GetSubTaskById(const TaskId& task_id) const 
 }
 
 std::optional<Task> TaskManager::GetTaskById(const TaskId& task_id) const {
-    if (GetTaskType(task_id) == TaskType::Parent){
+    if (GetTaskType(task_id) == TaskType::kParent){
         auto task_iterator = tasks_.find(task_id);
         return task_iterator->second;
     } else {
@@ -160,7 +167,7 @@ Task TaskManager::MakeTaskCompleted(const Task& task) {
 
 std::optional<std::vector<TaskTransfer>> TaskManager::GetTaskSubTasks(const TaskId& parent_task_id) const {
     std::vector<TaskTransfer> subtasks;
-    if (GetTaskType(parent_task_id) != TaskType::Parent){
+    if (GetTaskType(parent_task_id) != TaskType::kParent){
         return std::nullopt;
     }
     for (const auto& item : subtasks_) {

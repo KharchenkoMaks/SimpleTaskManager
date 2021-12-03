@@ -17,6 +17,7 @@
 #include <utility>
 #include <memory>
 #include <optional>
+#include <algorithm>
 
 class TaskManager : public IModel {
 public:
@@ -36,9 +37,10 @@ public:
 
 private:
     enum class TaskType {
-        Parent,
-        Child,
-        None
+        kParent,
+        kChild,
+        kDeleted,
+        kNone
     };
 private:
     TaskType GetTaskType(const TaskId& task_id) const;
@@ -51,6 +53,9 @@ private:
 private:
     std::map<TaskId, Task> tasks_;
     std::map<TaskId, SubTask> subtasks_;
+
+    std::map<TaskId, Task> deleted_tasks_;
+    std::map<TaskId, SubTask> deleted_subtasks_;
 
     std::unique_ptr<IdGenerator> generator_;
 };
