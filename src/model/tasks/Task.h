@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_TASK_H
 #define SIMPLETASKMANAGER_TASK_H
 
-#include "TaskId.h"
+#include "id/TaskId.h"
 #include "DueTime.h"
 
 #include <string>

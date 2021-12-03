@@ -3,8 +3,8 @@
 //
 
 #include "gtest/gtest.h"
-#include "IdGenerator.h"
-#include "TaskId.h"
+#include "id/IdGenerator.h"
+#include "id/TaskId.h"
 
 class IdGeneratorTest : public ::testing::Test{
 

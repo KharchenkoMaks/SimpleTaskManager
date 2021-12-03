@@ -6,8 +6,8 @@
 #include "gmock/gmock.h"
 
 #include "TaskManager.h"
-#include "IdGenerator.h"
-#include "TaskId.h"
+#include "id/IdGenerator.h"
+#include "id/TaskId.h"
 #include "DueTime.h"
 #include "abstract_model/TaskTransfer.h"
 

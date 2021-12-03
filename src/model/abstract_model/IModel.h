@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_IMODEL_H
 #define SIMPLETASKMANAGER_IMODEL_H
 
-#include "TaskId.h"
+#include "id/TaskId.h"
 #include "tasks/Task.h"
 #include "TaskTransfer.h"
 

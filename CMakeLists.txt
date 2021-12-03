@@ -20,10 +20,10 @@ add_executable(SimpleTaskManager
         src/model/tasks/Task.h
         src/model/TaskManager.cpp
         src/model/TaskManager.h
-        src/model/TaskId.cpp
-        src/model/TaskId.h
-        src/model/IdGenerator.cpp
-        src/model/IdGenerator.h
+        src/model/id/TaskId.cpp
+        src/model/id/TaskId.h
+        src/model/id/IdGenerator.cpp
+        src/model/id/IdGenerator.h
         src/model/tasks/SubTask.cpp
         src/model/tasks/SubTask.h
         src/view/ConsoleStateMachine.cpp
@@ -56,10 +56,10 @@ add_executable(SimpleTaskManager
 add_executable(SimpleTaskManager_test
         src/model/tasks/Task.cpp
         src/model/tasks/Task.h
-        src/model/TaskId.cpp
-        src/model/TaskId.h
-        src/model/IdGenerator.cpp
-        src/model/IdGenerator.h
+        src/model/id/TaskId.cpp
+        src/model/id/TaskId.h
+        src/model/id/IdGenerator.cpp
+        src/model/id/IdGenerator.h
         src/model/TaskManager.cpp
         src/model/TaskManager.h
         src/model/tasks/SubTask.h

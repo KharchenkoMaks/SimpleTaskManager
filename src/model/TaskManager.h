@@ -8,8 +8,8 @@
 #include "abstract_model/IModel.h"
 #include "abstract_model/TaskTransfer.h"
 #include "tasks/Task.h"
-#include "TaskId.h"
-#include "IdGenerator.h"
+#include "id/TaskId.h"
+#include "id/IdGenerator.h"
 #include "tasks/SubTask.h"
 
 #include <map>
