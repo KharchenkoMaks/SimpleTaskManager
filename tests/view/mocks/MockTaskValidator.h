@@ -13,7 +13,7 @@
 class MockTaskValidator : public TaskValidator {
 public:
     MOCK_METHOD(bool, ValidateTask, (const Task& task), (override));
-    MOCK_METHOD(bool, ValidateTaskId, (const TaskId& task_id, (override)));
+    MOCK_METHOD(bool, ValidateTaskId, (const TaskId& task_id), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKTASKVALIDATOR_H

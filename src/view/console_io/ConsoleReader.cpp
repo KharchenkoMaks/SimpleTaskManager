@@ -6,6 +6,6 @@
 
 std::string ConsoleReader::ReadLine() {
     std::string line;
-    std::cin >> line;
+    std::getline(std::cin, line);
     return line;
 }

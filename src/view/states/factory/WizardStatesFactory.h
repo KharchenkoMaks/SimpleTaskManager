@@ -54,7 +54,7 @@ public:
                         const std::shared_ptr<ConsoleReader>& reader);
 
 public:
-    std::optional<std::shared_ptr<WizardStateConsole>> GetStateByCommand(const std::string& command);
+    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetStateByCommand(const std::string& command);
 
     std::shared_ptr<WizardStateConsole> GetInitialState();
 

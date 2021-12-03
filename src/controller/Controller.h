@@ -27,6 +27,8 @@ public:
     std::string GetAllTasks();
 public:
     std::optional<Task> GetTask(const TaskId& task_id) const;
+public:
+    virtual ~Controller() = default;
 private:
     std::unique_ptr<IModel> model_;
 

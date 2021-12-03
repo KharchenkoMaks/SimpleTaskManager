@@ -23,8 +23,7 @@ const std::shared_ptr<ConsoleReader> &WizardStateConsole::GetConsoleReader() con
 
 std::string WizardStateConsole::GetUserInput(const std::string& invitation_message) {
     console_printer_->Write(invitation_message + "> ");
-    std::string user_input;
-    std::getline(std::cin, user_input);
+    std::string user_input = console_reader_->ReadLine();
     return user_input;
 }
 
