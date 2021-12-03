@@ -71,6 +71,6 @@ add_executable(SimpleTaskManager_test
         tests/model/TaskIdTest.cpp
         tests/model/IdGeneratorTest.cpp
         tests/model/TaskManagerTest.cpp
-        tests/model/DueTimeTest.cpp)
+        tests/model/DueTimeTest.cpp tests/model/tasks/SubTaskTest.cpp)
 
 target_link_libraries(SimpleTaskManager_test GTest::gtest GTest::gmock GTest::gmock_main)
