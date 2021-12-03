@@ -10,11 +10,13 @@
 #include "id/TaskId.h"
 #include "DueTime.h"
 #include "abstract_model/TaskTransfer.h"
+#include "tasks/SubTask.h"
 
 #include <ctime>
 #include <string>
 #include <vector>
 #include <utility>
+#include <optional>
 
 using ::testing::Return;
 
@@ -71,26 +73,42 @@ TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
     // Arrange
     std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
     EXPECT_CALL(*gen, CreateNewTaskId())
-        .Times(1)
-        .WillOnce(Return(TaskId::Create(0).value()));
+        .Times(2)
+        .WillOnce(Return(TaskId::Create(0).value()))
+        .WillOnce(Return(TaskId::Create(1).value()));
 
     TaskManager task_manager(std::move(gen));
     const std::string expected_title = "edited task";
     const Task::Priority expected_priority = Task::Priority::HIGH;
     const DueTime expected_time = DueTime::Create(time(0));
 
-    TaskId task1 = task_manager.AddTask(Task::Create("title",
+    TaskId main_task_id = task_manager.AddTask(Task::Create("title",
                                                      Task::Priority::MEDIUM,
                                                      DueTime::Create(time(0)))).value();
+    TaskId subtask_id = task_manager.AddSubTask(Task::Create("SubTask",
+                                                             Task::Priority::LOW,
+                                                             DueTime::Create(time(0))), main_task_id).value();
     // Act
-    task_manager.EditTask(task1,
+    task_manager.EditTask(main_task_id,
                           Task::Create(expected_title, expected_priority, expected_time));
-    TaskTransfer actual = task_manager.GetTasks()[0];
+    task_manager.EditTask(subtask_id,
+                          Task::Create(expected_title, expected_priority, expected_time));
+    std::optional<TaskTransfer> actual_main = task_manager.GetTask(main_task_id);
+    std::optional<TaskTransfer> actual_sub = task_manager.GetTask(subtask_id);
     // Assert
-    EXPECT_TRUE(task1 == actual.GetTaskId());
-    EXPECT_EQ(expected_title, actual.GetTask().GetTitle());
-    EXPECT_EQ(expected_priority, actual.GetTask().GetPriority());
-    EXPECT_EQ(expected_time, actual.GetTask().GetDueTime());
+    ASSERT_NE(actual_main, std::nullopt);
+    ASSERT_NE(actual_main, std::nullopt);
+
+    EXPECT_EQ(main_task_id, actual_main.value().GetTaskId());
+    EXPECT_EQ(expected_title, actual_main.value().GetTask().GetTitle());
+    EXPECT_EQ(expected_priority, actual_main.value().GetTask().GetPriority());
+    EXPECT_EQ(expected_time, actual_main.value().GetTask().GetDueTime());
+
+    EXPECT_EQ(subtask_id, actual_sub.value().GetTaskId());
+    EXPECT_EQ(expected_title, actual_sub.value().GetTask().GetTitle());
+    EXPECT_EQ(expected_priority, actual_sub.value().GetTask().GetPriority());
+    EXPECT_EQ(expected_time, actual_sub.value().GetTask().GetDueTime());
+    EXPECT_EQ(actual_sub.value().GetParentTaskId(), main_task_id);
 }
 
 // Creating two Tasks in TaskManager
@@ -202,4 +220,112 @@ TEST_F(TaskManagerTest, TryCompletingNonExistentTask_ShouldReturnFalse){
     TaskManager task_manager(std::move(gen));
     // Act & Assert
     EXPECT_FALSE(task_manager.CompleteTask(TaskId::Create(5).value()));
+}
+
+// Adding subtask to task manager
+// GetTask should return right subtask
+TEST_F(TaskManagerTest, TryAddingSubtask_ShouldReturnRightTask) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+            .Times(2)
+            .WillOnce(Return(TaskId::Create(1).value()))
+            .WillOnce(Return(TaskId::Create(10).value()));
+
+    TaskManager task_manager(std::move(gen));
+
+    Task main_task = Task::Create("Main Task", Task::Priority::NONE, DueTime::Create(time(0)));
+    Task subtask = Task::Create("SubTask", Task::Priority::LOW, DueTime::Create(time(0)));
+    // Act
+    TaskId main_task_id = task_manager.AddTask(main_task).value();
+    TaskId subtask_id = task_manager.AddSubTask(subtask, main_task_id).value();
+    std::optional<TaskTransfer> get_subtask = task_manager.GetTask(subtask_id);
+    // Assert
+    ASSERT_NE(get_subtask, std::nullopt);
+    EXPECT_EQ(get_subtask.value().GetTaskId(), subtask_id);
+    EXPECT_EQ(get_subtask.value().GetParentTaskId(), main_task_id);
+    EXPECT_EQ(get_subtask.value().GetTask(), subtask);
+    EXPECT_TRUE(task_manager.IsTaskIdExist(subtask_id));
+    EXPECT_TRUE(task_manager.IsTaskIdExist(main_task_id));
+}
+
+TEST_F(TaskManagerTest, TryGetNonExistentTask_ShouldReturnNullopt) {
+    // Arrange
+    TaskManager task_manager(std::make_unique<IdGenerator>());
+    // Act
+    std::optional<TaskTransfer> task = task_manager.GetTask(TaskId::Create(10).value());
+    // Assert
+    EXPECT_EQ(task, std::nullopt);
+}
+
+TEST_F(TaskManagerTest, TryDeletingSubTask_ShouldDeleteSubTaskProperly) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+            .Times(3)
+            .WillOnce(Return(TaskId::Create(1).value()))
+            .WillOnce(Return(TaskId::Create(10).value()))
+            .WillOnce(Return(TaskId::Create(15).value()));
+
+    TaskManager task_manager(std::move(gen));
+
+    const std::string expected_main_title = "Main Task";
+    const Task::Priority expected_main_priority = Task::Priority::HIGH;
+    const DueTime expected_main_due_time = DueTime::Create(1000);
+
+    const std::string expected_sub_title = "SubTask2";
+    const Task::Priority expected_sub_priority = Task::Priority::NONE;
+    const DueTime expected_sub_due_time = DueTime::Create(3000);
+
+    Task main_task = Task::Create(expected_main_title, expected_main_priority, expected_main_due_time);
+    Task subtask1 = Task::Create("SubTask1", Task::Priority::HIGH, DueTime::Create(time(0)));
+    Task subtask2 = Task::Create(expected_sub_title, expected_sub_priority, expected_sub_due_time);
+
+    TaskId main_task_id = task_manager.AddTask(main_task).value();
+    TaskId subtask1_id = task_manager.AddSubTask(subtask1, main_task_id).value();
+    TaskId subtask2_id = task_manager.AddSubTask(subtask2, main_task_id).value();
+
+    // Act
+    task_manager.DeleteTask(subtask1_id);
+    const std::vector<TaskTransfer> tasks = task_manager.GetTasks();
+    const TaskTransfer main_task_transfer = tasks[0];
+    const TaskTransfer subtask_transfer = tasks[1];
+
+    // Assert
+    ASSERT_EQ(tasks.size(), 2);
+
+    EXPECT_EQ(main_task_transfer.GetTask(), main_task);
+    EXPECT_EQ(main_task_transfer.GetTaskId(), main_task_id);
+    EXPECT_EQ(main_task_transfer.GetParentTaskId(), std::nullopt);
+
+    EXPECT_EQ(subtask_transfer.GetTask(), subtask2);
+    EXPECT_EQ(subtask_transfer.GetTaskId(), subtask2_id);
+    EXPECT_EQ(subtask_transfer.GetParentTaskId(), main_task_id);
+}
+
+TEST_F(TaskManagerTest, TryCompleteSubTask_ShouldCompleteSubTask) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+            .Times(3)
+            .WillOnce(Return(TaskId::Create(1).value()))
+            .WillOnce(Return(TaskId::Create(10).value()))
+            .WillOnce(Return(TaskId::Create(15).value()));
+
+    TaskManager task_manager(std::move(gen));
+
+    Task main_task = Task::Create("Main task", Task::Priority::NONE, DueTime::Create(time(0)));
+    Task subtask1 = Task::Create("SubTask1", Task::Priority::HIGH, DueTime::Create(time(0)));
+    Task subtask2 = Task::Create("SubTask2", Task::Priority::LOW, DueTime::Create(time(0)));
+
+    TaskId main_task_id = task_manager.AddTask(main_task).value();
+    TaskId subtask1_id = task_manager.AddSubTask(subtask1, main_task_id).value();
+    TaskId subtask2_id = task_manager.AddSubTask(subtask2, main_task_id).value();
+
+    // Act
+    task_manager.CompleteTask(subtask1_id);
+    const std::optional<TaskTransfer> actual_subtask = task_manager.GetTask(subtask1_id);
+    // Assert
+    EXPECT_NE(actual_subtask, std::nullopt);
+    EXPECT_TRUE(actual_subtask->GetTask().IsCompleted());
 }
