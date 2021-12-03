@@ -56,18 +56,18 @@ public:
 
     std::shared_ptr<WizardStateConsole> GetInitialState();
 
-    std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const RootState& state, MoveType move_type);
-    std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const HelpState& state, MoveType move_type);
-    std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const QuitState& state, MoveType move_type);
-    std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const AddTaskState& state, MoveType move_type);
-    std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const EditTaskState& state, MoveType move_type);
-    std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const InputTaskTitleState& state, MoveType move_type);
-    std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const InputTaskPriorityState& state, MoveType move_type);
-    std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const InputTaskDueDateState& state, MoveType move_type);
-    std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const ShowState& state, MoveType move_type);
-    std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const CompleteTaskState& state, MoveType move_type);
-    std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const AddSubTaskState& state, MoveType move_type);
-    std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const DeleteTaskState& state, MoveType move_type);
+    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const RootState& state, MoveType move_type);
+    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const HelpState& state, MoveType move_type);
+    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const QuitState& state, MoveType move_type);
+    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const AddTaskState& state, MoveType move_type);
+    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const EditTaskState& state, MoveType move_type);
+    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const InputTaskTitleState& state, MoveType move_type);
+    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const InputTaskPriorityState& state, MoveType move_type);
+    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const InputTaskDueDateState& state, MoveType move_type);
+    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const ShowState& state, MoveType move_type);
+    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const CompleteTaskState& state, MoveType move_type);
+    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const AddSubTaskState& state, MoveType move_type);
+    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const DeleteTaskState& state, MoveType move_type);
 
 private:
     enum class States {
