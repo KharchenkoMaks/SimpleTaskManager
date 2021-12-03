@@ -34,8 +34,8 @@ TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
     std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
     EXPECT_CALL(*gen, CreateNewTaskId())
         .Times(2)
-        .WillOnce(Return(TaskId::Create(1)))
-        .WillOnce(Return(TaskId::Create(2)));
+        .WillOnce(Return(TaskId::Create(1).value()))
+        .WillOnce(Return(TaskId::Create(2).value()));
 
     TaskManager task_manager(std::move(gen));
 
@@ -72,7 +72,7 @@ TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
     std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
     EXPECT_CALL(*gen, CreateNewTaskId())
         .Times(1)
-        .WillOnce(Return(TaskId::Create(0)));
+        .WillOnce(Return(TaskId::Create(0).value()));
 
     TaskManager task_manager(std::move(gen));
     const std::string expected_title = "edited task";
@@ -101,8 +101,8 @@ TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
     std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
     EXPECT_CALL(*gen, CreateNewTaskId())
         .Times(2)
-        .WillOnce(Return(TaskId::Create(1)))
-        .WillOnce(Return(TaskId::Create(10)));
+        .WillOnce(Return(TaskId::Create(1).value()))
+        .WillOnce(Return(TaskId::Create(10).value()));
 
     TaskManager task_manager(std::move(gen));
     const std::string expected_title = "second task";
@@ -134,7 +134,7 @@ TEST_F(TaskManagerTest, TryEditingNonExistentTask_ShouldReturnFalse){
         .Times(0);
 
     TaskManager task_manager(std::move(gen));
-    TaskId task_id = TaskId::Create(5);
+    TaskId task_id = TaskId::Create(5).value();
     Task task = Task::Create("title", Task::Priority::NONE, DueTime::Create(time(0)));
     // Act & Assert
     EXPECT_FALSE(task_manager.EditTask(task_id, task));
@@ -149,7 +149,7 @@ TEST_F(TaskManagerTest, TryDeletingNonExistentTask_ShouldReturnFalse){
         .Times(0);
 
     TaskManager task_manager(std::move(gen));
-    TaskId task_id = TaskId::Create(5);
+    TaskId task_id = TaskId::Create(5).value();
     // Act & Assert
     EXPECT_FALSE(task_manager.DeleteTask(task_id));
 }
@@ -201,5 +201,5 @@ TEST_F(TaskManagerTest, TryCompletingNonExistentTask_ShouldReturnFalse){
 
     TaskManager task_manager(std::move(gen));
     // Act & Assert
-    EXPECT_FALSE(task_manager.CompleteTask(TaskId::Create(5)));
+    EXPECT_FALSE(task_manager.CompleteTask(TaskId::Create(5).value()));
 }
