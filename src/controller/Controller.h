@@ -24,9 +24,10 @@ public:
     bool DeleteTask(const TaskId& task_id);
     bool CompleteTask(const TaskId& task_id);
 
-    virtual std::string GetAllTasks();
 public:
+    virtual std::string GetAllTasks();
     std::optional<Task> GetTask(const TaskId& task_id) const;
+
 public:
     virtual ~Controller() = default;
 private:

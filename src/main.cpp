@@ -50,6 +50,7 @@ int main() {
 // TODO_DONE: Implement show command - Done 30.11.2021
 // TODO_DONE: Implement add_subtask command - Done 02.12.2021
 // TODO: Make complete method work with subtasks
+// TODO: Make delete method work with subtasks
 // TODO: AddTask WizardStateMachine for states that starts state machine?
 // TODO_DONE: Make DueTime validator in controller - Done 01.12.2021
 // TODO_DONE: Get rid of exceptions in task manager API - Done 01.12.2021
@@ -59,3 +60,4 @@ int main() {
 // TODO_DONE: Rework GetIdFromUser method to get invitation string and do controller checks - Done 02.12.2021
 // TODO_DONE: Make TaskId::Create not throw exception on incorrect string - Done 03.12.2021
 // TODO_DONE: Delete NullTaskId constant - Done 02.12.2021
+// TODO: Make label command

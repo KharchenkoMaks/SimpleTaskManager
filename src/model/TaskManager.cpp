@@ -177,3 +177,31 @@ std::optional<std::vector<TaskTransfer>> TaskManager::GetTaskSubTasks(const Task
     }
     return subtasks;
 }
+
+bool TaskManager::SetTaskLabel(const TaskId& id, std::string& label) {
+    switch (GetTaskType(id)) {
+        case TaskType::kParent: {
+            Task task_to_label = GetTaskById(id).value();
+            tasks_.insert_or_assign(id, SetLabel(task_to_label, label));
+            return true;
+        }
+        case TaskType::kChild: {
+            SubTask task_to_label = GetSubTaskById(id).value();
+            SubTask task_with_label =
+                    SubTask::Create(SetLabel(task_to_label.GetTaskParameters(), label), task_to_label.GetParentTaskId());
+            subtasks_.insert_or_assign(id, task_with_label);
+            return true;
+        }
+        default: {
+            return false;
+        }
+    }
+}
+
+Task TaskManager::SetLabel(const Task& task, const std::string& label) {
+    return Task::Create(task.GetTitle(),
+                        task.GetPriority(),
+                        task.GetDueTime(),
+                        task.IsCompleted(),
+                        label);
+}

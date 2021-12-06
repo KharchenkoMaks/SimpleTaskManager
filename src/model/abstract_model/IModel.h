@@ -18,6 +18,7 @@ public:
     virtual bool EditTask(const TaskId& id, const Task& t) = 0;
     virtual bool DeleteTask(const TaskId& id) = 0;
     virtual bool CompleteTask(const TaskId& id) = 0;
+    virtual bool SetTaskLabel(const TaskId& id, std::string& label) = 0;
 
     virtual std::vector<TaskTransfer> GetTasks() = 0;
 
