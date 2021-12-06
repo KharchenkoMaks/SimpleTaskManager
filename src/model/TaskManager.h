@@ -24,11 +24,12 @@ public:
     std::optional<TaskId> AddTask(const Task& t) override;
     std::optional<TaskId> AddSubTask(const Task& task, const TaskId& parent_id) override;
     bool EditTask(const TaskId& id, const Task& t) override;
-    bool DeleteTask(const TaskId& id) override;
-    bool CompleteTask(const TaskId& id) override;
+    bool DeleteTask(const TaskId& id, bool force_delete_subtasks = false) override;
+    bool CompleteTask(const TaskId& id, bool force_complete_subtasks = false) override;
     bool SetTaskLabel(const TaskId& id, std::string& label) override;
 
     std::vector<TaskTransfer> GetTasks() override;
+    std::optional<std::vector<TaskTransfer>> GetTaskSubTasks(const TaskId& task_id) override;
 public:
     bool IsTaskIdExist(const TaskId& task_id) override;
 
@@ -48,10 +49,13 @@ private:
     std::optional<SubTask> GetSubTaskById(const TaskId& task_id) const;
     std::optional<Task> GetTaskById(const TaskId& task_id) const;
 
-    std::optional<std::vector<TaskTransfer>> GetTaskSubTasks(const TaskId& task_id) const;
+    std::optional<std::vector<TaskId>> GetAllTaskSubTaskIds(const TaskId& parent_id);
 
     Task MakeTaskCompleted(const Task& task);
     Task SetLabel(const Task& task, const std::string& label);
+private:
+    void DeleteSubTasks(const TaskId& parent_id);
+    bool IsAllSubTasksDeleted(const TaskId& parent_id);
 private:
     std::map<TaskId, Task> tasks_;
     std::map<TaskId, SubTask> subtasks_;

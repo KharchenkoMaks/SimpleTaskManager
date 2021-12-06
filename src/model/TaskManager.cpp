@@ -52,12 +52,42 @@ bool TaskManager::EditTask(const TaskId& id, const Task& t) {
     }
 }
 
-bool TaskManager::DeleteTask(const TaskId& id) {
+void TaskManager::DeleteSubTasks(const TaskId& parent_id) {
+    std::optional<std::vector<TaskId>> tasks_to_delete = GetAllTaskSubTaskIds(parent_id);
+    if (tasks_to_delete.has_value()) {
+        for (const auto& subtask_id : tasks_to_delete.value()) {
+            std::optional<SubTask> subtask = GetSubTaskById(subtask_id);
+            if (subtask.has_value()) {
+                subtasks_.erase(subtask_id);
+                deleted_subtasks_.insert_or_assign(subtask_id, subtask.value());
+            }
+        }
+    }
+}
+
+bool TaskManager::IsAllSubTasksDeleted(const TaskId &parent_id) {
+    std::optional<std::vector<TaskId>> subtasks = GetAllTaskSubTaskIds(parent_id);
+    if (subtasks.has_value()) {
+        if (subtasks.value().size() > 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool TaskManager::DeleteTask(const TaskId& id, bool force_delete_subtasks) {
     switch (GetTaskType(id)) {
         case TaskType::kParent: {
             auto task_iterator = tasks_.find(id);
             tasks_.erase(task_iterator);
             deleted_tasks_.insert_or_assign(task_iterator->first, task_iterator->second);
+
+            if (force_delete_subtasks) {
+                DeleteSubTasks(task_iterator->first);
+            } else {
+                return IsAllSubTasksDeleted(task_iterator->first);
+            }
+
             return true;
         }
         case TaskType::kChild: {
@@ -72,13 +102,10 @@ bool TaskManager::DeleteTask(const TaskId& id) {
     }
 }
 
-bool TaskManager::CompleteTask(const TaskId& id) {
+bool TaskManager::CompleteTask(const TaskId& id, bool force_complete_subtasks) {
     switch (GetTaskType(id)){
         case TaskType::kParent: {
             std::optional<Task> task_to_complete = GetTaskById(id);
-            if (!task_to_complete.has_value()) {
-                return false;
-            }
             tasks_.insert_or_assign(id, MakeTaskCompleted(task_to_complete.value()));
             return true;
         }
@@ -165,11 +192,11 @@ Task TaskManager::MakeTaskCompleted(const Task& task) {
     return Task::Create(task.GetTitle(), task.GetPriority(), task.GetDueTime(), true, task.GetLabel());
 }
 
-std::optional<std::vector<TaskTransfer>> TaskManager::GetTaskSubTasks(const TaskId& parent_task_id) const {
-    std::vector<TaskTransfer> subtasks;
+std::optional<std::vector<TaskTransfer>> TaskManager::GetTaskSubTasks(const TaskId& parent_task_id) {
     if (GetTaskType(parent_task_id) != TaskType::kParent){
         return std::nullopt;
     }
+    std::vector<TaskTransfer> subtasks;
     for (const auto& item : subtasks_) {
         if (item.second.GetParentTaskId() == parent_task_id) {
             subtasks.push_back(TaskTransfer::Create(item.first, item.second.GetTaskParameters(), item.second.GetParentTaskId()));
@@ -204,4 +231,17 @@ Task TaskManager::SetLabel(const Task& task, const std::string& label) {
                         task.GetDueTime(),
                         task.IsCompleted(),
                         label);
+}
+
+std::optional<std::vector<TaskId>> TaskManager::GetAllTaskSubTaskIds(const TaskId& parent_id) {
+    if (GetTaskType(parent_id) != TaskType::kParent) {
+        return std::nullopt;
+    }
+    std::vector<TaskId> subtasks;
+    for (const auto& item : subtasks_) {
+        if (item.second.GetParentTaskId() == parent_id) {
+            subtasks.push_back(item.first);
+        }
+    }
+    return subtasks;
 }
