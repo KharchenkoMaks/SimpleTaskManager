@@ -64,12 +64,8 @@ void TaskManager::DeleteSubTasks(const TaskId& parent_id) {
 TaskActionResult TaskManager::DeleteTask(const TaskId& id, bool force_delete_subtasks) {
     switch (GetTaskType(id)) {
         case TaskType::kParent: {
-            auto task_iterator = tasks_.find(id);
-            tasks_.erase(task_iterator);
-            deleted_tasks_.insert_or_assign(task_iterator->first, task_iterator->second);
-
             if (force_delete_subtasks) {
-                DeleteSubTasks(task_iterator->first);
+                DeleteSubTasks(id);
             } else {
                 auto find_undeleted_subtasks = [&id](std::pair<TaskId, SubTask> p) {
                     p.second.GetParentTaskId() == id;
@@ -78,6 +74,10 @@ TaskActionResult TaskManager::DeleteTask(const TaskId& id, bool force_delete_sub
                     return TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
                 }
             }
+
+            auto task_iterator = tasks_.find(id);
+            tasks_.erase(task_iterator);
+            deleted_tasks_.insert_or_assign(task_iterator->first, task_iterator->second);
 
             return TaskActionResult::SUCCESS;
         }
@@ -105,9 +105,6 @@ void TaskManager::CompleteSubTasks(const TaskId& parent_id) {
 TaskActionResult TaskManager::CompleteTask(const TaskId& id, bool force_complete_subtasks) {
     switch (GetTaskType(id)){
         case TaskType::kParent: {
-            std::optional<Task> task_to_complete = GetTaskById(id);
-            tasks_.insert_or_assign(id, MakeTaskCompleted(task_to_complete.value()));
-
             if (force_complete_subtasks) {
                 CompleteSubTasks(id);
             } else {
@@ -118,6 +115,9 @@ TaskActionResult TaskManager::CompleteTask(const TaskId& id, bool force_complete
                     return TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
                 }
             }
+
+            std::optional<Task> task_to_complete = GetTaskById(id);
+            tasks_.insert_or_assign(id, MakeTaskCompleted(task_to_complete.value()));
 
             return TaskActionResult::SUCCESS;
         }
