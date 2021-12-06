@@ -28,11 +28,15 @@ Task::Task(const std::string& title,
 
 std::string Task::to_string() const {
     std::string answer = title_ + ", Priority: " + PriorityToString(priority_) +
-                    ", Due to: " + due_to_.GetTimeString() + ", Completed: ";
+                    ", Due to: " + due_to_.GetTimeString();
     if (IsCompleted()) {
-        answer += "Yes";
+        answer += ", Completed: Yes";
     } else {
-        answer += "No";
+        answer += ", Completed: No";
+    }
+
+    if (!label_.empty()) {
+        answer += ",Label: " + label_;
     }
     return answer;
 }

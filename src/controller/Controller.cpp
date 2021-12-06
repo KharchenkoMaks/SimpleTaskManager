@@ -115,4 +115,5 @@ bool Controller::SetTaskLabel(const TaskId& task_id, const std::string& label) {
     if (model_->IsTaskIdExist(task_id)) {
         return model_->SetTaskLabel(task_id, label);
     }
+    return false;
 }
