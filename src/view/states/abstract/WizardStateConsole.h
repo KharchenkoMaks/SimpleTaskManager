@@ -32,6 +32,7 @@ public:
 
 public:
     std::string GetUserInput(const std::string &invitation_message);
+    bool UserConfirm(const std::string& question_string = "Are you sure? y/n");
 
 public:
     virtual ~WizardStateConsole() = default;

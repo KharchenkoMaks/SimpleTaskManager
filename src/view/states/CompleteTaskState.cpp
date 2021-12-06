@@ -25,10 +25,16 @@ std::optional<std::shared_ptr<WizardStateConsole>> CompleteTaskState::Execute(st
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    if (!GetController()->CompleteTask(task_id.task_id_.value())){
-        GetConsolePrinter()->WriteError("Task wasn't completed, try again.");
-        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
-    }
+    switch (GetController()->CompleteTask(task_id.task_id_.value())) {
+        case TaskActionResult::SUCCESS: {
+            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        }
+        case TaskActionResult::FAIL_NO_SUCH_TASK: {
+            GetConsolePrinter()->WriteError("No task with this id");
+            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        }
+        case TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS: {
 
-    return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        }
+    }
 }

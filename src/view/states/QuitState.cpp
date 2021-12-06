@@ -12,11 +12,6 @@ std::optional<std::shared_ptr<WizardStateConsole>> QuitState::Execute(std::share
     }
 }
 
-bool QuitState::UserConfirm() {
-    std::string users_answer = GetUserInput("Are you sure? y/n");
-    return users_answer == "Y" || users_answer == "y";
-}
-
 QuitState::QuitState(const std::shared_ptr<WizardStatesFactory>& states_factory,
                      const std::shared_ptr<ConsolePrinter>& printer,
                      const std::shared_ptr<ConsoleReader>& reader) :

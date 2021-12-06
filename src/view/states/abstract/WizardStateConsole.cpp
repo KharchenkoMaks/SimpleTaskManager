@@ -30,3 +30,8 @@ std::string WizardStateConsole::GetUserInput(const std::string& invitation_messa
 std::shared_ptr<WizardStatesFactory> WizardStateConsole::GetStatesFactory() const {
     return states_factory_;
 }
+
+bool WizardStateConsole::UserConfirm(const std::string& question_string) {
+    std::string users_answer = GetUserInput(question_string);
+    return users_answer == "Y" || users_answer == "y";
+}

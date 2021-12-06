@@ -10,6 +10,7 @@
 #include "WizardContext.h"
 #include "tasks/Task.h"
 #include "id/TaskId.h"
+#include "utilities/TaskActionResult.h"
 
 #include <memory>
 #include <optional>
