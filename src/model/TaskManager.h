@@ -11,6 +11,7 @@
 #include "id/TaskId.h"
 #include "id/IdGenerator.h"
 #include "tasks/SubTask.h"
+#include "utilities/TaskActionResult.h"
 
 #include <map>
 #include <vector>
@@ -24,8 +25,8 @@ public:
     std::optional<TaskId> AddTask(const Task& t) override;
     std::optional<TaskId> AddSubTask(const Task& task, const TaskId& parent_id) override;
     bool EditTask(const TaskId& id, const Task& t) override;
-    ActionResult DeleteTask(const TaskId& id, bool force_delete_subtasks = false) override;
-    ActionResult CompleteTask(const TaskId& id, bool force_complete_subtasks = false) override;
+    TaskActionResult DeleteTask(const TaskId& id, bool force_delete_subtasks = false) override;
+    TaskActionResult CompleteTask(const TaskId& id, bool force_complete_subtasks = false) override;
     bool SetTaskLabel(const TaskId& id, std::string& label) override;
 
     std::vector<TaskTransfer> GetTasks() override;

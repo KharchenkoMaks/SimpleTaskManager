@@ -13,6 +13,7 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 include_directories(src/model/)
 include_directories(src/view/)
 include_directories(src/controller/)
+include_directories(src/)
 
 add_executable(SimpleTaskManager
         src/main.cpp
@@ -72,7 +73,7 @@ add_executable(SimpleTaskManager
         src/view/states/task_input/AddSubTaskState.cpp
         src/view/states/task_input/AddSubTaskState.h
         src/view/states/DeleteTaskState.cpp
-        src/view/states/DeleteTaskState.h)
+        src/view/states/DeleteTaskState.h src/utilities/TaskActionResult.h)
 
 add_executable(SimpleTaskManager_test
         src/model/tasks/Task.cpp

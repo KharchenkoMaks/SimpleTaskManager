@@ -61,7 +61,7 @@ void TaskManager::DeleteSubTasks(const TaskId& parent_id) {
     }
 }
 
-IModel::ActionResult TaskManager::DeleteTask(const TaskId& id, bool force_delete_subtasks) {
+TaskActionResult TaskManager::DeleteTask(const TaskId& id, bool force_delete_subtasks) {
     switch (GetTaskType(id)) {
         case TaskType::kParent: {
             auto task_iterator = tasks_.find(id);
@@ -75,20 +75,20 @@ IModel::ActionResult TaskManager::DeleteTask(const TaskId& id, bool force_delete
                     p.second.GetParentTaskId() == id;
                 };
                 if (std::find_if(subtasks_.begin(), subtasks_.end(), find_undeleted_subtasks) != subtasks_.end()) {
-                    return IModel::ActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
+                    return TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
                 }
             }
 
-            return IModel::ActionResult::SUCCESS;
+            return TaskActionResult::SUCCESS;
         }
         case TaskType::kChild: {
             auto subtask_iterator = subtasks_.find(id);
             subtasks_.erase(subtask_iterator);
             deleted_subtasks_.insert_or_assign(subtask_iterator->first, subtask_iterator->second);
-            return IModel::ActionResult::SUCCESS;
+            return TaskActionResult::SUCCESS;
         }
         default: {
-            return IModel::ActionResult::FAIL_NO_SUCH_TASK;
+            return TaskActionResult::FAIL_NO_SUCH_TASK;
         }
     }
 }
@@ -102,7 +102,7 @@ void TaskManager::CompleteSubTasks(const TaskId& parent_id) {
     }
 }
 
-IModel::ActionResult TaskManager::CompleteTask(const TaskId& id, bool force_complete_subtasks) {
+TaskActionResult TaskManager::CompleteTask(const TaskId& id, bool force_complete_subtasks) {
     switch (GetTaskType(id)){
         case TaskType::kParent: {
             std::optional<Task> task_to_complete = GetTaskById(id);
@@ -115,11 +115,11 @@ IModel::ActionResult TaskManager::CompleteTask(const TaskId& id, bool force_comp
                     return p.second.GetParentTaskId() == id && !p.second.GetTaskParameters().IsCompleted();
                 };
                 if (std::find_if(subtasks_.begin(), subtasks_.end(), find_uncompleted_subtasks) != subtasks_.end()) {
-                    return IModel::ActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
+                    return TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
                 }
             }
 
-            return IModel::ActionResult::SUCCESS;
+            return TaskActionResult::SUCCESS;
         }
         case TaskType::kChild: {
             SubTask subtask = subtasks_.find(id)->second;
@@ -127,10 +127,10 @@ IModel::ActionResult TaskManager::CompleteTask(const TaskId& id, bool force_comp
                                        SubTask::Create(
                                                MakeTaskCompleted(subtask.GetTaskParameters()),
                                                subtask.GetParentTaskId()));
-            return IModel::ActionResult::SUCCESS;
+            return TaskActionResult::SUCCESS;
         }
         default: {
-            return IModel::ActionResult::FAIL_NO_SUCH_TASK;
+            return TaskActionResult::FAIL_NO_SUCH_TASK;
         }
     }
 }
