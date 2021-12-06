@@ -18,8 +18,9 @@ std::optional<std::shared_ptr<WizardStateConsole>> HelpState::Execute(std::share
     GetConsolePrinter()->WriteLine("3. edit");
     GetConsolePrinter()->WriteLine("4. delete");
     GetConsolePrinter()->WriteLine("5. complete");
-    GetConsolePrinter()->WriteLine("6. show");
-    GetConsolePrinter()->WriteLine("7. quit");
+    GetConsolePrinter()->WriteLine("6. set_label");
+    GetConsolePrinter()->WriteLine("7. show");
+    GetConsolePrinter()->WriteLine("8. quit");
 
     return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }
