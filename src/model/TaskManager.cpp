@@ -217,7 +217,7 @@ std::optional<std::vector<TaskTransfer>> TaskManager::GetTaskSubTasks(const Task
     return subtasks;
 }
 
-bool TaskManager::SetTaskLabel(const TaskId& id, std::string& label) {
+bool TaskManager::SetTaskLabel(const TaskId& id, const std::string& label) {
     switch (GetTaskType(id)) {
         case TaskType::kParent: {
             Task task_to_label = GetTaskById(id).value();

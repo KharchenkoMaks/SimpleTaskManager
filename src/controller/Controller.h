@@ -24,6 +24,7 @@ public:
     bool EditTask(const TaskId& task_id, const Task& task);
     TaskActionResult DeleteTask(const TaskId& task_id);
     TaskActionResult CompleteTask(const TaskId& task_id);
+    bool SetTaskLabel(const TaskId& task_id, const std::string& label);
 
     bool DeleteTaskWithSubTasks(const TaskId& task_id);
     bool CompleteTaskWithSubTasks(const TaskId& task_id);

@@ -16,5 +16,5 @@ SetLabelState::SetLabelState(const std::shared_ptr<Controller> &controller,
 }
 
 std::optional<std::shared_ptr<WizardStateConsole>> SetLabelState::Execute(std::shared_ptr<WizardContext> context) {
-    
+
 }

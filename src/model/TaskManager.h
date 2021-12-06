@@ -27,7 +27,7 @@ public:
     bool EditTask(const TaskId& id, const Task& t) override;
     TaskActionResult DeleteTask(const TaskId& id, bool force_delete_subtasks = false) override;
     TaskActionResult CompleteTask(const TaskId& id, bool force_complete_subtasks = false) override;
-    bool SetTaskLabel(const TaskId& id, std::string& label) override;
+    bool SetTaskLabel(const TaskId& id, const std::string& label) override;
 
     std::vector<TaskTransfer> GetTasks() override;
     std::optional<std::vector<TaskTransfer>> GetTaskSubTasks(const TaskId& task_id) override;
