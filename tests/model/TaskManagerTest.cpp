@@ -11,6 +11,7 @@
 #include "DueTime.h"
 #include "abstract_model/TaskTransfer.h"
 #include "tasks/SubTask.h"
+#include "utilities/TaskActionResult.h"
 
 #include <ctime>
 #include <string>
@@ -169,7 +170,7 @@ TEST_F(TaskManagerTest, TryDeletingNonExistentTask_ShouldReturnFalse){
     TaskManager task_manager(std::move(gen));
     TaskId task_id = TaskId::Create(5).value();
     // Act & Assert
-    EXPECT_FALSE(task_manager.DeleteTask(task_id));
+    EXPECT_EQ(task_manager.DeleteTask(task_id), TaskActionResult::FAIL_NO_SUCH_TASK);
 }
 
 // Creating three Tasks
@@ -219,7 +220,7 @@ TEST_F(TaskManagerTest, TryCompletingNonExistentTask_ShouldReturnFalse){
 
     TaskManager task_manager(std::move(gen));
     // Act & Assert
-    EXPECT_FALSE(task_manager.CompleteTask(TaskId::Create(5).value()));
+    EXPECT_EQ(task_manager.CompleteTask(TaskId::Create(5).value()), TaskActionResult::FAIL_NO_SUCH_TASK);
 }
 
 // Adding subtask to task manager
