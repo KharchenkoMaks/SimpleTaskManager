@@ -46,6 +46,19 @@ TaskActionResult Controller::DeleteTask(const TaskId &task_id) {
     return TaskActionResult::FAIL_NO_SUCH_TASK;
 }
 
+bool Controller::DeleteTaskWithSubTasks(const TaskId& task_id) {
+    if (task_validator_->ValidateTaskId(task_id)) {
+        if (model_->IsTaskIdExist(task_id)) {
+            switch (model_->DeleteTask(task_id, true)) {
+                case TaskActionResult::SUCCESS: {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 TaskActionResult Controller::CompleteTask(const TaskId &task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
         if (model_->IsTaskIdExist(task_id)){
@@ -53,6 +66,19 @@ TaskActionResult Controller::CompleteTask(const TaskId &task_id) {
         }
     }
     return TaskActionResult::FAIL_NO_SUCH_TASK;
+}
+
+bool Controller::CompleteTaskWithSubTasks(const TaskId& task_id) {
+    if (task_validator_->ValidateTaskId(task_id)) {
+        if (model_->IsTaskIdExist(task_id)) {
+            switch (model_->CompleteTask(task_id, true)) {
+                case TaskActionResult::SUCCESS: {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 std::optional<Task> Controller::GetTask(const TaskId& task_id) const {

@@ -25,6 +25,9 @@ public:
     TaskActionResult DeleteTask(const TaskId& task_id);
     TaskActionResult CompleteTask(const TaskId& task_id);
 
+    bool DeleteTaskWithSubTasks(const TaskId& task_id);
+    bool CompleteTaskWithSubTasks(const TaskId& task_id);
+
 public:
     virtual std::string GetAllTasks();
     std::optional<Task> GetTask(const TaskId& task_id) const;
