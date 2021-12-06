@@ -37,22 +37,22 @@ bool Controller::EditTask(const TaskId &task_id, const Task &task) {
     return false;
 }
 
-bool Controller::DeleteTask(const TaskId &task_id) {
+TaskActionResult Controller::DeleteTask(const TaskId &task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
         if (model_->IsTaskIdExist(task_id)){
             return model_->DeleteTask(task_id);
         }
     }
-    return false;
+    return TaskActionResult::FAIL_NO_SUCH_TASK;
 }
 
-bool Controller::CompleteTask(const TaskId &task_id) {
+TaskActionResult Controller::CompleteTask(const TaskId &task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
         if (model_->IsTaskIdExist(task_id)){
             return model_->CompleteTask(task_id);
         }
     }
-    return false;
+    return TaskActionResult::FAIL_NO_SUCH_TASK;
 }
 
 std::optional<Task> Controller::GetTask(const TaskId& task_id) const {

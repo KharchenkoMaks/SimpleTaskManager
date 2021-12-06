@@ -9,6 +9,7 @@
 #include "tasks/Task.h"
 #include "abstract_model/IModel.h"
 #include "TaskValidator.h"
+#include "utilities/TaskActionResult.h"
 
 #include <memory>
 #include <utility>
@@ -21,8 +22,8 @@ public:
     std::optional<TaskId> AddTask(const Task& task);
     std::optional<TaskId> AddSubTask(const Task& task, const TaskId& parent_id);
     bool EditTask(const TaskId& task_id, const Task& task);
-    bool DeleteTask(const TaskId& task_id);
-    bool CompleteTask(const TaskId& task_id);
+    TaskActionResult DeleteTask(const TaskId& task_id);
+    TaskActionResult CompleteTask(const TaskId& task_id);
 
 public:
     virtual std::string GetAllTasks();
