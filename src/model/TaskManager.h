@@ -55,7 +55,8 @@ private:
     Task SetLabel(const Task& task, const std::string& label);
 private:
     void DeleteSubTasks(const TaskId& parent_id);
-    bool IsAllSubTasksDeleted(const TaskId& parent_id);
+
+    void CompleteSubTasks(const TaskId& parent_id);
 private:
     std::map<TaskId, Task> tasks_;
     std::map<TaskId, SubTask> subtasks_;

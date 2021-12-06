@@ -53,26 +53,12 @@ bool TaskManager::EditTask(const TaskId& id, const Task& t) {
 }
 
 void TaskManager::DeleteSubTasks(const TaskId& parent_id) {
-    std::optional<std::vector<TaskId>> tasks_to_delete = GetAllTaskSubTaskIds(parent_id);
-    if (tasks_to_delete.has_value()) {
-        for (const auto& subtask_id : tasks_to_delete.value()) {
-            std::optional<SubTask> subtask = GetSubTaskById(subtask_id);
-            if (subtask.has_value()) {
-                subtasks_.erase(subtask_id);
-                deleted_subtasks_.insert_or_assign(subtask_id, subtask.value());
-            }
+    std::optional<std::vector<TaskId>> subtasks_to_delete = GetAllTaskSubTaskIds(parent_id);
+    if (subtasks_to_delete.has_value()) {
+        for (const auto& subtask_id : subtasks_to_delete.value()) {
+            DeleteTask(subtask_id);
         }
     }
-}
-
-bool TaskManager::IsAllSubTasksDeleted(const TaskId &parent_id) {
-    std::optional<std::vector<TaskId>> subtasks = GetAllTaskSubTaskIds(parent_id);
-    if (subtasks.has_value()) {
-        if (subtasks.value().size() > 0) {
-            return false;
-        }
-    }
-    return true;
 }
 
 IModel::ActionResult TaskManager::DeleteTask(const TaskId& id, bool force_delete_subtasks) {
@@ -85,7 +71,10 @@ IModel::ActionResult TaskManager::DeleteTask(const TaskId& id, bool force_delete
             if (force_delete_subtasks) {
                 DeleteSubTasks(task_iterator->first);
             } else {
-                if (!IsAllSubTasksDeleted(task_iterator->first)) {
+                auto find_undeleted_subtasks = [&id](std::pair<TaskId, SubTask> p) {
+                    p.second.GetParentTaskId() == id;
+                };
+                if (std::find_if(subtasks_.begin(), subtasks_.end(), find_undeleted_subtasks) != subtasks_.end()) {
                     return IModel::ActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
                 }
             }
@@ -104,11 +93,32 @@ IModel::ActionResult TaskManager::DeleteTask(const TaskId& id, bool force_delete
     }
 }
 
+void TaskManager::CompleteSubTasks(const TaskId& parent_id) {
+    std::optional<std::vector<TaskId>> subtasks_to_complete = GetAllTaskSubTaskIds(parent_id);
+    if (subtasks_to_complete.has_value()) {
+        for (const auto& subtask_id : subtasks_to_complete.value()) {
+            CompleteTask(subtask_id);
+        }
+    }
+}
+
 IModel::ActionResult TaskManager::CompleteTask(const TaskId& id, bool force_complete_subtasks) {
     switch (GetTaskType(id)){
         case TaskType::kParent: {
             std::optional<Task> task_to_complete = GetTaskById(id);
             tasks_.insert_or_assign(id, MakeTaskCompleted(task_to_complete.value()));
+
+            if (force_complete_subtasks) {
+                CompleteSubTasks(id);
+            } else {
+                auto find_uncompleted_subtasks = [&id](std::pair<TaskId, SubTask> p){
+                    return p.second.GetParentTaskId() == id && !p.second.GetTaskParameters().IsCompleted();
+                };
+                if (std::find_if(subtasks_.begin(), subtasks_.end(), find_uncompleted_subtasks) != subtasks_.end()) {
+                    return IModel::ActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
+                }
+            }
+
             return IModel::ActionResult::SUCCESS;
         }
         case TaskType::kChild: {
