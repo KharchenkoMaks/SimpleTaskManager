@@ -187,6 +187,9 @@ std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextS
 
 std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextState(const SetLabelState &state, const WizardStatesFactory::MoveType move_type) {
     switch (move_type) {
+        case MoveType::ERROR: {
+            return GetLazyStateByStatesEnum(States::kSetLabel);
+        }
         default: {
             return GetLazyStateByStatesEnum(States::kRoot);
         }
