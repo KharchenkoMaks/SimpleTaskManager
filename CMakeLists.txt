@@ -73,7 +73,7 @@ add_executable(SimpleTaskManager
         src/view/states/task_input/AddSubTaskState.cpp
         src/view/states/task_input/AddSubTaskState.h
         src/view/states/DeleteTaskState.cpp
-        src/view/states/DeleteTaskState.h src/utilities/TaskActionResult.h)
+        src/view/states/DeleteTaskState.h src/utilities/TaskActionResult.h src/view/states/task_input/SetLabelState.cpp src/view/states/task_input/SetLabelState.h)
 
 add_executable(SimpleTaskManager_test
         src/model/tasks/Task.cpp
