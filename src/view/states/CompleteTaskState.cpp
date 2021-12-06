@@ -40,7 +40,7 @@ std::optional<std::shared_ptr<WizardStateConsole>> CompleteTaskState::Execute(st
                 GetConsolePrinter()->WriteLine("Completed task with it subtasks.");
                 return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
             } else {
-                GetConsolePrinter()->WriteError("Task wasn't completed because of uncompleted subtasks");
+                GetConsolePrinter()->WriteLine("Task wasn't completed because of uncompleted subtasks");
                 return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
             }
         }

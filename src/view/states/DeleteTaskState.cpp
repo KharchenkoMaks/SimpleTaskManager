@@ -24,10 +24,24 @@ std::optional<std::shared_ptr<WizardStateConsole>> DeleteTaskState::Execute(std:
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    if (!GetController()->DeleteTask(task_id.task_id_.value())) {
-        GetConsolePrinter()->WriteError("Task wasn't deleted, try again.");
-        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+    switch (GetController()->DeleteTask(task_id.task_id_.value())) {
+        case TaskActionResult::SUCCESS: {
+            GetConsolePrinter()->WriteLine("Task was successfully deleted.");
+            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        }
+        case TaskActionResult::FAIL_NO_SUCH_TASK: {
+            GetConsolePrinter()->WriteError("No task was found with such task id");
+            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+        }
+        case TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS: {
+            if (UserConfirm("Found subtasks for this task, are you sure you want to delete them?")) {
+                GetController()->DeleteTaskWithSubTasks(task_id.task_id_.value());
+                GetConsolePrinter()->WriteLine("Deleted task with it's subtasks.");
+                return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+            } else {
+                GetConsolePrinter()->WriteLine("Task wasn't deleted.");
+                return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+            }
+        }
     }
-
-    return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
 }

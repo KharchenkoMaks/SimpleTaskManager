@@ -53,6 +53,9 @@ bool Controller::DeleteTaskWithSubTasks(const TaskId& task_id) {
                 case TaskActionResult::SUCCESS: {
                     return true;
                 }
+                default: {
+                    return false;
+                }
             }
         }
     }
@@ -74,6 +77,9 @@ bool Controller::CompleteTaskWithSubTasks(const TaskId& task_id) {
             switch (model_->CompleteTask(task_id, true)) {
                 case TaskActionResult::SUCCESS: {
                     return true;
+                }
+                default: {
+                    return false;
                 }
             }
         }
