@@ -10,6 +10,7 @@
 #include "../mocks/MockConsoleReader.h"
 #include "../mocks/MockTaskValidator.h"
 #include "../mocks/MockModel.h"
+#include "../mocks/MockWizardContext.h"
 
 using ::testing::Return;
 
@@ -21,6 +22,7 @@ public:
     std::shared_ptr<MockModel> model_;
     std::shared_ptr<MockController> controller_;
     std::shared_ptr<MockWizardStatesFactory> factory_;
+    std::shared_ptr<MockWizardContext> context_;
 
     void SetUp() override {
         printer_ = std::make_shared<MockConsolePrinter>();
@@ -29,23 +31,31 @@ public:
         model_ = std::make_unique<MockModel>();
         controller_ = std::make_shared<MockController>(std::make_unique<MockModel>(), std::make_unique<MockTaskValidator>());
         factory_ = std::make_shared<MockWizardStatesFactory>(controller_, printer_, reader_);
+        context_ = std::make_shared<MockWizardContext>();
     };
 
 };
 
-TEST_F(StatesTests, InputtingCommandsInRootState_ShouldCallStatesFactoryGetStateByCommandMethod) {
+// RootState receives nullopt from factory
+// Should call GetNextState with MoveType::ERROR
+TEST_F(StatesTests, ExecuteRootStateReceivesNulloptFromFactory_ShouldChangeStateToRoot) {
     // Arrange
     StatesTests::SetUp();
     RootState root_state(factory_, printer_, reader_);
-    EXPECT_CALL(*factory_, GetStateByCommand(testing::_))
-        .Times(1)
-        .WillOnce(Return(std::nullopt));
+    // Assert
+    // Invites user to input command
     EXPECT_CALL(*printer_, Write("> ")).Times(1);
+    // Receives cmd
     EXPECT_CALL(*reader_, ReadLine())
             .Times(1)
-            .WillOnce(Return("add"));
+            .WillOnce(Return("cmd"));
+    // Gives received command to factory and receives nullopt
+    EXPECT_CALL(*factory_, GetStateByCommand("cmd"))
+        .Times(1)
+        .WillOnce(Return(std::nullopt));
+    // Writes error message and call next state with MoveType::ERROR
     EXPECT_CALL(*printer_, WriteError("Unknown command! Use help.")).Times(1);
     EXPECT_CALL(*factory_, GetNextState(testing::An<const RootState&>(), WizardStatesFactory::MoveType::ERROR)).Times(1);
-    // TODO: Make MockWizardContext
-    root_state.Execute(std::make_shared<WizardContext>());
+    // Act
+    root_state.Execute(context_);
 }

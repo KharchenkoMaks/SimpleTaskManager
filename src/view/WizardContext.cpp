@@ -10,7 +10,7 @@ WizardContext::WizardContext() :
 
 }
 
-std::optional<Task> WizardContext::GetTask() const {
+std::optional<Task> WizardContext::GetTask() {
     return added_task_;
 }
 
@@ -64,7 +64,7 @@ TaskId WizardContext::CreateDefaultTaskId() {
     return TaskId::Create(0).value();
 }
 
-std::optional<TaskId> WizardContext::GetTaskId() const {
+std::optional<TaskId> WizardContext::GetTaskId() {
     return editing_task_id_;
 }
 

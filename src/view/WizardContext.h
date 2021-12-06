@@ -24,10 +24,10 @@ public:
     virtual bool AddTaskPriority(Task::Priority priority);
     // Returns false if due time isn't added
     virtual bool AddTaskDueTime(DueTime due_time);
-    virtual std::optional<Task> GetTask() const;
+    virtual std::optional<Task> GetTask();
 
     virtual void SetEditingTask(const TaskId& task_id, const Task& task);
-    virtual std::optional<TaskId> GetTaskId() const;
+    virtual std::optional<TaskId> GetTaskId();
 public:
     virtual ~WizardContext() = default;
 private:
