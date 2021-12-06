@@ -32,6 +32,6 @@ std::shared_ptr<WizardStatesFactory> WizardStateConsole::GetStatesFactory() cons
 }
 
 bool WizardStateConsole::UserConfirm(const std::string& question_string) {
-    std::string users_answer = GetUserInput(question_string);
+    std::string users_answer = GetUserInput(question_string + " y/n");
     return users_answer == "Y" || users_answer == "y";
 }
