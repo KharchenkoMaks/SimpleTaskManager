@@ -75,7 +75,7 @@ bool TaskManager::IsAllSubTasksDeleted(const TaskId &parent_id) {
     return true;
 }
 
-bool TaskManager::DeleteTask(const TaskId& id, bool force_delete_subtasks) {
+IModel::ActionResult TaskManager::DeleteTask(const TaskId& id, bool force_delete_subtasks) {
     switch (GetTaskType(id)) {
         case TaskType::kParent: {
             auto task_iterator = tasks_.find(id);
@@ -85,29 +85,31 @@ bool TaskManager::DeleteTask(const TaskId& id, bool force_delete_subtasks) {
             if (force_delete_subtasks) {
                 DeleteSubTasks(task_iterator->first);
             } else {
-                return IsAllSubTasksDeleted(task_iterator->first);
+                if (!IsAllSubTasksDeleted(task_iterator->first)) {
+                    return IModel::ActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
+                }
             }
 
-            return true;
+            return IModel::ActionResult::SUCCESS;
         }
         case TaskType::kChild: {
             auto subtask_iterator = subtasks_.find(id);
             subtasks_.erase(subtask_iterator);
             deleted_subtasks_.insert_or_assign(subtask_iterator->first, subtask_iterator->second);
-            return true;
+            return IModel::ActionResult::SUCCESS;
         }
         default: {
-            return false;
+            return IModel::ActionResult::FAIL_NO_SUCH_TASK;
         }
     }
 }
 
-bool TaskManager::CompleteTask(const TaskId& id, bool force_complete_subtasks) {
+IModel::ActionResult TaskManager::CompleteTask(const TaskId& id, bool force_complete_subtasks) {
     switch (GetTaskType(id)){
         case TaskType::kParent: {
             std::optional<Task> task_to_complete = GetTaskById(id);
             tasks_.insert_or_assign(id, MakeTaskCompleted(task_to_complete.value()));
-            return true;
+            return IModel::ActionResult::SUCCESS;
         }
         case TaskType::kChild: {
             SubTask subtask = subtasks_.find(id)->second;
@@ -115,10 +117,10 @@ bool TaskManager::CompleteTask(const TaskId& id, bool force_complete_subtasks) {
                                        SubTask::Create(
                                                MakeTaskCompleted(subtask.GetTaskParameters()),
                                                subtask.GetParentTaskId()));
-            return true;
+            return IModel::ActionResult::SUCCESS;
         }
         default: {
-            return false;
+            return IModel::ActionResult::FAIL_NO_SUCH_TASK;
         }
     }
 }
