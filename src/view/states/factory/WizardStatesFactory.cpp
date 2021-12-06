@@ -30,6 +30,8 @@ std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetState
         return GetLazyStateByStatesEnum(States::kHelp);
     } else if (command == "quit") {
         return GetLazyStateByStatesEnum(States::kQuit);
+    } else if (command == "set_label") {
+        return GetLazyStateByStatesEnum(States::kSetLabel);
     } else {
         return std::nullopt;
     }
@@ -183,6 +185,14 @@ std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextS
     }
 }
 
+std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextState(const SetLabelState &state, const WizardStatesFactory::MoveType move_type) {
+    switch (move_type) {
+        default: {
+            return GetLazyStateByStatesEnum(States::kRoot);
+        }
+    }
+}
+
 std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetLazyStateByStatesEnum(States state) {
     switch (state) {
         case States::kRoot: {
@@ -256,6 +266,12 @@ std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetLazyStateByStatesEnu
                 delete_state_ = std::make_shared<DeleteTaskState>(controller_, shared_from_this(), printer_, reader_);
             }
             return delete_state_;
+        }
+        case States::kSetLabel: {
+            if (!set_label_state_) {
+                set_label_state_ = std::make_shared<SetLabelState>(controller_, shared_from_this(), printer_, reader_);
+            }
+            return set_label_state_;
         }
     }
 }
