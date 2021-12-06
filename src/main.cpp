@@ -60,4 +60,4 @@ int main() {
 // TODO_DONE: Rework GetIdFromUser method to get invitation string and do controller checks - Done 02.12.2021
 // TODO_DONE: Make TaskId::Create not throw exception on incorrect string - Done 03.12.2021
 // TODO_DONE: Delete NullTaskId constant - Done 02.12.2021
-// TODO: Make label command
+// TODO_DONE: Make label command - Done 06.12.2021
