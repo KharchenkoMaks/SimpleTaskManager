@@ -68,7 +68,7 @@ TaskActionResult TaskManager::DeleteTask(const TaskId& id, bool force_delete_sub
                 DeleteSubTasks(id);
             } else {
                 auto find_undeleted_subtasks = [&id](std::pair<TaskId, SubTask> p) {
-                    p.second.GetParentTaskId() == id;
+                    return p.second.GetParentTaskId() == id;
                 };
                 if (std::find_if(subtasks_.begin(), subtasks_.end(), find_undeleted_subtasks) != subtasks_.end()) {
                     return TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
