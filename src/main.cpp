@@ -49,8 +49,8 @@ int main() {
 // TODO_DONE: Implement delete command - Done 02.12.2021
 // TODO_DONE: Implement show command - Done 30.11.2021
 // TODO_DONE: Implement add_subtask command - Done 02.12.2021
-// TODO: Make complete method work with subtasks
-// TODO: Make delete method work with subtasks
+// TODO_DONE: Make complete method work with subtasks - Done 06.12.2021
+// TODO_DONE: Make delete method work with subtasks - Done 06.12.2021
 // TODO: AddTask WizardStateMachine for states that starts state machine?
 // TODO_DONE: Make DueTime validator in controller - Done 01.12.2021
 // TODO_DONE: Get rid of exceptions in task manager API - Done 01.12.2021
