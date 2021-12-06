@@ -19,15 +19,17 @@ public:
     WizardContext();
 public:
     // Returns false if title isn't added
-    bool AddTaskTitle(const std::string& title);
+    virtual bool AddTaskTitle(const std::string& title);
     // Returns false if priority isn't added
-    bool AddTaskPriority(Task::Priority priority);
+    virtual bool AddTaskPriority(Task::Priority priority);
     // Returns false if due time isn't added
-    bool AddTaskDueTime(DueTime due_time);
-    std::optional<Task> GetTask() const;
+    virtual bool AddTaskDueTime(DueTime due_time);
+    virtual std::optional<Task> GetTask() const;
 
-    void SetEditingTask(const TaskId& task_id, const Task& task);
-    std::optional<TaskId> GetTaskId() const;
+    virtual void SetEditingTask(const TaskId& task_id, const Task& task);
+    virtual std::optional<TaskId> GetTaskId() const;
+public:
+    virtual ~WizardContext() = default;
 private:
     Task CreateDefaultTask();
     TaskId CreateDefaultTaskId();
