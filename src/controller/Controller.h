@@ -24,7 +24,7 @@ public:
     bool DeleteTask(const TaskId& task_id);
     bool CompleteTask(const TaskId& task_id);
 
-    std::string GetAllTasks();
+    virtual std::string GetAllTasks();
 public:
     std::optional<Task> GetTask(const TaskId& task_id) const;
 public:
