@@ -42,6 +42,8 @@ TEST_F(StatesTests, ExecuteRootStateReceivesNulloptFromFactory_ShouldChangeState
     // Arrange
     StatesTests::SetUp();
     RootState root_state(factory_, printer_, reader_);
+    std::optional<std::shared_ptr<WizardStateConsole>> expected_return =
+            std::make_shared<RootState>(factory_, printer_, reader_);
     // Assert
     // Invites user to input command
     EXPECT_CALL(*printer_, Write("> ")).Times(1);
@@ -55,7 +57,11 @@ TEST_F(StatesTests, ExecuteRootStateReceivesNulloptFromFactory_ShouldChangeState
         .WillOnce(Return(std::nullopt));
     // Writes error message and call next state with MoveType::ERROR
     EXPECT_CALL(*printer_, WriteError("Unknown command! Use help.")).Times(1);
-    EXPECT_CALL(*factory_, GetNextState(testing::An<const RootState&>(), WizardStatesFactory::MoveType::ERROR)).Times(1);
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const RootState&>(), WizardStatesFactory::MoveType::ERROR))
+        .Times(1)
+        .WillOnce(Return(expected_return));
     // Act
-    root_state.Execute(context_);
+    std::optional<std::shared_ptr<WizardStateConsole>> actual_return = root_state.Execute(context_);
+    // Assert
+    EXPECT_EQ(expected_return, actual_return);
 }
