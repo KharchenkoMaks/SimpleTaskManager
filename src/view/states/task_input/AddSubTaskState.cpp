@@ -29,16 +29,19 @@ std::optional<std::shared_ptr<WizardStateConsole>> AddSubTaskState::Execute(std:
     std::shared_ptr<WizardContext> context_with_added_task = RunStateMachine(std::make_shared<WizardContext>(),
                     GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
 
-    std::optional<TaskId> added_subtask_id = GetController()->AddSubTask(context_with_added_task->GetTask().value(),
-                                                                         parent_task_id.task_id_.value());
-    if (added_subtask_id.has_value()) {
-        GetConsolePrinter()->WriteLine("SubTask was successfully added. Task id: " +
-                                        std::to_string(added_subtask_id.value().GetId()));
-
-    } else {
-        GetConsolePrinter()->WriteError("Given subtask wasn't saved, try again.");
-        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+    if (context_with_added_task->GetTask().has_value()) {
+        std::optional<TaskId> added_subtask_id = GetController()->AddSubTask(context_with_added_task->GetTask().value(),
+                                                                             parent_task_id.task_id_.value());
+        if (added_subtask_id.has_value()) {
+            ShowAddedTaskId(added_subtask_id.value());
+            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        }
     }
 
-    return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+    GetConsolePrinter()->WriteError("Given subtask wasn't saved, try again.");
+    return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+}
+
+void AddSubTaskState::ShowAddedTaskId(const TaskId& task_id) {
+    GetConsolePrinter()->WriteLine("Subtask was successfully added. Task id: " + std::to_string(task_id.GetId()));
 }

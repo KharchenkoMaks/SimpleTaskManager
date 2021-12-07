@@ -76,7 +76,7 @@ std::optional<std::shared_ptr<WizardStateConsole>> WizardStatesFactory::GetNextS
             return GetLazyStateByStatesEnum(States::kRoot);
         }
         case MoveType::ERROR: {
-            return GetLazyStateByStatesEnum(States::kAddSubTask);
+            return GetLazyStateByStatesEnum(States::kRoot);
         }
         case MoveType::NEXT: {
             return GetLazyStateByStatesEnum(States::kInputTaskTitle);
