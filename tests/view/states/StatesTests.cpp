@@ -308,3 +308,71 @@ TEST_F(StatesTests, InputTaskTitleExecute_ShouldAskUserToEditTitleSetDefaultValu
     // Act
     input_title_state.Execute(context_);
 }
+
+TEST_F(StatesTests, InputTaskDueDateExecute_ShouldAskUserForDueDateAndWriteToContext) {
+    // Arrange
+    this->SetUp();
+    InputTaskDueDateState input_due_date_state {factory_, printer_, reader_};
+    const std::string expected_input_due_date = "15:00 01.01.2025";
+    DueTime expected_due_time = DueTime::Create(expected_input_due_date).value();
+    std::optional<std::shared_ptr<WizardStateConsole>> expected_return = std::nullopt;
+    // Assert
+    EXPECT_CALL(*context_, GetTaskId()).Times(1).WillOnce(Return(std::nullopt));
+    EXPECT_CALL(*printer_, Write("Due Date, format: 12:00 01.01.2000> ")).Times(1);
+    EXPECT_CALL(*reader_, ReadLine()).Times(1).WillOnce(Return(expected_input_due_date));
+    EXPECT_CALL(*context_, AddTaskDueTime(expected_due_time)).Times(1);
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const InputTaskDueDateState&>(), WizardStatesFactory::MoveType::NEXT))
+        .Times(1)
+        .WillOnce(Return(std::nullopt));
+    // Act
+    std::optional<std::shared_ptr<WizardStateConsole>> actual_return = input_due_date_state.Execute(context_);
+    // Assert
+    EXPECT_EQ(expected_return, actual_return);
+}
+
+TEST_F(StatesTests, InputTaskDueDateExecute_ShouldAskUserToEdit) {
+    // Arrange
+    this->SetUp();
+    std::optional<std::shared_ptr<WizardStateConsole>> expected_return =
+            std::make_shared<InputTaskDueDateState>(nullptr, nullptr, nullptr);
+    InputTaskDueDateState input_due_date_state {factory_, printer_, reader_};
+    DueTime old_due_time = DueTime::Create("15:00 01.01.2025").value();
+    std::string new_input = "guuuuuuuu";
+    // Assert
+    EXPECT_CALL(*context_, GetTaskId()).Times(1).WillOnce(Return(TaskId::Create(10).value()));
+    EXPECT_CALL(*context_, GetTask())
+        .Times(1)
+        .WillOnce(Return(Task::Create("t", Task::Priority::NONE, old_due_time)));
+    EXPECT_CALL(*printer_, Write("Due Date, default: " + old_due_time.GetTimeString() + "> ")).Times(1);
+    EXPECT_CALL(*reader_, ReadLine()).Times(1).WillOnce(Return(new_input));
+    EXPECT_CALL(*printer_, WriteError("Wrong due date was given, try again!"));
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const InputTaskDueDateState&>(), WizardStatesFactory::MoveType::ERROR))
+        .Times(1)
+        .WillOnce(Return(expected_return));
+    // Act
+    std::optional<std::shared_ptr<WizardStateConsole>> actual_return = input_due_date_state.Execute(context_);
+    // Assert
+    EXPECT_EQ(expected_return, actual_return);
+}
+
+TEST_F(StatesTests, InputTaskDueDateExecute_ShouldSetPreviousValueOnEmptyUserInput) {
+    // Arrange
+    this->SetUp();
+    InputTaskDueDateState input_due_date_state {factory_, printer_, reader_};
+    DueTime expected_due_time = DueTime::Create("15:00 01.01.2025").value();
+    std::optional<std::shared_ptr<WizardStateConsole>> expected_return = std::nullopt;
+    // Assert
+    EXPECT_CALL(*context_, GetTaskId()).Times(1).WillOnce(Return(TaskId::Create(10).value()));
+    EXPECT_CALL(*context_, GetTask())
+        .Times(1)
+        .WillOnce(Return(Task::Create("t", Task::Priority::NONE, expected_due_time)));
+    EXPECT_CALL(*reader_, ReadLine()).Times(1).WillOnce(Return(""));
+    EXPECT_CALL(*context_, AddTaskDueTime(expected_due_time)).Times(1);
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const InputTaskDueDateState&>(), WizardStatesFactory::MoveType::NEXT))
+        .Times(1)
+        .WillOnce(Return(std::nullopt));
+    // Act
+    std::optional<std::shared_ptr<WizardStateConsole>> actual_return = input_due_date_state.Execute(context_);
+    // Assert
+    EXPECT_EQ(expected_return, actual_return);
+}
