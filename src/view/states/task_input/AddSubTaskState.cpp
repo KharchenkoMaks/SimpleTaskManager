@@ -21,7 +21,7 @@ std::optional<std::shared_ptr<WizardStateConsole>> AddSubTaskState::Execute(std:
     if (parent_task_id.answer_status_ == WizardStateController::TaskIdFromUser::AnswerStatus::kNotValid){
         GetConsolePrinter()->WriteError("Wrong task id was given, try again!");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
-    } else if (parent_task_id.answer_status_ == WizardStateController::TaskIdFromUser::AnswerStatus::kNotValid) {
+    } else if (parent_task_id.answer_status_ == WizardStateController::TaskIdFromUser::AnswerStatus::kNoSuchTask) {
         GetConsolePrinter()->WriteError("No task with such task id was found, try again.");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }

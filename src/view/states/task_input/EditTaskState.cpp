@@ -19,10 +19,10 @@ EditTaskState::EditTaskState(const std::shared_ptr<ConsoleStateMachine>& state_m
 
 std::optional<std::shared_ptr<WizardStateConsole>> EditTaskState::Execute(std::shared_ptr<WizardContext> context) {
     WizardStateController::TaskIdFromUser editing_task_id = GetTaskIdFromUser();
-    if (editing_task_id.answer_status_ == WizardStateController::TaskIdFromUser::AnswerStatus::kNoSuchTask) {
+    if (editing_task_id.answer_status_ == WizardStateController::TaskIdFromUser::AnswerStatus::kNotValid) {
         GetConsolePrinter()->WriteError("Wrong task id was given, try again!");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
-    } else if (editing_task_id.answer_status_ == WizardStateController::TaskIdFromUser::AnswerStatus::kNotValid) {
+    } else if (editing_task_id.answer_status_ == WizardStateController::TaskIdFromUser::AnswerStatus::kNoSuchTask) {
         GetConsolePrinter()->WriteError("No task with such task id was found, try again.");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
