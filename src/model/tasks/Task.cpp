@@ -36,7 +36,7 @@ std::string Task::to_string() const {
     }
 
     if (!label_.empty()) {
-        answer += ",Label: " + label_;
+        answer += ", Label: " + label_;
     }
     return answer;
 }

@@ -88,7 +88,7 @@ TEST_F(TaskTest, usingToStringTaskMethod_shouldReturnCorrectString){
     tasks.push_back(Task::Create("title", Task::Priority::MEDIUM, some_time));
     tasks.push_back(Task::Create("title", Task::Priority::LOW, some_time));
     tasks.push_back(Task::Create("title", Task::Priority::NONE, some_time));
-    std::string priorities[priorities_count] { "High", "Medium", "Low", "kNone" };
+    std::string priorities[priorities_count] { "High", "Medium", "Low", "None" };
     // Act & Assert
     for (int i = 0; i < priorities_count; ++i) {
         std::string expected_not_completed = tasks[i].GetTitle() + ", Priority: " +

@@ -25,6 +25,10 @@ file(GLOB_RECURSE TaskManager_SRCS CONFIGURE_DEPENDS
         "src/utilities/*.h"
         "src/utilities/*.cpp")
 
+file(GLOB_RECURSE TaskManager_TEST CONFIGURE_DEPENDS
+        "tests/*.h"
+        "tests/*.cpp")
+
 list(REMOVE_ITEM TaskManager_SRCS "main.cpp")
 
 add_executable(SimpleTaskManager
@@ -33,19 +37,6 @@ add_executable(SimpleTaskManager
 
 add_executable(SimpleTaskManager_test
         ${TaskManager_SRCS}
-        tests/model/tasks/TaskTest.cpp
-        tests/model/TaskIdTest.cpp
-        tests/model/IdGeneratorTest.cpp
-        tests/model/TaskManagerTest.cpp
-        tests/model/DueTimeTest.cpp
-        tests/model/tasks/SubTaskTest.cpp
-        tests/view/states/StatesTests.cpp
-        tests/view/mocks/MockWizardStatesFactory.h
-        tests/view/mocks/MockController.h
-        tests/view/mocks/MockTaskValidator.h
-        tests/view/mocks/MockModel.h
-        tests/view/mocks/MockConsolePrinter.h
-        tests/view/mocks/MockConsoleReader.h
-        tests/view/mocks/MockWizardContext.h tests/view/mocks/MockConsoleStateMachine.h)
+        ${TaskManager_TEST})
 
 target_link_libraries(SimpleTaskManager_test GTest::gtest GTest::gmock GTest::gmock_main)
