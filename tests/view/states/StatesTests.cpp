@@ -13,6 +13,8 @@
 #include "../mocks/MockWizardContext.h"
 #include "../mocks/MockConsoleStateMachine.h"
 
+#include "DueTime.h"
+
 using ::testing::Return;
 
 class StatesTests : public ::testing::Test {
@@ -222,7 +224,7 @@ TEST_F(StatesTests, AddTaskExecute_ShouldRunStateMachineAndPrintError) {
             std::make_shared<RootState>(nullptr, nullptr, nullptr);
     std::optional<std::shared_ptr<WizardStateConsole>> expected_initial_state =
             std::make_shared<InputTaskTitleState>(nullptr, nullptr, nullptr);
-    // Act
+    // Assert
     // Expect call factory GetNextState to get initial state for inner state machine
     EXPECT_CALL(*factory_, GetNextState(testing::An<const AddTaskState&>(), WizardStatesFactory::MoveType::NEXT))
             .Times(1)
@@ -239,4 +241,70 @@ TEST_F(StatesTests, AddTaskExecute_ShouldRunStateMachineAndPrintError) {
     std::optional<std::shared_ptr<WizardStateConsole>> actual_return = add_task_state_.Execute(nullptr);
     // Expect Execute method return shared_ptr from factory GetNextState method
     EXPECT_EQ(expected_return, actual_return);
+}
+
+TEST_F(StatesTests, InputTaskTitleExecute_ShouldAskUserForTitleAndWriteItToContext) {
+    // Arrange
+    this->SetUp();
+    InputTaskTitleState input_title_state {factory_, printer_, reader_};
+    const std::string expected_input_title = "task title";
+    std::optional<std::shared_ptr<WizardStateConsole>> expected_return =
+            std::make_shared<InputTaskPriorityState>(nullptr, nullptr, nullptr);
+    // Assert
+    EXPECT_CALL(*context_, GetTaskId()).Times(1).WillOnce(Return(std::nullopt));
+    EXPECT_CALL(*printer_, Write("Title> ")).Times(1);
+    EXPECT_CALL(*reader_, ReadLine()).Times(1).WillOnce(Return(expected_input_title));
+    EXPECT_CALL(*context_, AddTaskTitle(expected_input_title)).Times(1).WillOnce(Return(true));
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const InputTaskTitleState&>(), WizardStatesFactory::MoveType::NEXT))
+            .Times(1)
+            .WillOnce(Return(expected_return));
+    // Act
+    std::optional<std::shared_ptr<WizardStateConsole>> actual_return = input_title_state.Execute(context_);
+    // Assert
+    EXPECT_EQ(expected_return, actual_return);
+}
+
+TEST_F(StatesTests, InputTaskTitleExecute_ShouldAskUserToEditTitle) {
+    // Arrange
+    this->SetUp();
+    InputTaskTitleState input_title_state {factory_, printer_, reader_};
+    const std::string expected_old_title = "old title";
+    const std::string expected_input_title = "task title";
+    std::optional<std::shared_ptr<WizardStateConsole>> expected_return =
+            std::make_shared<InputTaskTitleState>(nullptr, nullptr, nullptr);
+    // Assert
+    EXPECT_CALL(*context_, GetTaskId()).Times(1).WillOnce(Return(TaskId::Create(5).value()));
+    EXPECT_CALL(*context_, GetTask())
+        .Times(1)
+        .WillOnce(Return(Task::Create(expected_old_title, Task::Priority::NONE, DueTime::Create(time(0) + 1000))));
+    EXPECT_CALL(*printer_, WriteLine("Leave empty for default value.")).Times(1);
+    EXPECT_CALL(*printer_, Write("Title, default: " + expected_old_title + "> ")).Times(1);
+    EXPECT_CALL(*reader_, ReadLine()).Times(1).WillOnce(Return(expected_input_title));
+    EXPECT_CALL(*context_, AddTaskTitle(expected_input_title)).Times(1).WillOnce(Return(false));
+    EXPECT_CALL(*printer_, WriteError("Task title was wrong, please, try again!")).Times(1);
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const InputTaskTitleState&>(), WizardStatesFactory::MoveType::ERROR))
+            .Times(1)
+            .WillOnce(Return(expected_return));
+    // Act
+    std::optional<std::shared_ptr<WizardStateConsole>> actual_return = input_title_state.Execute(context_);
+    // Assert
+    EXPECT_EQ(expected_return, actual_return);
+}
+
+TEST_F(StatesTests, InputTaskTitleExecute_ShouldAskUserToEditTitleSetDefaultValue) {
+    // Arrange
+    this->SetUp();
+    InputTaskTitleState input_title_state {factory_, printer_, reader_};
+    const std::string expected_old_title = "old title";
+    // Assert
+    EXPECT_CALL(*context_, GetTaskId()).Times(1).WillOnce(Return(TaskId::Create(5).value()));
+    EXPECT_CALL(*context_, GetTask())
+            .Times(1)
+            .WillOnce(Return(Task::Create(expected_old_title, Task::Priority::NONE, DueTime::Create(time(0) + 1000))));
+    EXPECT_CALL(*printer_, WriteLine("Leave empty for default value.")).Times(1);
+    EXPECT_CALL(*printer_, Write("Title, default: " + expected_old_title + "> ")).Times(1);
+    EXPECT_CALL(*reader_, ReadLine()).Times(1).WillOnce(Return(""));
+    EXPECT_CALL(*context_, AddTaskTitle(expected_old_title)).Times(1).WillOnce(Return(true));
+    // Act
+    input_title_state.Execute(context_);
 }
