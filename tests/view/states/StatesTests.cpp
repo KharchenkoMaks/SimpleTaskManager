@@ -213,3 +213,30 @@ TEST_F(StatesTests, AddTaskExecute_ShouldRunStateMachineAndGiveTaskToController)
     // Expect Execute method return shared_ptr from factory GetNextState method
     EXPECT_EQ(expected_return, actual_return);
 }
+
+TEST_F(StatesTests, AddTaskExecute_ShouldRunStateMachineAndPrintError) {
+    // Arrange
+    this->SetUp();
+    AddTaskState add_task_state_ {state_machine_, controller_, factory_, printer_, nullptr };
+    std::optional<std::shared_ptr<WizardStateConsole>> expected_return =
+            std::make_shared<RootState>(nullptr, nullptr, nullptr);
+    std::optional<std::shared_ptr<WizardStateConsole>> expected_initial_state =
+            std::make_shared<InputTaskTitleState>(nullptr, nullptr, nullptr);
+    // Act
+    // Expect call factory GetNextState to get initial state for inner state machine
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const AddTaskState&>(), WizardStatesFactory::MoveType::NEXT))
+            .Times(1)
+            .WillOnce(Return(expected_initial_state));
+    // Expect running state_machine with initial_state returned by factory
+    EXPECT_CALL(*state_machine_, Run(testing::_, testing::Eq(expected_initial_state)))
+            .Times(1)
+            .WillOnce(Return(std::make_shared<WizardContext>()));
+    EXPECT_CALL(*printer_, WriteError(testing::_)).Times(1);
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const AddTaskState&>(), WizardStatesFactory::MoveType::ERROR))
+            .Times(1)
+            .WillOnce(Return(expected_return));
+    // Act
+    std::optional<std::shared_ptr<WizardStateConsole>> actual_return = add_task_state_.Execute(nullptr);
+    // Expect Execute method return shared_ptr from factory GetNextState method
+    EXPECT_EQ(expected_return, actual_return);
+}

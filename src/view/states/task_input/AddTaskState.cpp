@@ -8,16 +8,16 @@ std::optional<std::shared_ptr<WizardStateConsole>> AddTaskState::Execute(std::sh
     std::shared_ptr<WizardContext> context_with_added_task = RunStateMachine(std::make_shared<WizardContext>(),
                     GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
 
-    // Giving task to controller
-    std::optional<TaskId> added_task_id = GetController()->AddTask(context_with_added_task->GetTask().value());
-    if (added_task_id.has_value()) {
-        ShowAddedTaskId(added_task_id.value());
-    } else {
-        GetConsolePrinter()->WriteError("Given task wasn't saved, try again.");
-        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+    if (context_with_added_task->GetTask().has_value()) {
+        std::optional<TaskId> added_task_id = GetController()->AddTask(context_with_added_task->GetTask().value());
+        if (added_task_id.has_value()) {
+            ShowAddedTaskId(added_task_id.value());
+            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        }
     }
 
-    return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+    GetConsolePrinter()->WriteError("Given task wasn't saved, try again.");
+    return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
 }
 
 AddTaskState::AddTaskState(const std::shared_ptr<ConsoleStateMachine>& state_machine,
