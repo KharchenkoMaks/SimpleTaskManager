@@ -40,7 +40,7 @@ public:
 // Should call GetNextState with MoveType::ERROR
 TEST_F(StatesTests, ExecuteRootStateReceivesNulloptFromFactory_ShouldChangeStateToRoot) {
     // Arrange
-    StatesTests::SetUp();
+    this->SetUp();
     RootState root_state{factory_, printer_, reader_ };
     std::optional<std::shared_ptr<WizardStateConsole>> expected_return =
             std::make_shared<RootState>(nullptr, nullptr, nullptr);
@@ -68,7 +68,7 @@ TEST_F(StatesTests, ExecuteRootStateReceivesNulloptFromFactory_ShouldChangeState
 
 TEST_F(StatesTests, ExecuteRootStateReceivesNotNullFromFactory_ShouldReturnNextState) {
     // Arrange
-    StatesTests::SetUp();
+    this->SetUp();
     RootState root_state{factory_, printer_, reader_ };
     std::optional<std::shared_ptr<WizardStateConsole>> expected_return =
             std::make_shared<AddTaskState>(nullptr, nullptr, nullptr, nullptr);
@@ -90,7 +90,7 @@ TEST_F(StatesTests, ExecuteRootStateReceivesNotNullFromFactory_ShouldReturnNextS
 
 TEST_F(StatesTests, ExecuteQuitStateWithPositiveInput_ShouldCallNextStateNext) {
     // Arrange
-    StatesTests::SetUp();
+    this->SetUp();
     QuitState quit_state{ factory_, printer_, reader_ };
     std::optional<std::shared_ptr<WizardStateConsole>> expected_return =
             std::make_shared<QuitState>(nullptr, nullptr, nullptr);
@@ -112,7 +112,7 @@ TEST_F(StatesTests, ExecuteQuitStateWithPositiveInput_ShouldCallNextStateNext) {
 
 TEST_F(StatesTests, ExecuteQuitStateWithNegativeInput_ShouldCallNextStatePrevious) {
     // Arrange
-    StatesTests::SetUp();
+    this->SetUp();
     QuitState quit_state{ factory_, printer_, reader_ };
     std::optional<std::shared_ptr<WizardStateConsole>> expected_return = std::nullopt;
     // Assert
@@ -131,10 +131,10 @@ TEST_F(StatesTests, ExecuteQuitStateWithNegativeInput_ShouldCallNextStatePreviou
     EXPECT_EQ(expected_return, actual_return);
 }
 
-TEST_F(StatesTests, ExecuteShowState_PrintingStringReceivedFromController) {
-    // Act
-    StatesTests::SetUp();
-    ShowState show_state{ controller_, factory_, printer_, reader_ };
+TEST_F(StatesTests, ExecuteShowState_ShouldPrintStringReceivedFromController) {
+    // Arrange
+    this->SetUp();
+    ShowState show_state{ controller_, factory_, printer_, nullptr };
     std::optional<std::shared_ptr<WizardStateConsole>> expected_return =
             std::make_shared<RootState>(nullptr, nullptr, nullptr);
     const std::string expected_print = "tasks string";
@@ -148,6 +148,24 @@ TEST_F(StatesTests, ExecuteShowState_PrintingStringReceivedFromController) {
             .WillOnce(Return(expected_return));
     // Act
     std::optional<std::shared_ptr<WizardStateConsole>> actual_return = show_state.Execute(context_);
+    // Assert
+    EXPECT_EQ(expected_return, actual_return);
+}
+
+TEST_F(StatesTests, ExecuteShowState_ShouldPrintHelpString) {
+    // Arrange
+    this->SetUp();
+    HelpState help_state {factory_, printer_, nullptr};
+    const int expected_strings_printed = 9;
+    std::optional<std::shared_ptr<WizardStateConsole>> expected_return =
+            std::make_shared<RootState>(nullptr, nullptr, nullptr);
+    // Assert
+    EXPECT_CALL(*printer_, WriteLine(testing::An<const std::string&>())).Times(9);
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const HelpState&>(), WizardStatesFactory::MoveType::NEXT))
+        .Times(1)
+        .WillOnce(Return(expected_return));
+    // Act
+    std::optional<std::shared_ptr<WizardStateConsole>> actual_return = help_state.Execute(nullptr);
     // Assert
     EXPECT_EQ(expected_return, actual_return);
 }

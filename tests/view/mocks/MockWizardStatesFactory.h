@@ -21,6 +21,7 @@ public:
     MOCK_METHOD(std::optional<std::shared_ptr<WizardStateConsole>>, GetNextState, (const QuitState& state, MoveType move_type), (override));
     MOCK_METHOD(std::optional<std::shared_ptr<WizardStateConsole>>, GetNextState, (const RootState& state, MoveType move_type), (override));
     MOCK_METHOD(std::optional<std::shared_ptr<WizardStateConsole>>, GetNextState, (const ShowState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::optional<std::shared_ptr<WizardStateConsole>>, GetNextState, (const HelpState& state, MoveType move_type), (override));
     MOCK_METHOD(std::optional<std::shared_ptr<WizardStateConsole>>, GetStateByCommand, (const std::string& command), (override));
 };
 
