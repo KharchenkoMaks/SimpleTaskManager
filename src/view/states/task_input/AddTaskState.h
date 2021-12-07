@@ -5,17 +5,17 @@
 #ifndef SIMPLETASKMANAGER_ADDTASKSTATE_H
 #define SIMPLETASKMANAGER_ADDTASKSTATE_H
 
-#include "states/abstract/WizardStateController.h"
+#include "states/abstract/WizardStateWithStateMachine.h"
 #include "states/factory/WizardStatesFactory.h"
 #include "WizardContext.h"
-//#include "ConsoleStateMachine.h"
 
 #include <memory>
 #include <optional>
 
-class AddTaskState : public WizardStateController {
+class AddTaskState : public WizardStateWithStateMachine {
 public:
-    AddTaskState(const std::shared_ptr<Controller>& controller,
+    AddTaskState(const std::shared_ptr<ConsoleStateMachine>& state_machine,
+                 const std::shared_ptr<Controller>& controller,
                  const std::shared_ptr<WizardStatesFactory>& states_factory,
                  const std::shared_ptr<ConsolePrinter>& printer,
                  const std::shared_ptr<ConsoleReader>& reader);

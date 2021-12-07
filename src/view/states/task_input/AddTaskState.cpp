@@ -3,12 +3,11 @@
 //
 
 #include "states/task_input/AddTaskState.h"
-#include "ConsoleStateMachine.h"
 
 std::optional<std::shared_ptr<WizardStateConsole>> AddTaskState::Execute(std::shared_ptr<WizardContext> context) {
-    ConsoleStateMachine state_machine(std::make_shared<WizardContext>(),
-            GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
-    std::shared_ptr<WizardContext> context_with_added_task = state_machine.Run();
+    std::shared_ptr<WizardContext> context_with_added_task = std::make_shared<WizardContext>();
+    RunStateMachine(context_with_added_task,
+                    GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
 
     // Giving task to controller
     std::optional<TaskId> added_task_id = GetController()->AddTask(context_with_added_task->GetTask().value());
@@ -22,11 +21,12 @@ std::optional<std::shared_ptr<WizardStateConsole>> AddTaskState::Execute(std::sh
     return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
 }
 
-AddTaskState::AddTaskState(const std::shared_ptr<Controller>& controller,
+AddTaskState::AddTaskState(const std::shared_ptr<ConsoleStateMachine>& state_machine,
+                           const std::shared_ptr<Controller>& controller,
                            const std::shared_ptr<WizardStatesFactory>& states_factory,
                            const std::shared_ptr<ConsolePrinter>& printer,
                            const std::shared_ptr<ConsoleReader>& reader) :
-                           WizardStateController(controller, states_factory, printer, reader) {
+                           WizardStateWithStateMachine(state_machine, controller, states_factory, printer, reader) {
 
 }
 

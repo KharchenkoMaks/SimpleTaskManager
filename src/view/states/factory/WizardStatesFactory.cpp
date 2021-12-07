@@ -3,6 +3,7 @@
 //
 
 #include "WizardStatesFactory.h"
+#include "ConsoleStateMachine.h"
 
 WizardStatesFactory::WizardStatesFactory(const std::shared_ptr<Controller>& controller,
                                          const std::shared_ptr<ConsolePrinter>& printer,
@@ -218,19 +219,32 @@ std::shared_ptr<WizardStateConsole> WizardStatesFactory::GetLazyStateByStatesEnu
         }
         case States::kAddTask: {
             if (!add_task_state_) {
-                add_task_state_ = std::make_shared<AddTaskState>(controller_, shared_from_this(), printer_, reader_);
+                add_task_state_ = std::make_shared<AddTaskState>(
+                        std::make_shared<ConsoleStateMachine>(),
+                        controller_,
+                        shared_from_this(),
+                        printer_,
+                        reader_);
             }
             return add_task_state_;
         }
         case States::kAddSubTask: {
             if (!add_subtask_state_) {
-                add_subtask_state_ = std::make_shared<AddSubTaskState>(controller_, shared_from_this(), printer_, reader_);
+                add_subtask_state_ = std::make_shared<AddSubTaskState>(std::make_shared<ConsoleStateMachine>(),
+                        controller_,
+                        shared_from_this(),
+                        printer_,
+                        reader_);
             }
             return add_subtask_state_;
         }
         case States::kEditTask: {
             if (!edit_task_state_){
-                edit_task_state_ = std::make_shared<EditTaskState>(controller_, shared_from_this(), printer_, reader_);
+                edit_task_state_ = std::make_shared<EditTaskState>(std::make_shared<ConsoleStateMachine>(),
+                        controller_,
+                        shared_from_this(),
+                        printer_,
+                        reader_);
             }
             return edit_task_state_;
         }

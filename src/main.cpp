@@ -14,8 +14,8 @@ int main() {
     std::shared_ptr<WizardStatesFactory> states_factory = std::make_shared<WizardStatesFactory>(controller,
                                                                                                 std::make_shared<ConsolePrinter>(),
                                                                                                 std::make_shared<ConsoleReader>());
-    ConsoleStateMachine state_machine(std::make_shared<WizardContext>(), states_factory->GetInitialState());
-    state_machine.Run();
+    ConsoleStateMachine state_machine;
+    state_machine.Run(std::make_shared<WizardContext>(), states_factory->GetInitialState());
     return 0;
 }
 
@@ -27,7 +27,7 @@ int main() {
 // TODO_DONE: Make lazy states initialization in states factory - Done 29.11.2021
 // TODO_DONE: Get rid of states enum in states factory - Done 26.11.2021
 // TODO_DONE: Use state machine inside AddTaskState and EditTaskState - Done 25.11.2021
-// TODO: Make abstract State for states that run state machine inside?
+// TODO_DONE: Make abstract State for states that run state machine inside? - Done 07.12.2021
 // TODO_DONE: Rename WizardStateConsole abstract class - Done 26.11.2021
 // TODO_DONE: Rename Printer to PrinterWithScanner =) - Done 25.11.2021
 // TODO_DONE: Make default methods in WizardStateConsole to ask user for some input - Done 26.11.2021
@@ -51,7 +51,6 @@ int main() {
 // TODO_DONE: Implement add_subtask command - Done 02.12.2021
 // TODO_DONE: Make complete method work with subtasks - Done 06.12.2021
 // TODO_DONE: Make delete method work with subtasks - Done 06.12.2021
-// TODO: AddTask WizardStateMachine for states that starts state machine?
 // TODO_DONE: Make DueTime validator in controller - Done 01.12.2021
 // TODO_DONE: Get rid of exceptions in task manager API - Done 01.12.2021
 // TODO_DONE: Make general model interface - Done 01.12.2021
@@ -61,3 +60,4 @@ int main() {
 // TODO_DONE: Make TaskId::Create not throw exception on incorrect string - Done 03.12.2021
 // TODO_DONE: Delete NullTaskId constant - Done 02.12.2021
 // TODO_DONE: Make label command - Done 06.12.2021
+// TODO_DONE: Inject ConsoleMachine in States in factory - Done 07.12.2021

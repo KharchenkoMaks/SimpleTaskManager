@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_EDITTASKSTATE_H
 #define SIMPLETASKMANAGER_EDITTASKSTATE_H
 
-#include "states/abstract/WizardStateController.h"
+#include "states/abstract/WizardStateWithStateMachine.h"
 #include "states/factory/WizardStatesFactory.h"
 #include "WizardContext.h"
 #include "tasks/Task.h"
@@ -14,12 +14,13 @@
 #include <memory>
 #include <optional>
 
-class EditTaskState : public WizardStateController {
+class EditTaskState : public WizardStateWithStateMachine {
 public:
-    EditTaskState(const std::shared_ptr<Controller>& controller,
-                           const std::shared_ptr<WizardStatesFactory>& states_factory,
-                           const std::shared_ptr<ConsolePrinter>& printer,
-                           const std::shared_ptr<ConsoleReader>& reader);
+    EditTaskState(const std::shared_ptr<ConsoleStateMachine>& state_machine,
+                  const std::shared_ptr<Controller>& controller,
+                  const std::shared_ptr<WizardStatesFactory>& states_factory,
+                  const std::shared_ptr<ConsolePrinter>& printer,
+                  const std::shared_ptr<ConsoleReader>& reader);
 public:
     std::optional<std::shared_ptr<WizardStateConsole>> Execute(std::shared_ptr<WizardContext> context) override;
 };

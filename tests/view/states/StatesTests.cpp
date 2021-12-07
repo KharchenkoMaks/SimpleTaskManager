@@ -71,7 +71,7 @@ TEST_F(StatesTests, ExecuteRootStateReceivesNotNullFromFactory_ShouldReturnNextS
     this->SetUp();
     RootState root_state{factory_, printer_, reader_ };
     std::optional<std::shared_ptr<WizardStateConsole>> expected_return =
-            std::make_shared<AddTaskState>(nullptr, nullptr, nullptr, nullptr);
+            std::make_shared<AddTaskState>(nullptr, nullptr, nullptr, nullptr, nullptr);
     // Assert
     // Invites user to input command
     EXPECT_CALL(*printer_, Write("> ")).Times(1);

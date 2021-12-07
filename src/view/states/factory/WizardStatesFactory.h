@@ -6,6 +6,8 @@
 #define SIMPLETASKMANAGER_WIZARDSTATESFACTORY_H
 
 #include "states/abstract/WizardStateConsole.h"
+#include "states/abstract/WizardStateController.h"
+#include "states/abstract/WizardStateWithStateMachine.h"
 #include "console_io/ConsolePrinter.h"
 #include "console_io/ConsoleReader.h"
 #include "Controller.h"

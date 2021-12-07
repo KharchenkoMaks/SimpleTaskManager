@@ -24,7 +24,7 @@ std::optional<std::shared_ptr<WizardStateConsole>> InputTaskPriorityState::Execu
     if (task_priority.has_value()) {
         context->AddTaskPriority(task_priority.value());
     } else {
-        GetConsolePrinter()->WriteError("Wrong task priority was given, try [High, Medium, Low, kNone]!");
+        GetConsolePrinter()->WriteError("Wrong task priority was given, try [High, Medium, Low, None]!");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
@@ -32,7 +32,7 @@ std::optional<std::shared_ptr<WizardStateConsole>> InputTaskPriorityState::Execu
 }
 
 std::string InputTaskPriorityState::GetUserInputForPriorityAdd() {
-    return GetUserInput("Priority (High, Medium, Low, kNone)");
+    return GetUserInput("Priority (High, Medium, Low, None)");
 }
 
 std::string InputTaskPriorityState::GetUserInputForPriorityEdit(const Task &task) {
