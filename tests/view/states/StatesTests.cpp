@@ -11,6 +11,7 @@
 #include "../mocks/MockTaskValidator.h"
 #include "../mocks/MockModel.h"
 #include "../mocks/MockWizardContext.h"
+#include "../mocks/MockConsoleStateMachine.h"
 
 using ::testing::Return;
 
@@ -23,6 +24,9 @@ public:
     std::shared_ptr<MockController> controller_;
     std::shared_ptr<MockWizardStatesFactory> factory_;
     std::shared_ptr<MockWizardContext> context_;
+    std::shared_ptr<MockConsoleStateMachine> state_machine_;
+
+    std::shared_ptr<WizardContext> context_with_task;
 
     void SetUp() override {
         printer_ = std::make_shared<MockConsolePrinter>();
@@ -32,6 +36,12 @@ public:
         controller_ = std::make_shared<MockController>(std::make_unique<MockModel>(), std::make_unique<MockTaskValidator>());
         factory_ = std::make_shared<MockWizardStatesFactory>(controller_, printer_, reader_);
         context_ = std::make_shared<MockWizardContext>();
+        state_machine_ = std::make_shared<MockConsoleStateMachine>();
+
+        context_with_task = std::make_shared<WizardContext>();
+        context_with_task->AddTaskTitle("title");
+        context_with_task->AddTaskPriority(Task::Priority::NONE);
+        context_with_task->AddTaskDueTime(DueTime::Create("15:00 01.01.2030").value());
     };
 
 };
@@ -167,5 +177,39 @@ TEST_F(StatesTests, ExecuteShowState_ShouldPrintHelpString) {
     // Act
     std::optional<std::shared_ptr<WizardStateConsole>> actual_return = help_state.Execute(nullptr);
     // Assert
+    EXPECT_EQ(expected_return, actual_return);
+}
+
+TEST_F(StatesTests, AddTaskExecute_ShouldRunStateMachineAndGiveTaskToController) {
+    // Arrange
+    this->SetUp();
+    AddTaskState add_task_state_ {state_machine_, controller_, factory_, printer_, nullptr };
+    std::optional<std::shared_ptr<WizardStateConsole>> expected_return =
+            std::make_shared<RootState>(nullptr, nullptr, nullptr);
+    const TaskId returned_task_id = TaskId::Create(5).value();
+    std::optional<std::shared_ptr<WizardStateConsole>> expected_initial_state =
+            std::make_shared<InputTaskTitleState>(nullptr, nullptr, nullptr);
+    // Assert
+    // Expect call factory GetNextState to get initial state for inner state machine
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const AddTaskState&>(), WizardStatesFactory::MoveType::NEXT))
+        .Times(1)
+        .WillOnce(Return(expected_initial_state));
+    // Expect running state_machine with initial_state returned by factory
+    EXPECT_CALL(*state_machine_, Run(testing::_, testing::Eq(expected_initial_state)))
+        .Times(1)
+        .WillOnce(Return(context_with_task));
+    // Expect giving task from context to controller AddTask method
+    EXPECT_CALL(*controller_, AddTask(testing::Eq(context_with_task->GetTask().value())))
+        .Times(1)
+        .WillOnce(Return(returned_task_id));
+    // Expect printing task id
+    EXPECT_CALL(*printer_, WriteLine(testing::_)).Times(1);
+    // Expect call factory GetNextState with MoveType previous
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const AddTaskState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+            .Times(1)
+            .WillOnce(Return(expected_return));
+    // Act
+    std::optional<std::shared_ptr<WizardStateConsole>> actual_return = add_task_state_.Execute(nullptr);
+    // Expect Execute method return shared_ptr from factory GetNextState method
     EXPECT_EQ(expected_return, actual_return);
 }

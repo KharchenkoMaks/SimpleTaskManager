@@ -14,7 +14,7 @@
 
 class ConsoleStateMachine {
 public:
-    void Run(const std::shared_ptr<WizardContext>& context,
+    virtual std::shared_ptr<WizardContext> Run(const std::shared_ptr<WizardContext>& context,
                                        const std::optional<std::shared_ptr<WizardStateConsole>>& initial_state);
 private:
     std::optional<std::shared_ptr<WizardStateConsole> > state_;

@@ -19,7 +19,7 @@ class Controller {
 public:
     Controller(std::unique_ptr<IModel> model, std::unique_ptr<TaskValidator> task_validator);
 public:
-    std::optional<TaskId> AddTask(const Task& task);
+    virtual std::optional<TaskId> AddTask(const Task& task);
     std::optional<TaskId> AddSubTask(const Task& task, const TaskId& parent_id);
     bool EditTask(const TaskId& task_id, const Task& task);
     TaskActionResult DeleteTask(const TaskId& task_id);

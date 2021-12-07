@@ -46,6 +46,6 @@ add_executable(SimpleTaskManager_test
         tests/view/mocks/MockModel.h
         tests/view/mocks/MockConsolePrinter.h
         tests/view/mocks/MockConsoleReader.h
-        tests/view/mocks/MockWizardContext.h)
+        tests/view/mocks/MockWizardContext.h tests/view/mocks/MockConsoleStateMachine.h)
 
 target_link_libraries(SimpleTaskManager_test GTest::gtest GTest::gmock GTest::gmock_main)

@@ -21,7 +21,7 @@ public:
                                 const std::shared_ptr<ConsolePrinter>& printer,
                                 const std::shared_ptr<ConsoleReader>& reader);
 public:
-    void RunStateMachine(const std::shared_ptr<WizardContext>& context,
+    std::shared_ptr<WizardContext> RunStateMachine(const std::shared_ptr<WizardContext>& context,
                                                    const std::optional<std::shared_ptr<WizardStateConsole>>& initial_state);
 private:
     std::shared_ptr<ConsoleStateMachine> state_machine_;

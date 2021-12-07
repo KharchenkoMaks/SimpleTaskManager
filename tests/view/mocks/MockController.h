@@ -15,6 +15,7 @@ public:
     MockController(std::unique_ptr<IModel> model, std::unique_ptr<TaskValidator> task_validator) : Controller(std::move(model), std::move(task_validator)) {}
 
     MOCK_METHOD(std::string, GetAllTasks, (), (override));
+    MOCK_METHOD(std::optional<TaskId>, AddTask, (const Task& task), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKCONTROLLER_H

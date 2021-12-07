@@ -18,7 +18,7 @@ WizardStateWithStateMachine::WizardStateWithStateMachine(const std::shared_ptr<C
 
 }
 
-void WizardStateWithStateMachine::RunStateMachine(const std::shared_ptr<WizardContext>& context,
+std::shared_ptr<WizardContext> WizardStateWithStateMachine::RunStateMachine(const std::shared_ptr<WizardContext>& context,
                                                      const std::optional<std::shared_ptr<WizardStateConsole>>& initial_state) {
-    state_machine_->Run(context, initial_state);
+    return state_machine_->Run(context, initial_state);
 }

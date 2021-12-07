@@ -9,7 +9,7 @@
 
 class MockConsoleStateMachine : public ConsoleStateMachine {
 public:
-    MOCK_METHOD(void,
+    MOCK_METHOD(std::shared_ptr<WizardContext>,
                 Run,
                 (const std::shared_ptr<WizardContext>& context, const std::optional<std::shared_ptr<WizardStateConsole>>& initial_state),
                 (override));

@@ -26,8 +26,7 @@ std::optional<std::shared_ptr<WizardStateConsole>> AddSubTaskState::Execute(std:
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    std::shared_ptr<WizardContext> context_with_added_task = std::make_shared<WizardContext>();
-    RunStateMachine(context_with_added_task,
+    std::shared_ptr<WizardContext> context_with_added_task = RunStateMachine(std::make_shared<WizardContext>(),
                     GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
 
     std::optional<TaskId> added_subtask_id = GetController()->AddSubTask(context_with_added_task->GetTask().value(),

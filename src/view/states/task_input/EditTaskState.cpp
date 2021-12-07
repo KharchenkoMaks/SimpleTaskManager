@@ -33,7 +33,7 @@ std::optional<std::shared_ptr<WizardStateConsole>> EditTaskState::Execute(std::s
     context_task_editing->SetEditingTask(editing_task_id.task_id_.value(),
                                          GetController()->GetTask(editing_task_id.task_id_.value()).value());
 
-    RunStateMachine(context_task_editing,
+    context_task_editing = RunStateMachine(context_task_editing,
                     GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
 
     // Giving edited task to controller
