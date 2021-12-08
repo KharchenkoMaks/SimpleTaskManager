@@ -8,6 +8,7 @@
 #include "WizardContext.h"
 #include "console_io/ConsolePrinter.h"
 #include "console_io/ConsoleReader.h"
+#include "id/TaskId.h"
 
 #include <memory>
 #include <optional>
@@ -27,12 +28,13 @@ public:
     std::shared_ptr<WizardStatesFactory> GetStatesFactory() const;
 
     const std::shared_ptr<ConsolePrinter> &GetConsolePrinter() const;
-
     const std::shared_ptr<ConsoleReader> &GetConsoleReader() const;
 
 public:
     std::string GetUserInput(const std::string &invitation_message);
     bool UserConfirm(const std::string& question_string = "Are you sure?");
+    // Returns std::nullopt if invalid task_id was given
+    std::optional<TaskId> GetTaskIdFromUser(const std::string& invitation_string = "Task ID");
 
 public:
     virtual ~WizardStateConsole() = default;

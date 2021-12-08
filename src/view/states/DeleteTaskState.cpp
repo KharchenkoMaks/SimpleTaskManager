@@ -15,16 +15,13 @@ DeleteTaskState::DeleteTaskState(const std::shared_ptr<Controller> &controller,
 }
 
 std::optional<std::shared_ptr<WizardStateConsole>> DeleteTaskState::Execute(std::shared_ptr<WizardContext> context) {
-    WizardStateController::TaskIdFromUser task_id = GetTaskIdFromUser();
-    if (task_id.answer_status_ == WizardStateController::TaskIdFromUser::AnswerStatus::kNotValid){
-        GetConsolePrinter()->WriteError("Wrong task id was given, try again!");
+    std::optional<TaskId> task_id = GetTaskIdFromUser();
+    if (!task_id.has_value()){
+        GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
-    } else if (task_id.answer_status_ == WizardStateController::TaskIdFromUser::AnswerStatus::kNoSuchTask) {
-        GetConsolePrinter()->WriteError("No task with such task id was found, try again.");
-        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    switch (GetController()->DeleteTask(task_id.task_id_.value())) {
+    switch (GetController()->DeleteTask(task_id.value())) {
         case TaskActionResult::SUCCESS: {
             GetConsolePrinter()->WriteLine("Task was successfully deleted.");
             return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
@@ -35,7 +32,7 @@ std::optional<std::shared_ptr<WizardStateConsole>> DeleteTaskState::Execute(std:
         }
         case TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS: {
             if (UserConfirm("Found subtasks for this task, are you sure you want to delete them?")) {
-                GetController()->DeleteTaskWithSubTasks(task_id.task_id_.value());
+                GetController()->DeleteTaskWithSubTasks(task_id.value());
                 GetConsolePrinter()->WriteLine("Deleted task with it's subtasks.");
                 return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
             } else {

@@ -61,3 +61,7 @@ int main() {
 // TODO_DONE: Delete NullTaskId constant - Done 02.12.2021
 // TODO_DONE: Make label command - Done 06.12.2021
 // TODO_DONE: Inject ConsoleMachine in States in factory - Done 07.12.2021
+// TODO: Move next states logic to separate class
+// TODO: Make state for getting task id from user?
+// TODO_DONE: Remove check for task existence in states - Done 08.12.2021
+// TODO: Make user message when non-existent task id was given

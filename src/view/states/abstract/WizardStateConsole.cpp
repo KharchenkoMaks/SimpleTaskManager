@@ -35,3 +35,8 @@ bool WizardStateConsole::UserConfirm(const std::string& question_string) {
     std::string users_answer = GetUserInput(question_string + " y/n");
     return users_answer == "Y" || users_answer == "y";
 }
+
+std::optional<TaskId> WizardStateConsole::GetTaskIdFromUser(const std::string& invitation_string) {
+    std::string task_id_str = GetUserInput(invitation_string);
+    return TaskId::Create(task_id_str);
+}

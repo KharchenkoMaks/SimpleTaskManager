@@ -17,13 +17,10 @@ AddSubTaskState::AddSubTaskState(const std::shared_ptr<ConsoleStateMachine>& sta
 }
 
 std::optional<std::shared_ptr<WizardStateConsole>> AddSubTaskState::Execute(std::shared_ptr<WizardContext> context) {
-    WizardStateController::TaskIdFromUser parent_task_id = GetTaskIdFromUser("Parent Task ID");
-    if (parent_task_id.answer_status_ == WizardStateController::TaskIdFromUser::AnswerStatus::kNotValid){
-        GetConsolePrinter()->WriteError("Wrong task id was given, try again!");
+    std::optional<TaskId> parent_task_id = GetTaskIdFromUser("Parent Task ID");
+    if (!parent_task_id.has_value()){
+        GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
         return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
-    } else if (parent_task_id.answer_status_ == WizardStateController::TaskIdFromUser::AnswerStatus::kNoSuchTask) {
-        GetConsolePrinter()->WriteError("No task with such task id was found, try again.");
-        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
     std::shared_ptr<WizardContext> context_with_added_task = RunStateMachine(std::make_shared<WizardContext>(),
@@ -31,7 +28,7 @@ std::optional<std::shared_ptr<WizardStateConsole>> AddSubTaskState::Execute(std:
 
     if (context_with_added_task->GetTask().has_value()) {
         std::optional<TaskId> added_subtask_id = GetController()->AddSubTask(context_with_added_task->GetTask().value(),
-                                                                             parent_task_id.task_id_.value());
+                                                                             parent_task_id.value());
         if (added_subtask_id.has_value()) {
             ShowAddedTaskId(added_subtask_id.value());
             return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
