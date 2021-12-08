@@ -20,7 +20,7 @@ public:
     Controller(std::unique_ptr<IModel> model, std::unique_ptr<TaskValidator> task_validator);
 public:
     virtual std::optional<TaskId> AddTask(const Task& task);
-    std::optional<TaskId> AddSubTask(const Task& task, const TaskId& parent_id);
+    virtual std::optional<TaskId> AddSubTask(const Task& task, const TaskId& parent_id);
     bool EditTask(const TaskId& task_id, const Task& task);
     TaskActionResult DeleteTask(const TaskId& task_id);
     TaskActionResult CompleteTask(const TaskId& task_id);

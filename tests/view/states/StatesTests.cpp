@@ -28,7 +28,7 @@ public:
     std::shared_ptr<MockWizardContext> context_;
     std::shared_ptr<MockConsoleStateMachine> state_machine_;
 
-    std::shared_ptr<WizardContext> context_with_task;
+    std::shared_ptr<WizardContext> context_with_task_;
 
     void SetUp() override {
         printer_ = std::make_shared<MockConsolePrinter>();
@@ -40,10 +40,10 @@ public:
         context_ = std::make_shared<MockWizardContext>();
         state_machine_ = std::make_shared<MockConsoleStateMachine>();
 
-        context_with_task = std::make_shared<WizardContext>();
-        context_with_task->AddTaskTitle("title");
-        context_with_task->AddTaskPriority(Task::Priority::NONE);
-        context_with_task->AddTaskDueTime(DueTime::Create("15:00 01.01.2030").value());
+        context_with_task_ = std::make_shared<WizardContext>();
+        context_with_task_->AddTaskTitle("title");
+        context_with_task_->AddTaskPriority(Task::Priority::NONE);
+        context_with_task_->AddTaskDueTime(DueTime::Create("15:00 01.01.2030").value());
     };
 
 };
@@ -199,9 +199,9 @@ TEST_F(StatesTests, AddTaskExecute_ShouldRunStateMachineAndGiveTaskToController)
     // Expect running state_machine with initial_state returned by factory
     EXPECT_CALL(*state_machine_, Run(testing::_, testing::Eq(expected_initial_state)))
         .Times(1)
-        .WillOnce(Return(context_with_task));
+        .WillOnce(Return(context_with_task_));
     // Expect giving task from context to controller AddTask method
-    EXPECT_CALL(*controller_, AddTask(testing::Eq(context_with_task->GetTask().value())))
+    EXPECT_CALL(*controller_, AddTask(testing::Eq(context_with_task_->GetTask().value())))
         .Times(1)
         .WillOnce(Return(returned_task_id));
     // Expect printing task id
@@ -240,6 +240,56 @@ TEST_F(StatesTests, AddTaskExecute_ShouldRunStateMachineAndPrintError) {
     // Act
     std::optional<std::shared_ptr<WizardStateConsole>> actual_return = add_task_state_.Execute(nullptr);
     // Expect Execute method return shared_ptr from factory GetNextState method
+    EXPECT_EQ(expected_return, actual_return);
+}
+
+TEST_F(StatesTests, AddSubTaskExecute_ShouldRunStateMachineAndGiveTaskToController) {
+    // Arrange
+    this->SetUp();
+    AddSubTaskState add_subtask_state {state_machine_, controller_, factory_, printer_, reader_};
+    std::optional<std::shared_ptr<WizardStateConsole>> expected_return =
+            std::make_shared<RootState>(nullptr, nullptr, nullptr);
+    const TaskId returned_task_id = TaskId::Create(5).value();
+    std::optional<std::shared_ptr<WizardStateConsole>> expected_initial_state =
+            std::make_shared<InputTaskTitleState>(nullptr, nullptr, nullptr);
+    const std::string expected_user_input = "50";
+    // Assert
+    EXPECT_CALL(*printer_, Write("Parent Task ID> ")).Times(1);
+    EXPECT_CALL(*reader_, ReadLine()).Times(1).WillOnce(Return(expected_user_input));
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const AddSubTaskState&>(), WizardStatesFactory::MoveType::NEXT))
+            .Times(1)
+            .WillOnce(Return(expected_initial_state));
+    EXPECT_CALL(*state_machine_, Run(testing::_, testing::Eq(expected_initial_state)))
+        .Times(1)
+        .WillOnce(Return(context_with_task_));
+    EXPECT_CALL(*controller_, AddSubTask(context_with_task_->GetTask().value(), TaskId::Create(expected_user_input).value()))
+        .Times(1)
+        .WillOnce(Return(returned_task_id));
+    EXPECT_CALL(*printer_, WriteLine("Subtask was successfully added. Task id: " + std::to_string(returned_task_id.GetId())))
+        .Times(1);
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const AddSubTaskState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+            .Times(1)
+            .WillOnce(Return(expected_return));
+    // Act
+    std::optional<std::shared_ptr<WizardStateConsole>> actual_return = add_subtask_state.Execute(nullptr);
+    // Expect Execute method return shared_ptr from factory GetNextState method
+    EXPECT_EQ(expected_return, actual_return);
+}
+
+TEST_F(StatesTests, AddSubTaskExecuteWrongTaskIdInput_ShouldReturnOnPreviousState) {
+    // Arrange
+    this->SetUp();
+    AddSubTaskState add_subtask_state {state_machine_, controller_, factory_, printer_, reader_};
+    std::optional<std::shared_ptr<WizardStateConsole>> expected_return =
+            std::make_shared<RootState>(nullptr, nullptr, nullptr);
+    // Assert
+    EXPECT_CALL(*reader_, ReadLine()).Times(1).WillOnce(Return("asfasfasf"));
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const AddSubTaskState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+            .Times(1)
+            .WillOnce(Return(expected_return));
+    // Act
+    std::optional<std::shared_ptr<WizardStateConsole>> actual_return = add_subtask_state.Execute(nullptr);
+    // Assert
     EXPECT_EQ(expected_return, actual_return);
 }
 

@@ -16,6 +16,7 @@ public:
 
     MOCK_METHOD(std::string, GetAllTasks, (), (override));
     MOCK_METHOD(std::optional<TaskId>, AddTask, (const Task& task), (override));
+    MOCK_METHOD(std::optional<TaskId>, AddSubTask, (const Task& task, const TaskId& parent_id), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKCONTROLLER_H
