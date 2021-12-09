@@ -72,4 +72,4 @@ int main() {
 // TODO: Make TaskBuilder in WizardContext
 // TODO: Make set_label part of edit
 // TODO: Make builder of integration tests
-// TODO: Make state for ending state machine
+// TODO_DONE: Make state for ending state machine - Done 09.12.2021
