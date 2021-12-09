@@ -48,9 +48,9 @@ TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
             { Task::Priority::NONE,Task::Priority::LOW };
     // Act
     TaskId task1 = task_manager.AddTask(Task::Create(expected_title[0],
-                                                     expected_priority[0], expected_time)).value();
+                                                     expected_priority[0], expected_time)).second.value();
     TaskId task2 = task_manager.AddTask(Task::Create(expected_title[1],
-                                                     expected_priority[1], expected_time)).value();
+                                                     expected_priority[1], expected_time)).second.value();
 
     std::vector<TaskTransfer> tasks = task_manager.GetTasks();
     // Assert
@@ -85,10 +85,10 @@ TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
 
     TaskId main_task_id = task_manager.AddTask(Task::Create("title",
                                                      Task::Priority::MEDIUM,
-                                                     DueTime::Create(time(0)))).value();
+                                                     DueTime::Create(time(0)))).second.value();
     TaskId subtask_id = task_manager.AddSubTask(Task::Create("SubTask",
                                                              Task::Priority::LOW,
-                                                             DueTime::Create(time(0))), main_task_id).value();
+                                                             DueTime::Create(time(0))), main_task_id).second.value();
     // Act
     task_manager.EditTask(main_task_id,
                           Task::Create(expected_title, expected_priority, expected_time));
@@ -129,8 +129,8 @@ TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
     const DueTime expected_time = DueTime::Create(time(0));
     Task task1 = Task::Create("some title", Task::Priority::NONE, DueTime::Create(time(0)));
     Task task2 = Task::Create(expected_title, expected_priority, expected_time);
-    TaskId task_id_1 = task_manager.AddTask(task1).value();
-    TaskId task_id_2 = task_manager.AddTask(task2).value();
+    TaskId task_id_1 = task_manager.AddTask(task1).second.value();
+    TaskId task_id_2 = task_manager.AddTask(task2).second.value();
     // Act
     task_manager.DeleteTask(task_id_1);
     std::vector<TaskTransfer> tasks = task_manager.GetTasks();
@@ -156,7 +156,7 @@ TEST_F(TaskManagerTest, TryEditingNonExistentTask_ShouldReturnFalse){
     TaskId task_id = TaskId::Create(5).value();
     Task task = Task::Create("title", Task::Priority::NONE, DueTime::Create(time(0)));
     // Act & Assert
-    EXPECT_FALSE(task_manager.EditTask(task_id, task));
+    EXPECT_EQ(task_manager.EditTask(task_id, task), TaskActionResult::FAIL_NO_SUCH_TASK);
 }
 
 // Giving unused TaskId to DeleteTask method
@@ -190,11 +190,11 @@ TEST_F(TaskManagerTest, TryCompletingDifferentTasks_ShouldCompleteThoseTasks){
             Task::Create("task3", Task::Priority::NONE, some_time, true);
 
     TaskId task1 = task_manager.AddTask(
-            Task::Create("task1", Task::Priority::NONE, DueTime::Create(time(0)))).value();
+            Task::Create("task1", Task::Priority::NONE, DueTime::Create(time(0)))).second.value();
     TaskId task2 = task_manager.AddTask(
-            Task::Create("task2", Task::Priority::NONE, DueTime::Create(time(0)))).value();
+            Task::Create("task2", Task::Priority::NONE, DueTime::Create(time(0)))).second.value();
     TaskId task3 = task_manager.AddTask(
-            Task::Create("task3", Task::Priority::NONE, DueTime::Create(time(0)))).value();
+            Task::Create("task3", Task::Priority::NONE, DueTime::Create(time(0)))).second.value();
     // Act
     task_manager.CompleteTask(task1);
     task_manager.CompleteTask(task3);
@@ -238,8 +238,8 @@ TEST_F(TaskManagerTest, TryAddingSubtask_ShouldReturnRightTask) {
     Task main_task = Task::Create("Main Task", Task::Priority::NONE, DueTime::Create(time(0)));
     Task subtask = Task::Create("SubTask", Task::Priority::LOW, DueTime::Create(time(0)));
     // Act
-    TaskId main_task_id = task_manager.AddTask(main_task).value();
-    TaskId subtask_id = task_manager.AddSubTask(subtask, main_task_id).value();
+    TaskId main_task_id = task_manager.AddTask(main_task).second.value();
+    TaskId subtask_id = task_manager.AddSubTask(subtask, main_task_id).second.value();
     std::optional<TaskTransfer> get_subtask = task_manager.GetTask(subtask_id);
     // Assert
     ASSERT_NE(get_subtask, std::nullopt);
@@ -282,9 +282,9 @@ TEST_F(TaskManagerTest, TryDeletingSubTask_ShouldDeleteSubTaskProperly) {
     Task subtask1 = Task::Create("SubTask1", Task::Priority::HIGH, DueTime::Create(time(0)));
     Task subtask2 = Task::Create(expected_sub_title, expected_sub_priority, expected_sub_due_time);
 
-    TaskId main_task_id = task_manager.AddTask(main_task).value();
-    TaskId subtask1_id = task_manager.AddSubTask(subtask1, main_task_id).value();
-    TaskId subtask2_id = task_manager.AddSubTask(subtask2, main_task_id).value();
+    TaskId main_task_id = task_manager.AddTask(main_task).second.value();
+    TaskId subtask1_id = task_manager.AddSubTask(subtask1, main_task_id).second.value();
+    TaskId subtask2_id = task_manager.AddSubTask(subtask2, main_task_id).second.value();
 
     // Act
     task_manager.DeleteTask(subtask1_id);
@@ -319,9 +319,9 @@ TEST_F(TaskManagerTest, TryCompleteSubTask_ShouldCompleteSubTask) {
     Task subtask1 = Task::Create("SubTask1", Task::Priority::HIGH, DueTime::Create(time(0)));
     Task subtask2 = Task::Create("SubTask2", Task::Priority::LOW, DueTime::Create(time(0)));
 
-    TaskId main_task_id = task_manager.AddTask(main_task).value();
-    TaskId subtask1_id = task_manager.AddSubTask(subtask1, main_task_id).value();
-    TaskId subtask2_id = task_manager.AddSubTask(subtask2, main_task_id).value();
+    TaskId main_task_id = task_manager.AddTask(main_task).second.value();
+    TaskId subtask1_id = task_manager.AddSubTask(subtask1, main_task_id).second.value();
+    TaskId subtask2_id = task_manager.AddSubTask(subtask2, main_task_id).second.value();
 
     // Act
     task_manager.CompleteTask(subtask1_id);

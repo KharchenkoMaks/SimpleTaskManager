@@ -204,7 +204,7 @@ TEST_F(StatesTests, AddTaskExecute_ShouldRunStateMachineAndGiveTaskToController)
     // Expect giving task from context to controller AddTask method
     EXPECT_CALL(*controller_, AddTask(testing::Eq(context_with_task_->GetTask().value())))
         .Times(1)
-        .WillOnce(Return(returned_task_id));
+        .WillOnce(Return(std::make_pair(TaskActionResult::SUCCESS, returned_task_id)));
     // Expect printing task id
     EXPECT_CALL(*printer_, WriteLine(testing::_)).Times(1);
     // Expect call factory GetNextState with MoveType previous
@@ -265,7 +265,7 @@ TEST_F(StatesTests, AddSubTaskExecute_ShouldRunStateMachineAndGiveTaskToControll
         .WillOnce(Return(context_with_task_));
     EXPECT_CALL(*controller_, AddSubTask(context_with_task_->GetTask().value(), TaskId::Create(expected_user_input).value()))
         .Times(1)
-        .WillOnce(Return(returned_task_id));
+        .WillOnce(Return(std::make_pair(TaskActionResult::SUCCESS, returned_task_id)));
     EXPECT_CALL(*printer_, WriteLine("Subtask was successfully added. Task id: " + std::to_string(returned_task_id.GetId())))
         .Times(1);
     EXPECT_CALL(*factory_, GetNextState(testing::An<const AddSubTaskState&>(), WizardStatesFactory::MoveType::PREVIOUS))

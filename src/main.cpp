@@ -64,10 +64,10 @@ int main() {
 // TODO: Move next states logic to separate class
 // TODO: Make state for getting task id from user?
 // TODO_DONE: Remove check for task existence in states - Done 08.12.2021
-// TODO: Make user message when non-existent task id was given
+// TODO_DONE: Make user message when non-existent task id was given - Done 09.12.2021
 // TODO: Make task validator general, move it to utilities
 // TODO: Make pure State interface
-// TODO: Return TaskActionResult in Model API
+// TODO_DONE: Return TaskActionResult in Model API - Done 09.12.2021
 // TODO: Rename IModel
 // TODO: Make TaskBuilder in WizardContext
 // TODO: Make set_label part of edit
