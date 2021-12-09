@@ -12,14 +12,14 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 include_directories(src/model/)
 include_directories(src/view/)
-include_directories(src/controller/)
+include_directories(src/model/controller/)
 include_directories(src/)
 
 file(GLOB_RECURSE TaskManager_SRCS CONFIGURE_DEPENDS
         "src/view/*.h"
         "src/view/*.cpp"
-        "src/controller/*.h"
-        "src/controller/*.cpp"
+        "src/model/controller/*.h"
+        "src/model/controller/*.cpp"
         "src/model/*.h"
         "src/model/*.cpp"
         "src/utilities/*.h"
