@@ -11,80 +11,54 @@ Controller::Controller(std::unique_ptr<IModel> model,
 
 }
 
-std::optional<TaskId> Controller::AddTask(const Task &task) {
+std::pair<TaskActionResult, std::optional<TaskId>> Controller::AddTask(const Task &task) {
     if (task_validator_->ValidateTask(task)){
         return model_->AddTask(task);
     } else {
-        return std::nullopt;
+        return std::pair(TaskActionResult::FAIL_INVALID_TASK, std::nullopt);
     }
 }
 
-std::optional<TaskId> Controller::AddSubTask(const Task& task, const TaskId& parent_id) {
+std::pair<TaskActionResult, std::optional<TaskId>> Controller::AddSubTask(const Task& task, const TaskId& parent_id) {
     if (task_validator_->ValidateTask(task)) {
-        if (model_->IsTaskIdExist(parent_id)) {
-            return model_->AddSubTask(task, parent_id);
-        }
+        return model_->AddSubTask(task, parent_id);
     }
-    return std::nullopt;
+    return std::pair(TaskActionResult::FAIL_INVALID_TASK, std::nullopt);
 }
 
-bool Controller::EditTask(const TaskId &task_id, const Task &task) {
+TaskActionResult Controller::EditTask(const TaskId &task_id, const Task &task) {
     if (task_validator_->ValidateTask(task) && task_validator_->ValidateTaskId(task_id)) {
-        if (model_->IsTaskIdExist(task_id)) {
-            return model_->EditTask(task_id, task);
-        }
+        return model_->EditTask(task_id, task);
     }
-    return false;
+    return TaskActionResult::FAIL_INVALID_TASK;
 }
 
 TaskActionResult Controller::DeleteTask(const TaskId &task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
-        if (model_->IsTaskIdExist(task_id)){
-            return model_->DeleteTask(task_id);
-        }
+        return model_->DeleteTask(task_id);
     }
-    return TaskActionResult::FAIL_NO_SUCH_TASK;
+    return TaskActionResult::FAIL_INVALID_TASK;
 }
 
-bool Controller::DeleteTaskWithSubTasks(const TaskId& task_id) {
+TaskActionResult Controller::DeleteTaskWithSubTasks(const TaskId& task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
-        if (model_->IsTaskIdExist(task_id)) {
-            switch (model_->DeleteTask(task_id, true)) {
-                case TaskActionResult::SUCCESS: {
-                    return true;
-                }
-                default: {
-                    return false;
-                }
-            }
-        }
+        model_->DeleteTask(task_id, true);
     }
-    return false;
+    return TaskActionResult::FAIL_INVALID_TASK;
 }
 
 TaskActionResult Controller::CompleteTask(const TaskId &task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
-        if (model_->IsTaskIdExist(task_id)){
-            return model_->CompleteTask(task_id);
-        }
+        return model_->CompleteTask(task_id);
     }
-    return TaskActionResult::FAIL_NO_SUCH_TASK;
+    return TaskActionResult::FAIL_INVALID_TASK;
 }
 
-bool Controller::CompleteTaskWithSubTasks(const TaskId& task_id) {
+TaskActionResult Controller::CompleteTaskWithSubTasks(const TaskId& task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
-        if (model_->IsTaskIdExist(task_id)) {
-            switch (model_->CompleteTask(task_id, true)) {
-                case TaskActionResult::SUCCESS: {
-                    return true;
-                }
-                default: {
-                    return false;
-                }
-            }
-        }
+        model_->CompleteTask(task_id, true);
     }
-    return false;
+    return TaskActionResult::FAIL_INVALID_TASK;
 }
 
 std::optional<Task> Controller::GetTask(const TaskId& task_id) const {
@@ -111,9 +85,6 @@ std::string Controller::GetAllTasks() {
     return answer;
 }
 
-bool Controller::SetTaskLabel(const TaskId& task_id, const std::string& label) {
-    if (model_->IsTaskIdExist(task_id)) {
-        return model_->SetTaskLabel(task_id, label);
-    }
-    return false;
+TaskActionResult Controller::SetTaskLabel(const TaskId& task_id, const std::string& label) {
+    return model_->SetTaskLabel(task_id, label);
 }

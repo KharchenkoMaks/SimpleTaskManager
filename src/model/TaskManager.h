@@ -22,17 +22,17 @@
 
 class TaskManager : public IModel {
 public:
-    std::optional<TaskId> AddTask(const Task& t) override;
-    std::optional<TaskId> AddSubTask(const Task& task, const TaskId& parent_id) override;
-    bool EditTask(const TaskId& id, const Task& t) override;
+    std::pair<TaskActionResult, std::optional<TaskId>> AddTask(const Task& t) override;
+    std::pair<TaskActionResult, std::optional<TaskId>> AddSubTask(const Task& task, const TaskId& parent_id) override;
+    TaskActionResult EditTask(const TaskId& id, const Task& t) override;
     TaskActionResult DeleteTask(const TaskId& id, bool force_delete_subtasks = false) override;
     TaskActionResult CompleteTask(const TaskId& id, bool force_complete_subtasks = false) override;
-    bool SetTaskLabel(const TaskId& id, const std::string& label) override;
+    TaskActionResult SetTaskLabel(const TaskId& id, const std::string& label) override;
 
     std::vector<TaskTransfer> GetTasks() override;
-    std::optional<std::vector<TaskTransfer>> GetTaskSubTasks(const TaskId& task_id) override;
+    std::pair<TaskActionResult, std::vector<TaskTransfer>> GetTaskSubTasks(const TaskId& task_id) override;
 public:
-    bool IsTaskIdExist(const TaskId& task_id) override;
+    bool IsTaskExist(const TaskId& task_id) override;
 
     std::optional<TaskTransfer> GetTask(const TaskId& task_id) override;
 public:

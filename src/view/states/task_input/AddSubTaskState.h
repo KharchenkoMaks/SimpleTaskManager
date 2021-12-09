@@ -23,6 +23,9 @@ public:
     std::optional<std::shared_ptr<WizardStateConsole>> Execute(std::shared_ptr<WizardContext> context) override;
 private:
     void ShowAddedTaskId(const TaskId& task_id);
+
+    std::pair<TaskActionResult, std::optional<TaskId>> GiveSubTaskToController(const TaskId& parent_id, const std::shared_ptr<WizardContext>& context_with_added_task);
+    std::optional<std::shared_ptr<WizardStateConsole>> PrintResultAndChangeState(const std::pair<TaskActionResult, std::optional<TaskId>>& added_subtask_result);
 };
 
 

@@ -27,10 +27,6 @@ std::optional<std::shared_ptr<WizardStateConsole>> CompleteTaskState::Execute(st
             GetConsolePrinter()->WriteLine("Task successfully completed.");
             return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
         }
-        case TaskActionResult::FAIL_NO_SUCH_TASK: {
-            GetConsolePrinter()->WriteError("No task with this id");
-            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
-        }
         case TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS: {
             if (UserConfirm("Found uncompleted subtasks, do you want to complete them?")) {
                 GetController()->CompleteTaskWithSubTasks(task_id.value());
@@ -40,6 +36,10 @@ std::optional<std::shared_ptr<WizardStateConsole>> CompleteTaskState::Execute(st
                 GetConsolePrinter()->WriteLine("Task wasn't completed because of uncompleted subtasks");
                 return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
             }
+        }
+        default: {
+            GetConsolePrinter()->WriteError("No task with this id");
+            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
         }
     }
 }

@@ -26,10 +26,6 @@ std::optional<std::shared_ptr<WizardStateConsole>> DeleteTaskState::Execute(std:
             GetConsolePrinter()->WriteLine("Task was successfully deleted.");
             return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
         }
-        case TaskActionResult::FAIL_NO_SUCH_TASK: {
-            GetConsolePrinter()->WriteError("No task was found with such task id");
-            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
-        }
         case TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS: {
             if (UserConfirm("Found subtasks for this task, are you sure you want to delete them?")) {
                 GetController()->DeleteTaskWithSubTasks(task_id.value());
@@ -39,6 +35,10 @@ std::optional<std::shared_ptr<WizardStateConsole>> DeleteTaskState::Execute(std:
                 GetConsolePrinter()->WriteLine("Task wasn't deleted.");
                 return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
             }
+        }
+        default: {
+            GetConsolePrinter()->WriteError("No task was found with such task id");
+            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
         }
     }
 }

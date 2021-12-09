@@ -34,10 +34,20 @@ std::optional<std::shared_ptr<WizardStateConsole>> EditTaskState::Execute(std::s
                     GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
 
     // Giving edited task to controller
-    if (!GetController()->EditTask(context_task_editing->GetTaskId().value(), context_task_editing->GetTask().value())) {
-        GetConsolePrinter()->WriteError("Task wasn't edited, try again.");
-        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
-    }
+    TaskActionResult edit_task_result =
+            GetController()->EditTask(context_task_editing->GetTaskId().value(), context_task_editing->GetTask().value());
 
-    return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+    switch(edit_task_result) {
+        case TaskActionResult::SUCCESS: {
+            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        }
+        case TaskActionResult::FAIL_NO_SUCH_TASK: {
+            GetConsolePrinter()->WriteError("Task with such id wasn't found.");
+            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        }
+        default: {
+            GetConsolePrinter()->WriteError("Invalid task was given, try again.");
+            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        }
+    }
 }

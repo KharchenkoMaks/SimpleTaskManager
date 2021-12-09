@@ -23,11 +23,15 @@ std::optional<std::shared_ptr<WizardStateConsole>> SetLabelState::Execute(std::s
     }
 
     std::string label_to_set = GetUserInput("Label");
-    if (GetController()->SetTaskLabel(task_id.value(), label_to_set)) {
-        GetConsolePrinter()->WriteLine("Label was successfully set.");
-    } else {
-        GetConsolePrinter()->WriteError("Label wasn't set.");
+    TaskActionResult set_label_result = GetController()->SetTaskLabel(task_id.value(), label_to_set);
+    switch (set_label_result) {
+        case TaskActionResult::SUCCESS: {
+            GetConsolePrinter()->WriteLine("Label was successfully set.");
+            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+        }
+        default: {
+            GetConsolePrinter()->WriteError("Task with such id wasn't found.");
+            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+        }
     }
-
-    return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }

@@ -9,45 +9,42 @@ TaskManager::TaskManager(std::unique_ptr<IdGenerator> generator)
 
 }
 
-std::optional<TaskId> TaskManager::AddTask(const Task& t) {
+std::pair<TaskActionResult, std::optional<TaskId>> TaskManager::AddTask(const Task& t) {
     if (t.GetTitle().empty()){
-        return std::nullopt;
+        return std::pair(TaskActionResult::FAIL_INVALID_TASK, std::nullopt);
     }
     TaskId task_id = generator_->CreateNewTaskId();
     tasks_.insert({ task_id, t });
-    return task_id;
+    return std::pair(TaskActionResult::SUCCESS, task_id);
 }
 
-std::optional<TaskId> TaskManager::AddSubTask(const Task& task, const TaskId& parent_id) {
+std::pair<TaskActionResult, std::optional<TaskId>> TaskManager::AddSubTask(const Task& task, const TaskId& parent_id) {
     if (task.GetTitle().empty()) {
-        return std::nullopt;
+        return std::pair(TaskActionResult::FAIL_INVALID_TASK, std::nullopt);
     }
     if (GetTaskType(parent_id) != TaskType::kParent) {
-        return std::nullopt;
+        return std::pair(TaskActionResult::FAIL_NO_SUCH_TASK, std::nullopt);
     }
     SubTask subtask = SubTask::Create(task, parent_id);
     TaskId task_id = generator_->CreateNewTaskId();
     subtasks_.insert({ task_id, subtask });
-    return task_id;
+    return std::pair(TaskActionResult::SUCCESS, task_id);
 }
 
-bool TaskManager::EditTask(const TaskId& id, const Task& t) {
+TaskActionResult TaskManager::EditTask(const TaskId& id, const Task& t) {
     switch (GetTaskType(id)){
         case TaskType::kParent: {
             tasks_.insert_or_assign(id, t);
-            return true;
+            return TaskActionResult::SUCCESS;
         }
         case TaskType::kChild: {
             std::optional<SubTask> subtask = GetSubTaskById(id);
-            if (!subtask.has_value()) {
-                return false;
-            }
             SubTask new_subtask = SubTask::Create(t, subtask.value().GetParentTaskId());
             subtasks_.insert_or_assign(id, new_subtask);
-            return true;
+            return TaskActionResult::SUCCESS;
         }
         default: {
-            return false;
+            return TaskActionResult::FAIL_NO_SUCH_TASK;
         }
     }
 }
@@ -139,7 +136,7 @@ std::vector<TaskTransfer> TaskManager::GetTasks() {
     std::vector<TaskTransfer> tasks;
     for (const auto& task_item : tasks_) {
         tasks.push_back(TaskTransfer::Create(task_item.first, task_item.second));
-        std::vector<TaskTransfer> subtasks = GetTaskSubTasks(task_item.first).value();
+        std::vector<TaskTransfer> subtasks = GetTaskSubTasks(task_item.first).second;
         for (const auto& subtask_item : subtasks) {
             tasks.push_back(subtask_item);
         }
@@ -147,7 +144,7 @@ std::vector<TaskTransfer> TaskManager::GetTasks() {
     return tasks;
 }
 
-bool TaskManager::IsTaskIdExist(const TaskId &task_id) {
+bool TaskManager::IsTaskExist(const TaskId &task_id) {
     auto task_type = GetTaskType(task_id);
     return task_type == TaskType::kParent || task_type == TaskType::kChild;
 }
@@ -204,35 +201,35 @@ Task TaskManager::MakeTaskCompleted(const Task& task) {
     return Task::Create(task.GetTitle(), task.GetPriority(), task.GetDueTime(), true, task.GetLabel());
 }
 
-std::optional<std::vector<TaskTransfer>> TaskManager::GetTaskSubTasks(const TaskId& parent_task_id) {
-    if (GetTaskType(parent_task_id) != TaskType::kParent){
-        return std::nullopt;
-    }
+std::pair<TaskActionResult, std::vector<TaskTransfer>> TaskManager::GetTaskSubTasks(const TaskId& parent_task_id) {
     std::vector<TaskTransfer> subtasks;
+    if (GetTaskType(parent_task_id) != TaskType::kParent){
+        return std::pair(TaskActionResult::FAIL_NO_SUCH_TASK, subtasks);
+    }
     for (const auto& item : subtasks_) {
         if (item.second.GetParentTaskId() == parent_task_id) {
             subtasks.push_back(TaskTransfer::Create(item.first, item.second.GetTaskParameters(), item.second.GetParentTaskId()));
         }
     }
-    return subtasks;
+    return std::pair(TaskActionResult::SUCCESS, subtasks);
 }
 
-bool TaskManager::SetTaskLabel(const TaskId& id, const std::string& label) {
+TaskActionResult TaskManager::SetTaskLabel(const TaskId& id, const std::string& label) {
     switch (GetTaskType(id)) {
         case TaskType::kParent: {
             Task task_to_label = GetTaskById(id).value();
             tasks_.insert_or_assign(id, SetLabel(task_to_label, label));
-            return true;
+            return TaskActionResult::SUCCESS;
         }
         case TaskType::kChild: {
             SubTask task_to_label = GetSubTaskById(id).value();
             SubTask task_with_label =
                     SubTask::Create(SetLabel(task_to_label.GetTaskParameters(), label), task_to_label.GetParentTaskId());
             subtasks_.insert_or_assign(id, task_with_label);
-            return true;
+            return TaskActionResult::SUCCESS;
         }
         default: {
-            return false;
+            return TaskActionResult::FAIL_NO_SUCH_TASK;
         }
     }
 }
