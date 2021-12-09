@@ -22,7 +22,7 @@ public:
                                 const std::shared_ptr<ConsoleReader>& reader);
 
 public:
-    virtual std::optional<std::shared_ptr<WizardStateConsole>> Execute(std::shared_ptr<WizardContext>) = 0;
+    virtual std::shared_ptr<WizardStateConsole> Execute(std::shared_ptr<WizardContext>) = 0;
 
 public:
     std::shared_ptr<WizardStatesFactory> GetStatesFactory() const;

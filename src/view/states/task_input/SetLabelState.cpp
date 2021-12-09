@@ -15,7 +15,7 @@ SetLabelState::SetLabelState(const std::shared_ptr<Controller> &controller,
 
 }
 
-std::optional<std::shared_ptr<WizardStateConsole>> SetLabelState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<WizardStateConsole> SetLabelState::Execute(std::shared_ptr<WizardContext> context) {
     std::optional<TaskId> task_id = GetTaskIdFromUser();
     if (!task_id.has_value()){
         GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");

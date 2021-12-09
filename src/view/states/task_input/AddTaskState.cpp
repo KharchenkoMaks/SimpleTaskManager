@@ -4,7 +4,7 @@
 
 #include "states/task_input/AddTaskState.h"
 
-std::optional<std::shared_ptr<WizardStateConsole>> AddTaskState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<WizardStateConsole> AddTaskState::Execute(std::shared_ptr<WizardContext> context) {
     std::shared_ptr<WizardContext> context_with_added_task = RunStateMachine(std::make_shared<WizardContext>(),
                     GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
 

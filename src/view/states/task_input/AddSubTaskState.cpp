@@ -16,7 +16,7 @@ AddSubTaskState::AddSubTaskState(const std::shared_ptr<ConsoleStateMachine>& sta
 
 }
 
-std::optional<std::shared_ptr<WizardStateConsole>> AddSubTaskState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<WizardStateConsole> AddSubTaskState::Execute(std::shared_ptr<WizardContext> context) {
     std::optional<TaskId> parent_task_id = GetTaskIdFromUser("Parent Task ID");
     if (!parent_task_id.has_value()) {
         GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
@@ -44,7 +44,7 @@ std::pair<TaskActionResult, std::optional<TaskId>> AddSubTaskState::GiveSubTaskT
     return std::pair(TaskActionResult::FAIL_INVALID_TASK, std::nullopt);
 }
 
-std::optional<std::shared_ptr<WizardStateConsole>> AddSubTaskState::PrintResultAndChangeState(const std::pair<TaskActionResult, std::optional<TaskId>>& added_subtask_result) {
+std::shared_ptr<WizardStateConsole> AddSubTaskState::PrintResultAndChangeState(const std::pair<TaskActionResult, std::optional<TaskId>>& added_subtask_result) {
     switch (added_subtask_result.first) {
         case TaskActionResult::SUCCESS: {
             ShowAddedTaskId(added_subtask_result.second.value());

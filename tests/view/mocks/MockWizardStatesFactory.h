@@ -19,9 +19,17 @@ public:
                             WizardStatesFactory(controller, printer, reader) {}
 
     MOCK_METHOD(std::optional<std::shared_ptr<WizardStateConsole>>, GetNextState, (const QuitState& state, MoveType move_type), (override));
-    MOCK_METHOD(std::optional<std::shared_ptr<WizardStateConsole>>, GetNextState, (const RootState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::optional<std::shared_ptr<WizardStateConsole>>, GetNextState, (const RootState& state, MoveType move_type), (override))
+
+    std::shared_ptr<WizardStateConsole>
+
+    ;
     MOCK_METHOD(std::optional<std::shared_ptr<WizardStateConsole>>, GetNextState, (const ShowState& state, MoveType move_type), (override));
-    MOCK_METHOD(std::optional<std::shared_ptr<WizardStateConsole>>, GetNextState, (const HelpState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::optional<std::shared_ptr<WizardStateConsole>>, GetNextState, (const HelpState& state, MoveType move_type), (override))
+
+    std::shared_ptr<WizardStateConsole>
+
+    ;
     MOCK_METHOD(std::optional<std::shared_ptr<WizardStateConsole>>, GetNextState, (const AddTaskState& state, MoveType move_type), (override));
     MOCK_METHOD(std::optional<std::shared_ptr<WizardStateConsole>>, GetNextState, (const InputTaskTitleState& state, MoveType move_type), (override));
     MOCK_METHOD(std::optional<std::shared_ptr<WizardStateConsole>>, GetNextState, (const InputTaskPriorityState& state, MoveType move_type), (override));

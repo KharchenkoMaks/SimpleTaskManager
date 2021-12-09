@@ -17,7 +17,7 @@ EditTaskState::EditTaskState(const std::shared_ptr<ConsoleStateMachine>& state_m
 
 }
 
-std::optional<std::shared_ptr<WizardStateConsole>> EditTaskState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<WizardStateConsole> EditTaskState::Execute(std::shared_ptr<WizardContext> context) {
     std::optional<TaskId> editing_task_id = GetTaskIdFromUser();
     if (!editing_task_id.has_value()) {
         GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");

@@ -11,7 +11,7 @@ InputTaskPriorityState::InputTaskPriorityState(const std::shared_ptr<WizardState
 
 }
 
-std::optional<std::shared_ptr<WizardStateConsole>> InputTaskPriorityState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<WizardStateConsole> InputTaskPriorityState::Execute(std::shared_ptr<WizardContext> context) {
     std::string user_input;
 
     if (context->GetTaskId().has_value()) {

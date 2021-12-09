@@ -12,7 +12,7 @@ ShowState::ShowState(const std::shared_ptr<Controller>& controller,
 
 }
 
-std::optional<std::shared_ptr<WizardStateConsole>> ShowState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<WizardStateConsole> ShowState::Execute(std::shared_ptr<WizardContext> context) {
     std::string tasks_show = GetController()->GetAllTasks();
     GetConsolePrinter()->Write(tasks_show);
     return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);

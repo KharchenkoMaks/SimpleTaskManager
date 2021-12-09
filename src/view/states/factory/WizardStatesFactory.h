@@ -25,6 +25,7 @@
 #include "states/task_input/AddSubTaskState.h"
 #include "states/DeleteTaskState.h"
 #include "states/task_input/SetLabelState.h"
+#include "states/EndState.h"
 
 #include <memory>
 #include <string>
@@ -43,6 +44,7 @@ class CompleteTaskState;
 class AddSubTaskState;
 class DeleteTaskState;
 class SetLabelState;
+class EndState;
 
 class WizardStatesFactory : public std::enable_shared_from_this<WizardStatesFactory> {
 public:
@@ -58,23 +60,23 @@ public:
                         const std::shared_ptr<ConsoleReader>& reader);
 
 public:
-    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetStateByCommand(const std::string& command);
+    virtual std::shared_ptr<WizardStateConsole> GetStateByCommand(const std::string& command);
 
     std::shared_ptr<WizardStateConsole> GetInitialState();
 
-    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const RootState& state, MoveType move_type);
-    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const HelpState& state, MoveType move_type);
-    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const QuitState& state, MoveType move_type);
-    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const AddTaskState& state, MoveType move_type);
-    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const EditTaskState& state, MoveType move_type);
-    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const InputTaskTitleState& state, MoveType move_type);
-    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const InputTaskPriorityState& state, MoveType move_type);
-    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const InputTaskDueDateState& state, MoveType move_type);
-    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const ShowState& state, MoveType move_type);
-    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const CompleteTaskState& state, MoveType move_type);
-    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const AddSubTaskState& state, MoveType move_type);
-    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const DeleteTaskState& state, MoveType move_type);
-    virtual std::optional<std::shared_ptr<WizardStateConsole>> GetNextState(const SetLabelState& state, MoveType move_type);
+    virtual std::shared_ptr<WizardStateConsole> GetNextState(const RootState& state, MoveType move_type);
+    virtual std::shared_ptr<WizardStateConsole> GetNextState(const HelpState& state, MoveType move_type);
+    virtual std::shared_ptr<WizardStateConsole> GetNextState(const QuitState& state, MoveType move_type);
+    virtual std::shared_ptr<WizardStateConsole> GetNextState(const AddTaskState& state, MoveType move_type);
+    virtual std::shared_ptr<WizardStateConsole> GetNextState(const EditTaskState& state, MoveType move_type);
+    virtual std::shared_ptr<WizardStateConsole> GetNextState(const InputTaskTitleState& state, MoveType move_type);
+    virtual std::shared_ptr<WizardStateConsole> GetNextState(const InputTaskPriorityState& state, MoveType move_type);
+    virtual std::shared_ptr<WizardStateConsole> GetNextState(const InputTaskDueDateState& state, MoveType move_type);
+    virtual std::shared_ptr<WizardStateConsole> GetNextState(const ShowState& state, MoveType move_type);
+    virtual std::shared_ptr<WizardStateConsole> GetNextState(const CompleteTaskState& state, MoveType move_type);
+    virtual std::shared_ptr<WizardStateConsole> GetNextState(const AddSubTaskState& state, MoveType move_type);
+    virtual std::shared_ptr<WizardStateConsole> GetNextState(const DeleteTaskState& state, MoveType move_type);
+    virtual std::shared_ptr<WizardStateConsole> GetNextState(const SetLabelState& state, MoveType move_type);
 
 public:
     virtual ~WizardStatesFactory() = default;
@@ -93,7 +95,8 @@ private:
         kShow,
         kComplete,
         kDelete,
-        kSetLabel
+        kSetLabel,
+        kEnd
     };
 private:
     std::shared_ptr<WizardStateConsole> GetLazyStateByStatesEnum(States state);
@@ -102,6 +105,7 @@ private:
     std::shared_ptr<RootState> root_state_;
     std::shared_ptr<HelpState> help_state_;
     std::shared_ptr<QuitState> quit_state_;
+    std::shared_ptr<EndState> end_state_;
 
     std::shared_ptr<AddTaskState> add_task_state_;
     std::shared_ptr<AddSubTaskState> add_subtask_state_;

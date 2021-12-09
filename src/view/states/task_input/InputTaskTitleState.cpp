@@ -11,7 +11,7 @@ InputTaskTitleState::InputTaskTitleState(const std::shared_ptr<WizardStatesFacto
 
 }
 
-std::optional<std::shared_ptr<WizardStateConsole>> InputTaskTitleState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<WizardStateConsole> InputTaskTitleState::Execute(std::shared_ptr<WizardContext> context) {
     std::string user_input;
 
     if (context->GetTaskId().has_value()) {

@@ -11,7 +11,7 @@ InputTaskDueDateState::InputTaskDueDateState(const std::shared_ptr<WizardStatesF
 
 }
 
-std::optional<std::shared_ptr<WizardStateConsole>> InputTaskDueDateState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<WizardStateConsole> InputTaskDueDateState::Execute(std::shared_ptr<WizardContext> context) {
     std::string user_input;
     if (context->GetTaskId().has_value()) {
         // If TaskId has value in context, then we are editing task
