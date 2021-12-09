@@ -3,6 +3,7 @@
 //
 
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
 
 #include "../mocks/MockWizardStatesFactory.h"
 #include "../mocks/MockController.h"

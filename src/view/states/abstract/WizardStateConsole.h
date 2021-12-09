@@ -40,7 +40,7 @@ public:
     virtual ~WizardStateConsole() = default;
 
 private:
-    std::shared_ptr<WizardStatesFactory> states_factory_;
+    std::weak_ptr<WizardStatesFactory> states_factory_;
 
     std::shared_ptr<ConsolePrinter> console_printer_;
     std::shared_ptr<ConsoleReader> console_reader_;

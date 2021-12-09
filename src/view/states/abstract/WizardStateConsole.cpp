@@ -28,7 +28,7 @@ std::string WizardStateConsole::GetUserInput(const std::string& invitation_messa
 }
 
 std::shared_ptr<WizardStatesFactory> WizardStateConsole::GetStatesFactory() const {
-    return states_factory_;
+    return states_factory_.lock();
 }
 
 bool WizardStateConsole::UserConfirm(const std::string& question_string) {
