@@ -21,7 +21,11 @@ std::shared_ptr<WizardStateInterface> InputTaskDueDateState::Execute(std::shared
 
     std::optional<DueTime> task_due_date = DueTime::Create(user_input);
     if (task_due_date.has_value()) {
-        context->AddTaskDueTime(task_due_date.value());
+        const bool due_time_adding_result = context->AddTaskDueTime(task_due_date.value());
+        if (!due_time_adding_result) {
+            dependencies_->GetConsolePrinter()->WriteError("Due time should be in future, try again!");
+            return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+        }
     } else {
         dependencies_->GetConsolePrinter()->WriteError("Wrong due date was given, try again!");
         return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);

@@ -14,6 +14,9 @@ std::optional<Task> WizardContext::GetTask() {
 }
 
 bool WizardContext::AddTaskTitle(const std::string& title) {
+    if (title.empty()) {
+        return false;
+    }
     task_builder_.SetTitle(title);
     return true;
 }
@@ -24,6 +27,9 @@ bool WizardContext::AddTaskPriority(const Task::Priority priority) {
 }
 
 bool WizardContext::AddTaskDueTime(const DueTime due_time) {
+    if (!(due_time > time(0))) {
+        return false;
+    }
     task_builder_.SetDueTime(due_time);
     return true;
 }
