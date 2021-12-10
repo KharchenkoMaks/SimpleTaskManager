@@ -69,7 +69,7 @@ int main() {
 // TODO: Make pure State interface
 // TODO_DONE: Return TaskActionResult in Model API - Done 09.12.2021
 // TODO: Rename IModel
-// TODO: Make TaskBuilder in WizardContext
+// TODO_DONE: Make TaskBuilder in WizardContext - Done 10.12.2021
 // TODO: Make set_label part of edit
 // TODO: Make builder of integration tests
 // TODO_DONE: Make state for ending state machine - Done 09.12.2021

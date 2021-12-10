@@ -8,6 +8,7 @@
 #include "tasks/Task.h"
 #include "id/TaskId.h"
 #include "DueTime.h"
+#include "tasks/TaskBuilder.h"
 
 #include <memory>
 #include <string>
@@ -31,12 +32,7 @@ public:
 public:
     virtual ~WizardContext() = default;
 private:
-    Task CreateDefaultTask();
-    TaskId CreateDefaultTaskId();
-
-    void InitializeTask();
-private:
-    std::optional<Task> added_task_;
+    TaskBuilder task_builder_;
     std::optional<TaskId> editing_task_id_;
 };
 
