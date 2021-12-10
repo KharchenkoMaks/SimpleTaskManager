@@ -27,7 +27,6 @@ public:
     std::shared_ptr<MockController> controller_;
     std::shared_ptr<MockWizardStatesFactory> factory_;
     std::shared_ptr<MockWizardContext> context_;
-    std::shared_ptr<MockConsoleStateMachine> state_machine_;
 
     std::shared_ptr<WizardContext> context_with_task_;
 
@@ -39,7 +38,6 @@ public:
         controller_ = std::make_shared<MockController>(std::make_unique<MockModel>(), std::make_unique<MockTaskValidator>());
         factory_ = std::make_shared<MockWizardStatesFactory>(controller_, printer_, reader_);
         context_ = std::make_shared<MockWizardContext>();
-        state_machine_ = std::make_shared<MockConsoleStateMachine>();
 
         context_with_task_ = std::make_shared<WizardContext>();
         context_with_task_->AddTaskTitle("title");
@@ -54,9 +52,12 @@ public:
 TEST_F(StatesTests, ExecuteRootStateReceivesNulloptFromFactory_ShouldChangeStateToRoot) {
     // Arrange
     this->SetUp();
-    RootState root_state{factory_, printer_, reader_ };
-    std::shared_ptr<WizardStateInterface> expected_return =
-            std::make_shared<RootState>(nullptr, nullptr, nullptr);
+    RootState root_state{std::make_unique<StateDependencies>(std::make_unique<MockConsoleStateMachine>(),
+                                                             factory_,
+                                                             controller_,
+                                                             printer_,
+                                                             reader_)};
+    std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<RootState>(nullptr);
     // Assert
     // Invites user to input command
     EXPECT_CALL(*printer_, Write("> ")).Times(1);
@@ -82,9 +83,12 @@ TEST_F(StatesTests, ExecuteRootStateReceivesNulloptFromFactory_ShouldChangeState
 TEST_F(StatesTests, ExecuteRootStateReceivesNotNullFromFactory_ShouldReturnNextState) {
     // Arrange
     this->SetUp();
-    RootState root_state{factory_, printer_, reader_ };
-    std::shared_ptr<WizardStateInterface> expected_return =
-            std::make_shared<AddTaskState>(nullptr, nullptr, nullptr, nullptr, nullptr);
+    RootState root_state{std::make_unique<StateDependencies>(std::make_unique<MockConsoleStateMachine>(),
+                                                             factory_,
+                                                             controller_,
+                                                             printer_,
+                                                             reader_)};
+    std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<AddTaskState>(nullptr);
     // Assert
     // Invites user to input command
     EXPECT_CALL(*printer_, Write("> ")).Times(1);
@@ -104,9 +108,12 @@ TEST_F(StatesTests, ExecuteRootStateReceivesNotNullFromFactory_ShouldReturnNextS
 TEST_F(StatesTests, ExecuteQuitStateWithPositiveInput_ShouldCallNextStateNext) {
     // Arrange
     this->SetUp();
-    QuitState quit_state{ factory_, printer_, reader_ };
-    std::shared_ptr<WizardStateInterface> expected_return =
-            std::make_shared<QuitState>(nullptr, nullptr, nullptr);
+    QuitState quit_state{std::make_unique<StateDependencies>(std::make_unique<MockConsoleStateMachine>(),
+                                                             factory_,
+                                                             controller_,
+                                                             printer_,
+                                                             reader_)};
+    std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<QuitState>(nullptr);
     // Assert
     EXPECT_CALL(*printer_, Write("Are you sure? y/n> ")).Times(1);
     // Receives "y" from user
@@ -126,8 +133,12 @@ TEST_F(StatesTests, ExecuteQuitStateWithPositiveInput_ShouldCallNextStateNext) {
 TEST_F(StatesTests, ExecuteQuitStateWithNegativeInput_ShouldCallNextStatePrevious) {
     // Arrange
     this->SetUp();
-    QuitState quit_state{ factory_, printer_, reader_ };
-    std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<EndState>(nullptr, nullptr, nullptr);
+    QuitState quit_state{std::make_unique<StateDependencies>(std::make_unique<MockConsoleStateMachine>(),
+                                                             factory_,
+                                                             controller_,
+                                                             printer_,
+                                                             reader_)};
+    std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<EndState>(nullptr);
     // Assert
     EXPECT_CALL(*printer_, Write("Are you sure? y/n> ")).Times(1);
     // Receives "y" from user
@@ -147,9 +158,12 @@ TEST_F(StatesTests, ExecuteQuitStateWithNegativeInput_ShouldCallNextStatePreviou
 TEST_F(StatesTests, ExecuteShowState_ShouldPrintStringReceivedFromController) {
     // Arrange
     this->SetUp();
-    ShowState show_state{ controller_, factory_, printer_, nullptr };
-    std::shared_ptr<WizardStateInterface> expected_return =
-            std::make_shared<RootState>(nullptr, nullptr, nullptr);
+    ShowState show_state{std::make_unique<StateDependencies>(std::make_unique<MockConsoleStateMachine>(),
+                                                             factory_,
+                                                             controller_,
+                                                             printer_,
+                                                             reader_)};
+    std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<RootState>(nullptr);
     const std::string expected_print = "tasks string";
     // Assert
     EXPECT_CALL(*controller_, GetAllTasks())
@@ -168,10 +182,13 @@ TEST_F(StatesTests, ExecuteShowState_ShouldPrintStringReceivedFromController) {
 TEST_F(StatesTests, ExecuteShowState_ShouldPrintHelpString) {
     // Arrange
     this->SetUp();
-    HelpState help_state {factory_, printer_, nullptr};
+    HelpState help_state {std::make_unique<StateDependencies>(std::make_unique<MockConsoleStateMachine>(),
+                                                              factory_,
+                                                              controller_,
+                                                              printer_,
+                                                              reader_)};
     const int expected_strings_printed = 9;
-    std::shared_ptr<WizardStateInterface> expected_return =
-            std::make_shared<RootState>(nullptr, nullptr, nullptr);
+    std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<RootState>(nullptr);
     // Assert
     EXPECT_CALL(*printer_, WriteLine(testing::An<const std::string&>())).Times(9);
     EXPECT_CALL(*factory_, GetNextState(testing::An<const HelpState&>(), WizardStatesFactory::MoveType::NEXT))
@@ -186,19 +203,17 @@ TEST_F(StatesTests, ExecuteShowState_ShouldPrintHelpString) {
 TEST_F(StatesTests, AddTaskExecute_ShouldRunStateMachineAndGiveTaskToController) {
     // Arrange
     this->SetUp();
-    AddTaskState add_task_state_ {state_machine_, controller_, factory_, printer_, nullptr };
-    std::shared_ptr<WizardStateInterface> expected_return =
-            std::make_shared<RootState>(nullptr, nullptr, nullptr);
+    std::unique_ptr<MockConsoleStateMachine> state_machine = std::make_unique<MockConsoleStateMachine>();
+    std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<RootState>(nullptr);
     const TaskId returned_task_id = TaskId::Create(5).value();
-    std::shared_ptr<WizardStateInterface> expected_initial_state =
-            std::make_shared<InputTaskTitleState>(nullptr, nullptr, nullptr);
+    std::shared_ptr<WizardStateInterface> expected_initial_state = std::make_shared<InputTaskTitleState>(nullptr);
     // Assert
     // Expect call factory GetNextState to get initial state for inner state machine
     EXPECT_CALL(*factory_, GetNextState(testing::An<const AddTaskState&>(), WizardStatesFactory::MoveType::NEXT))
         .Times(1)
         .WillOnce(Return(expected_initial_state));
     // Expect running state_machine with initial_state returned by factory
-    EXPECT_CALL(*state_machine_, Run(testing::_, testing::Eq(expected_initial_state)))
+    EXPECT_CALL(*state_machine, Run(testing::_, testing::Eq(expected_initial_state)))
         .Times(1)
         .WillOnce(Return(context_with_task_));
     // Expect giving task from context to controller AddTask method
@@ -212,6 +227,11 @@ TEST_F(StatesTests, AddTaskExecute_ShouldRunStateMachineAndGiveTaskToController)
             .Times(1)
             .WillOnce(Return(expected_return));
     // Act
+    AddTaskState add_task_state_ {std::make_unique<StateDependencies>(std::move(state_machine),
+                                                                      factory_,
+                                                                      controller_,
+                                                                      printer_,
+                                                                      reader_)};
     std::shared_ptr<WizardStateInterface> actual_return = add_task_state_.Execute(nullptr);
     // Expect Execute method return shared_ptr from factory GetNextState method
     EXPECT_EQ(expected_return, actual_return);
@@ -220,18 +240,16 @@ TEST_F(StatesTests, AddTaskExecute_ShouldRunStateMachineAndGiveTaskToController)
 TEST_F(StatesTests, AddTaskExecute_ShouldRunStateMachineAndPrintError) {
     // Arrange
     this->SetUp();
-    AddTaskState add_task_state_ {state_machine_, controller_, factory_, printer_, nullptr };
-    std::shared_ptr<WizardStateInterface> expected_return =
-            std::make_shared<RootState>(nullptr, nullptr, nullptr);
-    std::shared_ptr<WizardStateInterface> expected_initial_state =
-            std::make_shared<InputTaskTitleState>(nullptr, nullptr, nullptr);
+    std::unique_ptr<MockConsoleStateMachine> state_machine = std::make_unique<MockConsoleStateMachine>();
+    std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<RootState>(nullptr);
+    std::shared_ptr<WizardStateInterface> expected_initial_state = std::make_shared<InputTaskTitleState>(nullptr);
     // Assert
     // Expect call factory GetNextState to get initial state for inner state machine
     EXPECT_CALL(*factory_, GetNextState(testing::An<const AddTaskState&>(), WizardStatesFactory::MoveType::NEXT))
             .Times(1)
             .WillOnce(Return(expected_initial_state));
     // Expect running state_machine with initial_state returned by factory
-    EXPECT_CALL(*state_machine_, Run(testing::_, testing::Eq(expected_initial_state)))
+    EXPECT_CALL(*state_machine, Run(testing::_, testing::Eq(expected_initial_state)))
             .Times(1)
             .WillOnce(Return(std::make_shared<WizardContext>()));
     EXPECT_CALL(*printer_, WriteError(testing::_)).Times(1);
@@ -239,6 +257,11 @@ TEST_F(StatesTests, AddTaskExecute_ShouldRunStateMachineAndPrintError) {
             .Times(1)
             .WillOnce(Return(expected_return));
     // Act
+    AddTaskState add_task_state_ {std::make_unique<StateDependencies>(std::move(state_machine),
+                                                                      factory_,
+                                                                      controller_,
+                                                                      printer_,
+                                                                      reader_)};
     std::shared_ptr<WizardStateInterface> actual_return = add_task_state_.Execute(nullptr);
     // Expect Execute method return shared_ptr from factory GetNextState method
     EXPECT_EQ(expected_return, actual_return);
@@ -247,12 +270,10 @@ TEST_F(StatesTests, AddTaskExecute_ShouldRunStateMachineAndPrintError) {
 TEST_F(StatesTests, AddSubTaskExecute_ShouldRunStateMachineAndGiveTaskToController) {
     // Arrange
     this->SetUp();
-    AddSubTaskState add_subtask_state {state_machine_, controller_, factory_, printer_, reader_};
-    std::shared_ptr<WizardStateInterface> expected_return =
-            std::make_shared<RootState>(nullptr, nullptr, nullptr);
+    std::unique_ptr<MockConsoleStateMachine> state_machine = std::make_unique<MockConsoleStateMachine>();
+    std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<RootState>(nullptr);
     const TaskId returned_task_id = TaskId::Create(5).value();
-    std::shared_ptr<WizardStateInterface> expected_initial_state =
-            std::make_shared<InputTaskTitleState>(nullptr, nullptr, nullptr);
+    std::shared_ptr<WizardStateInterface> expected_initial_state = std::make_shared<InputTaskTitleState>(nullptr);
     const std::string expected_user_input = "50";
     // Assert
     EXPECT_CALL(*printer_, Write("Parent Task ID> ")).Times(1);
@@ -260,7 +281,7 @@ TEST_F(StatesTests, AddSubTaskExecute_ShouldRunStateMachineAndGiveTaskToControll
     EXPECT_CALL(*factory_, GetNextState(testing::An<const AddSubTaskState&>(), WizardStatesFactory::MoveType::NEXT))
             .Times(1)
             .WillOnce(Return(expected_initial_state));
-    EXPECT_CALL(*state_machine_, Run(testing::_, testing::Eq(expected_initial_state)))
+    EXPECT_CALL(*state_machine, Run(testing::_, testing::Eq(expected_initial_state)))
         .Times(1)
         .WillOnce(Return(context_with_task_));
     EXPECT_CALL(*controller_, AddSubTask(context_with_task_->GetTask().value(), TaskId::Create(expected_user_input).value()))
@@ -272,6 +293,11 @@ TEST_F(StatesTests, AddSubTaskExecute_ShouldRunStateMachineAndGiveTaskToControll
             .Times(1)
             .WillOnce(Return(expected_return));
     // Act
+    AddSubTaskState add_subtask_state {std::make_unique<StateDependencies>(std::move(state_machine),
+                                                                           factory_,
+                                                                           controller_,
+                                                                           printer_,
+                                                                           reader_)};
     std::shared_ptr<WizardStateInterface> actual_return = add_subtask_state.Execute(nullptr);
     // Expect Execute method return shared_ptr from factory GetNextState method
     EXPECT_EQ(expected_return, actual_return);
@@ -280,9 +306,12 @@ TEST_F(StatesTests, AddSubTaskExecute_ShouldRunStateMachineAndGiveTaskToControll
 TEST_F(StatesTests, AddSubTaskExecuteWrongTaskIdInput_ShouldReturnOnPreviousState) {
     // Arrange
     this->SetUp();
-    AddSubTaskState add_subtask_state {state_machine_, controller_, factory_, printer_, reader_};
-    std::shared_ptr<WizardStateInterface> expected_return =
-            std::make_shared<RootState>(nullptr, nullptr, nullptr);
+    AddSubTaskState add_subtask_state {std::make_unique<StateDependencies>(std::make_unique<MockConsoleStateMachine>(),
+                                                                           factory_,
+                                                                           controller_,
+                                                                           printer_,
+                                                                           reader_)};
+    std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<RootState>(nullptr);
     // Assert
     EXPECT_CALL(*reader_, ReadLine()).Times(1).WillOnce(Return("asfasfasf"));
     EXPECT_CALL(*factory_, GetNextState(testing::An<const AddSubTaskState&>(), WizardStatesFactory::MoveType::PREVIOUS))
@@ -297,10 +326,13 @@ TEST_F(StatesTests, AddSubTaskExecuteWrongTaskIdInput_ShouldReturnOnPreviousStat
 TEST_F(StatesTests, InputTaskTitleExecute_ShouldAskUserForTitleAndWriteItToContext) {
     // Arrange
     this->SetUp();
-    InputTaskTitleState input_title_state {factory_, printer_, reader_};
+    InputTaskTitleState input_title_state {std::make_unique<StateDependencies>(std::make_unique<MockConsoleStateMachine>(),
+                                                                               factory_,
+                                                                               controller_,
+                                                                               printer_,
+                                                                               reader_)};
     const std::string expected_input_title = "task title";
-    std::shared_ptr<WizardStateInterface> expected_return =
-            std::make_shared<InputTaskPriorityState>(nullptr, nullptr, nullptr);
+    std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<InputTaskPriorityState>(nullptr);
     // Assert
     EXPECT_CALL(*context_, GetTaskId()).Times(1).WillOnce(Return(std::nullopt));
     EXPECT_CALL(*printer_, Write("Title> ")).Times(1);
@@ -318,11 +350,14 @@ TEST_F(StatesTests, InputTaskTitleExecute_ShouldAskUserForTitleAndWriteItToConte
 TEST_F(StatesTests, InputTaskTitleExecute_ShouldAskUserToEditTitle) {
     // Arrange
     this->SetUp();
-    InputTaskTitleState input_title_state {factory_, printer_, reader_};
+    InputTaskTitleState input_title_state {std::make_unique<StateDependencies>(std::make_unique<MockConsoleStateMachine>(),
+                                                                               factory_,
+                                                                               controller_,
+                                                                               printer_,
+                                                                               reader_)};
     const std::string expected_old_title = "old title";
     const std::string expected_input_title = "task title";
-    std::shared_ptr<WizardStateInterface> expected_return =
-            std::make_shared<InputTaskTitleState>(nullptr, nullptr, nullptr);
+    std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<InputTaskTitleState>(nullptr);
     // Assert
     EXPECT_CALL(*context_, GetTaskId()).Times(1).WillOnce(Return(TaskId::Create(5).value()));
     EXPECT_CALL(*context_, GetTask())
@@ -345,7 +380,11 @@ TEST_F(StatesTests, InputTaskTitleExecute_ShouldAskUserToEditTitle) {
 TEST_F(StatesTests, InputTaskTitleExecute_ShouldAskUserToEditTitleSetDefaultValue) {
     // Arrange
     this->SetUp();
-    InputTaskTitleState input_title_state {factory_, printer_, reader_};
+    InputTaskTitleState input_title_state {std::make_unique<StateDependencies>(std::make_unique<MockConsoleStateMachine>(),
+                                                                               factory_,
+                                                                               controller_,
+                                                                               printer_,
+                                                                               reader_)};
     const std::string expected_old_title = "old title";
     // Assert
     EXPECT_CALL(*context_, GetTaskId()).Times(1).WillOnce(Return(TaskId::Create(5).value()));
@@ -363,7 +402,11 @@ TEST_F(StatesTests, InputTaskTitleExecute_ShouldAskUserToEditTitleSetDefaultValu
 TEST_F(StatesTests, InputTaskDueDateExecute_ShouldAskUserForDueDateAndWriteToContext) {
     // Arrange
     this->SetUp();
-    InputTaskDueDateState input_due_date_state {factory_, printer_, reader_};
+    InputTaskDueDateState input_due_date_state {std::make_unique<StateDependencies>(std::make_unique<MockConsoleStateMachine>(),
+                                                                                    factory_,
+                                                                                    controller_,
+                                                                                    printer_,
+                                                                                    reader_)};
     const std::string expected_input_due_date = "15:00 01.01.2025";
     DueTime expected_due_time = DueTime::Create(expected_input_due_date).value();
     std::shared_ptr<WizardStateInterface> expected_return = nullptr;
@@ -384,9 +427,12 @@ TEST_F(StatesTests, InputTaskDueDateExecute_ShouldAskUserForDueDateAndWriteToCon
 TEST_F(StatesTests, InputTaskDueDateExecute_ShouldAskUserToEdit) {
     // Arrange
     this->SetUp();
-    std::shared_ptr<WizardStateInterface> expected_return =
-            std::make_shared<InputTaskDueDateState>(nullptr, nullptr, nullptr);
-    InputTaskDueDateState input_due_date_state {factory_, printer_, reader_};
+    std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<InputTaskDueDateState>(nullptr);
+    InputTaskDueDateState input_due_date_state {std::make_unique<StateDependencies>(std::make_unique<MockConsoleStateMachine>(),
+                                                                                    factory_,
+                                                                                    controller_,
+                                                                                    printer_,
+                                                                                    reader_)};
     DueTime old_due_time = DueTime::Create("15:00 01.01.2025").value();
     std::string new_input = "guuuuuuuu";
     // Assert
@@ -409,7 +455,11 @@ TEST_F(StatesTests, InputTaskDueDateExecute_ShouldAskUserToEdit) {
 TEST_F(StatesTests, InputTaskDueDateExecute_ShouldSetPreviousValueOnEmptyUserInput) {
     // Arrange
     this->SetUp();
-    InputTaskDueDateState input_due_date_state {factory_, printer_, reader_};
+    InputTaskDueDateState input_due_date_state {std::make_unique<StateDependencies>(std::make_unique<MockConsoleStateMachine>(),
+                                                                                    factory_,
+                                                                                    controller_,
+                                                                                    printer_,
+                                                                                    reader_)};
     DueTime expected_due_time = DueTime::Create("15:00 01.01.2025").value();
     std::shared_ptr<WizardStateInterface> expected_return = nullptr;
     // Assert
