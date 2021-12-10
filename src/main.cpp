@@ -73,3 +73,4 @@ int main() {
 // TODO: Make set_label part of edit
 // TODO: Make builder of integration tests
 // TODO_DONE: Make state for ending state machine - Done 09.12.2021
+// TODO: Rework states unit tests to test StateDependencies calls
