@@ -4,34 +4,28 @@
 
 #include "SetLabelState.h"
 
-SetLabelState::SetLabelState(const std::shared_ptr<Controller> &controller,
-                             const std::shared_ptr<WizardStatesFactory> &states_factory,
-                             const std::shared_ptr<ConsolePrinter> &printer,
-                             const std::shared_ptr<ConsoleReader> &reader) :
-                             WizardStateController(controller,
-                                                   states_factory,
-                                                   printer,
-                                                   reader) {
+SetLabelState::SetLabelState(std::unique_ptr<StateDependencies> dependencies) :
+                            dependencies_(std::move(dependencies)) {
 
 }
 
-std::shared_ptr<WizardStateConsole> SetLabelState::Execute(std::shared_ptr<WizardContext> context) {
-    std::optional<TaskId> task_id = GetTaskIdFromUser();
+std::shared_ptr<WizardStateInterface> SetLabelState::Execute(std::shared_ptr<WizardContext> context) {
+    std::optional<TaskId> task_id = dependencies_->GetTaskIdFromUser();
     if (!task_id.has_value()){
-        GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
-        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        dependencies_->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
+        return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
     }
 
-    std::string label_to_set = GetUserInput("Label");
-    TaskActionResult set_label_result = GetController()->SetTaskLabel(task_id.value(), label_to_set);
+    std::string label_to_set = dependencies_->GetUserInput("Label");
+    TaskActionResult set_label_result = dependencies_->GetController()->SetTaskLabel(task_id.value(), label_to_set);
     switch (set_label_result) {
         case TaskActionResult::SUCCESS: {
-            GetConsolePrinter()->WriteLine("Label was successfully set.");
-            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+            dependencies_->GetConsolePrinter()->WriteLine("Label was successfully set.");
+            return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
         }
         default: {
-            GetConsolePrinter()->WriteError("Task with such id wasn't found.");
-            return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+            dependencies_->GetConsolePrinter()->WriteError("Task with such id wasn't found.");
+            return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
         }
     }
 }

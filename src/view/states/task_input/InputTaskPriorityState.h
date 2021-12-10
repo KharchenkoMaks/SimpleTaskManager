@@ -5,23 +5,24 @@
 #ifndef SIMPLETASKMANAGER_INPUTTASKPRIORITYSTATE_H
 #define SIMPLETASKMANAGER_INPUTTASKPRIORITYSTATE_H
 
-#include "states/abstract/WizardStateConsole.h"
+#include "states/abstract/WizardStateInterface.h"
 #include "states/factory/WizardStatesFactory.h"
+#include "states/abstract/StateDependencies.h"
 #include "WizardContext.h"
 
 #include <string>
 #include <memory>
 
-class InputTaskPriorityState : public WizardStateConsole {
+class InputTaskPriorityState : public WizardStateInterface {
 public:
-    explicit InputTaskPriorityState(const std::shared_ptr<WizardStatesFactory>& states_factory,
-                                    const std::shared_ptr<ConsolePrinter>& printer,
-                                    const std::shared_ptr<ConsoleReader>& reader);
+    explicit InputTaskPriorityState(std::unique_ptr<StateDependencies> dependencies);
 public:
-    std::shared_ptr<WizardStateConsole> Execute(std::shared_ptr<WizardContext> context) override;
+    std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
 private:
     std::string GetUserInputForPriorityAdd();
     std::string GetUserInputForPriorityEdit(const Task& task);
+private:
+    std::unique_ptr<StateDependencies> dependencies_;
 };
 
 

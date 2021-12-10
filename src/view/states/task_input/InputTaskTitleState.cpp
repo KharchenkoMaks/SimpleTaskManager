@@ -4,14 +4,12 @@
 
 #include "states/task_input/InputTaskTitleState.h"
 
-InputTaskTitleState::InputTaskTitleState(const std::shared_ptr<WizardStatesFactory>& states_factory,
-                                         const std::shared_ptr<ConsolePrinter>& printer,
-                                         const std::shared_ptr<ConsoleReader>& reader) :
-                                         WizardStateConsole(states_factory, printer, reader) {
+InputTaskTitleState::InputTaskTitleState(std::unique_ptr<StateDependencies> dependencies) :
+                                        dependencies_(std::move(dependencies)) {
 
 }
 
-std::shared_ptr<WizardStateConsole> InputTaskTitleState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<WizardStateInterface> InputTaskTitleState::Execute(std::shared_ptr<WizardContext> context) {
     std::string user_input;
 
     if (context->GetTaskId().has_value()) {
@@ -21,20 +19,20 @@ std::shared_ptr<WizardStateConsole> InputTaskTitleState::Execute(std::shared_ptr
     }
 
     if (!context->AddTaskTitle(user_input)) {
-        GetConsolePrinter()->WriteError("Task title was wrong, please, try again!");
-        return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+        dependencies_->GetConsolePrinter()->WriteError("Task title was wrong, please, try again!");
+        return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+    return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }
 
 std::string InputTaskTitleState::GetUserInputForTitleAdd() {
-    return GetUserInput("Title");
+    return dependencies_->GetUserInput("Title");
 }
 
 std::string InputTaskTitleState::GetUserInputForTitleEdit(const Task &task) {
-    GetConsolePrinter()->WriteLine("Leave empty for default value.");
-    std::string user_input = GetUserInput("Title, default: " + task.GetTitle());
+    dependencies_->GetConsolePrinter()->WriteLine("Leave empty for default value.");
+    std::string user_input = dependencies_->GetUserInput("Title, default: " + task.GetTitle());
     if (user_input.empty()){
         return task.GetTitle();
     }

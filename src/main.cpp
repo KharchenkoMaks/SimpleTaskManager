@@ -28,18 +28,18 @@ int main() {
 // TODO_DONE: Get rid of states enum in states factory - Done 26.11.2021
 // TODO_DONE: Use state machine inside AddTaskState and EditTaskState - Done 25.11.2021
 // TODO_DONE: Make abstract State for states that run state machine inside? - Done 07.12.2021
-// TODO_DONE: Rename WizardStateConsole abstract class - Done 26.11.2021
+// TODO_DONE: Rename WizardStateInterface abstract class - Done 26.11.2021
 // TODO_DONE: Rename Printer to PrinterWithScanner =) - Done 25.11.2021
-// TODO_DONE: Make default methods in WizardStateConsole to ask user for some input - Done 26.11.2021
+// TODO_DONE: Make default methods in WizardStateInterface to ask user for some input - Done 26.11.2021
 // TODO_DONE: DeleteTask unnecessary directories - Done 25.11.2021
 // TODO_DONE: Change subtasks structure - Done 02.12.2021
 // TODO: Move Task::Priority converter out of Task class
 // TODO_DONE: Make functionality for task deleting - Done 03.12.2021
 // TODO_DONE: Make Task due time wrapper - Done 30.11.2021
 // TODO_DONE: Split MultiFunctionalPrinter to printer and reader - Done 26.11.2021
-// TODO_DONE: Make printer and reader private in WizardStateConsole - Done 26.11.2021
+// TODO_DONE: Make printer and reader private in WizardStateInterface - Done 26.11.2021
 // TODO_DONE: Move factory to states' parameters - Done 29.11.2021
-// TODO_DONE: Make read id method in WizardStateConsole - Done 29.11.2021
+// TODO_DONE: Make read id method in WizardStateInterface - Done 29.11.2021
 // TODO: Make start_from enum parameter in state machine?
 // TODO_DONE: Make controller and validator for tasks - Done 29.11.2021
 // TODO_DONE: Inject controller to state machine and states - Done 30.11.2021
@@ -66,7 +66,7 @@ int main() {
 // TODO_DONE: Remove check for task existence in states - Done 08.12.2021
 // TODO_DONE: Make user message when non-existent task id was given - Done 09.12.2021
 // TODO: Make task validator general, move it to utilities
-// TODO: Make pure State interface
+// TODO_DONE: Make pure State interface - Done 10.12.2021
 // TODO_DONE: Return TaskActionResult in Model API - Done 09.12.2021
 // TODO: Rename IModel
 // TODO_DONE: Make TaskBuilder in WizardContext - Done 10.12.2021

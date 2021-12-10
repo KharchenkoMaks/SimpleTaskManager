@@ -4,23 +4,21 @@
 
 #include "HelpState.h"
 
-HelpState::HelpState(const std::shared_ptr<WizardStatesFactory>& states_factory,
-                     const std::shared_ptr<ConsolePrinter>& printer,
-                     const std::shared_ptr<ConsoleReader>& reader) :
-                     WizardStateConsole(states_factory, printer, reader) {
+HelpState::HelpState(std::unique_ptr<StateDependencies> dependencies) :
+                    dependencies_(std::move(dependencies)) {
 
 }
 
-std::shared_ptr<WizardStateConsole> HelpState::Execute(std::shared_ptr<WizardContext> context) {
-    GetConsolePrinter()->WriteLine("Available commands:");
-    GetConsolePrinter()->WriteLine("1. add");
-    GetConsolePrinter()->WriteLine("2. add_subtask");
-    GetConsolePrinter()->WriteLine("3. edit");
-    GetConsolePrinter()->WriteLine("4. delete");
-    GetConsolePrinter()->WriteLine("5. complete");
-    GetConsolePrinter()->WriteLine("6. set_label");
-    GetConsolePrinter()->WriteLine("7. show");
-    GetConsolePrinter()->WriteLine("8. quit");
+std::shared_ptr<WizardStateInterface> HelpState::Execute(std::shared_ptr<WizardContext> context) {
+    dependencies_->GetConsolePrinter()->WriteLine("Available commands:");
+    dependencies_->GetConsolePrinter()->WriteLine("1. add");
+    dependencies_->GetConsolePrinter()->WriteLine("2. add_subtask");
+    dependencies_->GetConsolePrinter()->WriteLine("3. edit");
+    dependencies_->GetConsolePrinter()->WriteLine("4. delete");
+    dependencies_->GetConsolePrinter()->WriteLine("5. complete");
+    dependencies_->GetConsolePrinter()->WriteLine("6. set_label");
+    dependencies_->GetConsolePrinter()->WriteLine("7. show");
+    dependencies_->GetConsolePrinter()->WriteLine("8. quit");
 
-    return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+    return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }

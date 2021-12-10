@@ -7,7 +7,7 @@
 
 #include "states/factory/WizardStatesFactory.h"
 #include "WizardContext.h"
-#include "states/abstract/WizardStateConsole.h"
+#include "states/abstract/WizardStateInterface.h"
 
 #include <memory>
 #include <optional>
@@ -15,9 +15,9 @@
 class ConsoleStateMachine {
 public:
     virtual std::shared_ptr<WizardContext> Run(const std::shared_ptr<WizardContext>& context,
-                                               const std::shared_ptr<WizardStateConsole>& initial_state);
+                                               const std::shared_ptr<WizardStateInterface>& initial_state);
 private:
-    std::shared_ptr<WizardStateConsole> state_;
+    std::shared_ptr<WizardStateInterface> state_;
 };
 
 

@@ -4,12 +4,11 @@
 
 #include "EndState.h"
 
-EndState::EndState(const std::shared_ptr<WizardStatesFactory> &states_factory,
-                   const std::shared_ptr<ConsolePrinter> &printer, const std::shared_ptr<ConsoleReader> &reader)
-        : WizardStateConsole(states_factory, printer, reader) {
+EndState::EndState(std::unique_ptr<StateDependencies> dependencies) :
+                    dependencies_(std::move(dependencies)) {
 
 }
 
-std::shared_ptr<WizardStateConsole> EndState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<WizardStateInterface> EndState::Execute(std::shared_ptr<WizardContext> context) {
     return nullptr;
 }

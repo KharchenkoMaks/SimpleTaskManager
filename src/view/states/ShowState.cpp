@@ -4,16 +4,13 @@
 
 #include "ShowState.h"
 
-ShowState::ShowState(const std::shared_ptr<Controller>& controller,
-                     const std::shared_ptr<WizardStatesFactory>& states_factory,
-                     const std::shared_ptr<ConsolePrinter>& printer,
-                     const std::shared_ptr<ConsoleReader>& reader) :
-                     WizardStateController(controller, states_factory, printer, reader) {
+ShowState::ShowState(std::unique_ptr<StateDependencies> dependencies) :
+                    dependencies_(std::move(dependencies)) {
 
 }
 
-std::shared_ptr<WizardStateConsole> ShowState::Execute(std::shared_ptr<WizardContext> context) {
-    std::string tasks_show = GetController()->GetAllTasks();
-    GetConsolePrinter()->Write(tasks_show);
-    return GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+std::shared_ptr<WizardStateInterface> ShowState::Execute(std::shared_ptr<WizardContext> context) {
+    std::string tasks_show = dependencies_->GetController()->GetAllTasks();
+    dependencies_->GetConsolePrinter()->Write(tasks_show);
+    return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }

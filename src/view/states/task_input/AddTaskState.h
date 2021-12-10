@@ -5,24 +5,23 @@
 #ifndef SIMPLETASKMANAGER_ADDTASKSTATE_H
 #define SIMPLETASKMANAGER_ADDTASKSTATE_H
 
-#include "states/abstract/WizardStateWithStateMachine.h"
+#include "states/abstract/WizardStateInterface.h"
 #include "states/factory/WizardStatesFactory.h"
+#include "states/abstract/StateDependencies.h"
 #include "WizardContext.h"
 
 #include <memory>
 #include <optional>
 
-class AddTaskState : public WizardStateWithStateMachine {
+class AddTaskState : public WizardStateInterface {
 public:
-    AddTaskState(const std::shared_ptr<ConsoleStateMachine>& state_machine,
-                 const std::shared_ptr<Controller>& controller,
-                 const std::shared_ptr<WizardStatesFactory>& states_factory,
-                 const std::shared_ptr<ConsolePrinter>& printer,
-                 const std::shared_ptr<ConsoleReader>& reader);
+    AddTaskState(std::unique_ptr<StateDependencies> dependencies);
 public:
-    std::shared_ptr<WizardStateConsole> Execute(std::shared_ptr<WizardContext> context) override;
+    std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
 private:
     void ShowAddedTaskId(const TaskId& task_id);
+private:
+    std::unique_ptr<StateDependencies> dependencies_;
 };
 
 

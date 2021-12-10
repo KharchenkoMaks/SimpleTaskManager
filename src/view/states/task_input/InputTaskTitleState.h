@@ -5,23 +5,24 @@
 #ifndef SIMPLETASKMANAGER_INPUTTASKTITLESTATE_H
 #define SIMPLETASKMANAGER_INPUTTASKTITLESTATE_H
 
-#include "states/abstract/WizardStateConsole.h"
+#include "states/abstract/WizardStateInterface.h"
 #include "states/factory/WizardStatesFactory.h"
+#include "states/abstract/StateDependencies.h"
 #include "WizardContext.h"
 
 #include <string>
 #include <memory>
 
-class InputTaskTitleState : public WizardStateConsole {
+class InputTaskTitleState : public WizardStateInterface {
 public:
-    explicit InputTaskTitleState(const std::shared_ptr<WizardStatesFactory>& states_factory,
-                                 const std::shared_ptr<ConsolePrinter>& printer,
-                                 const std::shared_ptr<ConsoleReader>& reader);
+    explicit InputTaskTitleState(std::unique_ptr<StateDependencies> dependencies);
 public:
-    std::shared_ptr<WizardStateConsole> Execute(std::shared_ptr<WizardContext> context) override;
+    std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
 public:
     std::string GetUserInputForTitleAdd();
     std::string GetUserInputForTitleEdit(const Task& task);
+private:
+    std::unique_ptr<StateDependencies> dependencies_;
 };
 
 
