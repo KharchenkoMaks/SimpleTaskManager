@@ -8,7 +8,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "TaskValidator.h"
+#include "utilities/TaskValidator.h"
 
 class MockTaskValidator : public TaskValidator {
 public:

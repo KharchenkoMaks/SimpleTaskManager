@@ -8,7 +8,7 @@
 #include "id/TaskId.h"
 #include "tasks/Task.h"
 #include "abstract_model/IModel.h"
-#include "TaskValidator.h"
+#include "utilities/TaskValidator.h"
 #include "utilities/TaskActionResult.h"
 
 #include <memory>
