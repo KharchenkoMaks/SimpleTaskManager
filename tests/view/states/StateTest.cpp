@@ -154,3 +154,23 @@ TEST_F(StateTest, QuitStateExecute_ShouldReturnPreviousStateOnNegativeResult) {
     std::shared_ptr<WizardStateInterface> quit_state = std::make_shared<QuitState>(std::move(dependencies_));
     ExecuteAndExpectReturn(quit_state, expected_next_state);
 }
+
+TEST_F(StateTest, HelpState_ShouldPrintHelpMessage) {
+    // Arrange
+    AddExpectedPrint(PrintForm::WRITE_LINE, "Available commands:");
+    AddExpectedPrint(PrintForm::WRITE_LINE, "1. add");
+    AddExpectedPrint(PrintForm::WRITE_LINE, "2. add_subtask");
+    AddExpectedPrint(PrintForm::WRITE_LINE, "3. edit");
+    AddExpectedPrint(PrintForm::WRITE_LINE, "4. delete");
+    AddExpectedPrint(PrintForm::WRITE_LINE, "5. complete");
+    AddExpectedPrint(PrintForm::WRITE_LINE, "6. set_label");
+    AddExpectedPrint(PrintForm::WRITE_LINE, "7. show");
+    AddExpectedPrint(PrintForm::WRITE_LINE, "8. quit");
+    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    // Assert
+    EXPECT_CALL(*factory_, GetNextState(An<const HelpState&>(), WizardStatesFactory::MoveType::NEXT))
+            .Times(1).WillOnce(Return(expected_next_state));
+    // Act & Assert
+    std::shared_ptr<WizardStateInterface> help_state = std::make_shared<HelpState>(std::move(dependencies_));
+    ExecuteAndExpectReturn(help_state, expected_next_state);
+}
