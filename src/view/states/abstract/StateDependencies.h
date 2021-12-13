@@ -32,7 +32,7 @@ public:
 
 public:
     virtual std::string GetUserInput(const std::string &invitation_message);
-    virtual bool UserConfirm(const std::string& question_string = "Are you sure?");
+    virtual bool UserConfirm(const std::string& question_string);
     // Returns std::nullopt if invalid task_id was given
     virtual std::optional<TaskId> GetTaskIdFromUser(const std::string& invitation_string = "Task ID");
 public:

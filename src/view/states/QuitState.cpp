@@ -5,7 +5,7 @@
 #include "QuitState.h"
 
 std::shared_ptr<WizardStateInterface> QuitState::Execute(std::shared_ptr<WizardContext> context) {
-    if (dependencies_->UserConfirm()) {
+    if (dependencies_->UserConfirm("Are you sure?")) {
         return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
     } else {
         return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
