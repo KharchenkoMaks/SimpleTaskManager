@@ -35,8 +35,8 @@ public:
         reader_ = std::make_shared<MockConsoleReader>();
         task_validator_ = std::make_unique<MockTaskValidator>();
         model_ = std::make_unique<MockModel>();
-        controller_ = std::make_shared<MockController>(std::make_unique<MockModel>(), std::make_unique<MockTaskValidator>());
-        factory_ = std::make_shared<MockWizardStatesFactory>(controller_, printer_, reader_);
+        controller_ = std::make_shared<MockController>();
+        factory_ = std::make_shared<MockWizardStatesFactory>();
         context_ = std::make_shared<MockWizardContext>();
 
         context_with_task_ = std::make_shared<WizardContext>();
@@ -155,31 +155,7 @@ TEST_F(StatesTests, ExecuteQuitStateWithNegativeInput_ShouldCallNextStatePreviou
     EXPECT_EQ(expected_return, actual_return);
 }
 
-TEST_F(StatesTests, ExecuteShowState_ShouldPrintStringReceivedFromController) {
-    // Arrange
-    this->SetUp();
-    ShowState show_state{std::make_unique<StateDependencies>(std::make_unique<MockConsoleStateMachine>(),
-                                                             factory_,
-                                                             controller_,
-                                                             printer_,
-                                                             reader_)};
-    std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<RootState>(nullptr);
-    const std::string expected_print = "tasks string";
-    // Assert
-    EXPECT_CALL(*controller_, GetAllTasks())
-        .Times(1)
-        .WillOnce(Return(expected_print));
-    EXPECT_CALL(*printer_, Write(expected_print)).Times(1);
-    EXPECT_CALL(*factory_, GetNextState(testing::An<const ShowState&>(), WizardStatesFactory::MoveType::NEXT))
-            .Times(1)
-            .WillOnce(Return(expected_return));
-    // Act
-    std::shared_ptr<WizardStateInterface> actual_return = show_state.Execute(context_);
-    // Assert
-    EXPECT_EQ(expected_return, actual_return);
-}
-
-TEST_F(StatesTests, ExecuteShowState_ShouldPrintHelpString) {
+TEST_F(StatesTests, ExecuteHelpState_ShouldPrintHelpString) {
     // Arrange
     this->SetUp();
     HelpState help_state {std::make_unique<StateDependencies>(std::make_unique<MockConsoleStateMachine>(),

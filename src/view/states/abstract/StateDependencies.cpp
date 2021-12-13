@@ -5,15 +5,15 @@
 #include "StateDependencies.h"
 #include "ConsoleStateMachine.h"
 
-std::shared_ptr<Controller> StateDependencies::GetController() const {
+std::shared_ptr<Controller> StateDependencies::GetController() {
     return controller_;
 }
 
-const std::shared_ptr<ConsolePrinter>& StateDependencies::GetConsolePrinter() const {
+std::shared_ptr<ConsolePrinter> StateDependencies::GetConsolePrinter() {
     return console_printer_;
 }
 
-const std::shared_ptr<ConsoleReader>& StateDependencies::GetConsoleReader() const {
+std::shared_ptr<ConsoleReader> StateDependencies::GetConsoleReader() {
     return console_reader_;
 }
 
@@ -23,7 +23,7 @@ std::string StateDependencies::GetUserInput(const std::string& invitation_messag
     return user_input;
 }
 
-std::shared_ptr<WizardStatesFactory> StateDependencies::GetStatesFactory() const {
+std::shared_ptr<WizardStatesFactory> StateDependencies::GetStatesFactory() {
     return states_factory_.lock();
 }
 

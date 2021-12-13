@@ -13,10 +13,7 @@
 
 class MockWizardStatesFactory : public WizardStatesFactory {
 public:
-    MockWizardStatesFactory(const std::shared_ptr<Controller>& controller,
-                            const std::shared_ptr<ConsolePrinter>& printer,
-                            const std::shared_ptr<ConsoleReader>& reader) :
-                            WizardStatesFactory(controller, printer, reader) {}
+    MockWizardStatesFactory() : WizardStatesFactory(nullptr, nullptr, nullptr) {}
 
     MOCK_METHOD(std::shared_ptr<WizardStateInterface>, GetNextState, (const QuitState& state, MoveType move_type), (override));
     MOCK_METHOD(std::shared_ptr<WizardStateInterface>, GetNextState, (const RootState& state, MoveType move_type), (override));

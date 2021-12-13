@@ -23,12 +23,12 @@ public:
                       const std::shared_ptr<ConsolePrinter>& printer,
                       const std::shared_ptr<ConsoleReader>& reader);
 public:
-    std::shared_ptr<WizardStatesFactory> GetStatesFactory() const;
+    virtual std::shared_ptr<WizardStatesFactory> GetStatesFactory();
 
-    std::shared_ptr<Controller> GetController() const;
+    virtual std::shared_ptr<Controller> GetController();
 
-    const std::shared_ptr<ConsolePrinter> &GetConsolePrinter() const;
-    const std::shared_ptr<ConsoleReader> &GetConsoleReader() const;
+    virtual std::shared_ptr<ConsolePrinter> GetConsolePrinter();
+    virtual std::shared_ptr<ConsoleReader> GetConsoleReader();
 
 public:
     virtual std::string GetUserInput(const std::string &invitation_message);
