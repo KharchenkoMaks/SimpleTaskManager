@@ -70,19 +70,8 @@ std::optional<Task> Controller::GetTask(const TaskId& task_id) const {
     }
 }
 
-std::string Controller::GetAllTasks() {
-    std::string answer = "";
-
-    auto tasks = model_->GetTasks();
-    for (auto t : tasks){
-        if (!t.GetParentTaskId().has_value()) {
-            answer.append(t.GetTaskId().to_string() + ", " + t.GetTask().to_string() + "\n");
-        } else {
-            answer.append("\t" + t.GetTaskId().to_string() + ", " + t.GetTask().to_string() + "\n");
-        }
-    }
-
-    return answer;
+std::vector<TaskTransfer> Controller::GetAllTasks() {
+    return model_->GetTasks();
 }
 
 TaskActionResult Controller::SetTaskLabel(const TaskId& task_id, const std::string& label) {

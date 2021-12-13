@@ -30,7 +30,7 @@ public:
     TaskActionResult CompleteTaskWithSubTasks(const TaskId& task_id);
 
 public:
-    virtual std::string GetAllTasks();
+    virtual std::vector<TaskTransfer> GetAllTasks();
     std::optional<Task> GetTask(const TaskId& task_id) const;
 
 public:

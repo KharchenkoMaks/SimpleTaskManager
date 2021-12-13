@@ -9,6 +9,7 @@
 #include "states/factory/WizardStatesFactory.h"
 #include "states/abstract/StateDependencies.h"
 #include "WizardContext.h"
+#include "abstract_model/TaskTransfer.h"
 
 #include <memory>
 #include <optional>
@@ -18,6 +19,8 @@ public:
     explicit ShowState(std::unique_ptr<StateDependencies> dependencies);
 public:
     std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
+private:
+    void PrintTasks(const std::vector<TaskTransfer>& tasks);
 private:
     std::unique_ptr<StateDependencies> dependencies_;
 };
