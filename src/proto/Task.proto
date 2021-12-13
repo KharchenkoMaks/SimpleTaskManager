@@ -18,7 +18,7 @@ message Task {
     HIGH = 3;
   }
   string title = 1;
-  Priority task_priority = 2;
+  Priority priority = 2;
   DueDate due_date = 3;
   bool completed = 4;
   string label = 5;
