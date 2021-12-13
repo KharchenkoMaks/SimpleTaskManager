@@ -119,7 +119,7 @@ TaskActionResult TaskManager::CompleteTask(const TaskId& id, bool force_complete
             return TaskActionResult::SUCCESS;
         }
         case TaskType::kChild: {
-            SubTask subtask = subtasks_.find(id)->second;
+            SubTask subtask = GetSubTaskById(id).value();
             subtasks_.insert_or_assign(id,
                                        SubTask::Create(
                                                CompleteTask(subtask.GetTaskParameters()),
@@ -135,7 +135,7 @@ TaskActionResult TaskManager::CompleteTask(const TaskId& id, bool force_complete
 std::vector<TaskTransfer> TaskManager::GetTasks() {
     std::vector<TaskTransfer> tasks;
     for (const auto& task_item : tasks_) {
-        tasks.push_back(TaskTransfer::Create(task_item.first, task_item.second));
+        tasks.push_back(CreateTaskTransfer(task_item.first, task_item.second));
         std::vector<TaskTransfer> subtasks = GetTaskSubTasks(task_item.first).second;
         for (const auto& subtask_item : subtasks) {
             tasks.push_back(subtask_item);
@@ -208,7 +208,7 @@ std::pair<TaskActionResult, std::vector<TaskTransfer>> TaskManager::GetTaskSubTa
     }
     for (const auto& item : subtasks_) {
         if (item.second.GetParentTaskId() == parent_task_id) {
-            subtasks.push_back(TaskTransfer::Create(item.first, item.second.GetTaskParameters(), item.second.GetParentTaskId()));
+            subtasks.push_back(CreateTaskTransfer(item.first, item.second));
         }
     }
     return std::pair(TaskActionResult::SUCCESS, subtasks);
@@ -253,4 +253,12 @@ std::optional<std::vector<TaskId>> TaskManager::GetAllTaskSubTaskIds(const TaskI
         }
     }
     return subtasks;
+}
+
+TaskTransfer TaskManager::CreateTaskTransfer(const TaskId& id, const Task& task) {
+    return TaskTransfer::Create(id, task);
+}
+
+TaskTransfer TaskManager::CreateTaskTransfer(const TaskId& id, const SubTask& task) {
+    return TaskTransfer::Create(id, task.GetTaskParameters(), task.GetParentTaskId());
 }

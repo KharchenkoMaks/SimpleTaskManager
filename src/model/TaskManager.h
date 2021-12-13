@@ -46,6 +46,9 @@ private:
         kNone
     };
 private:
+    TaskTransfer CreateTaskTransfer(const TaskId& id, const Task& task);
+    TaskTransfer CreateTaskTransfer(const TaskId& id, const SubTask& task);
+private:
     TaskType GetTaskType(const TaskId& task_id) const;
     std::optional<SubTask> GetSubTaskById(const TaskId& task_id) const;
     std::optional<Task> GetTaskById(const TaskId& task_id) const;
