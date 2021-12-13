@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+message TaskId {
+  uint32 id = 1;
+}
+
+message DueDate {
+  google.protobuf.Timestamp due_date = 1;
+}
+
+message Task {
+  enum Priority {
+    NONE = 0;
+    LOW = 1;
+    MEDIUM = 2;
+    HIGH = 3;
+  }
+  string title = 1;
+  Priority task_priority = 2;
+  DueDate due_date = 3;
+  bool completed = 4;
+  string label = 5;
+}
