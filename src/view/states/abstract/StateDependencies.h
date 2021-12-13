@@ -31,12 +31,12 @@ public:
     const std::shared_ptr<ConsoleReader> &GetConsoleReader() const;
 
 public:
-    std::string GetUserInput(const std::string &invitation_message);
-    bool UserConfirm(const std::string& question_string = "Are you sure?");
+    virtual std::string GetUserInput(const std::string &invitation_message);
+    virtual bool UserConfirm(const std::string& question_string = "Are you sure?");
     // Returns std::nullopt if invalid task_id was given
-    std::optional<TaskId> GetTaskIdFromUser(const std::string& invitation_string = "Task ID");
+    virtual std::optional<TaskId> GetTaskIdFromUser(const std::string& invitation_string = "Task ID");
 public:
-    std::shared_ptr<WizardContext> RunStateMachine(const std::shared_ptr<WizardContext>& context,
+    virtual std::shared_ptr<WizardContext> RunStateMachine(const std::shared_ptr<WizardContext>& context,
                                                    const std::shared_ptr<WizardStateInterface>& initial_state);
 public:
     virtual ~StateDependencies();

@@ -1,0 +1,23 @@
+//
+// Created by Maksym Kharchenko on 13.12.2021.
+//
+
+#ifndef SIMPLETASKMANAGER_MOCKSTATEDEPENDENCIES_H
+#define SIMPLETASKMANAGER_MOCKSTATEDEPENDENCIES_H
+
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"
+
+#include "states/abstract/StateDependencies.h"
+
+class MockStateDependencies : public StateDependencies {
+public:
+    MockStateDependencies() : StateDependencies(nullptr, nullptr, nullptr, nullptr, nullptr) {}
+public:
+    MOCK_METHOD(std::string, GetUserInput, (const std::string &invitation_message), (override));
+    MOCK_METHOD(bool, UserConfirm, (const std::string& question_string), (override));
+    MOCK_METHOD(std::optional<TaskId>, GetTaskIdFromUser, (const std::string& invitation_string), (override));
+    MOCK_METHOD(std::shared_ptr<WizardContext>, RunStateMachine, (const std::shared_ptr<WizardContext>& context, const std::shared_ptr<WizardStateInterface>& initial_state), (override));
+};
+
+#endif //SIMPLETASKMANAGER_MOCKSTATEDEPENDENCIES_H

@@ -18,7 +18,7 @@ class MockController : public Controller {
 public:
     MockController(std::unique_ptr<IModel> model, std::unique_ptr<TaskValidator> task_validator) : Controller(std::move(model), std::move(task_validator)) {}
 
-    MOCK_METHOD(std::string, GetAllTasks, (), (override));
+    MOCK_METHOD(std::vector<TaskTransfer>, GetAllTasks, (), (override));
     MOCK_METHOD((std::pair<TaskActionResult, std::optional<TaskId>>), AddTask, (const Task& task), (override));
     MOCK_METHOD((std::pair<TaskActionResult, std::optional<TaskId>>), AddSubTask, (const Task& task, const TaskId& parent_id), (override));
 };
