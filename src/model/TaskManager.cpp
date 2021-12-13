@@ -114,7 +114,7 @@ TaskActionResult TaskManager::CompleteTask(const TaskId& id, bool force_complete
             }
 
             std::optional<Task> task_to_complete = GetTaskById(id);
-            tasks_.insert_or_assign(id, MakeTaskCompleted(task_to_complete.value()));
+            tasks_.insert_or_assign(id, CompleteTask(task_to_complete.value()));
 
             return TaskActionResult::SUCCESS;
         }
@@ -122,7 +122,7 @@ TaskActionResult TaskManager::CompleteTask(const TaskId& id, bool force_complete
             SubTask subtask = subtasks_.find(id)->second;
             subtasks_.insert_or_assign(id,
                                        SubTask::Create(
-                                               MakeTaskCompleted(subtask.GetTaskParameters()),
+                                               CompleteTask(subtask.GetTaskParameters()),
                                                subtask.GetParentTaskId()));
             return TaskActionResult::SUCCESS;
         }
@@ -197,7 +197,7 @@ std::optional<Task> TaskManager::GetTaskById(const TaskId& task_id) const {
     }
 }
 
-Task TaskManager::MakeTaskCompleted(const Task& task) {
+Task TaskManager::CompleteTask(const Task& task) {
     return Task::Create(task.GetTitle(), task.GetPriority(), task.GetDueTime(), true, task.GetLabel());
 }
 

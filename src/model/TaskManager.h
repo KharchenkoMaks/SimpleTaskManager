@@ -52,7 +52,7 @@ private:
 
     std::optional<std::vector<TaskId>> GetAllTaskSubTaskIds(const TaskId& parent_id);
 
-    Task MakeTaskCompleted(const Task& task);
+    Task CompleteTask(const Task& task);
     Task SetLabel(const Task& task, const std::string& label);
 private:
     void DeleteSubTasks(const TaskId& parent_id);
