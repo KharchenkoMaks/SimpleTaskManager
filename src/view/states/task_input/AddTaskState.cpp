@@ -32,5 +32,5 @@ AddTaskState::AddTaskState(std::unique_ptr<StateDependencies> dependencies) :
 }
 
 void AddTaskState::ShowAddedTaskId(const TaskId& task_id) {
-    dependencies_->GetConsolePrinter()->WriteLine("Task was successfully added. Task id: " + std::to_string(task_id.GetId()));
+    dependencies_->GetConsolePrinter()->WriteLine("Task was successfully added. Task id: " + std::to_string(task_id.id()));
 }

@@ -9,8 +9,7 @@
 #include "states/factory/WizardStatesFactory.h"
 #include "states/abstract/StateDependencies.h"
 #include "WizardContext.h"
-#include "tasks/Task.h"
-#include "id/TaskId.h"
+#include "Task.pb.h"
 #include "utilities/TaskActionResult.h"
 
 #include <memory>

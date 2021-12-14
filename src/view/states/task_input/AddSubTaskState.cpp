@@ -27,7 +27,7 @@ std::shared_ptr<WizardStateInterface> AddSubTaskState::Execute(std::shared_ptr<W
 }
 
 void AddSubTaskState::ShowAddedTaskId(const TaskId& task_id) {
-    dependencies_->GetConsolePrinter()->WriteLine("Subtask was successfully added. Task id: " + std::to_string(task_id.GetId()));
+    dependencies_->GetConsolePrinter()->WriteLine("Subtask was successfully added. Task id: " + std::to_string(task_id.id()));
 }
 
 std::pair<TaskActionResult, std::optional<TaskId>> AddSubTaskState::GiveSubTaskToController(const TaskId& parent_id, const std::shared_ptr<WizardContext>& context_with_added_task) {

@@ -19,7 +19,7 @@ std::shared_ptr<WizardStateInterface> InputTaskDueDateState::Execute(std::shared
         user_input = GetUserInputForDueDateAdd();
     }
 
-    std::optional<DueTime> task_due_date = DueTime::Create(user_input);
+    std::optional<google::protobuf::Timestamp> task_due_date = StringToTime(user_input);
     if (task_due_date.has_value()) {
         const bool due_time_adding_result = context->AddTaskDueTime(task_due_date.value());
         if (!due_time_adding_result) {
@@ -35,9 +35,9 @@ std::shared_ptr<WizardStateInterface> InputTaskDueDateState::Execute(std::shared
 }
 
 std::string InputTaskDueDateState::GetUserInputForDueDateEdit(const Task &task) {
-    std::string user_input = dependencies_->GetUserInput("Due Date, default: " + task.GetDueTime().GetTimeString());
+    std::string user_input = dependencies_->GetUserInput("Due Date, default: " + task.due_date().ShortDebugString());
     if (user_input.empty()){
-        return task.GetDueTime().GetTimeString();
+        return TimeToString(task.due_date());
     }
     return user_input;
 }
