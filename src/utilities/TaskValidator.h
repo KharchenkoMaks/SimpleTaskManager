@@ -5,8 +5,7 @@
 #ifndef SIMPLETASKMANAGER_TASKVALIDATOR_H
 #define SIMPLETASKMANAGER_TASKVALIDATOR_H
 
-#include "tasks/Task.h"
-#include "id/TaskId.h"
+#include "Task.pb.h"
 
 #include <ctime>
 #include <string>
@@ -19,7 +18,7 @@ public:
     virtual ~TaskValidator() = default;
 private:
     bool ValidateTitle(const std::string& title);
-    bool ValidateDueDate(DueTime due_date);
+    bool ValidateDueDate(google::protobuf::Timestamp due_date);
 };
 
 
