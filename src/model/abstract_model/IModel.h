@@ -5,9 +5,7 @@
 #ifndef SIMPLETASKMANAGER_IMODEL_H
 #define SIMPLETASKMANAGER_IMODEL_H
 
-#include "id/TaskId.h"
-#include "tasks/Task.h"
-#include "TaskTransfer.h"
+#include "Task.pb.h"
 #include "utilities/TaskActionResult.h"
 
 #include <optional>
@@ -15,7 +13,7 @@
 
 class IModel{
 public:
-    virtual std::pair<TaskActionResult, std::optional<TaskId>> AddTask(const Task& t) = 0;
+    virtual std::pair<TaskActionResult, std::optional<TaskId>> AddTask(const Task& task) = 0;
     virtual std::pair<TaskActionResult, std::optional<TaskId>> AddSubTask(const Task& task, const TaskId& parent_id) = 0;
     virtual TaskActionResult EditTask(const TaskId& id, const Task& t) = 0;
     virtual TaskActionResult DeleteTask(const TaskId& id, bool force_delete_subtasks = false) = 0;

@@ -5,8 +5,7 @@
 #ifndef SIMPLETASKMANAGER_CONTROLLER_H
 #define SIMPLETASKMANAGER_CONTROLLER_H
 
-#include "id/TaskId.h"
-#include "tasks/Task.h"
+#include "Task.pb.h"
 #include "abstract_model/IModel.h"
 #include "utilities/TaskValidator.h"
 #include "utilities/TaskActionResult.h"
@@ -31,7 +30,7 @@ public:
 
 public:
     virtual std::vector<TaskTransfer> GetAllTasks();
-    std::optional<Task> GetTask(const TaskId& task_id) const;
+    std::optional<TaskTransfer> GetTask(const TaskId& task_id) const;
 
 public:
     virtual ~Controller() = default;

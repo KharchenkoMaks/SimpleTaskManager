@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_IDGENERATOR_H
 #define SIMPLETASKMANAGER_IDGENERATOR_H
 
-#include "TaskId.h"
+#include "Task.pb.h"
 
 class IdGenerator{
 public:

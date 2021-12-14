@@ -17,7 +17,9 @@ IdGenerator::IdGenerator(const int last_id) {
 }
 
 TaskId IdGenerator::CreateNewTaskId() {
-    return TaskId::Create(last_id_++).value();
+    TaskId task_id;
+    task_id.set_id(last_id_++);
+    return task_id;
 }
 
 IdGenerator::~IdGenerator() = default;

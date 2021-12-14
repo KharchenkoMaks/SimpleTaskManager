@@ -7,11 +7,11 @@
 
 #include "Task.pb.h"
 
-bool operator<(const TaskId& task_id1, const TaskId& task_id2) const {
+bool operator<(const TaskId& task_id1, const TaskId& task_id2) {
     return task_id1.id() < task_id2.id();
 }
 
-bool operator==(const TaskId& task_id1, const TaskId& task_id2) const {
+bool operator==(const TaskId& task_id1, const TaskId& task_id2) {
     return task_id1.id() == task_id2.id();
 }
 

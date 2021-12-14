@@ -61,13 +61,8 @@ TaskActionResult Controller::CompleteTaskWithSubTasks(const TaskId& task_id) {
     return TaskActionResult::FAIL_INVALID_TASK;
 }
 
-std::optional<Task> Controller::GetTask(const TaskId& task_id) const {
-    std::optional<TaskTransfer> task = model_->GetTask(task_id);
-    if (task.has_value()){
-        return task->GetTask();
-    } else {
-        return std::nullopt;
-    }
+std::optional<TaskTransfer> Controller::GetTask(const TaskId& task_id) const {
+    return model_->GetTask(task_id);
 }
 
 std::vector<TaskTransfer> Controller::GetAllTasks() {
