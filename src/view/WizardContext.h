@@ -5,10 +5,7 @@
 #ifndef SIMPLETASKMANAGER_WIZARDCONTEXT_H
 #define SIMPLETASKMANAGER_WIZARDCONTEXT_H
 
-#include "tasks/Task.h"
-#include "id/TaskId.h"
-#include "DueTime.h"
-#include "tasks/TaskBuilder.h"
+#include "Task.pb.h"
 
 #include <memory>
 #include <string>
@@ -24,7 +21,7 @@ public:
     // Returns false if priority isn't added
     virtual bool AddTaskPriority(Task::Priority priority);
     // Returns false if due time isn't added
-    virtual bool AddTaskDueTime(DueTime due_time);
+    virtual bool AddTaskDueTime(google::protobuf::Timestamp due_time);
     virtual std::optional<Task> GetTask();
 
     virtual void SetEditingTask(const TaskId& task_id, const Task& task);
@@ -32,7 +29,7 @@ public:
 public:
     virtual ~WizardContext() = default;
 private:
-    TaskBuilder task_builder_;
+    Task task_;
     std::optional<TaskId> editing_task_id_;
 };
 
