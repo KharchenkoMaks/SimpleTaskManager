@@ -71,10 +71,17 @@ public:
             }
         }
     }
-    void AddExpectedRead(const std::string& invitation_message, const std::string& return_string) {
+    void AddExpectedRead(const std::string& invitation_message,
+                         const std::string& return_string) {
         EXPECT_CALL(*dependencies_, GetUserInput(invitation_message))
                 .Times(1)
                 .WillOnce(Return(return_string));
+    }
+    void AddExpectedReadId(const std::string& invitation_message,
+                           const std::optional<TaskId>& return_task_id) {
+        EXPECT_CALL(*dependencies_, GetTaskIdFromUser(invitation_message))
+                .Times(1)
+                .WillOnce(Return(return_task_id));
     }
 };
 
@@ -173,4 +180,27 @@ TEST_F(StateTest, HelpState_ShouldPrintHelpMessage) {
     // Act & Assert
     std::shared_ptr<WizardStateInterface> help_state = std::make_shared<HelpState>(std::move(dependencies_));
     ExecuteAndExpectReturn(help_state, expected_next_state);
+}
+
+TEST_F(StateTest, EndState_ShouldReturnNullptr) {
+    // Arrange
+    std::shared_ptr<WizardStateInterface> expected_next_state = nullptr;
+    std::shared_ptr<WizardStateInterface> end_state = std::make_shared<EndState>(std::move(dependencies_));
+    ExecuteAndExpectReturn(end_state, expected_next_state);
+}
+
+TEST_F(StateTest, DeleteTaskStateSuccess_ShouldAskControllerToDeleteTaskAndReturnPreviousState) {
+    // Arrange
+    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    const TaskId expected_deleted_task_id = TaskId::Create("10").value();
+    // Assert
+    AddExpectedReadId("Task ID", expected_deleted_task_id);
+    EXPECT_CALL(*controller_, DeleteTask(expected_deleted_task_id))
+        .Times(1).WillOnce(Return(TaskActionResult::SUCCESS));
+    AddExpectedPrint(PrintForm::WRITE_LINE, "Task was successfully deleted.");
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const DeleteTaskState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+        .Times(1).WillOnce(Return(expected_next_state));
+    // Act & Assert
+    std::shared_ptr<WizardStateInterface> delete_state = std::make_shared<DeleteTaskState>(std::move(dependencies_));
+    ExecuteAndExpectReturn(delete_state, expected_next_state);
 }

@@ -21,6 +21,7 @@ public:
     MOCK_METHOD(std::vector<TaskTransfer>, GetAllTasks, (), (override));
     MOCK_METHOD((std::pair<TaskActionResult, std::optional<TaskId>>), AddTask, (const Task& task), (override));
     MOCK_METHOD((std::pair<TaskActionResult, std::optional<TaskId>>), AddSubTask, (const Task& task, const TaskId& parent_id), (override));
+    MOCK_METHOD(TaskActionResult, DeleteTask, (const TaskId& task_id), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKCONTROLLER_H

@@ -10,7 +10,7 @@ EditTaskState::EditTaskState(std::unique_ptr<StateDependencies> dependencies) :
 }
 
 std::shared_ptr<WizardStateInterface> EditTaskState::Execute(std::shared_ptr<WizardContext> context) {
-    std::optional<TaskId> editing_task_id = dependencies_->GetTaskIdFromUser();
+    std::optional<TaskId> editing_task_id = dependencies_->GetTaskIdFromUser("Task ID");
     if (!editing_task_id.has_value()) {
         dependencies_->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
         return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);

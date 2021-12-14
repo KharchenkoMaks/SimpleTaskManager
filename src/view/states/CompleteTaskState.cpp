@@ -10,7 +10,7 @@ CompleteTaskState::CompleteTaskState(std::unique_ptr<StateDependencies> dependen
 }
 
 std::shared_ptr<WizardStateInterface> CompleteTaskState::Execute(std::shared_ptr<WizardContext> context) {
-    std::optional<TaskId> task_id = dependencies_->GetTaskIdFromUser();
+    std::optional<TaskId> task_id = dependencies_->GetTaskIdFromUser("Task ID");
     if (!task_id.has_value()) {
         dependencies_->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
         return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
