@@ -6,10 +6,6 @@ message TaskId {
   uint32 id = 1;
 }
 
-message DueDate {
-  google.protobuf.Timestamp due_date = 1;
-}
-
 message Task {
   enum Priority {
     NONE = 0;
@@ -19,7 +15,13 @@ message Task {
   }
   string title = 1;
   Priority priority = 2;
-  DueDate due_date = 3;
+  google.protobuf.Timestamp due_date = 3;
   bool completed = 4;
   string label = 5;
+}
+
+message TaskTransfer {
+  TaskId task_id = 1;
+  Task task = 2;
+  TaskId parent_id = 3;
 }
