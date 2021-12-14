@@ -19,8 +19,12 @@ std::shared_ptr<WizardStateInterface> EditTaskState::Execute(std::shared_ptr<Wiz
     // Creating new context
     std::shared_ptr<WizardContext> context_task_editing = std::make_shared<WizardContext>();
     // Setting task to edit in context
-    context_task_editing->SetEditingTask(editing_task_id.value(),
-                                         dependencies_->GetController()->GetTask(editing_task_id.value()).value());
+    std::optional<TaskTransfer> task_to_edit = dependencies_->GetController()->GetTask(editing_task_id.value());
+    if (!task_to_edit.has_value()) {
+        dependencies_->GetConsolePrinter()->WriteError("Task with such id wasn't found.");
+        return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+    }
+    context_task_editing->SetEditingTask(editing_task_id.value(), task_to_edit.value().task());
 
     context_task_editing = dependencies_->RunStateMachine(context_task_editing,
                                            dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
@@ -31,10 +35,6 @@ std::shared_ptr<WizardStateInterface> EditTaskState::Execute(std::shared_ptr<Wiz
 
     switch(edit_task_result) {
         case TaskActionResult::SUCCESS: {
-            return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
-        }
-        case TaskActionResult::FAIL_NO_SUCH_TASK: {
-            dependencies_->GetConsolePrinter()->WriteError("Task with such id wasn't found.");
             return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
         }
         default: {
