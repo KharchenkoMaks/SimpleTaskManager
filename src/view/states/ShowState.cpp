@@ -17,11 +17,43 @@ std::shared_ptr<WizardStateInterface> ShowState::Execute(std::shared_ptr<WizardC
 
 void ShowState::PrintTasks(const std::vector<TaskTransfer>& tasks) {
     for (auto task : tasks) {
-        std::string task_string;
-        if (task.GetParentTaskId().has_value()) {
+        if (task.has_parent_id()) {
             task_string += "\t";
         }
-        task_string += task.GetTaskId().to_string() + ", " + task.GetTask().to_string();
-        dependencies_->GetConsolePrinter()->WriteLine(task_string);
+        dependencies_->GetConsolePrinter()->WriteLine(TaskToString(task.task_id(), task.task()));
+    }
+}
+
+std::string ShowState::TaskToString(const TaskId& task_id, const Task& task) {
+    std::string return_string = "ID: " + std::to_string(task_id.id())
+                                + ", Title:" + task.title()
+                                + ", Priority" + TaskPriorityToString(task.priority())
+                                + ", Due to: " + task.due_date().ShortDebugString()
+                                + ", Completed: ";
+    if (task.completed()) {
+        return_string += "Yes";
+    } else {
+        return_string += "No";
+    }
+    if (!task.label().empty()) {
+        return_string += ", Label: " + task.label();
+    }
+    return return_string;
+}
+
+std::string ShowState::TaskPriorityToString(Task::Priority priority) {
+    switch(priority) {
+        case Task::Priority::Task_Priority_NONE: {
+            return "None";
+        }
+        case Task::Priority::Task_Priority_LOW: {
+            return "Low";
+        }
+        case Task::Priority::Task_Priority_MEDIUM: {
+            return "Medium";
+        }
+        case Task::Priority::Task_Priority_HIGH: {
+            return "High";
+        }
     }
 }
