@@ -10,7 +10,7 @@
 #include "WizardContext.h"
 #include "console_io/ConsolePrinter.h"
 #include "console_io/ConsoleReader.h"
-#include "id/TaskId.h"
+#include "Task.pb.h"
 
 class ConsoleStateMachine;
 class WizardStatesFactory;

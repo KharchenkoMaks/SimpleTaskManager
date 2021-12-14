@@ -34,7 +34,15 @@ bool StateDependencies::UserConfirm(const std::string& question_string) {
 
 std::optional<TaskId> StateDependencies::GetTaskIdFromUser(const std::string& invitation_string) {
     std::string task_id_str = GetUserInput(invitation_string);
-    return TaskId::Create(task_id_str);
+    try {
+        int task_id_int = std::stoi(task_id_str);
+        TaskId task_id;
+        task_id.set_id(task_id_int);
+        return task_id;
+    }
+    catch (std::invalid_argument) {
+        return std::nullopt;
+    }
 }
 
 std::shared_ptr<WizardContext> StateDependencies::RunStateMachine(const std::shared_ptr<WizardContext>& context,
