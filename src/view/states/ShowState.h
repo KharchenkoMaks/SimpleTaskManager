@@ -22,7 +22,6 @@ public:
 private:
     void PrintTasks(const std::vector<TaskTransfer>& tasks);
     std::string TaskToString(const TaskId& task_id, const Task& task);
-    std::string TaskPriorityToString(Task::Priority priority);
 private:
     std::unique_ptr<StateDependencies> dependencies_;
 };

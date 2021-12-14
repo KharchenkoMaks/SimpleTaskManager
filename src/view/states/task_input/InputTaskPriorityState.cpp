@@ -3,6 +3,7 @@
 //
 
 #include "states/task_input/InputTaskPriorityState.h"
+#include "utilities/TaskPriorityUtilities.h"
 
 InputTaskPriorityState::InputTaskPriorityState(std::unique_ptr<StateDependencies> dependencies) :
                                                 dependencies_(std::move(dependencies)) {
@@ -18,7 +19,7 @@ std::shared_ptr<WizardStateInterface> InputTaskPriorityState::Execute(std::share
         user_input = GetUserInputForPriorityAdd();
     }
 
-    std::optional<Task::Priority> task_priority = Task::GetTaskPriority(user_input);
+    std::optional<Task::Priority> task_priority = StringToTaskPriority(user_input);
     if (task_priority.has_value()) {
         context->AddTaskPriority(task_priority.value());
     } else {
@@ -34,9 +35,9 @@ std::string InputTaskPriorityState::GetUserInputForPriorityAdd() {
 }
 
 std::string InputTaskPriorityState::GetUserInputForPriorityEdit(const Task &task) {
-    std::string user_input = dependencies_->GetUserInput("Priority, default: " + Task::PriorityToString(task.GetPriority()));
+    std::string user_input = dependencies_->GetUserInput("Priority, default: " + TaskPriorityToString(task.priority()));
     if (user_input.empty()){
-        return Task::PriorityToString(task.GetPriority());
+        return TaskPriorityToString(task.priority());
     }
     return user_input;
 }

@@ -4,6 +4,7 @@
 
 #include "ShowState.h"
 #include "utilities/DueDateUtilities.h"
+#include "utilities/TaskPriorityUtilities.h"
 
 ShowState::ShowState(std::unique_ptr<StateDependencies> dependencies) :
                     dependencies_(std::move(dependencies)) {
@@ -42,21 +43,4 @@ std::string ShowState::TaskToString(const TaskId& task_id, const Task& task) {
         return_string += ", Label: " + task.label();
     }
     return return_string;
-}
-
-std::string ShowState::TaskPriorityToString(Task::Priority priority) {
-    switch(priority) {
-        case Task::Priority::Task_Priority_NONE: {
-            return "None";
-        }
-        case Task::Priority::Task_Priority_LOW: {
-            return "Low";
-        }
-        case Task::Priority::Task_Priority_MEDIUM: {
-            return "Medium";
-        }
-        case Task::Priority::Task_Priority_HIGH: {
-            return "High";
-        }
-    }
 }
