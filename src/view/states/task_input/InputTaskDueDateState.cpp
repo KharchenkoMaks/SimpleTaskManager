@@ -3,6 +3,7 @@
 //
 
 #include "states/task_input/InputTaskDueDateState.h"
+#include "utilities/TaskUtilities.h"
 
 InputTaskDueDateState::InputTaskDueDateState(std::unique_ptr<StateDependencies> dependencies) :
                                              dependencies_(std::move(dependencies)) {

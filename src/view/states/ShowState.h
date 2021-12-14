@@ -21,7 +21,6 @@ public:
     std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
 private:
     void PrintTasks(const std::vector<TaskTransfer>& tasks);
-    std::string TaskToString(const TaskId& task_id, const Task& task);
 private:
     std::unique_ptr<StateDependencies> dependencies_;
 };

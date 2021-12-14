@@ -3,8 +3,7 @@
 //
 
 #include "ShowState.h"
-#include "utilities/DueDateUtilities.h"
-#include "utilities/TaskPriorityUtilities.h"
+#include "utilities/TaskUtilities.h"
 
 ShowState::ShowState(std::unique_ptr<StateDependencies> dependencies) :
                     dependencies_(std::move(dependencies)) {
@@ -26,21 +25,4 @@ void ShowState::PrintTasks(const std::vector<TaskTransfer>& tasks) {
         task_string += TaskToString(task.task_id(), task.task());
         dependencies_->GetConsolePrinter()->WriteLine(task_string);
     }
-}
-
-std::string ShowState::TaskToString(const TaskId& task_id, const Task& task) {
-    std::string return_string = "ID: " + std::to_string(task_id.id())
-                                + ", Title:" + task.title()
-                                + ", Priority" + TaskPriorityToString(task.priority())
-                                + ", Due to: " + TimeToString(task.due_date())
-                                + ", Completed: ";
-    if (task.completed()) {
-        return_string += "Yes";
-    } else {
-        return_string += "No";
-    }
-    if (!task.label().empty()) {
-        return_string += ", Label: " + task.label();
-    }
-    return return_string;
 }

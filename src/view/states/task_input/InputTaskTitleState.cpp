@@ -32,9 +32,9 @@ std::string InputTaskTitleState::GetUserInputForTitleAdd() {
 
 std::string InputTaskTitleState::GetUserInputForTitleEdit(const Task &task) {
     dependencies_->GetConsolePrinter()->WriteLine("Leave empty for default value.");
-    std::string user_input = dependencies_->GetUserInput("Title, default: " + task.GetTitle());
+    std::string user_input = dependencies_->GetUserInput("Title, default: " + task.title());
     if (user_input.empty()){
-        return task.GetTitle();
+        return task.title();
     }
     return user_input;
 }

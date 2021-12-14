@@ -3,7 +3,7 @@
 //
 
 #include "states/task_input/InputTaskPriorityState.h"
-#include "utilities/TaskPriorityUtilities.h"
+#include "utilities/TaskUtilities.h"
 
 InputTaskPriorityState::InputTaskPriorityState(std::unique_ptr<StateDependencies> dependencies) :
                                                 dependencies_(std::move(dependencies)) {

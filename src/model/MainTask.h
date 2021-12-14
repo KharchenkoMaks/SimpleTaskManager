@@ -6,7 +6,6 @@
 #define SIMPLETASKMANAGER_MAINTASK_H
 
 #include "Task.pb.h"
-#include "utilities/TaskIdUtilities.h"
 
 #include <map>
 #include <utility>

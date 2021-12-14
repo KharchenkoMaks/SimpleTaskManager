@@ -3,6 +3,7 @@
 //
 
 #include "TaskManager.h"
+#include "utilities/TaskUtilities.h"
 
 TaskManager::TaskManager(std::unique_ptr<IdGenerator> generator)
     : generator_(std::move(generator)) {
