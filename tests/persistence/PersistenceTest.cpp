@@ -42,14 +42,16 @@ public:
     }
 private:
     std::vector<std::pair<TaskId, Task>> GenerateTasks(int count) {
-        std::vector<Task> tasks;
+        std::vector<std::pair<TaskId, Task>> tasks;
         for (int i = 0; i < count; ++i) {
+            TaskId task_id;
+            task_id.set_id(i);
             Task task;
             task.set_title("task" + std::to_string(i));
             task.set_priority(Task::Priority(i % 4));
             task.set_allocated_due_date(
                     new google::protobuf::Timestamp(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))));
-            tasks.push_back(task);
+            tasks.push_back(std::pair(task_id, task));
         }
         return tasks;
     }
