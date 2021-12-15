@@ -36,7 +36,7 @@ std::shared_ptr<WizardStateInterface> InputTaskDueDateState::Execute(std::shared
 }
 
 std::string InputTaskDueDateState::GetUserInputForDueDateEdit(const Task &task) {
-    std::string user_input = dependencies_->GetUserInput("Due Date, default: " + task.due_date().ShortDebugString());
+    std::string user_input = dependencies_->GetUserInput("Due Date, default: " + TimeToString(task.due_date()));
     if (user_input.empty()){
         return TimeToString(task.due_date());
     }

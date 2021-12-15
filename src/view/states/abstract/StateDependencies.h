@@ -11,6 +11,7 @@
 #include "console_io/ConsolePrinter.h"
 #include "console_io/ConsoleReader.h"
 #include "Task.pb.h"
+#include "utilities/TaskUtilities.h"
 
 class ConsoleStateMachine;
 class WizardStatesFactory;

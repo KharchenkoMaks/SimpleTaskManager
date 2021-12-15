@@ -14,6 +14,9 @@
 #include "../mocks/MockWizardStatesFactory.h"
 #include "../mocks/MockController.h"
 
+#include "utilities/TaskUtilities.h"
+#include "Task.pb.h"
+
 #include <vector>
 #include <utility>
 
@@ -87,18 +90,40 @@ public:
 
 TEST_F(StateTest, ShowStateExecute_ShouldPrintTasksReceivedFromController) {
     // Arrange
-    const TaskId parent_task_id = TaskId::Create(0).value();
-    const std::pair<TaskId, Task> task1 = std::make_pair(parent_task_id, Task::Create("task1", Task::Priority::LOW, DueTime::Create(100)));
-    const std::pair<TaskId, Task> task2 = std::make_pair(TaskId::Create(1).value(), Task::Create("task2", Task::Priority::MEDIUM, DueTime::Create(100)));
-    const std::pair<TaskId, Task> subtask = std::make_pair(TaskId::Create(1).value(), Task::Create("subtask", Task::Priority::MEDIUM, DueTime::Create(100)));
-    AddExpectedPrint(PrintForm::WRITE_LINE, task1.first.to_string() + ", " + task1.second.to_string());
-    AddExpectedPrint(PrintForm::WRITE_LINE, "\t" + subtask.first.to_string() + ", " + subtask.second.to_string());
-    AddExpectedPrint(PrintForm::WRITE_LINE, task2.first.to_string() + ", " + task2.second.to_string());
-    const std::vector<TaskTransfer> returned_tasks_from_controller {
-            TaskTransfer::Create(task1.first, task1.second),
-            TaskTransfer::Create(subtask.first, subtask.second, parent_task_id),
-            TaskTransfer::Create(task2.first, task2.second)
-    };
+    TaskId parent_task_id;
+    TaskId task2_id;
+    task2_id.set_id(2);
+    TaskId task3_id;
+    task3_id.set_id(3);
+    Task t1;
+    t1.set_title("task1");
+    t1.set_priority(Task::Priority::Task_Priority_LOW);
+    t1.set_allocated_due_date(new google::protobuf::Timestamp(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))));
+    Task t2;
+    t2.set_title("task2");
+    t2.set_priority(Task::Priority::Task_Priority_MEDIUM);
+    t2.set_allocated_due_date(new google::protobuf::Timestamp(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))));
+    Task t3;
+    t3.set_title("subtask");
+    t3.set_priority(Task::Priority::Task_Priority_MEDIUM);
+    t3.set_allocated_due_date(new google::protobuf::Timestamp(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))));
+    const std::pair<TaskId, Task> task1 = std::make_pair(parent_task_id, t1);
+    const std::pair<TaskId, Task> task2 = std::make_pair(task2_id, t2);
+    const std::pair<TaskId, Task> subtask = std::make_pair(task3_id, t3);
+    AddExpectedPrint(PrintForm::WRITE_LINE, TaskToString(parent_task_id, t1));
+    AddExpectedPrint(PrintForm::WRITE_LINE, "\t" + TaskToString(task3_id, t3));
+    AddExpectedPrint(PrintForm::WRITE_LINE, TaskToString(task2_id, t2));
+    TaskTransfer tt1;
+    tt1.set_allocated_task_id(new TaskId(parent_task_id));
+    tt1.set_allocated_task(new Task(t1));
+    TaskTransfer tt2;
+    tt2.set_allocated_task_id(new TaskId(task2_id));
+    tt2.set_allocated_task(new Task(t2));
+    TaskTransfer tt3;
+    tt3.set_allocated_task_id(new TaskId(task3_id));
+    tt3.set_allocated_task(new Task(t3));
+    tt3.set_allocated_parent_id(new TaskId(parent_task_id));
+    const std::vector<TaskTransfer> returned_tasks_from_controller { tt1, tt3, tt2 };
     std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
     // Assert
     EXPECT_CALL(*controller_, GetAllTasks()).Times(1).WillOnce(Return(returned_tasks_from_controller));
@@ -192,7 +217,7 @@ TEST_F(StateTest, EndState_ShouldReturnNullptr) {
 TEST_F(StateTest, DeleteTaskStateSuccess_ShouldAskControllerToDeleteTaskAndReturnPreviousState) {
     // Arrange
     std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
-    const TaskId expected_deleted_task_id = TaskId::Create("10").value();
+    const TaskId expected_deleted_task_id = StringToTaskId("10").value();
     // Assert
     AddExpectedReadId("Task ID", expected_deleted_task_id);
     EXPECT_CALL(*controller_, DeleteTask(expected_deleted_task_id))

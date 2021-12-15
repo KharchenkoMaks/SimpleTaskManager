@@ -79,3 +79,22 @@ std::string TaskToString(const TaskId& task_id, const Task& task) {
     }
     return return_string;
 }
+
+bool operator==(const Task& task1, const Task& task2) {
+    return task1.title() == task2.title() &&
+            task1.priority() == task2.priority() &&
+            task1.due_date() == task2.due_date() &&
+            task1.completed() == task2.completed() &&
+            task1.label() == task2.label();
+}
+
+std::optional<TaskId> StringToTaskId(const std::string& task_id_str) {
+    try {
+        int id = std::stoi(task_id_str);
+        TaskId task_id;
+        task_id.set_id(id);
+        return task_id;
+    } catch (std::invalid_argument) {
+        return std::nullopt;
+    }
+}

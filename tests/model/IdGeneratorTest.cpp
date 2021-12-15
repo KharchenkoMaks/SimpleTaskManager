@@ -4,7 +4,7 @@
 
 #include "gtest/gtest.h"
 #include "id/IdGenerator.h"
-#include "id/TaskId.h"
+#include "Task.pb.h"
 
 class IdGeneratorTest : public ::testing::Test{
 
@@ -19,7 +19,7 @@ TEST_F(IdGeneratorTest, CreateNewTaskId_shouldIncrementTaskId){
     // Act & Assert
     for (int expected = 0; expected < test_times; ++expected){
         TaskId task = generator.CreateNewTaskId();
-        EXPECT_EQ(task.GetId(), expected);
+        EXPECT_EQ(task.id(), expected);
     }
 }
 
@@ -33,7 +33,7 @@ TEST_F(IdGeneratorTest, InitializeIdGenerator_shouldIncrementTaskIdFromLastId){
     // Act & Assert
     for (int expected = last_id; expected < last_id + test_times; ++expected){
         TaskId task = generator.CreateNewTaskId();
-        EXPECT_EQ(task.GetId(), expected);
+        EXPECT_EQ(task.id(), expected);
     }
 }
 

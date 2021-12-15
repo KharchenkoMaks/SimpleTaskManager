@@ -26,6 +26,10 @@ std::optional<google::protobuf::Timestamp> StringToTime(const std::string& time_
 
 std::string TimeToString(google::protobuf::Timestamp time, const std::string& format = "%H:%M %d.%m.%Y");
 
-std::string TaskToString(const TaskId& task_id, const Task& task);
+std::string TaskToString(const TaskId& task_id, const Task& task);\
+
+bool operator==(const Task& task1, const Task& task2);
+
+std::optional<TaskId> StringToTaskId(const std::string& task_id_str);
 
 #endif //SIMPLETASKMANAGER_TASKUTILITIES_H

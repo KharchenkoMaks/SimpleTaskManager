@@ -53,9 +53,11 @@ add_executable(SimpleTaskManager
         src/main.cpp)
 
 add_executable(SimpleTaskManager_test
+        ${PROTO_SRCS}
+        ${PROTO_HDRS}
         ${TaskManager_SRCS}
         ${TaskManager_TEST})
 
 target_link_libraries(SimpleTaskManager ${Protobuf_LIBRARIES})
 
-target_link_libraries(SimpleTaskManager_test GTest::gtest GTest::gmock GTest::gmock_main)
+target_link_libraries(SimpleTaskManager_test GTest::gtest GTest::gmock GTest::gmock_main ${Protobuf_LIBRARIES})

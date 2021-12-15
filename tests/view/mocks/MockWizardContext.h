@@ -16,7 +16,7 @@ class MockWizardContext : public WizardContext {
 public:
     MOCK_METHOD(bool, AddTaskTitle, (const std::string& title), (override));
     MOCK_METHOD(bool, AddTaskPriority, (Task::Priority priority), (override));
-    MOCK_METHOD(bool, AddTaskDueTime, (DueTime due_time), (override));
+    MOCK_METHOD(bool, AddTaskDueTime, (google::protobuf::Timestamp due_time), (override));
     MOCK_METHOD(std::optional<Task>, GetTask, (), (override));
     MOCK_METHOD(void, SetEditingTask, (const TaskId& task_id, const Task& task), (override));
     MOCK_METHOD(std::optional<TaskId>, GetTaskId, (), (override));
