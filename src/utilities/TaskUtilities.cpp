@@ -6,9 +6,6 @@
 
 std::string TaskPriorityToString(const Task::Priority priority) {
     switch(priority) {
-        case Task::Priority::Task_Priority_NONE: {
-            return "None";
-        }
         case Task::Priority::Task_Priority_LOW: {
             return "Low";
         }
@@ -17,6 +14,9 @@ std::string TaskPriorityToString(const Task::Priority priority) {
         }
         case Task::Priority::Task_Priority_HIGH: {
             return "High";
+        }
+        default: {
+            return "None";
         }
     }
 }
@@ -28,8 +28,10 @@ std::optional<Task::Priority> StringToTaskPriority(const std::string& str) {
         return Task::Priority::Task_Priority_LOW;
     } else if (str == "Medium") {
         return Task::Priority::Task_Priority_MEDIUM;
-    } if (str == "High") {
+    } else if (str == "High") {
         return Task::Priority::Task_Priority_HIGH;
+    } else {
+        return std::nullopt;
     }
 }
 
