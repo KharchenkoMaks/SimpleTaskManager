@@ -98,3 +98,15 @@ std::optional<TaskId> StringToTaskId(const std::string& task_id_str) {
         return std::nullopt;
     }
 }
+
+bool operator==(const TaskTransfer& task1, const TaskTransfer& task2) {
+    if (task1.has_parent_id() && task2.has_parent_id()) {
+        return task1.task_id() == task2.task_id() &&
+            task1.task() == task2.task() &&
+            task1.parent_id() == task2.parent_id();
+    } else if (!task1.has_parent_id() && !task2.has_parent_id()) {
+        return task1.task_id() == task2.task_id() &&
+               task1.task() == task2.task();
+    }
+    return false;
+}

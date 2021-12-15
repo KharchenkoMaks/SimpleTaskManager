@@ -23,7 +23,9 @@ file(GLOB_RECURSE TaskManager_SRCS CONFIGURE_DEPENDS
         "src/model/*.h"
         "src/model/*.cpp"
         "src/utilities/*.h"
-        "src/utilities/*.cpp")
+        "src/utilities/*.cpp"
+        "src/persistence/*.h"
+        "src/persistence/*.cpp")
 
 file(GLOB_RECURSE TaskManager_TEST CONFIGURE_DEPENDS
         "tests/*.h"

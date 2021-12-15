@@ -32,4 +32,6 @@ bool operator==(const Task& task1, const Task& task2);
 
 std::optional<TaskId> StringToTaskId(const std::string& task_id_str);
 
+bool operator==(const TaskTransfer& task1, const TaskTransfer& task2);
+
 #endif //SIMPLETASKMANAGER_TASKUTILITIES_H
