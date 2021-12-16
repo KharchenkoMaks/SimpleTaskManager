@@ -197,7 +197,9 @@ TEST_F(StateTest, HelpState_ShouldPrintHelpMessage) {
     AddExpectedPrint(PrintForm::WRITE_LINE, "5. complete");
     AddExpectedPrint(PrintForm::WRITE_LINE, "6. set_label");
     AddExpectedPrint(PrintForm::WRITE_LINE, "7. show");
-    AddExpectedPrint(PrintForm::WRITE_LINE, "8. quit");
+    AddExpectedPrint(PrintForm::WRITE_LINE, "8. save");
+    AddExpectedPrint(PrintForm::WRITE_LINE, "9. load");
+    AddExpectedPrint(PrintForm::WRITE_LINE, "10. quit");
     std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
     // Assert
     EXPECT_CALL(*factory_, GetNextState(An<const HelpState&>(), WizardStatesFactory::MoveType::NEXT))
