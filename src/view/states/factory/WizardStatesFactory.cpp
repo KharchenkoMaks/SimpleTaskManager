@@ -35,6 +35,8 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetStateByCommand(con
         return GetLazyStateByStatesEnum(States::kSetLabel);
     } else if (command == "save") {
         return GetLazyStateByStatesEnum(States::kSave);
+    } else if (command == "load") {
+        return GetLazyStateByStatesEnum(States::kLoad);
     } else {
         return nullptr;
     }
@@ -197,6 +199,17 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const Se
 }
 
 std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const SaveState &state, const WizardStatesFactory::MoveType move_type) {
+    switch(move_type) {
+        case MoveType::ERROR: {
+            return GetLazyStateByStatesEnum(States::kSave);
+        }
+        default: {
+            return GetLazyStateByStatesEnum(States::kRoot);
+        }
+    }
+}
+
+std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const LoadState &state, const WizardStatesFactory::MoveType move_type) {
     switch(move_type) {
         case MoveType::ERROR: {
             return GetLazyStateByStatesEnum(States::kSave);
@@ -374,6 +387,17 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetLazyStateByStatesE
                                                             reader_));
             }
             return save_state_;
+        }
+        case States::kLoad: {
+            if (!load_state_) {
+                load_state_ = std::make_shared<LoadState>(
+                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                            shared_from_this(),
+                                                            controller_,
+                                                            printer_,
+                                                            reader_));
+            }
+            return load_state_;
         }
     }
 }

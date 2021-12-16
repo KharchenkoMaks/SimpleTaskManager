@@ -26,6 +26,7 @@
 #include "states/task_input/SetLabelState.h"
 #include "states/EndState.h"
 #include "states/persistence/SaveState.h"
+#include "states/persistence/LoadState.h"
 
 #include <memory>
 #include <string>
@@ -46,6 +47,7 @@ class DeleteTaskState;
 class SetLabelState;
 class EndState;
 class SaveState;
+class LoadState;
 
 class WizardStatesFactory : public std::enable_shared_from_this<WizardStatesFactory> {
 public:
@@ -79,6 +81,7 @@ public:
     virtual std::shared_ptr<WizardStateInterface> GetNextState(const DeleteTaskState& state, MoveType move_type);
     virtual std::shared_ptr<WizardStateInterface> GetNextState(const SetLabelState& state, MoveType move_type);
     virtual std::shared_ptr<WizardStateInterface> GetNextState(const SaveState& state, MoveType move_type);
+    virtual std::shared_ptr<WizardStateInterface> GetNextState(const LoadState& state, MoveType move_type);
 
 public:
     virtual ~WizardStatesFactory() = default;
@@ -99,7 +102,8 @@ private:
         kDelete,
         kSetLabel,
         kEnd,
-        kSave
+        kSave,
+        kLoad
     };
 private:
     std::shared_ptr<WizardStateInterface> GetLazyStateByStatesEnum(States state);
@@ -124,6 +128,7 @@ private:
     std::shared_ptr<InputTaskDueDateState> input_task_due_date_state_;
 
     std::shared_ptr<SaveState> save_state_;
+    std::shared_ptr<LoadState> load_state_;
 
     std::shared_ptr<ConsoleReader> reader_;
     std::shared_ptr<ConsolePrinter> printer_;

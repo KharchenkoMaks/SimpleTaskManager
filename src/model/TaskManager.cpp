@@ -203,6 +203,7 @@ bool TaskManager::LoadModelState(std::unique_ptr<IdGenerator> generator, const s
     }
     generator_ = std::move(generator);
     tasks_.swap(tasks_to_add);
+    return true;
 }
 
 std::pair<TaskId, std::vector<TaskTransfer>> TaskManager::GetModelState() {
