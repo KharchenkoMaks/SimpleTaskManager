@@ -40,7 +40,7 @@ public:
     Task expected_second_task;
     Task expected_third_task;
     void SetUp() override {
-        expected_time = google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0));
+        expected_time = google::protobuf::util::TimeUtil::TimeTToTimestamp(1702737566);
 
         expected_first_task_id.set_id(1);
         expected_second_task_id.set_id(2);
@@ -105,7 +105,6 @@ TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
     TaskManager task_manager(std::move(gen));
     const std::string expected_title = "edited task";
     const Task::Priority expected_priority = Task::Priority::Task_Priority_HIGH;
-    const google::protobuf::Timestamp expected_time = google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0));
     Task edited_task;
     edited_task.set_title(expected_title);
     edited_task.set_priority(expected_priority);
