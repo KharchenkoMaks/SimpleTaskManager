@@ -184,3 +184,23 @@ TaskTransfer TaskManager::CreateTaskTransferFromSubTask(const TaskId& task_id, c
     task_transfer.set_allocated_parent_id(new TaskId(parent_id));
     return task_transfer;
 }
+
+bool TaskManager::LoadTaskManagerState(std::unique_ptr<IdGenerator> generator, const std::vector<TaskTransfer> tasks) {
+    std::map<TaskId, MainTask> tasks_to_add;
+    for (const auto& task : tasks) {
+        if (!task.has_task() || !task.has_task_id() || !task_validator_->ValidateTask(task.task())) {
+            return false;
+        }
+        if (!task.has_parent_id()) {
+            tasks_to_add.insert_or_assign(task.task_id(), MainTask::Create(task.task()));
+        } else {
+            auto main_task = tasks_to_add.find(task.parent_id());
+            if (main_task == tasks_to_add.end()) {
+                return false;
+            }
+            main_task->second.AddSubTask(task.task_id(), task.task());
+        }
+    }
+    generator_ = std::move(generator);
+    tasks_.swap(tasks_to_add);
+}
