@@ -15,12 +15,14 @@ std::shared_ptr<WizardStateInterface> LoadState::Execute(std::shared_ptr<WizardC
             dependencies_->GetConsolePrinter()->WriteLine("Tasks were successfully loaded!");
             break;
         }
-        case TaskManagerPersistence::SaveLoadStatus::FILE_WAS_NOT_OPENED:
+        case TaskManagerPersistence::SaveLoadStatus::FILE_WAS_NOT_OPENED: {
             dependencies_->GetConsolePrinter()->WriteError("Couldn't open file " + file_name + ", try again!");
             break;
-        case TaskManagerPersistence::SaveLoadStatus::INVALID_FILE_STRUCTURE:
+        }
+        case TaskManagerPersistence::SaveLoadStatus::INVALID_FILE_STRUCTURE: {
             dependencies_->GetConsolePrinter()->WriteError("Couldn't load from file, " + file_name + " is damaged.");
             break;
+        }
     }
     return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
 }

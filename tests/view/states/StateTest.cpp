@@ -239,13 +239,15 @@ TEST_F(StateTest, SaveStateSuccess_ShouldAskUserForFileNameAndPrintSuccessMessag
     const std::string file_name = "test_file";
     // Assert
     AddExpectedRead("File name", file_name);
-    EXPECT_CALL(*controller_, SaveToFile(file_name)).Times(1).WillOnce(Return(TaskManagerPersistence::SaveLoadStatus::SUCCESS));
+    EXPECT_CALL(*controller_, SaveToFile(file_name))
+        .Times(1)
+        .WillOnce(Return(TaskManagerPersistence::SaveLoadStatus::SUCCESS));
     AddExpectedPrint(PrintForm::WRITE_LINE, "Tasks were successfully saved to " + file_name);
     EXPECT_CALL(*factory_, GetNextState(testing::An<const SaveState&>(), WizardStatesFactory::MoveType::PREVIOUS))
         .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
-    std::shared_ptr<WizardStateInterface> delete_state = std::make_shared<SaveState>(std::move(dependencies_));
-    ExecuteAndExpectReturn(delete_state, expected_next_state);
+    std::shared_ptr<WizardStateInterface> save_state = std::make_shared<SaveState>(std::move(dependencies_));
+    ExecuteAndExpectReturn(save_state, expected_next_state);
 }
 
 TEST_F(StateTest, SaveStateFail_ShouldAskUserForFileNameAndPrintErrorMessage) {
@@ -254,11 +256,64 @@ TEST_F(StateTest, SaveStateFail_ShouldAskUserForFileNameAndPrintErrorMessage) {
     const std::string file_name = "test_file";
     // Assert
     AddExpectedRead("File name", file_name);
-    EXPECT_CALL(*controller_, SaveToFile(file_name)).Times(1).WillOnce(Return(TaskManagerPersistence::SaveLoadStatus::FILE_WAS_NOT_OPENED));
+    EXPECT_CALL(*controller_, SaveToFile(file_name))
+        .Times(1)
+        .WillOnce(Return(TaskManagerPersistence::SaveLoadStatus::FILE_WAS_NOT_OPENED));
     AddExpectedPrint(PrintForm::WRITE_ERROR, "Couldn't open file " + file_name + ", try again!");
     EXPECT_CALL(*factory_, GetNextState(testing::An<const SaveState&>(), WizardStatesFactory::MoveType::PREVIOUS))
             .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
-    std::shared_ptr<WizardStateInterface> delete_state = std::make_shared<SaveState>(std::move(dependencies_));
-    ExecuteAndExpectReturn(delete_state, expected_next_state);
+    std::shared_ptr<WizardStateInterface> save_state = std::make_shared<SaveState>(std::move(dependencies_));
+    ExecuteAndExpectReturn(save_state, expected_next_state);
+}
+
+TEST_F(StateTest, LoadStateSuccess_ShouldAskUserForFileNameAndPrintSuccessMessage) {
+    // Arrange
+    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    const std::string file_name = "test_file";
+    // Assert
+    AddExpectedRead("File name", file_name);
+    EXPECT_CALL(*controller_, LoadFromFile(file_name))
+        .Times(1)
+        .WillOnce(Return(TaskManagerPersistence::SaveLoadStatus::SUCCESS));
+    AddExpectedPrint(PrintForm::WRITE_LINE, "Tasks were successfully loaded!");
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const LoadState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+            .Times(1).WillOnce(Return(expected_next_state));
+    // Act & Assert
+    std::shared_ptr<WizardStateInterface> load_state = std::make_shared<LoadState>(std::move(dependencies_));
+    ExecuteAndExpectReturn(load_state, expected_next_state);
+}
+
+TEST_F(StateTest, LoadStateFailFileNotOpened_ShouldAskUserForFileNameAndPrintErrorMessage) {
+    // Arrange
+    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    const std::string file_name = "test_file";
+    // Assert
+    AddExpectedRead("File name", file_name);
+    EXPECT_CALL(*controller_, LoadFromFile(file_name))
+            .Times(1)
+            .WillOnce(Return(TaskManagerPersistence::SaveLoadStatus::FILE_WAS_NOT_OPENED));
+    AddExpectedPrint(PrintForm::WRITE_ERROR, "Couldn't open file " + file_name + ", try again!");
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const LoadState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+            .Times(1).WillOnce(Return(expected_next_state));
+    // Act & Assert
+    std::shared_ptr<WizardStateInterface> load_state = std::make_shared<LoadState>(std::move(dependencies_));
+    ExecuteAndExpectReturn(load_state, expected_next_state);
+}
+
+TEST_F(StateTest, LoadStateFailFileStructure_ShouldAskUserForFileNameAndPrintErrorMessage) {
+    // Arrange
+    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    const std::string file_name = "test_file";
+    // Assert
+    AddExpectedRead("File name", file_name);
+    EXPECT_CALL(*controller_, LoadFromFile(file_name))
+            .Times(1)
+            .WillOnce(Return(TaskManagerPersistence::SaveLoadStatus::INVALID_FILE_STRUCTURE));
+    AddExpectedPrint(PrintForm::WRITE_ERROR, "Couldn't load from file, " + file_name + " is damaged.");
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const LoadState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+            .Times(1).WillOnce(Return(expected_next_state));
+    // Act & Assert
+    std::shared_ptr<WizardStateInterface> load_state = std::make_shared<LoadState>(std::move(dependencies_));
+    ExecuteAndExpectReturn(load_state, expected_next_state);
 }
