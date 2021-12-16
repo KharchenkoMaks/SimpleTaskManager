@@ -22,4 +22,10 @@ TaskId IdGenerator::CreateNewTaskId() {
     return task_id;
 }
 
+TaskId IdGenerator::GetLastTaskId() {
+    TaskId task_id;
+    task_id.set_id(last_id_);
+    return task_id;
+}
+
 IdGenerator::~IdGenerator() = default;

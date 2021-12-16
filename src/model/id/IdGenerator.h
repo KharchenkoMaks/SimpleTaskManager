@@ -13,6 +13,9 @@ public:
     explicit IdGenerator(int last_id);
 public:
     virtual TaskId CreateNewTaskId();
+public:
+    TaskId GetLastTaskId();
+public:
     virtual ~IdGenerator();
 private:
     int last_id_;
