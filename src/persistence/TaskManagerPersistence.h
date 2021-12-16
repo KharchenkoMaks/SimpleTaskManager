@@ -8,16 +8,23 @@
 #include "Task.pb.h"
 
 #include <vector>
+#include <utility>
 
 class TaskManagerPersistence {
+public:
+    enum class SaveLoadStatus {
+        SUCCESS,
+        FILE_WAS_NOT_OPENED,
+        INVALID_FILE_STRUCTURE
+    };
 public:
     struct TaskManagerParameters {
         TaskId last_id_;
         std::vector<TaskTransfer> tasks_;
     };
 public:
-    TaskManagerParameters LoadFromFile(const std::string& file_name);
-    bool SaveToFile(const std::string& file_name, const TaskManagerParameters& parameters_to_save);
+    std::pair<SaveLoadStatus, TaskManagerParameters> LoadFromFile(const std::string& file_name);
+    SaveLoadStatus SaveToFile(const std::string& file_name, const TaskManagerParameters& parameters_to_save);
 };
 
 

@@ -70,16 +70,17 @@ TEST_F(PersistenceTest, FileReadWrite_ShouldWriteTasksAndReadTasksFromFile) {
     TaskManagerPersistence tm_persistence;
     const std::string file_name = "some_file";
     // Act
-    const bool actual_save_answer = tm_persistence.SaveToFile(file_name, parameters_to_save);
+    const TaskManagerPersistence::SaveLoadStatus actual_save_answer = tm_persistence.SaveToFile(file_name, parameters_to_save);
     // Assert
-    ASSERT_TRUE(actual_save_answer);
+    ASSERT_EQ(TaskManagerPersistence::SaveLoadStatus::SUCCESS, actual_save_answer);
     // Act
-    const TaskManagerPersistence::TaskManagerParameters actual_loaded_parameters =
+    const std::pair<TaskManagerPersistence::SaveLoadStatus, TaskManagerPersistence::TaskManagerParameters> actual_loaded_parameters =
             tm_persistence.LoadFromFile(file_name);
     // Assert
-    EXPECT_EQ(parameters_to_save.last_id_, actual_loaded_parameters.last_id_);
-    ASSERT_EQ(parameters_to_save.tasks_.size(), actual_loaded_parameters.tasks_.size());
+    ASSERT_EQ(TaskManagerPersistence::SaveLoadStatus::SUCCESS, actual_loaded_parameters.second);
+    EXPECT_EQ(parameters_to_save.last_id_, actual_loaded_parameters.second.last_id_);
+    ASSERT_EQ(parameters_to_save.tasks_.size(), actual_loaded_parameters.second.tasks_.size());
     for (int i = 0; i < parameters_to_save.tasks_.size(); ++i) {
-        EXPECT_EQ(parameters_to_save.tasks_[i], actual_loaded_parameters.tasks_[i]);
+        EXPECT_EQ(parameters_to_save.tasks_[i], actual_loaded_parameters.second.tasks_[i]);
     }
 }

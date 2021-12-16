@@ -9,15 +9,22 @@
 #include <google/protobuf/util/delimited_message_util.h>
 #include <fstream>
 
-TaskManagerPersistence::TaskManagerParameters TaskManagerPersistence::LoadFromFile(const std::string& file_name) {
+std::pair<TaskManagerPersistence::SaveLoadStatus, TaskManagerPersistence::TaskManagerParameters>
+        TaskManagerPersistence::LoadFromFile(const std::string& file_name) {
+
     TaskManagerPersistence::TaskManagerParameters tm_parameters;
 
     std::ifstream file_to_read(file_name);
+    if (!file_to_read.is_open()) {
+        return std::make_pair(SaveLoadStatus::FILE_WAS_NOT_OPENED, tm_parameters);
+    }
 
     std::unique_ptr<google::protobuf::io::ZeroCopyInputStream> raw_input =
             std::make_unique<google::protobuf::io::IstreamInputStream>(&file_to_read);
 
-    google::protobuf::util::ParseDelimitedFromZeroCopyStream(&tm_parameters.last_id_, raw_input.get(), nullptr);
+    if (!google::protobuf::util::ParseDelimitedFromZeroCopyStream(&tm_parameters.last_id_, raw_input.get(), nullptr)) {
+        return std::make_pair(SaveLoadStatus::INVALID_FILE_STRUCTURE, tm_parameters);
+    }
 
     TaskTransfer read_task;
     while (google::protobuf::util::ParseDelimitedFromZeroCopyStream(&read_task, raw_input.get(), nullptr)) {
@@ -27,10 +34,10 @@ TaskManagerPersistence::TaskManagerParameters TaskManagerPersistence::LoadFromFi
         read_task.clear_task_id();
     }
 
-    return tm_parameters;
+    return std::make_pair(SaveLoadStatus::SUCCESS, tm_parameters);
 }
 
-bool TaskManagerPersistence::SaveToFile(const std::string& file_name,
+TaskManagerPersistence::SaveLoadStatus TaskManagerPersistence::SaveToFile(const std::string& file_name,
                                         const TaskManagerPersistence::TaskManagerParameters& parameters_to_save) {
 
     std::ofstream file_to_write(file_name);
@@ -42,5 +49,5 @@ bool TaskManagerPersistence::SaveToFile(const std::string& file_name,
 
     file_to_write.close();
 
-    return true;
+    return SaveLoadStatus::SUCCESS;
 }
