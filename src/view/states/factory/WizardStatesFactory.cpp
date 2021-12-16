@@ -33,6 +33,8 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetStateByCommand(con
         return GetLazyStateByStatesEnum(States::kQuit);
     } else if (command == "set_label") {
         return GetLazyStateByStatesEnum(States::kSetLabel);
+    } else if (command == "save") {
+        return GetLazyStateByStatesEnum(States::kSave);
     } else {
         return nullptr;
     }
@@ -187,6 +189,17 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const Se
     switch (move_type) {
         case MoveType::ERROR: {
             return GetLazyStateByStatesEnum(States::kSetLabel);
+        }
+        default: {
+            return GetLazyStateByStatesEnum(States::kRoot);
+        }
+    }
+}
+
+std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const SaveState &state, const WizardStatesFactory::MoveType move_type) {
+    switch(move_type) {
+        case MoveType::ERROR: {
+            return GetLazyStateByStatesEnum(States::kSave);
         }
         default: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -350,6 +363,17 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetLazyStateByStatesE
                                                             reader_));
             }
             return end_state_;
+        }
+        case States::kSave: {
+            if (!save_state_) {
+                save_state_ = std::make_shared<SaveState>(
+                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                            shared_from_this(),
+                                                            controller_,
+                                                            printer_,
+                                                            reader_));
+            }
+            return save_state_;
         }
     }
 }
