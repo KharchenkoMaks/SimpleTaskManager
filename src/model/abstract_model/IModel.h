@@ -7,6 +7,7 @@
 
 #include "Task.pb.h"
 #include "utilities/TaskActionResult.h"
+#include "id/IdGenerator.h"
 
 #include <optional>
 #include <utility>
@@ -21,12 +22,13 @@ public:
     virtual TaskActionResult SetTaskLabel(const TaskId& id, const std::string& label) = 0;
 
     virtual std::vector<TaskTransfer> GetTasks() = 0;
-
     virtual std::optional<TaskTransfer> GetTask(const TaskId& task_id) = 0;
-
     virtual std::pair<TaskActionResult, std::vector<TaskTransfer>> GetTaskSubTasks(const TaskId& task_id) = 0;
 
     virtual bool IsTaskExist(const TaskId& task_id) = 0;
+
+    virtual std::pair<TaskId, std::vector<TaskTransfer>> GetModelState() = 0;
+    virtual bool LoadModelState(std::unique_ptr<IdGenerator> generator, const std::vector<TaskTransfer>& tasks) = 0;
 
     virtual ~IModel() = default;
 };

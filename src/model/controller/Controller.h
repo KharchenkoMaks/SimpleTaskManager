@@ -9,6 +9,7 @@
 #include "abstract_model/IModel.h"
 #include "utilities/TaskValidator.h"
 #include "utilities/TaskActionResult.h"
+#include "persistence/TaskManagerPersistence.h"
 
 #include <memory>
 #include <utility>
@@ -17,6 +18,9 @@
 class Controller {
 public:
     Controller(std::unique_ptr<IModel> model, std::unique_ptr<TaskValidator> task_validator);
+    Controller(std::unique_ptr<IModel> model,
+               std::unique_ptr<TaskValidator> task_validator,
+               std::unique_ptr<TaskManagerPersistence> tm_persistence);
 public:
     virtual std::pair<TaskActionResult, std::optional<TaskId>> AddTask(const Task& task);
     virtual std::pair<TaskActionResult, std::optional<TaskId>> AddSubTask(const Task& task, const TaskId& parent_id);
@@ -31,6 +35,9 @@ public:
 public:
     virtual std::vector<TaskTransfer> GetAllTasks();
     std::optional<TaskTransfer> GetTask(const TaskId& task_id) const;
+public:
+    TaskManagerPersistence::SaveLoadStatus SaveToFile(const std::string& file_name);
+    TaskManagerPersistence::SaveLoadStatus LoadFromFile(const std::string& file_name);
 
 public:
     virtual ~Controller() = default;
@@ -38,6 +45,8 @@ private:
     std::unique_ptr<IModel> model_;
 
     std::unique_ptr<TaskValidator> task_validator_;
+
+    std::unique_ptr<TaskManagerPersistence> tm_persistence_;
 };
 
 

@@ -185,7 +185,7 @@ TaskTransfer TaskManager::CreateTaskTransferFromSubTask(const TaskId& task_id, c
     return task_transfer;
 }
 
-bool TaskManager::LoadTaskManagerState(std::unique_ptr<IdGenerator> generator, const std::vector<TaskTransfer>& tasks) {
+bool TaskManager::LoadModelState(std::unique_ptr<IdGenerator> generator, const std::vector<TaskTransfer>& tasks) {
     std::map<TaskId, MainTask> tasks_to_add;
     for (const auto& task : tasks) {
         if (!task.has_task() || !task.has_task_id() || !task_validator_->ValidateTask(task.task())) {
@@ -205,6 +205,6 @@ bool TaskManager::LoadTaskManagerState(std::unique_ptr<IdGenerator> generator, c
     tasks_.swap(tasks_to_add);
 }
 
-std::pair<TaskId, std::vector<TaskTransfer>> TaskManager::GetTaskManagerState() {
+std::pair<TaskId, std::vector<TaskTransfer>> TaskManager::GetModelState() {
     return std::make_pair(generator_->GetLastTaskId(), GetTasks());
 }

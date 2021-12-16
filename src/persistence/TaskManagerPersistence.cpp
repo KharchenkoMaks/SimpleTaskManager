@@ -41,6 +41,9 @@ TaskManagerPersistence::SaveLoadStatus TaskManagerPersistence::SaveToFile(const 
                                         const TaskManagerPersistence::TaskManagerParameters& parameters_to_save) {
 
     std::ofstream file_to_write(file_name);
+    if (!file_to_write.is_open()) {
+        return SaveLoadStatus::FILE_WAS_NOT_OPENED;
+    }
     google::protobuf::util::SerializeDelimitedToOstream(parameters_to_save.last_id_, &file_to_write);
 
     for (const auto& task : parameters_to_save.tasks_) {
@@ -50,4 +53,10 @@ TaskManagerPersistence::SaveLoadStatus TaskManagerPersistence::SaveToFile(const 
     file_to_write.close();
 
     return SaveLoadStatus::SUCCESS;
+}
+
+TaskManagerPersistence::TaskManagerParameters::TaskManagerParameters(const TaskId& last_id,
+                                                                     const std::vector<TaskTransfer>& tasks) {
+    last_id_.CopyFrom(last_id);
+    tasks_ = tasks;
 }

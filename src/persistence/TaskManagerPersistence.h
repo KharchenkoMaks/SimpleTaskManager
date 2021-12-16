@@ -19,6 +19,9 @@ public:
     };
 public:
     struct TaskManagerParameters {
+        TaskManagerParameters() = default;
+        TaskManagerParameters(const TaskId& last_id,
+                              const std::vector<TaskTransfer>& tasks);
         TaskId last_id_;
         std::vector<TaskTransfer> tasks_;
     };
