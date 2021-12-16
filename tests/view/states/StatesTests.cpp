@@ -173,7 +173,7 @@ TEST_F(StatesTests, ExecuteHelpState_ShouldPrintHelpString) {
     const int expected_strings_printed = 9;
     std::shared_ptr<WizardStateInterface> expected_return = std::make_shared<RootState>(nullptr);
     // Assert
-    EXPECT_CALL(*printer_, WriteLine(testing::An<const std::string&>())).Times(9);
+    EXPECT_CALL(*printer_, WriteLine(testing::An<const std::string&>())).Times(11);
     EXPECT_CALL(*factory_, GetNextState(testing::An<const HelpState&>(), WizardStatesFactory::MoveType::NEXT))
         .Times(1)
         .WillOnce(Return(expected_return));

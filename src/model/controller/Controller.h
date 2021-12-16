@@ -36,8 +36,8 @@ public:
     virtual std::vector<TaskTransfer> GetAllTasks();
     std::optional<TaskTransfer> GetTask(const TaskId& task_id) const;
 public:
-    TaskManagerPersistence::SaveLoadStatus SaveToFile(const std::string& file_name);
-    TaskManagerPersistence::SaveLoadStatus LoadFromFile(const std::string& file_name);
+    virtual TaskManagerPersistence::SaveLoadStatus SaveToFile(const std::string& file_name);
+    virtual TaskManagerPersistence::SaveLoadStatus LoadFromFile(const std::string& file_name);
 
 public:
     virtual ~Controller() = default;

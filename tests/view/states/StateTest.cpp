@@ -16,6 +16,7 @@
 
 #include "utilities/TaskUtilities.h"
 #include "Task.pb.h"
+#include "persistence/TaskManagerPersistence.h"
 
 #include <vector>
 #include <utility>
@@ -229,5 +230,35 @@ TEST_F(StateTest, DeleteTaskStateSuccess_ShouldAskControllerToDeleteTaskAndRetur
         .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
     std::shared_ptr<WizardStateInterface> delete_state = std::make_shared<DeleteTaskState>(std::move(dependencies_));
+    ExecuteAndExpectReturn(delete_state, expected_next_state);
+}
+
+TEST_F(StateTest, SaveStateSuccess_ShouldAskUserForFileNameAndPrintSuccessMessage) {
+    // Arrange
+    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    const std::string file_name = "test_file";
+    // Assert
+    AddExpectedRead("File name", file_name);
+    EXPECT_CALL(*controller_, SaveToFile(file_name)).Times(1).WillOnce(Return(TaskManagerPersistence::SaveLoadStatus::SUCCESS));
+    AddExpectedPrint(PrintForm::WRITE_LINE, "Tasks were successfully saved to " + file_name);
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const SaveState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+        .Times(1).WillOnce(Return(expected_next_state));
+    // Act & Assert
+    std::shared_ptr<WizardStateInterface> delete_state = std::make_shared<SaveState>(std::move(dependencies_));
+    ExecuteAndExpectReturn(delete_state, expected_next_state);
+}
+
+TEST_F(StateTest, SaveStateFail_ShouldAskUserForFileNameAndPrintErrorMessage) {
+    // Arrange
+    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    const std::string file_name = "test_file";
+    // Assert
+    AddExpectedRead("File name", file_name);
+    EXPECT_CALL(*controller_, SaveToFile(file_name)).Times(1).WillOnce(Return(TaskManagerPersistence::SaveLoadStatus::FILE_WAS_NOT_OPENED));
+    AddExpectedPrint(PrintForm::WRITE_ERROR, "Couldn't open file " + file_name + ", try again!");
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const SaveState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+            .Times(1).WillOnce(Return(expected_next_state));
+    // Act & Assert
+    std::shared_ptr<WizardStateInterface> delete_state = std::make_shared<SaveState>(std::move(dependencies_));
     ExecuteAndExpectReturn(delete_state, expected_next_state);
 }
