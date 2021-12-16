@@ -8,13 +8,13 @@ Controller::Controller(std::unique_ptr<IModel> model,
                        std::unique_ptr<TaskValidator> task_validator) :
                        model_(std::move(model)),
                        task_validator_(std::move(task_validator)),
-                       tm_persistence_(std::make_unique<TaskManagerPersistence>()) {
+                       tm_persistence_(std::make_unique<persistence::TasksPersistence>()) {
 
 }
 
 Controller::Controller(std::unique_ptr<IModel> model,
                        std::unique_ptr<TaskValidator> task_validator,
-                       std::unique_ptr<TaskManagerPersistence> tm_persistence) :
+                       std::unique_ptr<persistence::TasksPersistence> tm_persistence) :
         model_(std::move(model)),
         task_validator_(std::move(task_validator)),
         tm_persistence_(std::move(tm_persistence)) {
@@ -83,26 +83,26 @@ TaskActionResult Controller::SetTaskLabel(const TaskId& task_id, const std::stri
     return model_->SetTaskLabel(task_id, label);
 }
 
-TaskManagerPersistence::SaveLoadStatus Controller::SaveToFile(const std::string& file_name) {
+persistence::SaveLoadStatus Controller::SaveToFile(const std::string& file_name) {
     auto model_state = model_->GetModelState();
-    TaskManagerPersistence::TaskManagerParameters parameters_to_save { model_state.first, model_state.second };
+    persistence::TasksPersistence::TaskManagerParameters parameters_to_save { model_state.first, model_state.second };
     return tm_persistence_->SaveToFile(file_name, parameters_to_save);
 }
 
-TaskManagerPersistence::SaveLoadStatus Controller::LoadFromFile(const std::string& file_name) {
+persistence::SaveLoadStatus Controller::LoadFromFile(const std::string& file_name) {
     auto model_state = tm_persistence_->LoadFromFile(file_name);
-    if (model_state.first != TaskManagerPersistence::SaveLoadStatus::SUCCESS) {
+    if (model_state.first != persistence::SaveLoadStatus::SUCCESS) {
         return model_state.first;
     }
     std::unique_ptr<IdGenerator> new_generator;
     try {
         new_generator = std::make_unique<IdGenerator>(model_state.second.last_id_.id());
     } catch (std::invalid_argument) {
-        return TaskManagerPersistence::SaveLoadStatus::INVALID_FILE_STRUCTURE;
+        return persistence::SaveLoadStatus::INVALID_FILE_STRUCTURE;
     }
     if (model_->LoadModelState(std::move(new_generator), model_state.second.tasks_)) {
-        return TaskManagerPersistence::SaveLoadStatus::SUCCESS;
+        return persistence::SaveLoadStatus::SUCCESS;
     } else {
-        return TaskManagerPersistence::SaveLoadStatus::INVALID_FILE_STRUCTURE;
+        return persistence::SaveLoadStatus::INVALID_FILE_STRUCTURE;
     }
 }

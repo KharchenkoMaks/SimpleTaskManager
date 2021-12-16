@@ -15,8 +15,9 @@
 #include "../mocks/MockController.h"
 
 #include "utilities/TaskUtilities.h"
+#include "utilities/SaveLoadStatus.h"
 #include "Task.pb.h"
-#include "persistence/TaskManagerPersistence.h"
+#include "persistence/TasksPersistence.h"
 
 #include <vector>
 #include <utility>
@@ -241,7 +242,7 @@ TEST_F(StateTest, SaveStateSuccess_ShouldAskUserForFileNameAndPrintSuccessMessag
     AddExpectedRead("File name", file_name);
     EXPECT_CALL(*controller_, SaveToFile(file_name))
         .Times(1)
-        .WillOnce(Return(TaskManagerPersistence::SaveLoadStatus::SUCCESS));
+        .WillOnce(Return(persistence::SaveLoadStatus::SUCCESS));
     AddExpectedPrint(PrintForm::WRITE_LINE, "Tasks were successfully saved to " + file_name);
     EXPECT_CALL(*factory_, GetNextState(testing::An<const SaveState&>(), WizardStatesFactory::MoveType::PREVIOUS))
         .Times(1).WillOnce(Return(expected_next_state));
@@ -258,7 +259,7 @@ TEST_F(StateTest, SaveStateFail_ShouldAskUserForFileNameAndPrintErrorMessage) {
     AddExpectedRead("File name", file_name);
     EXPECT_CALL(*controller_, SaveToFile(file_name))
         .Times(1)
-        .WillOnce(Return(TaskManagerPersistence::SaveLoadStatus::FILE_WAS_NOT_OPENED));
+        .WillOnce(Return(persistence::SaveLoadStatus::FILE_WAS_NOT_OPENED));
     AddExpectedPrint(PrintForm::WRITE_ERROR, "Couldn't open file " + file_name + ", try again!");
     EXPECT_CALL(*factory_, GetNextState(testing::An<const SaveState&>(), WizardStatesFactory::MoveType::PREVIOUS))
             .Times(1).WillOnce(Return(expected_next_state));
@@ -275,7 +276,7 @@ TEST_F(StateTest, LoadStateSuccess_ShouldAskUserForFileNameAndPrintSuccessMessag
     AddExpectedRead("File name", file_name);
     EXPECT_CALL(*controller_, LoadFromFile(file_name))
         .Times(1)
-        .WillOnce(Return(TaskManagerPersistence::SaveLoadStatus::SUCCESS));
+        .WillOnce(Return(persistence::SaveLoadStatus::SUCCESS));
     AddExpectedPrint(PrintForm::WRITE_LINE, "Tasks were successfully loaded!");
     EXPECT_CALL(*factory_, GetNextState(testing::An<const LoadState&>(), WizardStatesFactory::MoveType::PREVIOUS))
             .Times(1).WillOnce(Return(expected_next_state));
@@ -292,7 +293,7 @@ TEST_F(StateTest, LoadStateFailFileNotOpened_ShouldAskUserForFileNameAndPrintErr
     AddExpectedRead("File name", file_name);
     EXPECT_CALL(*controller_, LoadFromFile(file_name))
             .Times(1)
-            .WillOnce(Return(TaskManagerPersistence::SaveLoadStatus::FILE_WAS_NOT_OPENED));
+            .WillOnce(Return(persistence::SaveLoadStatus::FILE_WAS_NOT_OPENED));
     AddExpectedPrint(PrintForm::WRITE_ERROR, "Couldn't open file " + file_name + ", try again!");
     EXPECT_CALL(*factory_, GetNextState(testing::An<const LoadState&>(), WizardStatesFactory::MoveType::PREVIOUS))
             .Times(1).WillOnce(Return(expected_next_state));
@@ -309,7 +310,7 @@ TEST_F(StateTest, LoadStateFailFileStructure_ShouldAskUserForFileNameAndPrintErr
     AddExpectedRead("File name", file_name);
     EXPECT_CALL(*controller_, LoadFromFile(file_name))
             .Times(1)
-            .WillOnce(Return(TaskManagerPersistence::SaveLoadStatus::INVALID_FILE_STRUCTURE));
+            .WillOnce(Return(persistence::SaveLoadStatus::INVALID_FILE_STRUCTURE));
     AddExpectedPrint(PrintForm::WRITE_ERROR, "Couldn't load from file, " + file_name + " is damaged.");
     EXPECT_CALL(*factory_, GetNextState(testing::An<const LoadState&>(), WizardStatesFactory::MoveType::PREVIOUS))
             .Times(1).WillOnce(Return(expected_next_state));

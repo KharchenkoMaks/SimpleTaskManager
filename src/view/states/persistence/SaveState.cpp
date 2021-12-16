@@ -3,6 +3,7 @@
 //
 
 #include "SaveState.h"
+#include "utilities/SaveLoadStatus.h"
 
 SaveState::SaveState(std::unique_ptr<StateDependencies> dependencies) : dependencies_(std::move(dependencies)) {
 
@@ -11,7 +12,7 @@ SaveState::SaveState(std::unique_ptr<StateDependencies> dependencies) : dependen
 std::shared_ptr<WizardStateInterface> SaveState::Execute(std::shared_ptr<WizardContext> context) {
     std::string file_name = dependencies_->GetUserInput("File name");
     switch (dependencies_->GetController()->SaveToFile(file_name)) {
-        case TaskManagerPersistence::SaveLoadStatus::SUCCESS: {
+        case persistence::SaveLoadStatus::SUCCESS: {
             dependencies_->GetConsolePrinter()->WriteLine("Tasks were successfully saved to " + file_name);
             break;
         }

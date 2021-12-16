@@ -18,7 +18,6 @@ public:
     MOCK_METHOD(std::shared_ptr<WizardStatesFactory>, GetStatesFactory, (), (override));
     MOCK_METHOD(std::shared_ptr<Controller>, GetController, (), (override));
     MOCK_METHOD(std::shared_ptr<ConsolePrinter>, GetConsolePrinter, (), (override));
-    MOCK_METHOD(std::shared_ptr<ConsoleReader>, GetConsoleReader, (), (override));
 
     MOCK_METHOD(std::string, GetUserInput, (const std::string &invitation_message), (override));
     MOCK_METHOD(bool, UserConfirm, (const std::string& question_string), (override));

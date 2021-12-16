@@ -10,7 +10,7 @@
 #include "states/abstract/StateDependencies.h"
 #include "WizardContext.h"
 #include "Task.pb.h"
-#include "persistence/TaskManagerPersistence.h"
+#include "persistence/TasksPersistence.h"
 
 #include <memory>
 #include <optional>

@@ -4,8 +4,9 @@
 
 #include "gtest/gtest.h"
 
-#include "persistence/TaskManagerPersistence.h"
+#include "persistence/TasksPersistence.h"
 #include "utilities/TaskUtilities.h"
+#include "utilities/SaveLoadStatus.h"
 #include "Task.pb.h"
 
 #include <utility>
@@ -13,7 +14,7 @@
 
 class PersistenceTest : public ::testing::Test{
 public:
-    TaskManagerPersistence::TaskManagerParameters parameters_to_save;
+    persistence::TasksPersistence::TaskManagerParameters parameters_to_save;
 
     void SetUp() override {
         TaskId last_id;
@@ -67,17 +68,17 @@ private:
 
 TEST_F(PersistenceTest, FileReadWrite_ShouldWriteTasksAndReadTasksFromFile) {
     // Arrange
-    TaskManagerPersistence tm_persistence;
+    persistence::TasksPersistence tm_persistence;
     const std::string file_name = "some_file";
     // Act
-    const TaskManagerPersistence::SaveLoadStatus actual_save_answer = tm_persistence.SaveToFile(file_name, parameters_to_save);
+    const persistence::SaveLoadStatus actual_save_answer = tm_persistence.SaveToFile(file_name, parameters_to_save);
     // Assert
-    ASSERT_EQ(TaskManagerPersistence::SaveLoadStatus::SUCCESS, actual_save_answer);
+    ASSERT_EQ(persistence::SaveLoadStatus::SUCCESS, actual_save_answer);
     // Act
-    const std::pair<TaskManagerPersistence::SaveLoadStatus, TaskManagerPersistence::TaskManagerParameters> actual_loaded_parameters =
+    const std::pair<persistence::SaveLoadStatus, persistence::TasksPersistence::TaskManagerParameters> actual_loaded_parameters =
             tm_persistence.LoadFromFile(file_name);
     // Assert
-    ASSERT_EQ(TaskManagerPersistence::SaveLoadStatus::SUCCESS, actual_loaded_parameters.first);
+    ASSERT_EQ(persistence::SaveLoadStatus::SUCCESS, actual_loaded_parameters.first);
     EXPECT_EQ(parameters_to_save.last_id_, actual_loaded_parameters.second.last_id_);
     ASSERT_EQ(parameters_to_save.tasks_.size(), actual_loaded_parameters.second.tasks_.size());
     for (int i = 0; i < parameters_to_save.tasks_.size(); ++i) {

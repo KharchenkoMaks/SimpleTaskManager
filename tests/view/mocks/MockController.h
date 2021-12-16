@@ -11,6 +11,7 @@
 #include "Controller.h"
 
 #include "utilities/TaskActionResult.h"
+#include "utilities/SaveLoadStatus.h"
 
 #include <utility>
 
@@ -22,8 +23,8 @@ public:
     MOCK_METHOD((std::pair<TaskActionResult, std::optional<TaskId>>), AddTask, (const Task& task), (override));
     MOCK_METHOD((std::pair<TaskActionResult, std::optional<TaskId>>), AddSubTask, (const Task& task, const TaskId& parent_id), (override));
     MOCK_METHOD(TaskActionResult, DeleteTask, (const TaskId& task_id), (override));
-    MOCK_METHOD(TaskManagerPersistence::SaveLoadStatus, SaveToFile, (const std::string& file_name), (override));
-    MOCK_METHOD(TaskManagerPersistence::SaveLoadStatus, LoadFromFile, (const std::string& file_name), (override));
+    MOCK_METHOD(persistence::SaveLoadStatus, SaveToFile, (const std::string& file_name), (override));
+    MOCK_METHOD(persistence::SaveLoadStatus, LoadFromFile, (const std::string& file_name), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKCONTROLLER_H

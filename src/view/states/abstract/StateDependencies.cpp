@@ -13,10 +13,6 @@ std::shared_ptr<ConsolePrinter> StateDependencies::GetConsolePrinter() {
     return console_printer_;
 }
 
-std::shared_ptr<ConsoleReader> StateDependencies::GetConsoleReader() {
-    return console_reader_;
-}
-
 std::string StateDependencies::GetUserInput(const std::string& invitation_message) {
     console_printer_->Write(invitation_message + "> ");
     std::string user_input = console_reader_->ReadLine();

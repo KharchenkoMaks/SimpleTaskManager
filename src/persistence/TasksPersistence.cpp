@@ -2,17 +2,19 @@
 // Created by Maksym Kharchenko on 15.12.2021.
 //
 
-#include "TaskManagerPersistence.h"
+#include "TasksPersistence.h"
 
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 #include <google/protobuf/util/delimited_message_util.h>
 #include <fstream>
 
-std::pair<TaskManagerPersistence::SaveLoadStatus, TaskManagerPersistence::TaskManagerParameters>
-        TaskManagerPersistence::LoadFromFile(const std::string& file_name) {
+using namespace persistence;
 
-    TaskManagerPersistence::TaskManagerParameters tm_parameters;
+std::pair<SaveLoadStatus, TasksPersistence::TaskManagerParameters>
+        TasksPersistence::LoadFromFile(const std::string& file_name) {
+
+    TasksPersistence::TaskManagerParameters tm_parameters;
 
     std::ifstream file_to_read(file_name);
     if (!file_to_read.is_open()) {
@@ -37,8 +39,8 @@ std::pair<TaskManagerPersistence::SaveLoadStatus, TaskManagerPersistence::TaskMa
     return std::make_pair(SaveLoadStatus::SUCCESS, tm_parameters);
 }
 
-TaskManagerPersistence::SaveLoadStatus TaskManagerPersistence::SaveToFile(const std::string& file_name,
-                                        const TaskManagerPersistence::TaskManagerParameters& parameters_to_save) {
+SaveLoadStatus TasksPersistence::SaveToFile(const std::string& file_name,
+                                        const TasksPersistence::TaskManagerParameters& parameters_to_save) {
 
     std::ofstream file_to_write(file_name);
     if (!file_to_write.is_open()) {
@@ -55,7 +57,7 @@ TaskManagerPersistence::SaveLoadStatus TaskManagerPersistence::SaveToFile(const 
     return SaveLoadStatus::SUCCESS;
 }
 
-TaskManagerPersistence::TaskManagerParameters::TaskManagerParameters(const TaskId& last_id,
+TasksPersistence::TaskManagerParameters::TaskManagerParameters(const TaskId& last_id,
                                                                      const std::vector<TaskTransfer>& tasks) {
     last_id_.CopyFrom(last_id);
     tasks_ = tasks;

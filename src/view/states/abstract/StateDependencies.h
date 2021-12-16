@@ -29,7 +29,6 @@ public:
     virtual std::shared_ptr<Controller> GetController();
 
     virtual std::shared_ptr<ConsolePrinter> GetConsolePrinter();
-    virtual std::shared_ptr<ConsoleReader> GetConsoleReader();
 
 public:
     virtual std::string GetUserInput(const std::string &invitation_message);

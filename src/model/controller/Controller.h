@@ -9,7 +9,8 @@
 #include "abstract_model/IModel.h"
 #include "utilities/TaskValidator.h"
 #include "utilities/TaskActionResult.h"
-#include "persistence/TaskManagerPersistence.h"
+#include "utilities/SaveLoadStatus.h"
+#include "persistence/TasksPersistence.h"
 
 #include <memory>
 #include <utility>
@@ -20,7 +21,7 @@ public:
     Controller(std::unique_ptr<IModel> model, std::unique_ptr<TaskValidator> task_validator);
     Controller(std::unique_ptr<IModel> model,
                std::unique_ptr<TaskValidator> task_validator,
-               std::unique_ptr<TaskManagerPersistence> tm_persistence);
+               std::unique_ptr<persistence::TasksPersistence> tm_persistence);
 public:
     virtual std::pair<TaskActionResult, std::optional<TaskId>> AddTask(const Task& task);
     virtual std::pair<TaskActionResult, std::optional<TaskId>> AddSubTask(const Task& task, const TaskId& parent_id);
@@ -36,8 +37,8 @@ public:
     virtual std::vector<TaskTransfer> GetAllTasks();
     std::optional<TaskTransfer> GetTask(const TaskId& task_id) const;
 public:
-    virtual TaskManagerPersistence::SaveLoadStatus SaveToFile(const std::string& file_name);
-    virtual TaskManagerPersistence::SaveLoadStatus LoadFromFile(const std::string& file_name);
+    virtual persistence::SaveLoadStatus SaveToFile(const std::string& file_name);
+    virtual persistence::SaveLoadStatus LoadFromFile(const std::string& file_name);
 
 public:
     virtual ~Controller() = default;
@@ -46,7 +47,7 @@ private:
 
     std::unique_ptr<TaskValidator> task_validator_;
 
-    std::unique_ptr<TaskManagerPersistence> tm_persistence_;
+    std::unique_ptr<persistence::TasksPersistence> tm_persistence_;
 };
 
 
