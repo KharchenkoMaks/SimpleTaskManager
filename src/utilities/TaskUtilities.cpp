@@ -22,7 +22,7 @@ std::string TaskPriorityToString(const Task::Priority priority) {
 }
 
 std::optional<Task::Priority> StringToTaskPriority(const std::string& str) {
-    if (str == "None") {
+    if (str == "None" || str.empty()) {
         return Task::Priority::Task_Priority_NONE;
     } else if (str == "Low") {
         return Task::Priority::Task_Priority_LOW;

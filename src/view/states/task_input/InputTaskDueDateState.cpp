@@ -21,6 +21,9 @@ std::shared_ptr<WizardStateInterface> InputTaskDueDateState::Execute(std::shared
     }
 
     std::optional<google::protobuf::Timestamp> task_due_date = StringToTime(user_input);
+    if (!task_due_date.has_value()) {
+        task_due_date = StringToTime(user_input, "%d.%m.%Y");
+    }
     if (task_due_date.has_value()) {
         const bool due_time_adding_result = context->AddTaskDueTime(task_due_date.value());
         if (!due_time_adding_result) {
