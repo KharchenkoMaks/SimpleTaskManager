@@ -5,13 +5,21 @@
 #include "TaskManager.h"
 #include "utilities/TaskUtilities.h"
 
-TaskManager::TaskManager(std::unique_ptr<IdGenerator> generator)
-    : generator_(std::move(generator)) {
+TaskManager::TaskManager(std::unique_ptr<IdGenerator> generator) :
+                        generator_(std::move(generator)),
+                        task_validator_(std::make_unique<TaskValidator>()) {
+
+}
+
+TaskManager::TaskManager(std::unique_ptr<IdGenerator> generator,
+                         std::unique_ptr<TaskValidator> task_validator) :
+        generator_(std::move(generator)),
+        task_validator_(std::move(task_validator)) {
 
 }
 
 std::pair<TaskActionResult, std::optional<TaskId>> TaskManager::AddTask(const Task& task) {
-    if (task.title().empty()){
+    if (!task_validator_->ValidateTask(task)) {
         return std::pair(TaskActionResult::FAIL_INVALID_TASK, std::nullopt);
     }
     TaskId task_id = generator_->CreateNewTaskId();
@@ -20,7 +28,7 @@ std::pair<TaskActionResult, std::optional<TaskId>> TaskManager::AddTask(const Ta
 }
 
 std::pair<TaskActionResult, std::optional<TaskId>> TaskManager::AddSubTask(const Task& task, const TaskId& parent_id) {
-    if (task.title().empty()) {
+    if (!task_validator_->ValidateTask(task)) {
         return std::pair(TaskActionResult::FAIL_INVALID_TASK, std::nullopt);
     }
     auto parent_task = tasks_.find(parent_id);
@@ -32,14 +40,17 @@ std::pair<TaskActionResult, std::optional<TaskId>> TaskManager::AddSubTask(const
     return std::pair(TaskActionResult::SUCCESS, subtask_id);
 }
 
-TaskActionResult TaskManager::EditTask(const TaskId& id, const Task& t) {
+TaskActionResult TaskManager::EditTask(const TaskId& id, const Task& task) {
+    if (!task_validator_->ValidateTask(task)) {
+        return TaskActionResult::FAIL_INVALID_TASK;
+    }
     if (tasks_.find(id) != tasks_.end()) {
-        auto task = tasks_.find(id);
-        task->second.EditTask(t);
+        auto main_task = tasks_.find(id);
+        main_task->second.EditTask(task);
         return TaskActionResult::SUCCESS;
     } else if (GetMainTaskWithSubTask(id).has_value()) {
-        auto task = GetMainTaskWithSubTask(id).value();
-        task->second.EditSubTask(id, t);
+        auto subtask = GetMainTaskWithSubTask(id).value();
+        subtask->second.EditSubTask(id, task);
         return TaskActionResult::SUCCESS;
     } else {
         return TaskActionResult::FAIL_NO_SUCH_TASK;

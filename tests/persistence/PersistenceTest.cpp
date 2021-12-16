@@ -77,7 +77,7 @@ TEST_F(PersistenceTest, FileReadWrite_ShouldWriteTasksAndReadTasksFromFile) {
     const std::pair<TaskManagerPersistence::SaveLoadStatus, TaskManagerPersistence::TaskManagerParameters> actual_loaded_parameters =
             tm_persistence.LoadFromFile(file_name);
     // Assert
-    ASSERT_EQ(TaskManagerPersistence::SaveLoadStatus::SUCCESS, actual_loaded_parameters.second);
+    ASSERT_EQ(TaskManagerPersistence::SaveLoadStatus::SUCCESS, actual_loaded_parameters.first);
     EXPECT_EQ(parameters_to_save.last_id_, actual_loaded_parameters.second.last_id_);
     ASSERT_EQ(parameters_to_save.tasks_.size(), actual_loaded_parameters.second.tasks_.size());
     for (int i = 0; i < parameters_to_save.tasks_.size(); ++i) {
