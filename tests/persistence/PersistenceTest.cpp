@@ -24,17 +24,25 @@ public:
         task_transfer.set_allocated_task_id(new TaskId(tasks[0].first));
         task_transfer.set_allocated_task(new Task(tasks[0].second));
         parameters_to_save.tasks_.push_back(task_transfer);
+        task_transfer.clear_parent_id();
+
         task_transfer.set_allocated_task_id(new TaskId(tasks[1].first));
         task_transfer.set_allocated_task(new Task(tasks[1].second));
         task_transfer.set_allocated_parent_id(new TaskId(tasks[0].first));
         parameters_to_save.tasks_.push_back(task_transfer);
+        task_transfer.clear_parent_id();
+
         task_transfer.set_allocated_task_id(new TaskId(tasks[2].first));
         task_transfer.set_allocated_task(new Task(tasks[2].second));
         task_transfer.set_allocated_parent_id(new TaskId(tasks[0].first));
         parameters_to_save.tasks_.push_back(task_transfer);
+        task_transfer.clear_parent_id();
+
         task_transfer.set_allocated_task_id(new TaskId(tasks[3].first));
         task_transfer.set_allocated_task(new Task(tasks[3].second));
         parameters_to_save.tasks_.push_back(task_transfer);
+        task_transfer.clear_parent_id();
+
         task_transfer.set_allocated_task_id(new TaskId(tasks[4].first));
         task_transfer.set_allocated_task(new Task(tasks[4].second));
         task_transfer.set_allocated_parent_id(new TaskId(tasks[3].first));
@@ -60,7 +68,7 @@ private:
 TEST_F(PersistenceTest, FileReadWrite_ShouldWriteTasksAndReadTasksFromFile) {
     // Arrange
     TaskManagerPersistence tm_persistence;
-    const std::string file_name = "save.txt";
+    const std::string file_name = "some_file";
     // Act
     const bool actual_save_answer = tm_persistence.SaveToFile(file_name, parameters_to_save);
     // Assert
@@ -70,5 +78,8 @@ TEST_F(PersistenceTest, FileReadWrite_ShouldWriteTasksAndReadTasksFromFile) {
             tm_persistence.LoadFromFile(file_name);
     // Assert
     EXPECT_EQ(parameters_to_save.last_id_, actual_loaded_parameters.last_id_);
-    EXPECT_EQ(parameters_to_save.tasks_, actual_loaded_parameters.tasks_);
+    ASSERT_EQ(parameters_to_save.tasks_.size(), actual_loaded_parameters.tasks_.size());
+    for (int i = 0; i < parameters_to_save.tasks_.size(); ++i) {
+        EXPECT_EQ(parameters_to_save.tasks_[i], actual_loaded_parameters.tasks_[i]);
+    }
 }
