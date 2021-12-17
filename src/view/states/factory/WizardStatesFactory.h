@@ -107,28 +107,10 @@ private:
     };
 private:
     std::shared_ptr<WizardStateInterface> GetLazyStateByStatesEnum(States state);
+    void InitializeState(States state);
 
 private:
-    std::shared_ptr<RootState> root_state_;
-    std::shared_ptr<HelpState> help_state_;
-    std::shared_ptr<QuitState> quit_state_;
-    std::shared_ptr<EndState> end_state_;
-
-    std::shared_ptr<AddTaskState> add_task_state_;
-    std::shared_ptr<AddSubTaskState> add_subtask_state_;
-    std::shared_ptr<EditTaskState> edit_task_state_;
-
-    std::shared_ptr<ShowState> show_state_;
-    std::shared_ptr<CompleteTaskState> complete_state_;
-    std::shared_ptr<DeleteTaskState> delete_state_;
-    std::shared_ptr<SetLabelState> set_label_state_;
-
-    std::shared_ptr<InputTaskTitleState> input_task_title_state_;
-    std::shared_ptr<InputTaskPriorityState> input_task_priority_state_;
-    std::shared_ptr<InputTaskDueDateState> input_task_due_date_state_;
-
-    std::shared_ptr<SaveState> save_state_;
-    std::shared_ptr<LoadState> load_state_;
+    std::map<States, std::shared_ptr<WizardStateInterface>> states_;
 
     std::shared_ptr<ConsoleReader> reader_;
     std::shared_ptr<ConsolePrinter> printer_;

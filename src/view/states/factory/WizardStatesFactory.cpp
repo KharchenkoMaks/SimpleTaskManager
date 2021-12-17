@@ -220,184 +220,143 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const Lo
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetLazyStateByStatesEnum(States state) {
+std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetLazyStateByStatesEnum(WizardStatesFactory::States state) {
+    auto found_state = states_.find(state);
+    if (found_state == states_.end()) {
+        InitializeState(state);
+    }
+    return found_state->second;
+}
+
+void WizardStatesFactory::InitializeState(States state) {
     switch (state) {
         case States::kRoot: {
-            if (!root_state_){
-                root_state_ = std::make_shared<RootState>(
-                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
-                                                                        shared_from_this(),
-                                                                        controller_,
-                                                                        printer_,
-                                                                        reader_));
-            }
-            return root_state_;
+            states_.insert_or_assign(state, std::make_shared<RootState>(
+                                            std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
         case States::kHelp: {
-            if (!help_state_){
-                help_state_ = std::make_shared<HelpState>(
-                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
-                                                            shared_from_this(),
-                                                            controller_,
-                                                            printer_,
-                                                            reader_));
-            }
-            return help_state_;
+            states_.insert_or_assign(state, std::make_shared<HelpState>(
+                    std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
         case States::kQuit: {
-            if (!quit_state_){
-                quit_state_ = std::make_shared<QuitState>(
-                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
-                                                            shared_from_this(),
-                                                            controller_,
-                                                            printer_,
-                                                            reader_));
-            }
-            return quit_state_;
+            states_.insert_or_assign(state, std::make_shared<QuitState>(
+                    std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
         case States::kAddTask: {
-            if (!add_task_state_) {
-                add_task_state_ = std::make_shared<AddTaskState>(
-                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
-                                                            shared_from_this(),
-                                                            controller_,
-                                                            printer_,
-                                                            reader_));
-            }
-            return add_task_state_;
+            states_.insert_or_assign(state, std::make_shared<AddTaskState>(
+                    std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
         case States::kAddSubTask: {
-            if (!add_subtask_state_) {
-                add_subtask_state_ = std::make_shared<AddSubTaskState>(
-                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
-                                                            shared_from_this(),
-                                                            controller_,
-                                                            printer_,
-                                                            reader_));
-            }
-            return add_subtask_state_;
+            states_.insert_or_assign(state, std::make_shared<AddSubTaskState>(
+                    std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
         case States::kEditTask: {
-            if (!edit_task_state_){
-                edit_task_state_ = std::make_shared<EditTaskState>(
-                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
-                                                            shared_from_this(),
-                                                            controller_,
-                                                            printer_,
-                                                            reader_));
-            }
-            return edit_task_state_;
+            states_.insert_or_assign(state, std::make_shared<EditTaskState>(
+                    std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
         case States::kInputTaskTitle: {
-            if (!input_task_title_state_){
-                input_task_title_state_ = std::make_shared<InputTaskTitleState>(
-                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
-                                                            shared_from_this(),
-                                                            controller_,
-                                                            printer_,
-                                                            reader_));
-            }
-            return input_task_title_state_;
+            states_.insert_or_assign(state, std::make_shared<InputTaskTitleState>(
+                    std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
         case States::kInputTaskPriority: {
-            if (!input_task_priority_state_){
-                input_task_priority_state_ = std::make_shared<InputTaskPriorityState>(
-                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
-                                                            shared_from_this(),
-                                                            controller_,
-                                                            printer_,
-                                                            reader_));
-            }
-            return input_task_priority_state_;
+            states_.insert_or_assign(state, std::make_shared<InputTaskPriorityState>(
+                    std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
         case States::kInputTaskDueDate: {
-            if (!input_task_due_date_state_){
-                input_task_due_date_state_ = std::make_shared<InputTaskDueDateState>(
-                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
-                                                            shared_from_this(),
-                                                            controller_,
-                                                            printer_,
-                                                            reader_));
-            }
-            return input_task_due_date_state_;
+            states_.insert_or_assign(state, std::make_shared<InputTaskDueDateState>(
+                    std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
         case States::kShow: {
-            if (!show_state_) {
-                show_state_ = std::make_shared<ShowState>(
-                        std::make_unique<StateDependencies>(
-                                std::make_unique<ConsoleStateMachine>(),
-                                                            shared_from_this(),
-                                                            controller_,
-                                                            printer_,
-                                                            reader_));
-            }
-            return show_state_;
+            states_.insert_or_assign(state, std::make_shared<ShowState>(
+                    std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
         case States::kComplete: {
-            if (!complete_state_) {
-                complete_state_ = std::make_shared<CompleteTaskState>(
-                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
-                                                            shared_from_this(),
-                                                            controller_,
-                                                            printer_,
-                                                            reader_));
-            }
-            return complete_state_;
+            states_.insert_or_assign(state, std::make_shared<CompleteTaskState>(
+                    std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
         case States::kDelete: {
-            if (!delete_state_) {
-                delete_state_ = std::make_shared<DeleteTaskState>(
-                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
-                                                            shared_from_this(),
-                                                            controller_,
-                                                            printer_,
-                                                            reader_));
-            }
-            return delete_state_;
+            states_.insert_or_assign(state, std::make_shared<DeleteTaskState>(
+                    std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
         case States::kSetLabel: {
-            if (!set_label_state_) {
-                set_label_state_ = std::make_shared<SetLabelState>(
-                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
-                                                            shared_from_this(),
-                                                            controller_,
-                                                            printer_,
-                                                            reader_));
-            }
-            return set_label_state_;
+            states_.insert_or_assign(state, std::make_shared<SetLabelState>(
+                    std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
         case States::kEnd: {
-            if (!end_state_) {
-                end_state_ = std::make_shared<EndState>(
-                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
-                                                            shared_from_this(),
-                                                            controller_,
-                                                            printer_,
-                                                            reader_));
-            }
-            return end_state_;
+            states_.insert_or_assign(state, std::make_shared<EndState>(
+                    std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
         case States::kSave: {
-            if (!save_state_) {
-                save_state_ = std::make_shared<SaveState>(
-                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
-                                                            shared_from_this(),
-                                                            controller_,
-                                                            printer_,
-                                                            reader_));
-            }
-            return save_state_;
+            states_.insert_or_assign(state, std::make_shared<SaveState>(
+                    std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
         case States::kLoad: {
-            if (!load_state_) {
-                load_state_ = std::make_shared<LoadState>(
-                        std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
-                                                            shared_from_this(),
-                                                            controller_,
-                                                            printer_,
-                                                            reader_));
-            }
-            return load_state_;
+            states_.insert_or_assign(state, std::make_shared<LoadState>(
+                    std::make_unique<StateDependencies>(std::make_unique<ConsoleStateMachine>(),
+                                                        shared_from_this(),
+                                                        controller_,
+                                                        printer_,
+                                                        reader_)));
         }
     }
 }
