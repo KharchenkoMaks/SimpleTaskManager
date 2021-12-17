@@ -74,3 +74,8 @@ int main() {
 // TODO: Make builder of integration tests
 // TODO_DONE: Make state for ending state machine - Done 09.12.2021
 // TODO: Rework states unit tests to test StateDependencies calls
+// TODO: Remove states includes in factory header file
+// TODO: Remove controller from states
+// TODO: Create state machine in factory
+// TODO: Remove StateDependencies (free methods, leave only factory)
+// TODO: Remove code repeating in task manager tasks container
