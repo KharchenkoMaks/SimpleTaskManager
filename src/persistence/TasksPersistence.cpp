@@ -58,7 +58,7 @@ SaveLoadStatus TasksPersistence::SaveToFile(const std::string& file_name,
 }
 
 TasksPersistence::TaskManagerParameters::TaskManagerParameters(const TaskId& last_id,
-                                                                     const std::vector<TaskTransfer>& tasks) {
+                                                               const std::vector<TaskTransfer>& tasks) {
     last_id_.CopyFrom(last_id);
     tasks_ = tasks;
 }

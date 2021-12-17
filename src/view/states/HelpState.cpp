@@ -16,7 +16,7 @@ std::shared_ptr<WizardStateInterface> HelpState::Execute(std::shared_ptr<WizardC
     dependencies_->GetConsolePrinter()->WriteLine("3. edit");
     dependencies_->GetConsolePrinter()->WriteLine("4. delete");
     dependencies_->GetConsolePrinter()->WriteLine("5. complete");
-    dependencies_->GetConsolePrinter()->WriteLine("6. set_label");
+    dependencies_->GetConsolePrinter()->WriteLine("6. label");
     dependencies_->GetConsolePrinter()->WriteLine("7. show");
     dependencies_->GetConsolePrinter()->WriteLine("8. save");
     dependencies_->GetConsolePrinter()->WriteLine("9. load");

@@ -31,7 +31,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetStateByCommand(con
         return GetLazyStateByStatesEnum(States::kHelp);
     } else if (command == "quit") {
         return GetLazyStateByStatesEnum(States::kQuit);
-    } else if (command == "set_label") {
+    } else if (command == "label") {
         return GetLazyStateByStatesEnum(States::kSetLabel);
     } else if (command == "save") {
         return GetLazyStateByStatesEnum(States::kSave);

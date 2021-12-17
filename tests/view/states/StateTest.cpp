@@ -197,7 +197,7 @@ TEST_F(StateTest, HelpState_ShouldPrintHelpMessage) {
     AddExpectedPrint(PrintForm::WRITE_LINE, "3. edit");
     AddExpectedPrint(PrintForm::WRITE_LINE, "4. delete");
     AddExpectedPrint(PrintForm::WRITE_LINE, "5. complete");
-    AddExpectedPrint(PrintForm::WRITE_LINE, "6. set_label");
+    AddExpectedPrint(PrintForm::WRITE_LINE, "6. label");
     AddExpectedPrint(PrintForm::WRITE_LINE, "7. show");
     AddExpectedPrint(PrintForm::WRITE_LINE, "8. save");
     AddExpectedPrint(PrintForm::WRITE_LINE, "9. load");
