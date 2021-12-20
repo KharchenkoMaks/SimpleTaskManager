@@ -3,9 +3,10 @@
 //
 
 #include "states/task_input/InputTaskTitleState.h"
+#include "console_io/ConsoleUtilities.h"
 
-InputTaskTitleState::InputTaskTitleState(std::unique_ptr<StateDependencies> dependencies) :
-                                        dependencies_(std::move(dependencies)) {
+InputTaskTitleState::InputTaskTitleState(const std::shared_ptr<WizardStatesFactory>& factory) :
+                                        factory_(factory) {
 
 }
 
@@ -19,20 +20,22 @@ std::shared_ptr<WizardStateInterface> InputTaskTitleState::Execute(std::shared_p
     }
 
     if (!context->AddTaskTitle(user_input)) {
-        dependencies_->GetConsolePrinter()->WriteError("Task title was wrong, please, try again!");
-        return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+        factory_.lock()->GetConsolePrinter()->WriteError("Task title was wrong, please, try again!");
+        return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+    return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }
 
 std::string InputTaskTitleState::GetUserInputForTitleAdd() {
-    return dependencies_->GetUserInput("Title");
+    return console_io::util::GetUserInput("Title", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
 }
 
 std::string InputTaskTitleState::GetUserInputForTitleEdit(const Task &task) {
-    dependencies_->GetConsolePrinter()->WriteLine("Leave empty for default value.");
-    std::string user_input = dependencies_->GetUserInput("Title, default: " + task.title());
+    factory_.lock()->GetConsolePrinter()->WriteLine("Leave empty for default value.");
+    std::string user_input = console_io::util::GetUserInput("Title, default: " + task.title(),
+                                                            *factory_.lock()->GetConsolePrinter(),
+                                                            *factory_.lock()->GetConsoleReader());
     if (user_input.empty()){
         return task.title();
     }

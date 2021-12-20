@@ -7,7 +7,6 @@
 
 #include "states/abstract/WizardStateInterface.h"
 #include "states/factory/WizardStatesFactory.h"
-#include "states/abstract/StateDependencies.h"
 #include "WizardContext.h"
 #include "Task.pb.h"
 #include "persistence/TasksPersistence.h"
@@ -17,11 +16,11 @@
 
 class LoadState : public WizardStateInterface {
 public:
-    explicit LoadState(std::unique_ptr<StateDependencies> dependencies);
+    explicit LoadState(const std::shared_ptr<WizardStatesFactory>& factory);
 public:
     std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
 private:
-    std::unique_ptr<StateDependencies> dependencies_;
+    std::weak_ptr<WizardStatesFactory> factory_;
 };
 
 

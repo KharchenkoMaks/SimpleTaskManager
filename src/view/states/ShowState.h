@@ -7,7 +7,6 @@
 
 #include "states/abstract/WizardStateInterface.h"
 #include "states/factory/WizardStatesFactory.h"
-#include "states/abstract/StateDependencies.h"
 #include "WizardContext.h"
 #include "Task.pb.h"
 
@@ -16,13 +15,13 @@
 
 class ShowState : public WizardStateInterface {
 public:
-    explicit ShowState(std::unique_ptr<StateDependencies> dependencies);
+    explicit ShowState(const std::shared_ptr<WizardStatesFactory>& factory);
 public:
     std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
 private:
     void PrintTasks(const std::vector<TaskTransfer>& tasks);
 private:
-    std::unique_ptr<StateDependencies> dependencies_;
+    std::weak_ptr<WizardStatesFactory> factory_;
 };
 
 

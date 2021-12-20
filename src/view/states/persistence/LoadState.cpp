@@ -4,26 +4,27 @@
 
 #include "LoadState.h"
 #include "utilities/SaveLoadStatus.h"
+#include "console_io/ConsoleUtilities.h"
 
-LoadState::LoadState(std::unique_ptr<StateDependencies> dependencies) : dependencies_(std::move(dependencies)) {
+LoadState::LoadState(const std::shared_ptr<WizardStatesFactory>& factory) : factory_(factory) {
 
 }
 
 std::shared_ptr<WizardStateInterface> LoadState::Execute(std::shared_ptr<WizardContext> context) {
-    std::string file_name = dependencies_->GetUserInput("File name");
-    switch (dependencies_->GetController()->LoadFromFile(file_name)) {
+    std::string file_name = console_io::util::GetUserInput("File name", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
+    switch (factory_.lock()->GetController()->LoadFromFile(file_name)) {
         case persistence::SaveLoadStatus::SUCCESS: {
-            dependencies_->GetConsolePrinter()->WriteLine("Tasks were successfully loaded!");
+            factory_.lock()->GetConsolePrinter()->WriteLine("Tasks were successfully loaded!");
             break;
         }
         case persistence::SaveLoadStatus::FILE_WAS_NOT_OPENED: {
-            dependencies_->GetConsolePrinter()->WriteError("Couldn't open file " + file_name + ", try again!");
+            factory_.lock()->GetConsolePrinter()->WriteError("Couldn't open file " + file_name + ", try again!");
             break;
         }
         case persistence::SaveLoadStatus::INVALID_FILE_STRUCTURE: {
-            dependencies_->GetConsolePrinter()->WriteError("Couldn't load from file, " + file_name + " is damaged.");
+            factory_.lock()->GetConsolePrinter()->WriteError("Couldn't load from file, " + file_name + " is damaged.");
             break;
         }
     }
-    return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+    return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
 }

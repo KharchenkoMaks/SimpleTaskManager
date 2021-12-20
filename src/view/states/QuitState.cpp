@@ -3,16 +3,17 @@
 //
 
 #include "QuitState.h"
+#include "console_io/ConsoleUtilities.h"
 
 std::shared_ptr<WizardStateInterface> QuitState::Execute(std::shared_ptr<WizardContext> context) {
-    if (dependencies_->UserConfirm("Are you sure?")) {
-        return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+    if (console_io::util::UserConfirm("Are you sure?", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader())) {
+        return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
     } else {
-        return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
     }
 }
 
-QuitState::QuitState(std::unique_ptr<StateDependencies> dependencies) :
-                    dependencies_(std::move(dependencies)) {
+QuitState::QuitState(const std::shared_ptr<WizardStatesFactory>& factory) :
+                    factory_(factory) {
 
 }

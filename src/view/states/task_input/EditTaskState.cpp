@@ -3,43 +3,45 @@
 //
 
 #include "states/task_input/EditTaskState.h"
+#include "console_io/ConsoleUtilities.h"
 
-EditTaskState::EditTaskState(std::unique_ptr<StateDependencies> dependencies) :
-                            dependencies_(std::move(dependencies)) {
+EditTaskState::EditTaskState(const std::shared_ptr<WizardStatesFactory>& factory) :
+                            factory_(factory) {
 
 }
 
 std::shared_ptr<WizardStateInterface> EditTaskState::Execute(std::shared_ptr<WizardContext> context) {
-    std::optional<TaskId> editing_task_id = dependencies_->GetTaskIdFromUser("Task ID");
+    std::optional<TaskId> editing_task_id = console_io::util::GetTaskIdFromUser("Task ID", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
     if (!editing_task_id.has_value()) {
-        dependencies_->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
-        return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        factory_.lock()->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
+        return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
     }
 
     // Creating new context
     std::shared_ptr<WizardContext> context_task_editing = std::make_shared<WizardContext>();
     // Setting task to edit in context
-    std::optional<TaskTransfer> task_to_edit = dependencies_->GetController()->GetTask(editing_task_id.value());
+    std::optional<TaskTransfer> task_to_edit = factory_.lock()->GetController()->GetTask(editing_task_id.value());
     if (!task_to_edit.has_value()) {
-        dependencies_->GetConsolePrinter()->WriteError("Task with such id wasn't found.");
-        return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        factory_.lock()->GetConsolePrinter()->WriteError("Task with such id wasn't found.");
+        return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
     }
     context_task_editing->SetEditingTask(editing_task_id.value(), task_to_edit.value().task());
 
-    context_task_editing = dependencies_->RunStateMachine(context_task_editing,
-                                           dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
+    auto state_machine = factory_.lock()->CreateStateMachine();
+    context_task_editing = state_machine->Run(context_task_editing,
+                                           factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
 
     // Giving edited task to controller
     TaskActionResult edit_task_result =
-            dependencies_->GetController()->EditTask(context_task_editing->GetTaskId().value(), context_task_editing->GetTask().value());
+            factory_.lock()->GetController()->EditTask(context_task_editing->GetTaskId().value(), context_task_editing->GetTask().value());
 
     switch(edit_task_result) {
         case TaskActionResult::SUCCESS: {
-            return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+            return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
         }
         default: {
-            dependencies_->GetConsolePrinter()->WriteError("Invalid task was given, try again.");
-            return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+            factory_.lock()->GetConsolePrinter()->WriteError("Invalid task was given, try again.");
+            return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
         }
     }
 }

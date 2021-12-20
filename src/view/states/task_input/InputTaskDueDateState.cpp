@@ -4,9 +4,10 @@
 
 #include "states/task_input/InputTaskDueDateState.h"
 #include "utilities/TaskUtilities.h"
+#include "console_io/ConsoleUtilities.h"
 
-InputTaskDueDateState::InputTaskDueDateState(std::unique_ptr<StateDependencies> dependencies) :
-                                             dependencies_(std::move(dependencies)) {
+InputTaskDueDateState::InputTaskDueDateState(const std::shared_ptr<WizardStatesFactory>& factory) :
+                                             factory_(factory) {
 
 }
 
@@ -27,19 +28,21 @@ std::shared_ptr<WizardStateInterface> InputTaskDueDateState::Execute(std::shared
     if (task_due_date.has_value()) {
         const bool due_time_adding_result = context->AddTaskDueTime(task_due_date.value());
         if (!due_time_adding_result) {
-            dependencies_->GetConsolePrinter()->WriteError("Due time should be in future, try again!");
-            return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+            factory_.lock()->GetConsolePrinter()->WriteError("Due time should be in future, try again!");
+            return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
         }
     } else {
-        dependencies_->GetConsolePrinter()->WriteError("Wrong due date was given, try again!");
-        return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+        factory_.lock()->GetConsolePrinter()->WriteError("Wrong due date was given, try again!");
+        return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+    return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }
 
 std::string InputTaskDueDateState::GetUserInputForDueDateEdit(const Task &task) {
-    std::string user_input = dependencies_->GetUserInput("Due Date, default: " + TimeToString(task.due_date()));
+    std::string user_input = console_io::util::GetUserInput("Due Date, default: " + TimeToString(task.due_date()),
+                                                            *factory_.lock()->GetConsolePrinter(),
+                                                            *factory_.lock()->GetConsoleReader());
     if (user_input.empty()){
         return TimeToString(task.due_date());
     }
@@ -47,5 +50,5 @@ std::string InputTaskDueDateState::GetUserInputForDueDateEdit(const Task &task) 
 }
 
 std::string InputTaskDueDateState::GetUserInputForDueDateAdd() {
-    return dependencies_->GetUserInput("Due Date, format: 12:00 01.01.2000");
+    return console_io::util::GetUserInput("Due Date, format: 12:00 01.01.2000", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
 }

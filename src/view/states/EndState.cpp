@@ -4,8 +4,8 @@
 
 #include "EndState.h"
 
-EndState::EndState(std::unique_ptr<StateDependencies> dependencies) :
-                    dependencies_(std::move(dependencies)) {
+EndState::EndState(const std::shared_ptr<WizardStatesFactory>& factory) :
+                    factory_(factory) {
 
 }
 

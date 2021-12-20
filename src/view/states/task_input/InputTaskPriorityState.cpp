@@ -4,9 +4,10 @@
 
 #include "states/task_input/InputTaskPriorityState.h"
 #include "utilities/TaskUtilities.h"
+#include "console_io/ConsoleUtilities.h"
 
-InputTaskPriorityState::InputTaskPriorityState(std::unique_ptr<StateDependencies> dependencies) :
-                                                dependencies_(std::move(dependencies)) {
+InputTaskPriorityState::InputTaskPriorityState(const std::shared_ptr<WizardStatesFactory>& factory) :
+                                                factory_(factory) {
 
 }
 
@@ -23,19 +24,21 @@ std::shared_ptr<WizardStateInterface> InputTaskPriorityState::Execute(std::share
     if (task_priority.has_value()) {
         context->AddTaskPriority(task_priority.value());
     } else {
-        dependencies_->GetConsolePrinter()->WriteError("Wrong task priority was given, try [High, Medium, Low, None]!");
-        return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+        factory_.lock()->GetConsolePrinter()->WriteError("Wrong task priority was given, try [High, Medium, Low, None]!");
+        return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
     }
 
-    return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+    return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }
 
 std::string InputTaskPriorityState::GetUserInputForPriorityAdd() {
-    return dependencies_->GetUserInput("Priority (High, Medium, Low, None)");
+    return console_io::util::GetUserInput("Priority (High, Medium, Low, None)", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
 }
 
 std::string InputTaskPriorityState::GetUserInputForPriorityEdit(const Task &task) {
-    std::string user_input = dependencies_->GetUserInput("Priority, default: " + TaskPriorityToString(task.priority()));
+    std::string user_input = console_io::util::GetUserInput("Priority, default: " + TaskPriorityToString(task.priority()),
+                                                            *factory_.lock()->GetConsolePrinter(),
+                                                            *factory_.lock()->GetConsoleReader());
     if (user_input.empty()){
         return TaskPriorityToString(task.priority());
     }

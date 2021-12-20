@@ -10,9 +10,9 @@
 
 class ConsolePrinter {
 public:
-    virtual void Write(const std::string& message);
-    virtual void WriteLine(const std::string& message);
-    virtual void WriteError(const std::string& message);
+    virtual void Write(const std::string& message) const;
+    virtual void WriteLine(const std::string& message) const;
+    virtual void WriteError(const std::string& message) const;
     
     virtual ~ConsolePrinter() = default;
 };

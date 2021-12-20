@@ -7,7 +7,6 @@
 
 #include "states/abstract/WizardStateInterface.h"
 #include "states/factory/WizardStatesFactory.h"
-#include "states/abstract/StateDependencies.h"
 #include "WizardContext.h"
 
 #include <memory>
@@ -15,7 +14,7 @@
 
 class AddSubTaskState : public WizardStateInterface {
 public:
-    AddSubTaskState(std::unique_ptr<StateDependencies> dependencies);
+    AddSubTaskState(const std::shared_ptr<WizardStatesFactory>& factory);
 public:
     std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
 private:
@@ -24,7 +23,7 @@ private:
     std::pair<TaskActionResult, std::optional<TaskId>> GiveSubTaskToController(const TaskId& parent_id, const std::shared_ptr<WizardContext>& context_with_added_task);
     std::shared_ptr<WizardStateInterface> PrintResultAndChangeState(const std::pair<TaskActionResult, std::optional<TaskId>>& added_subtask_result);
 private:
-    std::unique_ptr<StateDependencies> dependencies_;
+    std::weak_ptr<WizardStatesFactory> factory_;
 };
 
 

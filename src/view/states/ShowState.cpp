@@ -4,16 +4,17 @@
 
 #include "ShowState.h"
 #include "utilities/TaskUtilities.h"
+#include "console_io/ConsoleUtilities.h"
 
-ShowState::ShowState(std::unique_ptr<StateDependencies> dependencies) :
-                    dependencies_(std::move(dependencies)) {
+ShowState::ShowState(const std::shared_ptr<WizardStatesFactory>& factory) :
+                    factory_(factory) {
 
 }
 
 std::shared_ptr<WizardStateInterface> ShowState::Execute(std::shared_ptr<WizardContext> context) {
-    std::vector<TaskTransfer> tasks = dependencies_->GetController()->GetAllTasks();
+    std::vector<TaskTransfer> tasks = factory_.lock()->GetController()->GetAllTasks();
     PrintTasks(tasks);
-    return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+    return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
 }
 
 void ShowState::PrintTasks(const std::vector<TaskTransfer>& tasks) {
@@ -23,6 +24,6 @@ void ShowState::PrintTasks(const std::vector<TaskTransfer>& tasks) {
             task_string += "\t";
         }
         task_string += TaskToString(task.task_id(), task.task());
-        dependencies_->GetConsolePrinter()->WriteLine(task_string);
+        factory_.lock()->GetConsolePrinter()->WriteLine(task_string);
     }
 }

@@ -9,24 +9,7 @@
 #include "console_io/ConsolePrinter.h"
 #include "console_io/ConsoleReader.h"
 #include "Controller.h"
-#include "states/abstract/StateDependencies.h"
-
-#include "states/RootState.h"
-#include "states/HelpState.h"
-#include "states/QuitState.h"
-#include "states/task_input/AddTaskState.h"
-#include "states/task_input/EditTaskState.h"
-#include "states/task_input/InputTaskTitleState.h"
-#include "states/task_input/InputTaskPriorityState.h"
-#include "states/task_input/InputTaskDueDateState.h"
-#include "states/ShowState.h"
-#include "states/CompleteTaskState.h"
-#include "states/task_input/AddSubTaskState.h"
-#include "states/DeleteTaskState.h"
-#include "states/task_input/SetLabelState.h"
-#include "states/EndState.h"
-#include "states/persistence/SaveState.h"
-#include "states/persistence/LoadState.h"
+#include "ConsoleStateMachine.h"
 
 #include <memory>
 #include <string>
@@ -61,6 +44,14 @@ public:
     WizardStatesFactory(const std::shared_ptr<Controller>& controller,
                         const std::shared_ptr<ConsolePrinter>& printer,
                         const std::shared_ptr<ConsoleReader>& reader);
+
+public:
+    std::shared_ptr<ConsolePrinter> GetConsolePrinter() const;
+    std::shared_ptr<ConsoleReader> GetConsoleReader() const;
+    std::shared_ptr<Controller> GetController() const;
+
+public:
+    std::unique_ptr<ConsoleStateMachine> CreateStateMachine() const;
 
 public:
     virtual std::shared_ptr<WizardStateInterface> GetStateByCommand(const std::string& command);

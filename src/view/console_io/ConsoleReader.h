@@ -10,7 +10,7 @@
 
 class ConsoleReader {
 public:
-    virtual std::string ReadLine();
+    virtual std::string ReadLine() const;
 public:
     virtual ~ConsoleReader() = default;
 };

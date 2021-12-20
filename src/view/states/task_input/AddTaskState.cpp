@@ -3,34 +3,36 @@
 //
 
 #include "states/task_input/AddTaskState.h"
+#include "console_io/ConsoleUtilities.h"
 
 std::shared_ptr<WizardStateInterface> AddTaskState::Execute(std::shared_ptr<WizardContext> context) {
-    std::shared_ptr<WizardContext> context_with_added_task = dependencies_->RunStateMachine(std::make_shared<WizardContext>(),
-                    dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
+    auto state_machine = factory_.lock()->CreateStateMachine();
+    std::shared_ptr<WizardContext> context_with_added_task = state_machine->Run(std::make_shared<WizardContext>(),
+                    factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT));
 
     if (context_with_added_task->GetTask().has_value()) {
         std::pair<TaskActionResult, std::optional<TaskId>> add_task_result =
-                dependencies_->GetController()->AddTask(context_with_added_task->GetTask().value());
+                factory_.lock()->GetController()->AddTask(context_with_added_task->GetTask().value());
         switch (add_task_result.first) {
             case TaskActionResult::SUCCESS: {
                 ShowAddedTaskId(add_task_result.second.value());
-                return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+                return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
             }
             default: {
-                dependencies_->GetConsolePrinter()->WriteError("Invalid task was given, try again.");
-                return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+                factory_.lock()->GetConsolePrinter()->WriteError("Invalid task was given, try again.");
+                return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
             }
         }
     }
-    dependencies_->GetConsolePrinter()->WriteError("Task wasn't saved.");
-    return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+    factory_.lock()->GetConsolePrinter()->WriteError("Task wasn't saved.");
+    return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
 }
 
-AddTaskState::AddTaskState(std::unique_ptr<StateDependencies> dependencies) :
-                           dependencies_(std::move(dependencies)) {
+AddTaskState::AddTaskState(const std::shared_ptr<WizardStatesFactory>& factory) :
+                           factory_(factory) {
 
 }
 
 void AddTaskState::ShowAddedTaskId(const TaskId& task_id) {
-    dependencies_->GetConsolePrinter()->WriteLine("Task was successfully added. Task id: " + std::to_string(task_id.id()));
+    factory_.lock()->GetConsolePrinter()->WriteLine("Task was successfully added. Task id: " + std::to_string(task_id.id()));
 }

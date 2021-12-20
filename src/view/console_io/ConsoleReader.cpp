@@ -4,7 +4,7 @@
 
 #include "console_io/ConsoleReader.h"
 
-std::string ConsoleReader::ReadLine() {
+std::string ConsoleReader::ReadLine() const {
     std::string line;
     std::getline(std::cin, line);
     return line;

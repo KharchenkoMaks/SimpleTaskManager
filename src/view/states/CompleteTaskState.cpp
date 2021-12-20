@@ -3,37 +3,38 @@
 //
 
 #include "CompleteTaskState.h"
+#include "console_io/ConsoleUtilities.h"
 
-CompleteTaskState::CompleteTaskState(std::unique_ptr<StateDependencies> dependencies) :
-                                    dependencies_(std::move(dependencies)) {
+CompleteTaskState::CompleteTaskState(const std::shared_ptr<WizardStatesFactory>& factory) :
+                                    factory_(factory) {
 
 }
 
 std::shared_ptr<WizardStateInterface> CompleteTaskState::Execute(std::shared_ptr<WizardContext> context) {
-    std::optional<TaskId> task_id = dependencies_->GetTaskIdFromUser("Task ID");
+    std::optional<TaskId> task_id = console_io::util::GetTaskIdFromUser("Task ID", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
     if (!task_id.has_value()) {
-        dependencies_->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
-        return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        factory_.lock()->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
+        return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
     }
 
-    switch (dependencies_->GetController()->CompleteTask(task_id.value())) {
+    switch (factory_.lock()->GetController()->CompleteTask(task_id.value())) {
         case TaskActionResult::SUCCESS: {
-            dependencies_->GetConsolePrinter()->WriteLine("Task successfully completed.");
-            return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+            factory_.lock()->GetConsolePrinter()->WriteLine("Task successfully completed.");
+            return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
         }
         case TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS: {
-            if (dependencies_->UserConfirm("Found uncompleted subtasks, do you want to complete them?")) {
-                dependencies_->GetController()->CompleteTaskWithSubTasks(task_id.value());
-                dependencies_->GetConsolePrinter()->WriteLine("Completed task with it subtasks.");
-                return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+            if (console_io::util::UserConfirm("Found uncompleted subtasks, do you want to complete them?", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader())) {
+                factory_.lock()->GetController()->CompleteTaskWithSubTasks(task_id.value());
+                factory_.lock()->GetConsolePrinter()->WriteLine("Completed task with it subtasks.");
+                return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
             } else {
-                dependencies_->GetConsolePrinter()->WriteLine("Task wasn't completed because of uncompleted subtasks");
-                return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+                factory_.lock()->GetConsolePrinter()->WriteLine("Task wasn't completed because of uncompleted subtasks");
+                return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
             }
         }
         default: {
-            dependencies_->GetConsolePrinter()->WriteError("No task with this id");
-            return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+            factory_.lock()->GetConsolePrinter()->WriteError("No task with this id");
+            return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
         }
     }
 }

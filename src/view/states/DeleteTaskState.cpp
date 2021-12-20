@@ -3,37 +3,38 @@
 //
 
 #include "DeleteTaskState.h"
+#include "console_io/ConsoleUtilities.h"
 
-DeleteTaskState::DeleteTaskState(std::unique_ptr<StateDependencies> dependencies) :
-                                dependencies_(std::move(dependencies)) {
+DeleteTaskState::DeleteTaskState(const std::shared_ptr<WizardStatesFactory>& factory) :
+                                factory_(factory) {
 
 }
 
 std::shared_ptr<WizardStateInterface> DeleteTaskState::Execute(std::shared_ptr<WizardContext> context) {
-    std::optional<TaskId> task_id = dependencies_->GetTaskIdFromUser("Task ID");
+    std::optional<TaskId> task_id = console_io::util::GetTaskIdFromUser("Task ID", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
     if (!task_id.has_value()){
-        dependencies_->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
-        return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        factory_.lock()->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
+        return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
     }
 
-    switch (dependencies_->GetController()->DeleteTask(task_id.value())) {
+    switch (factory_.lock()->GetController()->DeleteTask(task_id.value())) {
         case TaskActionResult::SUCCESS: {
-            dependencies_->GetConsolePrinter()->WriteLine("Task was successfully deleted.");
-            return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+            factory_.lock()->GetConsolePrinter()->WriteLine("Task was successfully deleted.");
+            return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
         }
         case TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS: {
-            if (dependencies_->UserConfirm("Found subtasks for this task, are you sure you want to delete them?")) {
-                dependencies_->GetController()->DeleteTaskWithSubTasks(task_id.value());
-                dependencies_->GetConsolePrinter()->WriteLine("Deleted task with it's subtasks.");
-                return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+            if (console_io::util::UserConfirm("Found subtasks for this task, are you sure you want to delete them?", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader())) {
+                factory_.lock()->GetController()->DeleteTaskWithSubTasks(task_id.value());
+                factory_.lock()->GetConsolePrinter()->WriteLine("Deleted task with it's subtasks.");
+                return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
             } else {
-                dependencies_->GetConsolePrinter()->WriteLine("Task wasn't deleted.");
-                return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+                factory_.lock()->GetConsolePrinter()->WriteLine("Task wasn't deleted.");
+                return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
             }
         }
         default: {
-            dependencies_->GetConsolePrinter()->WriteError("No task was found with such task id");
-            return dependencies_->GetStatesFactory()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+            factory_.lock()->GetConsolePrinter()->WriteError("No task was found with such task id");
+            return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
         }
     }
 }

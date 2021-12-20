@@ -7,7 +7,6 @@
 
 #include "states/abstract/WizardStateInterface.h"
 #include "states/factory/WizardStatesFactory.h"
-#include "states/abstract/StateDependencies.h"
 #include "WizardContext.h"
 
 #include <string>
@@ -17,14 +16,14 @@
 
 class InputTaskDueDateState : public WizardStateInterface {
 public:
-    InputTaskDueDateState(std::unique_ptr<StateDependencies> dependencies);
+    InputTaskDueDateState(const std::shared_ptr<WizardStatesFactory>& factory);
 public:
     std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
 private:
     std::string GetUserInputForDueDateAdd();
     std::string GetUserInputForDueDateEdit(const Task& task);
 private:
-    std::unique_ptr<StateDependencies> dependencies_;
+    std::weak_ptr<WizardStatesFactory> factory_;
 };
 
 

@@ -7,7 +7,6 @@
 
 #include "abstract/WizardStateInterface.h"
 #include "states/factory/WizardStatesFactory.h"
-#include "abstract/StateDependencies.h"
 #include "WizardContext.h"
 
 #include <string>
@@ -15,11 +14,11 @@
 
 class RootState : public WizardStateInterface {
 public:
-    explicit RootState(std::unique_ptr<StateDependencies> dependencies);
+    RootState(const std::shared_ptr<WizardStatesFactory>& factory);
 public:
     std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
 private:
-    std::unique_ptr<StateDependencies> dependencies_;
+    std::weak_ptr<WizardStatesFactory> factory_;
 };
 
 

@@ -7,18 +7,17 @@
 
 #include "abstract/WizardStateInterface.h"
 #include "states/factory/WizardStatesFactory.h"
-#include "abstract/StateDependencies.h"
 
 #include <string>
 #include <memory>
 
 class HelpState : public WizardStateInterface {
 public:
-    explicit HelpState(std::unique_ptr<StateDependencies> dependencies);
+    explicit HelpState(const std::shared_ptr<WizardStatesFactory>& factory);
 public:
     std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
 private:
-    std::unique_ptr<StateDependencies> dependencies_;
+    std::weak_ptr<WizardStatesFactory> factory_;
 };
 
 

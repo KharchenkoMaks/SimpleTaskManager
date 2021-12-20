@@ -7,7 +7,6 @@
 
 #include "states/abstract/WizardStateInterface.h"
 #include "states/factory/WizardStatesFactory.h"
-#include "states/abstract/StateDependencies.h"
 #include "WizardContext.h"
 
 #include <string>
@@ -15,14 +14,14 @@
 
 class InputTaskPriorityState : public WizardStateInterface {
 public:
-    explicit InputTaskPriorityState(std::unique_ptr<StateDependencies> dependencies);
+    explicit InputTaskPriorityState(const std::shared_ptr<WizardStatesFactory>& factory);
 public:
     std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
 private:
     std::string GetUserInputForPriorityAdd();
     std::string GetUserInputForPriorityEdit(const Task& task);
 private:
-    std::unique_ptr<StateDependencies> dependencies_;
+    std::weak_ptr<WizardStatesFactory> factory_;
 };
 
 
