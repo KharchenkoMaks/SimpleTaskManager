@@ -14,12 +14,10 @@
 class ViewController {
 public:
     ViewController(std::unique_ptr<ConsoleStateMachine> state_machine,
-                   std::unique_ptr<CommandFactory> command_factory,
                    std::unique_ptr<StatesFactory> states_factory);
 public:
     void RunUserInterface();
 private:
-    std::shared_ptr<CommandFactory> command_factory_;
     std::shared_ptr<StatesFactory> states_factory_;
 
     std::shared_ptr<ConsoleStateMachine> state_machine_;

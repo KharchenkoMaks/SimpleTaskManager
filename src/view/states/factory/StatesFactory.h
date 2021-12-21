@@ -10,6 +10,7 @@
 #include "console_io/ConsoleReader.h"
 #include "Controller.h"
 #include "ConsoleStateMachine.h"
+#include "commands/factory/CommandFactory.h"
 
 #include <memory>
 #include <string>
@@ -41,12 +42,14 @@ public:
     };
 
 public:
-    StatesFactory(const std::shared_ptr<ConsolePrinter>& printer,
+    StatesFactory(const std::shared_ptr<CommandFactory> command_factory,
+                  const std::shared_ptr<ConsolePrinter>& printer,
                   const std::shared_ptr<ConsoleReader>& reader);
 
 public:
     std::shared_ptr<ConsolePrinter> GetConsolePrinter() const;
     std::shared_ptr<ConsoleReader> GetConsoleReader() const;
+    std::shared_ptr<CommandFactory> GetCommandFactory() const;
 
 public:
     std::unique_ptr<ConsoleStateMachine> CreateStateMachine() const;
@@ -100,6 +103,8 @@ private:
 
 private:
     std::map<States, std::shared_ptr<StateInterface>> states_;
+
+    std::shared_ptr<CommandFactory> command_factory_;
 
     std::shared_ptr<ConsoleReader> reader_;
     std::shared_ptr<ConsolePrinter> printer_;

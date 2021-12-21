@@ -5,10 +5,8 @@
 #include "ViewController.h"
 
 ViewController::ViewController(std::unique_ptr<ConsoleStateMachine> state_machine,
-                               std::unique_ptr<CommandFactory> command_factory,
                                std::unique_ptr<StatesFactory> states_factory) :
                                state_machine_(std::move(state_machine)),
-                               command_factory_(std::move(command_factory)),
                                states_factory_(std::move(states_factory)) {
 
 }
