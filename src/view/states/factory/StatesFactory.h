@@ -41,14 +41,12 @@ public:
     };
 
 public:
-    StatesFactory(const std::shared_ptr<Controller>& controller,
-                        const std::shared_ptr<ConsolePrinter>& printer,
-                        const std::shared_ptr<ConsoleReader>& reader);
+    StatesFactory(const std::shared_ptr<ConsolePrinter>& printer,
+                  const std::shared_ptr<ConsoleReader>& reader);
 
 public:
     std::shared_ptr<ConsolePrinter> GetConsolePrinter() const;
     std::shared_ptr<ConsoleReader> GetConsoleReader() const;
-    std::shared_ptr<Controller> GetController() const;
 
 public:
     std::unique_ptr<ConsoleStateMachine> CreateStateMachine() const;
@@ -105,8 +103,6 @@ private:
 
     std::shared_ptr<ConsoleReader> reader_;
     std::shared_ptr<ConsolePrinter> printer_;
-
-    std::shared_ptr<Controller> controller_;
 };
 
 

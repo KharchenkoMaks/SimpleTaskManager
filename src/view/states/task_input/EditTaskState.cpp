@@ -14,7 +14,7 @@ std::shared_ptr<StateInterface> EditTaskState::Execute(std::shared_ptr<StateCont
     std::optional<TaskId> editing_task_id = console_io::util::GetTaskIdFromUser("Task ID", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
     if (!editing_task_id.has_value()) {
         factory_.lock()->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
+        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
     }
 
     // Creating new context
@@ -23,7 +23,7 @@ std::shared_ptr<StateInterface> EditTaskState::Execute(std::shared_ptr<StateCont
     std::optional<TaskTransfer> task_to_edit = factory_.lock()->GetController()->GetTask(editing_task_id.value());
     if (!task_to_edit.has_value()) {
         factory_.lock()->GetConsolePrinter()->WriteError("Task with such id wasn't found.");
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
+        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
     }
     context_task_editing->SetEditingTask(editing_task_id.value(), task_to_edit.value().task());
 
@@ -41,7 +41,7 @@ std::shared_ptr<StateInterface> EditTaskState::Execute(std::shared_ptr<StateCont
         }
         default: {
             factory_.lock()->GetConsolePrinter()->WriteError("Invalid task was given, try again.");
-            return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
+            return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
         }
     }
 }

@@ -22,14 +22,10 @@
 #include "states/persistence/SaveState.h"
 #include "states/persistence/LoadState.h"
 
-StatesFactory::StatesFactory(const std::shared_ptr<Controller>& controller,
-                                         const std::shared_ptr<ConsolePrinter>& printer,
-                                         const std::shared_ptr<ConsoleReader>& reader) :
-                                         controller_(controller),
-                                         printer_(printer),
-                                         reader_(reader) {
-
-}
+StatesFactory::StatesFactory(const std::shared_ptr<ConsolePrinter>& printer,
+                             const std::shared_ptr<ConsoleReader>& reader) :
+                             printer_(printer),
+                             reader_(reader) {}
 
 std::shared_ptr<StateInterface> StatesFactory::GetStateByCommand(const std::string &command) {
     if (command == "add") {
@@ -80,7 +76,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const QuitState& sta
 std::shared_ptr<StateInterface> StatesFactory::GetNextState(const AddTaskState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
-            return GetLazyStateByStatesEnum(States::kRoot);
+            return GetLazyStateByStatesEnum(States::kEnd);
         }
         case MoveType::ERROR: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -94,7 +90,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const AddTaskState &
 std::shared_ptr<StateInterface> StatesFactory::GetNextState(const AddSubTaskState& state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
-            return GetLazyStateByStatesEnum(States::kRoot);
+            return GetLazyStateByStatesEnum(States::kEnd);
         }
         case MoveType::ERROR: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -108,10 +104,10 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const AddSubTaskStat
 std::shared_ptr<StateInterface> StatesFactory::GetNextState(const EditTaskState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
-            return GetLazyStateByStatesEnum(States::kRoot);
+            return GetLazyStateByStatesEnum(States::kEnd);
         }
         case MoveType::ERROR: {
-            return GetLazyStateByStatesEnum(States::kEditTask);
+            return GetLazyStateByStatesEnum(States::kRoot);
         }
         case MoveType::NEXT: {
             return GetLazyStateByStatesEnum(States::kInputTaskTitle);
@@ -177,7 +173,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const RootState &sta
 std::shared_ptr<StateInterface> StatesFactory::GetNextState(const ShowState &state, StatesFactory::MoveType move_type) {
     switch (move_type) {
         default: {
-            return GetLazyStateByStatesEnum(States::kRoot);
+            return GetLazyStateByStatesEnum(States::kEnd);
         }
     }
 }
@@ -188,7 +184,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const CompleteTaskSt
             return GetLazyStateByStatesEnum(States::kComplete);
         }
         default: {
-            return GetLazyStateByStatesEnum(States::kRoot);
+            return GetLazyStateByStatesEnum(States::kEnd);
         }
     }
 }
@@ -199,7 +195,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const DeleteTaskStat
             return GetLazyStateByStatesEnum(States::kDelete);
         }
         default: {
-            return GetLazyStateByStatesEnum(States::kRoot);
+            return GetLazyStateByStatesEnum(States::kEnd);
         }
     }
 }
@@ -210,7 +206,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const SetLabelState 
             return GetLazyStateByStatesEnum(States::kSetLabel);
         }
         default: {
-            return GetLazyStateByStatesEnum(States::kRoot);
+            return GetLazyStateByStatesEnum(States::kEnd);
         }
     }
 }
@@ -221,7 +217,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const SaveState &sta
             return GetLazyStateByStatesEnum(States::kSave);
         }
         default: {
-            return GetLazyStateByStatesEnum(States::kRoot);
+            return GetLazyStateByStatesEnum(States::kEnd);
         }
     }
 }
@@ -232,7 +228,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const LoadState &sta
             return GetLazyStateByStatesEnum(States::kSave);
         }
         default: {
-            return GetLazyStateByStatesEnum(States::kRoot);
+            return GetLazyStateByStatesEnum(States::kEnd);
         }
     }
 }
@@ -321,10 +317,6 @@ std::shared_ptr<ConsolePrinter> StatesFactory::GetConsolePrinter() const {
 
 std::shared_ptr<ConsoleReader> StatesFactory::GetConsoleReader() const {
     return reader_;
-}
-
-std::shared_ptr<Controller> StatesFactory::GetController() const {
-    return controller_;
 }
 
 std::unique_ptr<ConsoleStateMachine> StatesFactory::CreateStateMachine() const {
