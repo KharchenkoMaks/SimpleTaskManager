@@ -14,7 +14,7 @@
 
 class AddSubTaskState : public StateInterface {
 public:
-    AddSubTaskState(const std::shared_ptr<StatesFactory>& factory);
+    explicit AddSubTaskState(const std::shared_ptr<StatesFactory>& factory);
 public:
     std::shared_ptr<StateInterface> Execute(StateContext& context) override;
 private:
