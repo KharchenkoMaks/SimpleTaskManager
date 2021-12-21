@@ -8,16 +8,20 @@
 #include "CommandInterface.h"
 #include "Task.pb.h"
 #include "controller/Controller.h"
+#include "console_io/ConsolePrinter.h"
 
 #include <memory>
 
 class ShowTasksCommand : public CommandInterface {
 public:
-    explicit ShowTasksCommand(const std::shared_ptr<Controller>& controller);
+    ShowTasksCommand(const std::shared_ptr<Controller>& controller,
+                     const std::shared_ptr<ConsolePrinter>& printer);
 public:
     void Execute() override;
 private:
     std::shared_ptr<Controller> controller_;
+
+    std::shared_ptr<ConsolePrinter> printer_;
 };
 
 

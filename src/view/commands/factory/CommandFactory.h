@@ -8,13 +8,15 @@
 #include "view/commands/CommandInterface.h"
 #include "controller/Controller.h"
 #include "StateContext.h"
+#include "console_io/ConsolePrinter.h"
 
 #include <memory>
 #include <optional>
 
 class CommandFactory {
 public:
-    explicit CommandFactory(std::unique_ptr<Controller> controller);
+    explicit CommandFactory(std::unique_ptr<Controller> controller,
+                            const std::shared_ptr<ConsolePrinter>& printer);
 public:
     std::unique_ptr<CommandInterface> CreateAddTaskCommand(const StateContext& context);
     std::unique_ptr<CommandInterface> CreateAddSubTaskCommand(const StateContext& context);
@@ -26,6 +28,7 @@ public:
     std::unique_ptr<CommandInterface> CreateSaveCommand(const StateContext& context);
     std::unique_ptr<CommandInterface> CreateLoadCommand(const StateContext& context);
 private:
+    std::shared_ptr<ConsolePrinter> printer_;
     std::shared_ptr<Controller> controller_;
 };
 

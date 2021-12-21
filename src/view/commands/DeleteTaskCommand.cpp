@@ -4,8 +4,11 @@
 
 #include "DeleteTaskCommand.h"
 
-DeleteTaskCommand::DeleteTaskCommand(const std::shared_ptr<Controller>& controller, const TaskId& task_id) :
-                                    controller_(controller),
-                                    task_id_(task_id) {
+DeleteTaskCommand::DeleteTaskCommand(const std::shared_ptr<Controller>& controller,
+                                     const std::shared_ptr<ConsolePrinter>& printer,
+                                     const TaskId& task_id) :
+                                     controller_(controller),
+                                     printer_(printer),
+                                     task_id_(task_id) {
 
 }

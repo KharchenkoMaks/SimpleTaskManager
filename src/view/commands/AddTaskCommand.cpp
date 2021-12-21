@@ -4,8 +4,11 @@
 
 #include "AddTaskCommand.h"
 
-AddTaskCommand::AddTaskCommand(const std::shared_ptr<Controller>& controller, const Task& task) :
-                                controller_(controller),
-                                task_(task) {
+AddTaskCommand::AddTaskCommand(const std::shared_ptr<Controller>& controller,
+                               const std::shared_ptr<ConsolePrinter>& printer,
+                               const Task& task) :
+                               controller_(controller),
+                               printer_(printer),
+                               task_(task) {
 
 }

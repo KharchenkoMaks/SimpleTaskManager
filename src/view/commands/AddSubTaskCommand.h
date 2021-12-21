@@ -9,13 +9,15 @@
 #include "Task.pb.h"
 #include "controller/Controller.h"
 #include "view/console_io/ConsolePrinter.h"
-#include "view/console_io/ConsoleReader.h"
 
 #include <memory>
 
 class AddSubTaskCommand : public CommandInterface {
 public:
-    AddSubTaskCommand(const std::shared_ptr<Controller>& controller, const Task& task, const TaskId& parent_id);
+    AddSubTaskCommand(const std::shared_ptr<Controller>& controller,
+                      const std::shared_ptr<ConsolePrinter>& printer,
+                      const Task& task,
+                      const TaskId& parent_id);
 public:
     void Execute() override;
 private:
@@ -23,7 +25,6 @@ private:
     TaskId task_parent_id_;
 
     std::shared_ptr<ConsolePrinter> printer_;
-    std::shared_ptr<ConsoleReader> reader_;
 
     std::shared_ptr<Controller> controller_;
 };

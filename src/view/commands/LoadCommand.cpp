@@ -4,8 +4,11 @@
 
 #include "LoadCommand.h"
 
-LoadCommand::LoadCommand(const std::shared_ptr<Controller>& controller, const std::string& file_name) :
-                        controller_(controller),
-                        file_name_(file_name){
+LoadCommand::LoadCommand(const std::shared_ptr<Controller>& controller,
+                         const std::shared_ptr<ConsolePrinter>& printer,
+                         const std::string& file_name) :
+                         controller_(controller),
+                         printer_(printer),
+                         file_name_(file_name) {
 
 }
