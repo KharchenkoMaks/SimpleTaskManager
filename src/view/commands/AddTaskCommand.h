@@ -7,14 +7,19 @@
 
 #include "CommandInterface.h"
 #include "Task.pb.h"
+#include "controller/Controller.h"
+
+#include <memory>
 
 class AddTaskCommand : public CommandInterface {
 public:
-    AddTaskCommand(const Task& task);
+    AddTaskCommand(const std::shared_ptr<Controller>& controller, const Task& task);
 public:
     void Execute() override;
 private:
     Task task_;
+
+    std::shared_ptr<Controller> controller_;
 };
 
 

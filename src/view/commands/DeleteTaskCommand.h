@@ -7,14 +7,19 @@
 
 #include "CommandInterface.h"
 #include "Task.pb.h"
+#include "controller/Controller.h"
 
-class DeleteTaskCommand {
+#include <memory>
+
+class DeleteTaskCommand : public CommandInterface {
 public:
-    DeleteTaskCommand(const TaskId& task_id);
+    DeleteTaskCommand(const std::shared_ptr<Controller>& controller, const TaskId& task_id);
 public:
     void Execute() override;
 private:
     TaskId task_id_;
+
+    std::shared_ptr<Controller> controller_;
 };
 
 

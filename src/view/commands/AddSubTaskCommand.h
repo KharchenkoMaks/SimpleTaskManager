@@ -7,15 +7,20 @@
 
 #include "CommandInterface.h"
 #include "Task.pb.h"
+#include "controller/Controller.h"
+
+#include <memory>
 
 class AddSubTaskCommand : public CommandInterface {
 public:
-    AddSubTaskCommand(const Task& task, const TaskId& parent_id);
+    AddSubTaskCommand(const std::shared_ptr<Controller>& controller, const Task& task, const TaskId& parent_id);
 public:
     void Execute() override;
 private:
     Task task_;
     TaskId task_parent_id_;
+
+    std::shared_ptr<Controller> controller_;
 };
 
 

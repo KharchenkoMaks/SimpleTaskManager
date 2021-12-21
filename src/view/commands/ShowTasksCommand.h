@@ -7,10 +7,17 @@
 
 #include "CommandInterface.h"
 #include "Task.pb.h"
+#include "controller/Controller.h"
+
+#include <memory>
 
 class ShowTasksCommand : public CommandInterface {
 public:
+    explicit ShowTasksCommand(const std::shared_ptr<Controller>& controller);
+public:
     void Execute() override;
+private:
+    std::shared_ptr<Controller> controller_;
 };
 
 

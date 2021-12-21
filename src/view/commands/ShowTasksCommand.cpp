@@ -3,3 +3,7 @@
 //
 
 #include "ShowTasksCommand.h"
+
+ShowTasksCommand::ShowTasksCommand(const std::shared_ptr<Controller>& controller) : controller_(controller) {
+
+}
