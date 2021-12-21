@@ -14,7 +14,7 @@
 
 class StateInterface {
 public:
-    virtual std::shared_ptr<StateInterface> Execute(std::shared_ptr<StateContext>) = 0;
+    virtual std::shared_ptr<StateInterface> Execute(StateContext&) = 0;
 
 public:
     virtual ~StateInterface() = default;

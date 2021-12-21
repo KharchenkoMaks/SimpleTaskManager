@@ -8,6 +8,8 @@
 #include "CommandInterface.h"
 #include "Task.pb.h"
 #include "controller/Controller.h"
+#include "view/console_io/ConsolePrinter.h"
+#include "view/console_io/ConsoleReader.h"
 
 #include <memory>
 
@@ -19,6 +21,9 @@ public:
 private:
     Task task_;
     TaskId task_parent_id_;
+
+    std::shared_ptr<ConsolePrinter> printer_;
+    std::shared_ptr<ConsoleReader> reader_;
 
     std::shared_ptr<Controller> controller_;
 };
