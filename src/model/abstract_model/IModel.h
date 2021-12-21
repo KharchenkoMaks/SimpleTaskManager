@@ -27,8 +27,7 @@ public:
 
     virtual bool IsTaskExist(const TaskId& task_id) = 0;
 
-    virtual std::pair<TaskId, std::vector<TaskTransfer>> GetModelState() = 0;
-    virtual bool LoadModelState(std::unique_ptr<IdGenerator> generator, const std::vector<TaskTransfer>& tasks) = 0;
+    virtual bool LoadModelState(const std::vector<TaskTransfer>& tasks) = 0;
 
     virtual ~IModel() = default;
 };

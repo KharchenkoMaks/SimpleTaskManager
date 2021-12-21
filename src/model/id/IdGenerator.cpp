@@ -4,28 +4,20 @@
 
 #include "IdGenerator.h"
 
-IdGenerator::IdGenerator() {
-    this->last_id_ = 0;
-}
-
-
-IdGenerator::IdGenerator(const int last_id) {
-    if (last_id < 0){
-        throw std::invalid_argument("last_id was < 0");
-    }
-    this->last_id_ = last_id;
-}
-
 TaskId IdGenerator::CreateNewTaskId() {
     TaskId task_id;
     task_id.set_id(last_id_++);
     return task_id;
 }
 
-TaskId IdGenerator::GetLastTaskId() {
-    TaskId task_id;
-    task_id.set_id(last_id_);
-    return task_id;
+IdGenerator::IdGenerator() : last_id_(0) {}
+
+bool IdGenerator::SetLastTaskId(const TaskId& task_id) {
+    if (task_id.id() >= 0) {
+        last_id_ = task_id.id();
+        return true;
+    }
+    return false;
 }
 
 IdGenerator::~IdGenerator() = default;

@@ -10,11 +10,10 @@
 class IdGenerator{
 public:
     IdGenerator();
-    explicit IdGenerator(int last_id);
 public:
     virtual TaskId CreateNewTaskId();
 public:
-    TaskId GetLastTaskId();
+    bool SetLastTaskId(const TaskId& task_id);
 public:
     virtual ~IdGenerator();
 private:

@@ -15,20 +15,9 @@ namespace persistence {
 
 class TasksPersistence {
 public:
-    struct TaskManagerParameters {
-        TaskManagerParameters() = default;
+    std::pair<SaveLoadStatus, std::vector<TaskTransfer>> LoadFromFile(const std::string& file_name);
 
-        TaskManagerParameters(const TaskId &last_id,
-                              const std::vector<TaskTransfer> &tasks);
-
-        TaskId last_id_;
-        std::vector<TaskTransfer> tasks_;
-    };
-
-public:
-    std::pair<SaveLoadStatus, TaskManagerParameters> LoadFromFile(const std::string &file_name);
-
-    SaveLoadStatus SaveToFile(const std::string &file_name, const TaskManagerParameters &parameters_to_save);
+    SaveLoadStatus SaveToFile(const std::string &file_name, const std::vector<TaskTransfer>& tasks_to_save);
 };
 
 }

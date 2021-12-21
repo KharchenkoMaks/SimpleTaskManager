@@ -185,11 +185,16 @@ TaskTransfer TaskManager::CreateTaskTransferFromSubTask(const TaskId& task_id, c
     return task_transfer;
 }
 
-bool TaskManager::LoadModelState(std::unique_ptr<IdGenerator> generator, const std::vector<TaskTransfer>& tasks) {
+bool TaskManager::LoadModelState(const std::vector<TaskTransfer>& tasks) {
     std::map<TaskId, MainTask> tasks_to_add;
+    TaskId max_id;
+    max_id.set_id(0);
     for (const auto& task : tasks) {
         if (!task.has_task() || !task.has_task_id() || !task_validator_->ValidateTask(task.task())) {
             return false;
+        }
+        if (max_id < task.task_id()) {
+            max_id.CopyFrom(task.task_id());
         }
         if (!task.has_parent_id()) {
             tasks_to_add.insert_or_assign(task.task_id(), MainTask::Create(task.task()));
@@ -201,11 +206,8 @@ bool TaskManager::LoadModelState(std::unique_ptr<IdGenerator> generator, const s
             main_task->second.AddSubTask(task.task_id(), task.task());
         }
     }
-    generator_ = std::move(generator);
+    max_id.set_id(max_id.id() + 1);
+    generator_->SetLastTaskId(max_id);
     tasks_.swap(tasks_to_add);
     return true;
-}
-
-std::pair<TaskId, std::vector<TaskTransfer>> TaskManager::GetModelState() {
-    return std::make_pair(generator_->GetLastTaskId(), GetTasks());
 }

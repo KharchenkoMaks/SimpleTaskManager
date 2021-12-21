@@ -84,9 +84,7 @@ TaskActionResult Controller::SetTaskLabel(const TaskId& task_id, const std::stri
 }
 
 persistence::SaveLoadStatus Controller::SaveToFile(const std::string& file_name) {
-    auto model_state = model_->GetModelState();
-    persistence::TasksPersistence::TaskManagerParameters parameters_to_save { model_state.first, model_state.second };
-    return tm_persistence_->SaveToFile(file_name, parameters_to_save);
+    return tm_persistence_->SaveToFile(file_name, model_->GetTasks());
 }
 
 persistence::SaveLoadStatus Controller::LoadFromFile(const std::string& file_name) {
@@ -94,13 +92,7 @@ persistence::SaveLoadStatus Controller::LoadFromFile(const std::string& file_nam
     if (model_state.first != persistence::SaveLoadStatus::SUCCESS) {
         return model_state.first;
     }
-    std::unique_ptr<IdGenerator> new_generator;
-    try {
-        new_generator = std::make_unique<IdGenerator>(model_state.second.last_id_.id());
-    } catch (std::invalid_argument) {
-        return persistence::SaveLoadStatus::INVALID_FILE_STRUCTURE;
-    }
-    if (model_->LoadModelState(std::move(new_generator), model_state.second.tasks_)) {
+    if (model_->LoadModelState(model_state.second)) {
         return persistence::SaveLoadStatus::SUCCESS;
     } else {
         return persistence::SaveLoadStatus::INVALID_FILE_STRUCTURE;

@@ -37,8 +37,7 @@ public:
 public:
     bool IsTaskExist(const TaskId& task_id) override;
 public: // Persistence
-    std::pair<TaskId, std::vector<TaskTransfer>> GetModelState() override;
-    bool LoadModelState(std::unique_ptr<IdGenerator> generator, const std::vector<TaskTransfer>& tasks) override;
+    bool LoadModelState(const std::vector<TaskTransfer>& tasks) override;
 private:
     TaskTransfer CreateTaskTransferFromTask(const TaskId& task_id, const Task& task);
     TaskTransfer CreateTaskTransferFromSubTask(const TaskId& task_id, const Task& task, const TaskId& parent_id);

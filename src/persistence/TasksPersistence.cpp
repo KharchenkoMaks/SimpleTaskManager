@@ -11,54 +11,42 @@
 
 using namespace persistence;
 
-std::pair<SaveLoadStatus, TasksPersistence::TaskManagerParameters>
+std::pair<SaveLoadStatus, std::vector<TaskTransfer>>
         TasksPersistence::LoadFromFile(const std::string& file_name) {
+    std::vector<TaskTransfer> loaded_tasks;
 
-    TasksPersistence::TaskManagerParameters tm_parameters;
-
-    std::ifstream file_to_read(file_name);
-    if (!file_to_read.is_open()) {
-        return std::make_pair(SaveLoadStatus::FILE_WAS_NOT_OPENED, tm_parameters);
+    std::ifstream file(file_name);
+    if (!file.is_open()) {
+        return std::make_pair(SaveLoadStatus::FILE_WAS_NOT_OPENED, loaded_tasks);
     }
 
     std::unique_ptr<google::protobuf::io::ZeroCopyInputStream> raw_input =
-            std::make_unique<google::protobuf::io::IstreamInputStream>(&file_to_read);
-
-    if (!google::protobuf::util::ParseDelimitedFromZeroCopyStream(&tm_parameters.last_id_, raw_input.get(), nullptr)) {
-        return std::make_pair(SaveLoadStatus::INVALID_FILE_STRUCTURE, tm_parameters);
-    }
+            std::make_unique<google::protobuf::io::IstreamInputStream>(&file);
 
     TaskTransfer read_task;
     while (google::protobuf::util::ParseDelimitedFromZeroCopyStream(&read_task, raw_input.get(), nullptr)) {
-        tm_parameters.tasks_.push_back(read_task);
+        loaded_tasks.push_back(read_task);
         read_task.clear_parent_id();
         read_task.clear_task();
         read_task.clear_task_id();
     }
 
-    return std::make_pair(SaveLoadStatus::SUCCESS, tm_parameters);
+    return std::make_pair(SaveLoadStatus::SUCCESS, loaded_tasks);
 }
 
 SaveLoadStatus TasksPersistence::SaveToFile(const std::string& file_name,
-                                        const TasksPersistence::TaskManagerParameters& parameters_to_save) {
+                                        const std::vector<TaskTransfer>& tasks_to_save) {
 
-    std::ofstream file_to_write(file_name);
-    if (!file_to_write.is_open()) {
+    std::ofstream file(file_name);
+    if (!file.is_open()) {
         return SaveLoadStatus::FILE_WAS_NOT_OPENED;
     }
-    google::protobuf::util::SerializeDelimitedToOstream(parameters_to_save.last_id_, &file_to_write);
 
-    for (const auto& task : parameters_to_save.tasks_) {
-        google::protobuf::util::SerializeDelimitedToOstream(task, &file_to_write);
+    for (const auto& task : tasks_to_save) {
+        google::protobuf::util::SerializeDelimitedToOstream(task, &file);
     }
 
-    file_to_write.close();
+    file.close();
 
     return SaveLoadStatus::SUCCESS;
-}
-
-TasksPersistence::TaskManagerParameters::TaskManagerParameters(const TaskId& last_id,
-                                                               const std::vector<TaskTransfer>& tasks) {
-    last_id_.CopyFrom(last_id);
-    tasks_ = tasks;
 }
