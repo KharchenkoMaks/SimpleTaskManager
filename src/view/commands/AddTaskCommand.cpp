@@ -12,3 +12,18 @@ AddTaskCommand::AddTaskCommand(const std::shared_ptr<Controller>& controller,
                                task_(task) {
 
 }
+
+void AddTaskCommand::Execute() {
+    std::pair<TaskActionResult, std::optional<TaskId>> add_task_result = controller_->AddTask(task_);
+
+    switch (add_task_result.first) {
+        case TaskActionResult::SUCCESS: {
+            printer_->WriteLine("Task was successfully added. Task id: " + std::to_string(add_task_result.second.value().id()));
+            break;
+        }
+        default: {
+            printer_->WriteError("Invalid task was given, try again.");
+            break;
+        }
+    }
+}

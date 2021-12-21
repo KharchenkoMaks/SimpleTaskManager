@@ -25,6 +25,7 @@ public:
     virtual bool AddTaskDueTime(google::protobuf::Timestamp due_time);
     virtual std::optional<Task> GetTask() const;
 
+    void SetTaskId(const TaskId& task_id);
     virtual void SetEditingTask(const TaskId& task_id, const Task& task);
     virtual std::optional<TaskId> GetTaskId() const;
 
