@@ -8,26 +8,26 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "states/factory/WizardStatesFactory.h"
+#include "states/factory/StatesFactory.h"
 #include "Controller.h"
 
-class MockWizardStatesFactory : public WizardStatesFactory {
+class MockWizardStatesFactory : public StatesFactory {
 public:
-    MockWizardStatesFactory() : WizardStatesFactory(nullptr, nullptr, nullptr) {}
+    MockWizardStatesFactory() : StatesFactory(nullptr, nullptr, nullptr) {}
 
-    MOCK_METHOD(std::shared_ptr<WizardStateInterface>, GetNextState, (const QuitState& state, MoveType move_type), (override));
-    MOCK_METHOD(std::shared_ptr<WizardStateInterface>, GetNextState, (const RootState& state, MoveType move_type), (override));
-    MOCK_METHOD(std::shared_ptr<WizardStateInterface>, GetNextState, (const ShowState& state, MoveType move_type), (override));
-    MOCK_METHOD(std::shared_ptr<WizardStateInterface>, GetNextState, (const HelpState& state, MoveType move_type), (override));
-    MOCK_METHOD(std::shared_ptr<WizardStateInterface>, GetNextState, (const AddTaskState& state, MoveType move_type), (override));
-    MOCK_METHOD(std::shared_ptr<WizardStateInterface>, GetNextState, (const InputTaskTitleState& state, MoveType move_type), (override));
-    MOCK_METHOD(std::shared_ptr<WizardStateInterface>, GetNextState, (const InputTaskPriorityState& state, MoveType move_type), (override));
-    MOCK_METHOD(std::shared_ptr<WizardStateInterface>, GetNextState, (const InputTaskDueDateState& state, MoveType move_type), (override));
-    MOCK_METHOD(std::shared_ptr<WizardStateInterface>, GetNextState, (const AddSubTaskState& state, MoveType move_type), (override));
-    MOCK_METHOD(std::shared_ptr<WizardStateInterface>, GetNextState, (const DeleteTaskState& state, MoveType move_type), (override));
-    MOCK_METHOD(std::shared_ptr<WizardStateInterface>, GetNextState, (const SaveState& state, MoveType move_type), (override));
-    MOCK_METHOD(std::shared_ptr<WizardStateInterface>, GetNextState, (const LoadState& state, MoveType move_type), (override));
-    MOCK_METHOD(std::shared_ptr<WizardStateInterface>, GetStateByCommand, (const std::string& command), (override));
+    MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const QuitState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const RootState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const ShowState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const HelpState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const AddTaskState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const InputTaskTitleState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const InputTaskPriorityState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const InputTaskDueDateState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const AddSubTaskState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const DeleteTaskState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const SaveState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const LoadState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::shared_ptr<StateInterface>, GetStateByCommand, (const std::string& command), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKWIZARDSTATESFACTORY_H

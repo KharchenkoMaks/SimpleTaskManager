@@ -5,20 +5,20 @@
 #ifndef SIMPLETASKMANAGER_ROOTSTATE_H
 #define SIMPLETASKMANAGER_ROOTSTATE_H
 
-#include "abstract/WizardStateInterface.h"
-#include "states/factory/WizardStatesFactory.h"
-#include "WizardContext.h"
+#include "StateInterface.h"
+#include "states/factory/StatesFactory.h"
+#include "StateContext.h"
 
 #include <string>
 #include <memory>
 
-class RootState : public WizardStateInterface {
+class RootState : public StateInterface {
 public:
-    RootState(const std::shared_ptr<WizardStatesFactory>& factory);
+    RootState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
+    std::shared_ptr<StateInterface> Execute(std::shared_ptr<StateContext> context) override;
 private:
-    std::weak_ptr<WizardStatesFactory> factory_;
+    std::weak_ptr<StatesFactory> factory_;
 };
 
 

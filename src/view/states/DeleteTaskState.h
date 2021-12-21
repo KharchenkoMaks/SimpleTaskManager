@@ -5,21 +5,21 @@
 #ifndef SIMPLETASKMANAGER_DELETETASKSTATE_H
 #define SIMPLETASKMANAGER_DELETETASKSTATE_H
 
-#include "states/abstract/WizardStateInterface.h"
-#include "states/factory/WizardStatesFactory.h"
-#include "WizardContext.h"
+#include "StateInterface.h"
+#include "states/factory/StatesFactory.h"
+#include "StateContext.h"
 #include "Task.pb.h"
 
 #include <memory>
 #include <optional>
 
-class DeleteTaskState : public WizardStateInterface {
+class DeleteTaskState : public StateInterface {
 public:
-    DeleteTaskState(const std::shared_ptr<WizardStatesFactory>& factory);
+    DeleteTaskState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
+    std::shared_ptr<StateInterface> Execute(std::shared_ptr<StateContext> context) override;
 private:
-    std::weak_ptr<WizardStatesFactory> factory_;
+    std::weak_ptr<StatesFactory> factory_;
 };
 
 

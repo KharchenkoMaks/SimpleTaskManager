@@ -2,7 +2,7 @@
 
 #include "TaskManager.h"
 #include "ConsoleStateMachine.h"
-#include "states/factory/WizardStatesFactory.h"
+#include "states/factory/StatesFactory.h"
 #include "Controller.h"
 
 #include <memory>
@@ -11,11 +11,11 @@ int main() {
     std::shared_ptr<Controller> controller =
             std::make_shared<Controller>(std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
                             std::make_unique<TaskValidator>());
-    std::shared_ptr<WizardStatesFactory> states_factory = std::make_shared<WizardStatesFactory>(controller,
+    std::shared_ptr<StatesFactory> states_factory = std::make_shared<StatesFactory>(controller,
                                                                                                 std::make_shared<ConsolePrinter>(),
                                                                                                 std::make_shared<ConsoleReader>());
     ConsoleStateMachine state_machine;
-    state_machine.Run(std::make_shared<WizardContext>(), states_factory->GetInitialState());
+    state_machine.Run(std::make_shared<StateContext>(), states_factory->GetInitialState());
     return 0;
 }
 
@@ -28,18 +28,18 @@ int main() {
 // TODO_DONE: Get rid of states enum in states factory - Done 26.11.2021
 // TODO_DONE: Use state machine inside AddTaskState and EditTaskState - Done 25.11.2021
 // TODO_DONE: Make abstract State for states that run state machine inside? - Done 07.12.2021
-// TODO_DONE: Rename WizardStateInterface abstract class - Done 26.11.2021
+// TODO_DONE: Rename StateInterface abstract class - Done 26.11.2021
 // TODO_DONE: Rename Printer to PrinterWithScanner =) - Done 25.11.2021
-// TODO_DONE: Make default methods in WizardStateInterface to ask user for some input - Done 26.11.2021
+// TODO_DONE: Make default methods in StateInterface to ask user for some input - Done 26.11.2021
 // TODO_DONE: DeleteTask unnecessary directories - Done 25.11.2021
 // TODO_DONE: Change subtasks structure - Done 02.12.2021
 // TODO: Move Task::Priority converter out of Task class
 // TODO_DONE: Make functionality for task deleting - Done 03.12.2021
 // TODO_DONE: Make Task due time wrapper - Done 30.11.2021
 // TODO_DONE: Split MultiFunctionalPrinter to printer and reader - Done 26.11.2021
-// TODO_DONE: Make printer and reader private in WizardStateInterface - Done 26.11.2021
+// TODO_DONE: Make printer and reader private in StateInterface - Done 26.11.2021
 // TODO_DONE: Move factory to states' parameters - Done 29.11.2021
-// TODO_DONE: Make read id method in WizardStateInterface - Done 29.11.2021
+// TODO_DONE: Make read id method in StateInterface - Done 29.11.2021
 // TODO: Make start_from enum parameter in state machine?
 // TODO_DONE: Make controller and validator for tasks - Done 29.11.2021
 // TODO_DONE: Inject controller to state machine and states - Done 30.11.2021
@@ -69,7 +69,7 @@ int main() {
 // TODO_DONE: Make pure State interface - Done 10.12.2021
 // TODO_DONE: Return TaskActionResult in Model API - Done 09.12.2021
 // TODO: Rename IModel
-// TODO_DONE: Make TaskBuilder in WizardContext - Done 10.12.2021
+// TODO_DONE: Make TaskBuilder in StateContext - Done 10.12.2021
 // TODO: Make set_label part of edit
 // TODO: Make builder of integration tests
 // TODO_DONE: Make state for ending state machine - Done 09.12.2021

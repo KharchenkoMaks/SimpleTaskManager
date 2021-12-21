@@ -15,14 +15,14 @@ class MockStateDependencies : public StateDependencies {
 public:
     MockStateDependencies() : StateDependencies(std::unique_ptr<ConsoleStateMachine>(nullptr), nullptr, nullptr, nullptr, nullptr) {}
 public:
-    MOCK_METHOD(std::shared_ptr<WizardStatesFactory>, GetStatesFactory, (), (override));
+    MOCK_METHOD(std::shared_ptr<StatesFactory>, GetStatesFactory, (), (override));
     MOCK_METHOD(std::shared_ptr<Controller>, GetController, (), (override));
     MOCK_METHOD(std::shared_ptr<ConsolePrinter>, GetConsolePrinter, (), (override));
 
     MOCK_METHOD(std::string, GetUserInput, (const std::string &invitation_message), (override));
     MOCK_METHOD(bool, UserConfirm, (const std::string& question_string), (override));
     MOCK_METHOD(std::optional<TaskId>, GetTaskIdFromUser, (const std::string& invitation_string), (override));
-    MOCK_METHOD(std::shared_ptr<WizardContext>, RunStateMachine, (const std::shared_ptr<WizardContext>& context, const std::shared_ptr<WizardStateInterface>& initial_state), (override));
+    MOCK_METHOD(std::shared_ptr<StateContext>, RunStateMachine, (const std::shared_ptr<WizardContext>& context, const std::shared_ptr<WizardStateInterface>& initial_state), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKSTATEDEPENDENCIES_H

@@ -2,19 +2,20 @@
 // Created by Maksym Kharchenko on 23.11.2021.
 //
 
-#ifndef SIMPLETASKMANAGER_WIZARDCONTEXT_H
-#define SIMPLETASKMANAGER_WIZARDCONTEXT_H
+#ifndef SIMPLETASKMANAGER_STATECONTEXT_H
+#define SIMPLETASKMANAGER_STATECONTEXT_H
 
 #include "Task.pb.h"
+#include "commands/CommandInterface.h"
 
 #include <memory>
 #include <string>
 #include <optional>
 #include <ctime>
 
-class WizardContext {
+class StateContext {
 public:
-    WizardContext();
+    StateContext();
 public:
     // Returns false if title isn't added
     virtual bool AddTaskTitle(const std::string& title);
@@ -32,15 +33,20 @@ public:
 
     void SetFileName(const std::string& file_name);
     std::string GetFileName() const;
+
+    void SetCommand(std::unique_ptr<CommandInterface> command);
+    std::shared_ptr<CommandInterface> GetCommand() const;
 public:
-    virtual ~WizardContext() = default;
+    virtual ~StateContext() = default;
 private:
     Task task_;
     std::optional<TaskId> editing_task_id_;
 
     std::string task_label_;
     std::string file_name_;
+
+    std::shared_ptr<CommandInterface> command_;
 };
 
 
-#endif //SIMPLETASKMANAGER_WIZARDCONTEXT_H
+#endif //SIMPLETASKMANAGER_STATECONTEXT_H

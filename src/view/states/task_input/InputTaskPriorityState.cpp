@@ -6,12 +6,12 @@
 #include "utilities/TaskUtilities.h"
 #include "console_io/ConsoleUtilities.h"
 
-InputTaskPriorityState::InputTaskPriorityState(const std::shared_ptr<WizardStatesFactory>& factory) :
+InputTaskPriorityState::InputTaskPriorityState(const std::shared_ptr<StatesFactory>& factory) :
                                                 factory_(factory) {
 
 }
 
-std::shared_ptr<WizardStateInterface> InputTaskPriorityState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<StateInterface> InputTaskPriorityState::Execute(std::shared_ptr<StateContext> context) {
     std::string user_input;
 
     if (context->GetTaskId().has_value()) {
@@ -25,10 +25,10 @@ std::shared_ptr<WizardStateInterface> InputTaskPriorityState::Execute(std::share
         context->AddTaskPriority(task_priority.value());
     } else {
         factory_.lock()->GetConsolePrinter()->WriteError("Wrong task priority was given, try [High, Medium, Low, None]!");
-        return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
     }
 
-    return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
 }
 
 std::string InputTaskPriorityState::GetUserInputForPriorityAdd() {

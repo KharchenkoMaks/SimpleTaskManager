@@ -6,12 +6,12 @@
 #include "utilities/TaskUtilities.h"
 #include "console_io/ConsoleUtilities.h"
 
-InputTaskDueDateState::InputTaskDueDateState(const std::shared_ptr<WizardStatesFactory>& factory) :
+InputTaskDueDateState::InputTaskDueDateState(const std::shared_ptr<StatesFactory>& factory) :
                                              factory_(factory) {
 
 }
 
-std::shared_ptr<WizardStateInterface> InputTaskDueDateState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<StateInterface> InputTaskDueDateState::Execute(std::shared_ptr<StateContext> context) {
     std::string user_input;
     if (context->GetTaskId().has_value()) {
         // If TaskId has value in context, then we are editing task
@@ -29,14 +29,14 @@ std::shared_ptr<WizardStateInterface> InputTaskDueDateState::Execute(std::shared
         const bool due_time_adding_result = context->AddTaskDueTime(task_due_date.value());
         if (!due_time_adding_result) {
             factory_.lock()->GetConsolePrinter()->WriteError("Due time should be in future, try again!");
-            return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+            return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
         }
     } else {
         factory_.lock()->GetConsolePrinter()->WriteError("Wrong due date was given, try again!");
-        return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
     }
 
-    return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
 }
 
 std::string InputTaskDueDateState::GetUserInputForDueDateEdit(const Task &task) {

@@ -5,22 +5,22 @@
 #ifndef SIMPLETASKMANAGER_ADDTASKSTATE_H
 #define SIMPLETASKMANAGER_ADDTASKSTATE_H
 
-#include "states/abstract/WizardStateInterface.h"
-#include "states/factory/WizardStatesFactory.h"
-#include "WizardContext.h"
+#include "states/StateInterface.h"
+#include "states/factory/StatesFactory.h"
+#include "StateContext.h"
 
 #include <memory>
 #include <optional>
 
-class AddTaskState : public WizardStateInterface {
+class AddTaskState : public StateInterface {
 public:
-    AddTaskState(const std::shared_ptr<WizardStatesFactory>& factory);
+    AddTaskState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
+    std::shared_ptr<StateInterface> Execute(std::shared_ptr<StateContext> context) override;
 private:
     void ShowAddedTaskId(const TaskId& task_id);
 private:
-    std::weak_ptr<WizardStatesFactory> factory_;
+    std::weak_ptr<StatesFactory> factory_;
 };
 
 

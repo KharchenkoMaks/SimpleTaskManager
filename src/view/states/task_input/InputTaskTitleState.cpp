@@ -5,12 +5,12 @@
 #include "states/task_input/InputTaskTitleState.h"
 #include "console_io/ConsoleUtilities.h"
 
-InputTaskTitleState::InputTaskTitleState(const std::shared_ptr<WizardStatesFactory>& factory) :
+InputTaskTitleState::InputTaskTitleState(const std::shared_ptr<StatesFactory>& factory) :
                                         factory_(factory) {
 
 }
 
-std::shared_ptr<WizardStateInterface> InputTaskTitleState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<StateInterface> InputTaskTitleState::Execute(std::shared_ptr<StateContext> context) {
     std::string user_input;
 
     if (context->GetTaskId().has_value()) {
@@ -21,10 +21,10 @@ std::shared_ptr<WizardStateInterface> InputTaskTitleState::Execute(std::shared_p
 
     if (!context->AddTaskTitle(user_input)) {
         factory_.lock()->GetConsolePrinter()->WriteError("Task title was wrong, please, try again!");
-        return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
     }
 
-    return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
 }
 
 std::string InputTaskTitleState::GetUserInputForTitleAdd() {

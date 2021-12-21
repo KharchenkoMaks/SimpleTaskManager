@@ -4,11 +4,11 @@
 
 #include "EndState.h"
 
-EndState::EndState(const std::shared_ptr<WizardStatesFactory>& factory) :
+EndState::EndState(const std::shared_ptr<StatesFactory>& factory) :
                     factory_(factory) {
 
 }
 
-std::shared_ptr<WizardStateInterface> EndState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<StateInterface> EndState::Execute(std::shared_ptr<StateContext> context) {
     return nullptr;
 }

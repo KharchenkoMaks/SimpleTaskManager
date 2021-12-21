@@ -8,11 +8,11 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "WizardContext.h"
+#include "StateContext.h"
 
 #include <string>
 
-class MockWizardContext : public WizardContext {
+class MockWizardContext : public StateContext {
 public:
     MOCK_METHOD(bool, AddTaskTitle, (const std::string& title), (override));
     MOCK_METHOD(bool, AddTaskPriority, (Task::Priority priority), (override));

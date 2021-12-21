@@ -5,19 +5,19 @@
 #ifndef SIMPLETASKMANAGER_HELPSTATE_H
 #define SIMPLETASKMANAGER_HELPSTATE_H
 
-#include "abstract/WizardStateInterface.h"
-#include "states/factory/WizardStatesFactory.h"
+#include "StateInterface.h"
+#include "states/factory/StatesFactory.h"
 
 #include <string>
 #include <memory>
 
-class HelpState : public WizardStateInterface {
+class HelpState : public StateInterface {
 public:
-    explicit HelpState(const std::shared_ptr<WizardStatesFactory>& factory);
+    explicit HelpState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
+    std::shared_ptr<StateInterface> Execute(std::shared_ptr<StateContext> context) override;
 private:
-    std::weak_ptr<WizardStatesFactory> factory_;
+    std::weak_ptr<StatesFactory> factory_;
 };
 
 

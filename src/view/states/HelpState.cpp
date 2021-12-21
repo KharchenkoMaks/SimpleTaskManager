@@ -4,12 +4,12 @@
 
 #include "HelpState.h"
 
-HelpState::HelpState(const std::shared_ptr<WizardStatesFactory>& factory) :
+HelpState::HelpState(const std::shared_ptr<StatesFactory>& factory) :
                     factory_(factory) {
 
 }
 
-std::shared_ptr<WizardStateInterface> HelpState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<StateInterface> HelpState::Execute(std::shared_ptr<StateContext> context) {
     factory_.lock()->GetConsolePrinter()->WriteLine("Available commands:");
     factory_.lock()->GetConsolePrinter()->WriteLine("1. add");
     factory_.lock()->GetConsolePrinter()->WriteLine("2. add_subtask");
@@ -22,5 +22,5 @@ std::shared_ptr<WizardStateInterface> HelpState::Execute(std::shared_ptr<WizardC
     factory_.lock()->GetConsolePrinter()->WriteLine("9. load");
     factory_.lock()->GetConsolePrinter()->WriteLine("10. quit");
 
-    return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
 }

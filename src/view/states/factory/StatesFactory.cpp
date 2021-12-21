@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 23.11.2021.
 //
 
-#include "WizardStatesFactory.h"
+#include "StatesFactory.h"
 #include "ConsoleStateMachine.h"
 
 #include "states/RootState.h"
@@ -22,7 +22,7 @@
 #include "states/persistence/SaveState.h"
 #include "states/persistence/LoadState.h"
 
-WizardStatesFactory::WizardStatesFactory(const std::shared_ptr<Controller>& controller,
+StatesFactory::StatesFactory(const std::shared_ptr<Controller>& controller,
                                          const std::shared_ptr<ConsolePrinter>& printer,
                                          const std::shared_ptr<ConsoleReader>& reader) :
                                          controller_(controller),
@@ -31,7 +31,7 @@ WizardStatesFactory::WizardStatesFactory(const std::shared_ptr<Controller>& cont
 
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetStateByCommand(const std::string &command) {
+std::shared_ptr<StateInterface> StatesFactory::GetStateByCommand(const std::string &command) {
     if (command == "add") {
         return GetLazyStateByStatesEnum(States::kAddTask);
     } else if (command == "add_subtask") {
@@ -59,11 +59,11 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetStateByCommand(con
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetInitialState() {
+std::shared_ptr<StateInterface> StatesFactory::GetInitialState() {
     return GetLazyStateByStatesEnum(States::kRoot);
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const QuitState& state, const MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const QuitState& state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -77,7 +77,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const Qu
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const AddTaskState &state, const MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const AddTaskState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -91,7 +91,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const Ad
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const AddSubTaskState& state, const MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const AddSubTaskState& state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -105,7 +105,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const Ad
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const EditTaskState &state, const MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const EditTaskState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -119,7 +119,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const Ed
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const InputTaskTitleState &state, const MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const InputTaskTitleState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::NEXT: {
             return GetLazyStateByStatesEnum(States::kInputTaskPriority);
@@ -130,7 +130,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const In
     };
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const InputTaskPriorityState &state, const MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const InputTaskPriorityState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kInputTaskTitle);
@@ -144,7 +144,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const In
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const InputTaskDueDateState &state, const MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const InputTaskDueDateState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kInputTaskPriority);
@@ -158,7 +158,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const In
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const HelpState &state, MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const HelpState &state, MoveType move_type) {
     switch (move_type) {
         default: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -166,7 +166,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const He
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const RootState &state, WizardStatesFactory::MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const RootState &state, StatesFactory::MoveType move_type) {
     switch (move_type) {
         default: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -174,7 +174,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const Ro
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const ShowState &state, WizardStatesFactory::MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const ShowState &state, StatesFactory::MoveType move_type) {
     switch (move_type) {
         default: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -182,7 +182,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const Sh
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const CompleteTaskState &state, WizardStatesFactory::MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const CompleteTaskState &state, StatesFactory::MoveType move_type) {
     switch (move_type) {
         case MoveType::ERROR: {
             return GetLazyStateByStatesEnum(States::kComplete);
@@ -193,7 +193,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const Co
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const DeleteTaskState& state, const MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const DeleteTaskState& state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::ERROR: {
             return GetLazyStateByStatesEnum(States::kDelete);
@@ -204,7 +204,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const De
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const SetLabelState &state, const WizardStatesFactory::MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const SetLabelState &state, const StatesFactory::MoveType move_type) {
     switch (move_type) {
         case MoveType::ERROR: {
             return GetLazyStateByStatesEnum(States::kSetLabel);
@@ -215,7 +215,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const Se
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const SaveState &state, const WizardStatesFactory::MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const SaveState &state, const StatesFactory::MoveType move_type) {
     switch(move_type) {
         case MoveType::ERROR: {
             return GetLazyStateByStatesEnum(States::kSave);
@@ -226,7 +226,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const Sa
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const LoadState &state, const WizardStatesFactory::MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const LoadState &state, const StatesFactory::MoveType move_type) {
     switch(move_type) {
         case MoveType::ERROR: {
             return GetLazyStateByStatesEnum(States::kSave);
@@ -237,7 +237,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetNextState(const Lo
     }
 }
 
-std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetLazyStateByStatesEnum(WizardStatesFactory::States state) {
+std::shared_ptr<StateInterface> StatesFactory::GetLazyStateByStatesEnum(StatesFactory::States state) {
     auto found_state = states_.find(state);
     if (found_state == states_.end()) {
         InitializeState(state);
@@ -246,7 +246,7 @@ std::shared_ptr<WizardStateInterface> WizardStatesFactory::GetLazyStateByStatesE
     return found_state->second;
 }
 
-void WizardStatesFactory::InitializeState(States state) {
+void StatesFactory::InitializeState(States state) {
     switch (state) {
         case States::kRoot: {
             states_.insert_or_assign(state, std::make_shared<RootState>(shared_from_this()));
@@ -315,18 +315,18 @@ void WizardStatesFactory::InitializeState(States state) {
     }
 }
 
-std::shared_ptr<ConsolePrinter> WizardStatesFactory::GetConsolePrinter() const {
+std::shared_ptr<ConsolePrinter> StatesFactory::GetConsolePrinter() const {
     return printer_;
 }
 
-std::shared_ptr<ConsoleReader> WizardStatesFactory::GetConsoleReader() const {
+std::shared_ptr<ConsoleReader> StatesFactory::GetConsoleReader() const {
     return reader_;
 }
 
-std::shared_ptr<Controller> WizardStatesFactory::GetController() const {
+std::shared_ptr<Controller> StatesFactory::GetController() const {
     return controller_;
 }
 
-std::unique_ptr<ConsoleStateMachine> WizardStatesFactory::CreateStateMachine() const {
+std::unique_ptr<ConsoleStateMachine> StatesFactory::CreateStateMachine() const {
     return std::make_unique<ConsoleStateMachine>();
 }

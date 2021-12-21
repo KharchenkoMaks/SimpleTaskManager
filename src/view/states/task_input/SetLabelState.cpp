@@ -5,16 +5,16 @@
 #include "SetLabelState.h"
 #include "console_io/ConsoleUtilities.h"
 
-SetLabelState::SetLabelState(const std::shared_ptr<WizardStatesFactory>& factory) :
+SetLabelState::SetLabelState(const std::shared_ptr<StatesFactory>& factory) :
                             factory_(factory) {
 
 }
 
-std::shared_ptr<WizardStateInterface> SetLabelState::Execute(std::shared_ptr<WizardContext> context) {
+std::shared_ptr<StateInterface> SetLabelState::Execute(std::shared_ptr<StateContext> context) {
     std::optional<TaskId> task_id = console_io::util::GetTaskIdFromUser("Task ID", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
     if (!task_id.has_value()){
         factory_.lock()->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
-        return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::PREVIOUS);
+        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
     }
 
     std::string label_to_set = console_io::util::GetUserInput("Label", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
@@ -22,11 +22,11 @@ std::shared_ptr<WizardStateInterface> SetLabelState::Execute(std::shared_ptr<Wiz
     switch (set_label_result) {
         case TaskActionResult::SUCCESS: {
             factory_.lock()->GetConsolePrinter()->WriteLine("Label was successfully set.");
-            return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::NEXT);
+            return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
         }
         default: {
             factory_.lock()->GetConsolePrinter()->WriteError("Task with such id wasn't found.");
-            return factory_.lock()->GetNextState(*this, WizardStatesFactory::MoveType::ERROR);
+            return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
         }
     }
 }

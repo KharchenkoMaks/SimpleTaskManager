@@ -10,7 +10,7 @@
 
 #include "TaskManager.h"
 #include "ConsoleStateMachine.h"
-#include "states/factory/WizardStatesFactory.h"
+#include "states/factory/StatesFactory.h"
 #include "Controller.h"
 
 using ::testing::Return;
@@ -28,7 +28,7 @@ TEST_F(IntegrationTests, DISABLED_Script1) {
     std::shared_ptr<Controller> controller =
             std::make_shared<Controller>(std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
                                          std::make_unique<TaskValidator>());
-    std::shared_ptr<WizardStatesFactory> states_factory = std::make_shared<WizardStatesFactory>(controller,
+    std::shared_ptr<StatesFactory> states_factory = std::make_shared<StatesFactory>(controller,
                                                                                                 printer_,
                                                                                                 reader_);
     ConsoleStateMachine state_machine;
@@ -58,5 +58,5 @@ TEST_F(IntegrationTests, DISABLED_Script1) {
     EXPECT_CALL(*printer_, Write(testing::_)).Times(testing::AnyNumber());
     EXPECT_CALL(*printer_, WriteLine(expected_show)).Times(1);
     EXPECT_CALL(*printer_, WriteLine(testing::_)).Times(testing::AnyNumber());
-    state_machine.Run(std::make_shared<WizardContext>(), states_factory->GetInitialState());
+    state_machine.Run(std::make_shared<StateContext>(), states_factory->GetInitialState());
 }

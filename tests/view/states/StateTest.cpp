@@ -53,10 +53,10 @@ public:
         EXPECT_CALL(*dependencies_, GetStatesFactory()).WillRepeatedly(Return(factory_));
         EXPECT_CALL(*dependencies_, GetController()).WillRepeatedly(Return(controller_));
     }
-    void ExecuteAndExpectReturn(const std::shared_ptr<WizardStateInterface>& testing_state,
-                                const std::shared_ptr<WizardStateInterface>& expected_next_state) {
+    void ExecuteAndExpectReturn(const std::shared_ptr<StateInterface>& testing_state,
+                                const std::shared_ptr<StateInterface>& expected_next_state) {
         // Execute state
-        std::shared_ptr<WizardStateInterface> actual_next_state = testing_state->Execute(wizard_context_);
+        std::shared_ptr<StateInterface> actual_next_state = testing_state->Execute(wizard_context_);
         // Assert
         EXPECT_EQ(expected_next_state, actual_next_state);
     }
@@ -126,13 +126,13 @@ TEST_F(StateTest, ShowStateExecute_ShouldPrintTasksReceivedFromController) {
     tt3.set_allocated_task(new Task(t3));
     tt3.set_allocated_parent_id(new TaskId(parent_task_id));
     const std::vector<TaskTransfer> returned_tasks_from_controller { tt1, tt3, tt2 };
-    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
     // Assert
     EXPECT_CALL(*controller_, GetAllTasks()).Times(1).WillOnce(Return(returned_tasks_from_controller));
-    EXPECT_CALL(*factory_, GetNextState(An<const ShowState&>(), WizardStatesFactory::MoveType::NEXT))
+    EXPECT_CALL(*factory_, GetNextState(An<const ShowState&>(), StatesFactory::MoveType::NEXT))
         .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
-    std::shared_ptr<WizardStateInterface> show_state = std::make_shared<ShowState>(std::move(dependencies_));
+    std::shared_ptr<StateInterface> show_state = std::make_shared<ShowState>(std::move(dependencies_));
     ExecuteAndExpectReturn(show_state, expected_next_state);
 }
 
@@ -140,12 +140,12 @@ TEST_F(StateTest, RootStateExecute_ShouldReturnNextStateFromFactory) {
     // Arrange
     const std::string expected_command = "help";
     AddExpectedRead("", expected_command);
-    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<HelpState>(nullptr);
+    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<HelpState>(nullptr);
     // Assert
     EXPECT_CALL(*factory_, GetStateByCommand(expected_command))
         .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
-    std::shared_ptr<WizardStateInterface> root_state = std::make_shared<RootState>(std::move(dependencies_));
+    std::shared_ptr<StateInterface> root_state = std::make_shared<RootState>(std::move(dependencies_));
     ExecuteAndExpectReturn(root_state, expected_next_state);
 }
 
@@ -154,38 +154,38 @@ TEST_F(StateTest, RootStateExecute_ShouldWriteErrorAndReturnRootStateOnWrongComm
     const std::string expected_command = "a";
     AddExpectedPrint(PrintForm::WRITE_ERROR, "Unknown command! Use help.");
     AddExpectedRead("", expected_command);
-    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
     // Assert
     EXPECT_CALL(*factory_, GetStateByCommand(expected_command))
             .Times(1).WillOnce(Return(nullptr));
-    EXPECT_CALL(*factory_, GetNextState(An<const RootState&>(), WizardStatesFactory::MoveType::ERROR))
+    EXPECT_CALL(*factory_, GetNextState(An<const RootState&>(), StatesFactory::MoveType::ERROR))
             .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
-    std::shared_ptr<WizardStateInterface> root_state = std::make_shared<RootState>(std::move(dependencies_));
+    std::shared_ptr<StateInterface> root_state = std::make_shared<RootState>(std::move(dependencies_));
     ExecuteAndExpectReturn(root_state, expected_next_state);
 }
 
 TEST_F(StateTest, QuitStateExecute_ShouldReturnNextStateOnPositiveInput) {
     // Arrange
-    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<EndState>(nullptr);
+    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<EndState>(nullptr);
     // Assert
     EXPECT_CALL(*dependencies_, UserConfirm("Are you sure?")).Times(1).WillOnce(Return(true));
-    EXPECT_CALL(*factory_, GetNextState(An<const QuitState&>(), WizardStatesFactory::MoveType::NEXT))
+    EXPECT_CALL(*factory_, GetNextState(An<const QuitState&>(), StatesFactory::MoveType::NEXT))
             .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
-    std::shared_ptr<WizardStateInterface> quit_state = std::make_shared<QuitState>(std::move(dependencies_));
+    std::shared_ptr<StateInterface> quit_state = std::make_shared<QuitState>(std::move(dependencies_));
     ExecuteAndExpectReturn(quit_state, expected_next_state);
 }
 
 TEST_F(StateTest, QuitStateExecute_ShouldReturnPreviousStateOnNegativeResult) {
     // Arrange
-    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
     // Assert
     EXPECT_CALL(*dependencies_, UserConfirm("Are you sure?")).Times(1).WillOnce(Return(false));
-    EXPECT_CALL(*factory_, GetNextState(An<const QuitState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+    EXPECT_CALL(*factory_, GetNextState(An<const QuitState&>(), StatesFactory::MoveType::PREVIOUS))
             .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
-    std::shared_ptr<WizardStateInterface> quit_state = std::make_shared<QuitState>(std::move(dependencies_));
+    std::shared_ptr<StateInterface> quit_state = std::make_shared<QuitState>(std::move(dependencies_));
     ExecuteAndExpectReturn(quit_state, expected_next_state);
 }
 
@@ -202,41 +202,41 @@ TEST_F(StateTest, HelpState_ShouldPrintHelpMessage) {
     AddExpectedPrint(PrintForm::WRITE_LINE, "8. save");
     AddExpectedPrint(PrintForm::WRITE_LINE, "9. load");
     AddExpectedPrint(PrintForm::WRITE_LINE, "10. quit");
-    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
     // Assert
-    EXPECT_CALL(*factory_, GetNextState(An<const HelpState&>(), WizardStatesFactory::MoveType::NEXT))
+    EXPECT_CALL(*factory_, GetNextState(An<const HelpState&>(), StatesFactory::MoveType::NEXT))
             .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
-    std::shared_ptr<WizardStateInterface> help_state = std::make_shared<HelpState>(std::move(dependencies_));
+    std::shared_ptr<StateInterface> help_state = std::make_shared<HelpState>(std::move(dependencies_));
     ExecuteAndExpectReturn(help_state, expected_next_state);
 }
 
 TEST_F(StateTest, EndState_ShouldReturnNullptr) {
     // Arrange
-    std::shared_ptr<WizardStateInterface> expected_next_state = nullptr;
-    std::shared_ptr<WizardStateInterface> end_state = std::make_shared<EndState>(std::move(dependencies_));
+    std::shared_ptr<StateInterface> expected_next_state = nullptr;
+    std::shared_ptr<StateInterface> end_state = std::make_shared<EndState>(std::move(dependencies_));
     ExecuteAndExpectReturn(end_state, expected_next_state);
 }
 
 TEST_F(StateTest, DeleteTaskStateSuccess_ShouldAskControllerToDeleteTaskAndReturnPreviousState) {
     // Arrange
-    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
     const TaskId expected_deleted_task_id = StringToTaskId("10").value();
     // Assert
     AddExpectedReadId("Task ID", expected_deleted_task_id);
     EXPECT_CALL(*controller_, DeleteTask(expected_deleted_task_id))
         .Times(1).WillOnce(Return(TaskActionResult::SUCCESS));
     AddExpectedPrint(PrintForm::WRITE_LINE, "Task was successfully deleted.");
-    EXPECT_CALL(*factory_, GetNextState(testing::An<const DeleteTaskState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const DeleteTaskState&>(), StatesFactory::MoveType::PREVIOUS))
         .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
-    std::shared_ptr<WizardStateInterface> delete_state = std::make_shared<DeleteTaskState>(std::move(dependencies_));
+    std::shared_ptr<StateInterface> delete_state = std::make_shared<DeleteTaskState>(std::move(dependencies_));
     ExecuteAndExpectReturn(delete_state, expected_next_state);
 }
 
 TEST_F(StateTest, SaveStateSuccess_ShouldAskUserForFileNameAndPrintSuccessMessage) {
     // Arrange
-    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
     const std::string file_name = "test_file";
     // Assert
     AddExpectedRead("File name", file_name);
@@ -244,16 +244,16 @@ TEST_F(StateTest, SaveStateSuccess_ShouldAskUserForFileNameAndPrintSuccessMessag
         .Times(1)
         .WillOnce(Return(persistence::SaveLoadStatus::SUCCESS));
     AddExpectedPrint(PrintForm::WRITE_LINE, "Tasks were successfully saved to " + file_name);
-    EXPECT_CALL(*factory_, GetNextState(testing::An<const SaveState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const SaveState&>(), StatesFactory::MoveType::PREVIOUS))
         .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
-    std::shared_ptr<WizardStateInterface> save_state = std::make_shared<SaveState>(std::move(dependencies_));
+    std::shared_ptr<StateInterface> save_state = std::make_shared<SaveState>(std::move(dependencies_));
     ExecuteAndExpectReturn(save_state, expected_next_state);
 }
 
 TEST_F(StateTest, SaveStateFail_ShouldAskUserForFileNameAndPrintErrorMessage) {
     // Arrange
-    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
     const std::string file_name = "test_file";
     // Assert
     AddExpectedRead("File name", file_name);
@@ -261,16 +261,16 @@ TEST_F(StateTest, SaveStateFail_ShouldAskUserForFileNameAndPrintErrorMessage) {
         .Times(1)
         .WillOnce(Return(persistence::SaveLoadStatus::FILE_WAS_NOT_OPENED));
     AddExpectedPrint(PrintForm::WRITE_ERROR, "Couldn't open file " + file_name + ", try again!");
-    EXPECT_CALL(*factory_, GetNextState(testing::An<const SaveState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const SaveState&>(), StatesFactory::MoveType::PREVIOUS))
             .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
-    std::shared_ptr<WizardStateInterface> save_state = std::make_shared<SaveState>(std::move(dependencies_));
+    std::shared_ptr<StateInterface> save_state = std::make_shared<SaveState>(std::move(dependencies_));
     ExecuteAndExpectReturn(save_state, expected_next_state);
 }
 
 TEST_F(StateTest, LoadStateSuccess_ShouldAskUserForFileNameAndPrintSuccessMessage) {
     // Arrange
-    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
     const std::string file_name = "test_file";
     // Assert
     AddExpectedRead("File name", file_name);
@@ -278,16 +278,16 @@ TEST_F(StateTest, LoadStateSuccess_ShouldAskUserForFileNameAndPrintSuccessMessag
         .Times(1)
         .WillOnce(Return(persistence::SaveLoadStatus::SUCCESS));
     AddExpectedPrint(PrintForm::WRITE_LINE, "Tasks were successfully loaded!");
-    EXPECT_CALL(*factory_, GetNextState(testing::An<const LoadState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const LoadState&>(), StatesFactory::MoveType::PREVIOUS))
             .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
-    std::shared_ptr<WizardStateInterface> load_state = std::make_shared<LoadState>(std::move(dependencies_));
+    std::shared_ptr<StateInterface> load_state = std::make_shared<LoadState>(std::move(dependencies_));
     ExecuteAndExpectReturn(load_state, expected_next_state);
 }
 
 TEST_F(StateTest, LoadStateFailFileNotOpened_ShouldAskUserForFileNameAndPrintErrorMessage) {
     // Arrange
-    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
     const std::string file_name = "test_file";
     // Assert
     AddExpectedRead("File name", file_name);
@@ -295,16 +295,16 @@ TEST_F(StateTest, LoadStateFailFileNotOpened_ShouldAskUserForFileNameAndPrintErr
             .Times(1)
             .WillOnce(Return(persistence::SaveLoadStatus::FILE_WAS_NOT_OPENED));
     AddExpectedPrint(PrintForm::WRITE_ERROR, "Couldn't open file " + file_name + ", try again!");
-    EXPECT_CALL(*factory_, GetNextState(testing::An<const LoadState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const LoadState&>(), StatesFactory::MoveType::PREVIOUS))
             .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
-    std::shared_ptr<WizardStateInterface> load_state = std::make_shared<LoadState>(std::move(dependencies_));
+    std::shared_ptr<StateInterface> load_state = std::make_shared<LoadState>(std::move(dependencies_));
     ExecuteAndExpectReturn(load_state, expected_next_state);
 }
 
 TEST_F(StateTest, LoadStateFailFileStructure_ShouldAskUserForFileNameAndPrintErrorMessage) {
     // Arrange
-    std::shared_ptr<WizardStateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
     const std::string file_name = "test_file";
     // Assert
     AddExpectedRead("File name", file_name);
@@ -312,9 +312,9 @@ TEST_F(StateTest, LoadStateFailFileStructure_ShouldAskUserForFileNameAndPrintErr
             .Times(1)
             .WillOnce(Return(persistence::SaveLoadStatus::INVALID_FILE_STRUCTURE));
     AddExpectedPrint(PrintForm::WRITE_ERROR, "Couldn't load from file, " + file_name + " is damaged.");
-    EXPECT_CALL(*factory_, GetNextState(testing::An<const LoadState&>(), WizardStatesFactory::MoveType::PREVIOUS))
+    EXPECT_CALL(*factory_, GetNextState(testing::An<const LoadState&>(), StatesFactory::MoveType::PREVIOUS))
             .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
-    std::shared_ptr<WizardStateInterface> load_state = std::make_shared<LoadState>(std::move(dependencies_));
+    std::shared_ptr<StateInterface> load_state = std::make_shared<LoadState>(std::move(dependencies_));
     ExecuteAndExpectReturn(load_state, expected_next_state);
 }

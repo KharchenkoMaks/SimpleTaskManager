@@ -5,20 +5,20 @@
 #ifndef SIMPLETASKMANAGER_CONSOLESTATEMACHINE_H
 #define SIMPLETASKMANAGER_CONSOLESTATEMACHINE_H
 
-#include "WizardContext.h"
-#include "states/abstract/WizardStateInterface.h"
+#include "StateContext.h"
+#include "states/StateInterface.h"
 
 #include <memory>
 #include <optional>
 
 class ConsoleStateMachine {
 public:
-    virtual std::shared_ptr<WizardContext> Run(const std::shared_ptr<WizardContext>& context,
-                                               const std::shared_ptr<WizardStateInterface>& initial_state);
+    virtual std::shared_ptr<StateContext> Run(const std::shared_ptr<StateContext>& context,
+                                               const std::shared_ptr<StateInterface>& initial_state);
 public:
     virtual ~ConsoleStateMachine() = default;
 private:
-    std::shared_ptr<WizardStateInterface> state_;
+    std::shared_ptr<StateInterface> state_;
 };
 
 

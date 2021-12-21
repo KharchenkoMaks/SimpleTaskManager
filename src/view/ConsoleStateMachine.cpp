@@ -4,8 +4,8 @@
 
 #include "ConsoleStateMachine.h"
 
-std::shared_ptr<WizardContext> ConsoleStateMachine::Run(const std::shared_ptr<WizardContext>& context,
-                                                        const std::shared_ptr<WizardStateInterface>& initial_state) {
+std::shared_ptr<StateContext> ConsoleStateMachine::Run(const std::shared_ptr<StateContext>& context,
+                                                        const std::shared_ptr<StateInterface>& initial_state) {
     state_ = initial_state;
     while (state_){
         state_ = state_->Execute(context);

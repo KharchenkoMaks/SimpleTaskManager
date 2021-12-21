@@ -5,25 +5,25 @@
 #ifndef SIMPLETASKMANAGER_INPUTTASKDUEDATESTATE_H
 #define SIMPLETASKMANAGER_INPUTTASKDUEDATESTATE_H
 
-#include "states/abstract/WizardStateInterface.h"
-#include "states/factory/WizardStatesFactory.h"
-#include "WizardContext.h"
+#include "states/StateInterface.h"
+#include "states/factory/StatesFactory.h"
+#include "StateContext.h"
 
 #include <string>
 #include <memory>
 #include <ctime>
 #include <optional>
 
-class InputTaskDueDateState : public WizardStateInterface {
+class InputTaskDueDateState : public StateInterface {
 public:
-    InputTaskDueDateState(const std::shared_ptr<WizardStatesFactory>& factory);
+    InputTaskDueDateState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
+    std::shared_ptr<StateInterface> Execute(std::shared_ptr<StateContext> context) override;
 private:
     std::string GetUserInputForDueDateAdd();
     std::string GetUserInputForDueDateEdit(const Task& task);
 private:
-    std::weak_ptr<WizardStatesFactory> factory_;
+    std::weak_ptr<StatesFactory> factory_;
 };
 
 

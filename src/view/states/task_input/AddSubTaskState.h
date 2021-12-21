@@ -5,25 +5,25 @@
 #ifndef SIMPLETASKMANAGER_ADDSUBTASKSTATE_H
 #define SIMPLETASKMANAGER_ADDSUBTASKSTATE_H
 
-#include "states/abstract/WizardStateInterface.h"
-#include "states/factory/WizardStatesFactory.h"
-#include "WizardContext.h"
+#include "states/StateInterface.h"
+#include "states/factory/StatesFactory.h"
+#include "StateContext.h"
 
 #include <memory>
 #include <optional>
 
-class AddSubTaskState : public WizardStateInterface {
+class AddSubTaskState : public StateInterface {
 public:
-    AddSubTaskState(const std::shared_ptr<WizardStatesFactory>& factory);
+    AddSubTaskState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<WizardStateInterface> Execute(std::shared_ptr<WizardContext> context) override;
+    std::shared_ptr<StateInterface> Execute(std::shared_ptr<StateContext> context) override;
 private:
     void ShowAddedTaskId(const TaskId& task_id);
 
-    std::pair<TaskActionResult, std::optional<TaskId>> GiveSubTaskToController(const TaskId& parent_id, const std::shared_ptr<WizardContext>& context_with_added_task);
-    std::shared_ptr<WizardStateInterface> PrintResultAndChangeState(const std::pair<TaskActionResult, std::optional<TaskId>>& added_subtask_result);
+    std::pair<TaskActionResult, std::optional<TaskId>> GiveSubTaskToController(const TaskId& parent_id, const std::shared_ptr<StateContext>& context_with_added_task);
+    std::shared_ptr<StateInterface> PrintResultAndChangeState(const std::pair<TaskActionResult, std::optional<TaskId>>& added_subtask_result);
 private:
-    std::weak_ptr<WizardStatesFactory> factory_;
+    std::weak_ptr<StatesFactory> factory_;
 };
 
 
