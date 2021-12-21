@@ -9,7 +9,7 @@ WizardContext::WizardContext() :
 
 }
 
-std::optional<Task> WizardContext::GetTask() {
+std::optional<Task> WizardContext::GetTask() const {
     if (task_.title().empty() || !task_.has_due_date()) {
         return std::nullopt;
     }
@@ -42,6 +42,22 @@ void WizardContext::SetEditingTask(const TaskId& task_id, const Task& task) {
     task_ = task;
 }
 
-std::optional<TaskId> WizardContext::GetTaskId() {
+std::optional<TaskId> WizardContext::GetTaskId() const {
     return editing_task_id_;
+}
+
+void WizardContext::SetTaskLabel(const std::string& task_label) {
+    task_label_ = task_label;
+}
+
+std::string WizardContext::GetTaskLabel() const {
+    return task_label_;
+}
+
+void WizardContext::SetFileName(const std::string& file_name) {
+    file_name_ = file_name;
+}
+
+std::string WizardContext::GetFileName() const {
+    return file_name_;
 }
