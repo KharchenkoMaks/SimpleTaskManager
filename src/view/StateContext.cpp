@@ -5,14 +5,12 @@
 #include "StateContext.h"
 
 StateContext::StateContext() :
-    editing_task_id_(std::nullopt) {
+        task_id_(std::nullopt),
+        task_(TaskBuilder::Create()) {
 
 }
 
-std::optional<Task> StateContext::GetTask() const {
-    if (task_.title().empty() || !task_.has_due_date()) {
-        return std::nullopt;
-    }
+TaskBuilder StateContext::GetTaskBuilder() const {
     return task_;
 }
 
@@ -20,38 +18,33 @@ bool StateContext::AddTaskTitle(const std::string& title) {
     if (title.empty()) {
         return false;
     }
-    task_.set_title(title);
+    task_.SetTitle(title);
     return true;
 }
 
 bool StateContext::AddTaskPriority(const Task::Priority priority) {
-    task_.set_priority(priority);
+    task_.SetPriority(priority);
     return true;
 }
 
-bool StateContext::AddTaskDueTime(const google::protobuf::Timestamp due_time) {
+bool StateContext::AddTaskDueTime(const google::protobuf::Timestamp& due_time) {
     if (due_time.seconds() <= time(0)) {
         return false;
     }
-    task_.set_allocated_due_date(new google::protobuf::Timestamp(due_time));
+    task_.SetDueDate(due_time);
     return true;
 }
 
-void StateContext::SetEditingTask(const TaskId& task_id, const Task& task) {
-    editing_task_id_ = task_id;
-    task_ = task;
-}
-
 std::optional<TaskId> StateContext::GetTaskId() const {
-    return editing_task_id_;
+    return task_id_;
 }
 
-void StateContext::SetTaskLabel(const std::string& task_label) {
-    task_label_ = task_label;
+void StateContext::AddTaskLabel(const std::string& task_label) {
+    task_.SetLabel(task_label);
 }
 
 std::string StateContext::GetTaskLabel() const {
-    return task_label_;
+    return task_.BuildTask().label();
 }
 
 void StateContext::SetFileName(const std::string& file_name) {
@@ -71,5 +64,5 @@ std::shared_ptr<CommandInterface> StateContext::GetCommand() const {
 }
 
 void StateContext::SetTaskId(const TaskId& task_id) {
-    editing_task_id_.value().CopyFrom(task_id);
+    task_id_.value().CopyFrom(task_id);
 }

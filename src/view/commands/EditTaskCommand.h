@@ -9,6 +9,7 @@
 #include "Task.pb.h"
 #include "controller/Controller.h"
 #include "console_io/ConsolePrinter.h"
+#include "utilities/TaskBuilder.h"
 
 #include <memory>
 
@@ -16,12 +17,12 @@ class EditTaskCommand : public CommandInterface {
 public:
     EditTaskCommand(const std::shared_ptr<Controller>& controller,
                     const std::shared_ptr<ConsolePrinter>& printer,
-                    const Task& task,
+                    const TaskBuilder& task_builder,
                     const TaskId& task_id);
 public:
     void Execute() override;
 private:
-    Task task_;
+    TaskBuilder task_builder_;
     TaskId task_id_;
 
     std::shared_ptr<ConsolePrinter> printer_;

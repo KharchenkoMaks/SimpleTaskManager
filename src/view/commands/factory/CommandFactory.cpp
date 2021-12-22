@@ -15,7 +15,7 @@
 #include "commands/LoadCommand.h"
 
 std::unique_ptr<CommandInterface> CommandFactory::CreateAddTaskCommand(const StateContext& context) {
-    std::optional<Task> task_to_add = context.GetTask();
+    std::optional<Task> task_to_add = context.GetTaskBuilder().BuildTask();
     if (task_to_add.has_value())
         return std::make_unique<AddTaskCommand>(controller_, printer_, task_to_add.value());
 
@@ -23,7 +23,7 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateAddTaskCommand(const Sta
 }
 
 std::unique_ptr<CommandInterface> CommandFactory::CreateAddSubTaskCommand(const StateContext& context) {
-    std::optional<Task> task_to_add = context.GetTask();
+    std::optional<Task> task_to_add = context.GetTaskBuilder().BuildTask();
     std::optional<TaskId> parent_task_id = context.GetTaskId();
     if (task_to_add.has_value() && parent_task_id.has_value())
         return std::make_unique<AddSubTaskCommand>(controller_, printer_, task_to_add.value(), parent_task_id.value());
@@ -32,10 +32,10 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateAddSubTaskCommand(const 
 }
 
 std::unique_ptr<CommandInterface> CommandFactory::CreateEditCommand(const StateContext& context) {
-    std::optional<Task> edited_task = context.GetTask();
+    TaskBuilder edited_task = context.GetTaskBuilder();
     std::optional<TaskId> edited_task_id = context.GetTaskId();
-    if (edited_task.has_value() && edited_task_id.has_value())
-        return std::make_unique<EditTaskCommand>(controller_, printer_, edited_task.value(), edited_task_id.value());
+    if (edited_task_id.has_value())
+        return std::make_unique<EditTaskCommand>(controller_, printer_, edited_task, edited_task_id.value());
 
     return nullptr;
 }

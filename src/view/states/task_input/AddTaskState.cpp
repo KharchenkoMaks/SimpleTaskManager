@@ -10,16 +10,12 @@ std::shared_ptr<StateInterface> AddTaskState::Execute(StateContext& context) {
     std::shared_ptr<StateContext> context_with_added_task = state_machine->Run(std::make_shared<StateContext>(),
                     factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT));
 
-    if (context_with_added_task->GetTask().has_value()) {
-        Task task_to_add = context_with_added_task->GetTask().value();
-        context.AddTaskTitle(task_to_add.title());
-        context.AddTaskPriority(task_to_add.priority());
-        context.AddTaskDueTime(task_to_add.due_date());
-        context.SetCommand(factory_.lock()->GetCommandFactory()->CreateAddTaskCommand(context));
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
-    } else {
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
-    }
+    Task task_to_add = context_with_added_task->GetTaskBuilder().BuildTask();
+    context.AddTaskTitle(task_to_add.title());
+    context.AddTaskPriority(task_to_add.priority());
+    context.AddTaskDueTime(task_to_add.due_date());
+    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateAddTaskCommand(context));
+    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }
 
 AddTaskState::AddTaskState(const std::shared_ptr<StatesFactory>& factory) :

@@ -22,8 +22,8 @@ std::shared_ptr<StateInterface> AddSubTaskState::Execute(StateContext& context) 
             state_machine->Run(std::make_shared<StateContext>(),
                                            factory_.lock()->GetNextState(*this,StatesFactory::MoveType::NEXT));
 
-    if (context_with_added_task->GetTask().has_value() && context_with_added_task->GetTaskId().has_value()) {
-        Task task_to_add = context_with_added_task->GetTask().value();
+    if (context_with_added_task->GetTaskId().has_value()) {
+        Task task_to_add = context_with_added_task->GetTaskBuilder().BuildTask();
         context.AddTaskTitle(task_to_add.title());
         context.AddTaskPriority(task_to_add.priority());
         context.AddTaskDueTime(task_to_add.due_date());

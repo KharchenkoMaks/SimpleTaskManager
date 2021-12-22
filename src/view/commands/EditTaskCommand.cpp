@@ -6,11 +6,11 @@
 
 EditTaskCommand::EditTaskCommand(const std::shared_ptr<Controller>& controller,
                                  const std::shared_ptr<ConsolePrinter>& printer,
-                                 const Task& task,
+                                 const TaskBuilder& task_builder,
                                  const TaskId& task_id) :
                                  controller_(controller),
                                  printer_(printer),
-                                 task_(task),
+                                 task_builder_(task_builder),
                                  task_id_(task_id) {
 
 }
