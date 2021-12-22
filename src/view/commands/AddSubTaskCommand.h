@@ -14,19 +14,13 @@
 
 class AddSubTaskCommand : public CommandInterface {
 public:
-    AddSubTaskCommand(const std::shared_ptr<Controller>& controller,
-                      const std::shared_ptr<ConsolePrinter>& printer,
-                      const Task& task,
+    AddSubTaskCommand(const Task& task,
                       const TaskId& parent_id);
 public:
-    void Execute() override;
+    void Execute(const std::shared_ptr<Controller>& controller) override;
 private:
     Task task_;
     TaskId task_parent_id_;
-
-    std::shared_ptr<ConsolePrinter> printer_;
-
-    std::shared_ptr<Controller> controller_;
 };
 
 

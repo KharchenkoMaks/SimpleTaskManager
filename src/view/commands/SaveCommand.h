@@ -14,17 +14,11 @@
 
 class SaveCommand : public CommandInterface {
 public:
-    SaveCommand(const std::shared_ptr<Controller>& controller,
-                const std::shared_ptr<ConsolePrinter>& printer,
-                const std::string& file_name);
+    SaveCommand(const std::string& file_name);
 public:
-    void Execute() override;
+    void Execute(const std::shared_ptr<Controller>& controller) override;
 private:
     std::string file_name_;
-
-    std::shared_ptr<ConsolePrinter> printer_;
-
-    std::shared_ptr<Controller> controller_;
 };
 
 

@@ -14,14 +14,9 @@
 
 class ShowTasksCommand : public CommandInterface {
 public:
-    ShowTasksCommand(const std::shared_ptr<Controller>& controller,
-                     const std::shared_ptr<ConsolePrinter>& printer);
+    ShowTasksCommand();
 public:
-    void Execute() override;
-private:
-    std::shared_ptr<Controller> controller_;
-
-    std::shared_ptr<ConsolePrinter> printer_;
+    void Execute(const std::shared_ptr<Controller>& controller) override;
 };
 
 

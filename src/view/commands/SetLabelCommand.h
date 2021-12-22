@@ -15,19 +15,13 @@
 
 class SetLabelCommand : public CommandInterface {
 public:
-    SetLabelCommand(const std::shared_ptr<Controller>& controller,
-                    const std::shared_ptr<ConsolePrinter>& printer,
-                    const TaskId& task_id,
+    SetLabelCommand(const TaskId& task_id,
                     const std::string& label);
 public:
-    void Execute() override;
+    void Execute(const std::shared_ptr<Controller>& controller) override;
 private:
     TaskId task_id_;
     std::string label_;
-
-    std::shared_ptr<ConsolePrinter> printer_;
-
-    std::shared_ptr<Controller> controller_;
 };
 
 

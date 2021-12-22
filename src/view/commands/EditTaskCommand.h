@@ -15,19 +15,13 @@
 
 class EditTaskCommand : public CommandInterface {
 public:
-    EditTaskCommand(const std::shared_ptr<Controller>& controller,
-                    const std::shared_ptr<ConsolePrinter>& printer,
-                    const TaskBuilder& task_builder,
+    EditTaskCommand(const TaskBuilder& task_builder,
                     const TaskId& task_id);
 public:
-    void Execute() override;
+    void Execute(const std::shared_ptr<Controller>& controller) override;
 private:
     TaskBuilder task_builder_;
     TaskId task_id_;
-
-    std::shared_ptr<ConsolePrinter> printer_;
-
-    std::shared_ptr<Controller> controller_;
 };
 
 

@@ -4,11 +4,7 @@
 
 #include "CompleteTaskCommand.h"
 
-CompleteTaskCommand::CompleteTaskCommand(const std::shared_ptr<Controller>& controller,
-                                         const std::shared_ptr<ConsolePrinter>& printer,
-                                         const TaskId& task_id) :
-                                         controller_(controller),
-                                         printer_(printer),
+CompleteTaskCommand::CompleteTaskCommand(const TaskId& task_id) :
                                          task_id_(task_id) {
 
 }

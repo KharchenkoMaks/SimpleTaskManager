@@ -5,9 +5,11 @@
 #ifndef SIMPLETASKMANAGER_COMMANDINTERFACE_H
 #define SIMPLETASKMANAGER_COMMANDINTERFACE_H
 
+#include "controller/Controller.h"
+
 class CommandInterface {
 public:
-    virtual void Execute() = 0;
+    virtual void Execute(const std::shared_ptr<Controller>& controller) = 0;
 };
 
 #endif //SIMPLETASKMANAGER_COMMANDINTERFACE_H

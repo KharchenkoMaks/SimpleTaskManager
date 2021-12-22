@@ -4,17 +4,13 @@
 
 #include "AddTaskCommand.h"
 
-AddTaskCommand::AddTaskCommand(const std::shared_ptr<Controller>& controller,
-                               const std::shared_ptr<ConsolePrinter>& printer,
-                               const Task& task) :
-                               controller_(controller),
-                               printer_(printer),
+AddTaskCommand::AddTaskCommand(const Task& task) :
                                task_(task) {
 
 }
 
-void AddTaskCommand::Execute() {
-    std::pair<TaskActionResult, std::optional<TaskId>> add_task_result = controller_->AddTask(task_);
+void AddTaskCommand::Execute(const std::shared_ptr<Controller>& controller) {
+    std::pair<TaskActionResult, std::optional<TaskId>> add_task_result = controller->AddTask(task_);
 
     switch (add_task_result.first) {
         case TaskActionResult::SUCCESS: {

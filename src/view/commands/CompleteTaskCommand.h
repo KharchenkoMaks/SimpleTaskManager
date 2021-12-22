@@ -14,17 +14,11 @@
 
 class CompleteTaskCommand : public CommandInterface {
 public:
-    CompleteTaskCommand(const std::shared_ptr<Controller>& controller,
-                        const std::shared_ptr<ConsolePrinter>& printer,
-                        const TaskId& task_id);
+    CompleteTaskCommand(const TaskId& task_id);
 public:
-    void Execute() override;
+    void Execute(const std::shared_ptr<Controller>& controller) override;
 private:
     TaskId task_id_;
-
-    std::shared_ptr<ConsolePrinter> printer_;
-
-    std::shared_ptr<Controller> controller_;
 };
 
 

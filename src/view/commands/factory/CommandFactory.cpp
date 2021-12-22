@@ -17,7 +17,7 @@
 std::unique_ptr<CommandInterface> CommandFactory::CreateAddTaskCommand(const StateContext& context) {
     std::optional<Task> task_to_add = context.GetTaskBuilder().BuildTask();
     if (task_to_add.has_value())
-        return std::make_unique<AddTaskCommand>(controller_, printer_, task_to_add.value());
+        return std::make_unique<AddTaskCommand>(task_to_add.value());
 
     return nullptr;
 }
@@ -26,7 +26,7 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateAddSubTaskCommand(const 
     std::optional<Task> task_to_add = context.GetTaskBuilder().BuildTask();
     std::optional<TaskId> parent_task_id = context.GetTaskId();
     if (task_to_add.has_value() && parent_task_id.has_value())
-        return std::make_unique<AddSubTaskCommand>(controller_, printer_, task_to_add.value(), parent_task_id.value());
+        return std::make_unique<AddSubTaskCommand>(task_to_add.value(), parent_task_id.value());
 
     return nullptr;
 }
@@ -35,7 +35,7 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateEditCommand(const StateC
     TaskBuilder edited_task = context.GetTaskBuilder();
     std::optional<TaskId> edited_task_id = context.GetTaskId();
     if (edited_task_id.has_value())
-        return std::make_unique<EditTaskCommand>(controller_, printer_, edited_task, edited_task_id.value());
+        return std::make_unique<EditTaskCommand>(edited_task, edited_task_id.value());
 
     return nullptr;
 }
@@ -43,7 +43,7 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateEditCommand(const StateC
 std::unique_ptr<CommandInterface> CommandFactory::CreateCompleteCommand(const StateContext& context) {
     std::optional<TaskId> task_id = context.GetTaskId();
     if (task_id.has_value())
-        return std::make_unique<CompleteTaskCommand>(controller_, printer_, task_id.value());
+        return std::make_unique<CompleteTaskCommand>(task_id.value());
 
     return nullptr;
 }
@@ -51,7 +51,7 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateCompleteCommand(const St
 std::unique_ptr<CommandInterface> CommandFactory::CreateDeleteCommand(const StateContext& context) {
     std::optional<TaskId> task_id = context.GetTaskId();
     if (task_id.has_value())
-        return std::make_unique<DeleteTaskCommand>(controller_, printer_, task_id.value());
+        return std::make_unique<DeleteTaskCommand>(task_id.value());
 
     return nullptr;
 }
@@ -60,19 +60,19 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateSetLabelCommand(const St
     std::optional<TaskId> task_id = context.GetTaskId();
     std::string task_label = context.GetTaskLabel();
     if (task_id.has_value() && !task_label.empty())
-        return std::make_unique<SetLabelCommand>(controller_, printer_, task_id.value(), task_label);
+        return std::make_unique<SetLabelCommand>(task_id.value(), task_label);
 
     return nullptr;
 }
 
 std::unique_ptr<CommandInterface> CommandFactory::CreateShowCommand(const StateContext& context) {
-    return std::make_unique<ShowTasksCommand>(controller_, printer_);
+    return std::make_unique<ShowTasksCommand>();
 }
 
 std::unique_ptr<CommandInterface> CommandFactory::CreateSaveCommand(const StateContext& context) {
     std::string file_name = context.GetFileName();
     if (!file_name.empty())
-        return std::make_unique<SaveCommand>(controller_, printer_, file_name);
+        return std::make_unique<SaveCommand>(file_name);
 
     return nullptr;
 }
@@ -80,14 +80,7 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateSaveCommand(const StateC
 std::unique_ptr<CommandInterface> CommandFactory::CreateLoadCommand(const StateContext& context) {
     std::string file_name = context.GetFileName();
     if (!file_name.empty())
-        return std::make_unique<LoadCommand>(controller_, printer_, file_name);
+        return std::make_unique<LoadCommand>(file_name);
 
     return nullptr;
-}
-
-CommandFactory::CommandFactory(std::unique_ptr<Controller> controller,
-                               const std::shared_ptr<ConsolePrinter>& printer) :
-                               controller_(std::move(controller)),
-                               printer_(printer) {
-
 }
