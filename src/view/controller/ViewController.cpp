@@ -17,6 +17,25 @@ void ViewController::RunUserInterface() {
         if (user_command == nullptr)
             break;
 
-        user_command->Execute(controller_);
+        CommandResult cmd_result = user_command->Execute(controller_);
+        
+        switch (cmd_result.GetResult()) {
+            case TaskActionResult::SUCCESS: {
+                if (cmd_result.GetTaskId() != std::nullopt) {
+                    user_interface_->PrintAddedTaskId(cmd_result.GetTaskId().value());
+                    break;
+                }
+                if (!cmd_result.GetTasksToShow().empty()) {
+                    user_interface_->ShowTasks(cmd_result.GetTasksToShow());
+                    break;
+                }
+                user_interface_->PrintResult(cmd_result.GetResult());
+                break;
+            }
+            default: {
+                user_interface_->PrintResult(cmd_result.GetResult());
+                break;
+            }
+        }
     }
 }
