@@ -26,10 +26,12 @@ TaskBuilder& TaskBuilder::SetDueDate(const google::protobuf::Timestamp& due_date
 
 TaskBuilder& TaskBuilder::SetCompletion(bool is_completed) {
     is_completed_ = is_completed;
+    return *this;
 }
 
 TaskBuilder& TaskBuilder::SetLabel(const std::string &label) {
     label_ = label;
+    return *this;
 }
 
 TaskBuilder& TaskBuilder::Merge(const Task& task) {

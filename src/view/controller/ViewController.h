@@ -5,23 +5,19 @@
 #ifndef SIMPLETASKMANAGER_VIEWCONTROLLER_H
 #define SIMPLETASKMANAGER_VIEWCONTROLLER_H
 
-#include "commands/factory/CommandFactory.h"
-#include "states/factory/StatesFactory.h"
+#include "UserInterface.h"
 #include "ConsoleStateMachine.h"
 
 #include <memory>
 
 class ViewController {
 public:
-    ViewController(std::unique_ptr<ConsoleStateMachine> state_machine,
-                   std::unique_ptr<StatesFactory> states_factory,
-                   std::unique_ptr<Controller> controller);
+    ViewController(std::unique_ptr<Controller> controller,
+                   std::unique_ptr<UserInterface> user_interface);
 public:
     void RunUserInterface();
 private:
-    std::shared_ptr<StatesFactory> states_factory_;
-
-    std::shared_ptr<ConsoleStateMachine> state_machine_;
+    std::unique_ptr<UserInterface> user_interface_;
 
     std::shared_ptr<Controller> controller_;
 };
