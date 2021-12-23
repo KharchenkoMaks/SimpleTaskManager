@@ -16,7 +16,7 @@ void ViewController::RunUserInterface() {
         std::shared_ptr<CommandInterface> user_command = user_interface_->AskUserForAction();
         if (user_command == nullptr)
             break;
-        
+
         user_command->Execute(controller_);
     }
 }

@@ -4,18 +4,26 @@
 #include "ConsoleStateMachine.h"
 #include "states/factory/StatesFactory.h"
 #include "Controller.h"
+#include "UserInterface.h"
+#include "controller/ViewController.h"
 
 #include <memory>
 
 int main() {
-    std::shared_ptr<Controller> controller =
-            std::make_shared<Controller>(std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
-                            std::make_unique<TaskValidator>());
-    std::shared_ptr<StatesFactory> states_factory = std::make_shared<StatesFactory>(controller,
-                                                                                                std::make_shared<ConsolePrinter>(),
-                                                                                                std::make_shared<ConsoleReader>());
-    ConsoleStateMachine state_machine;
-    state_machine.Run(std::make_shared<StateContext>(), states_factory->GetInitialState());
+    std::shared_ptr<CommandFactory> command_factory = std::make_shared<CommandFactory>();
+    std::shared_ptr<StatesFactory> states_factory = std::make_shared<StatesFactory>(command_factory);
+    std::unique_ptr<UserInterface> user_interface = std::make_unique<UserInterface>(
+            std::make_unique<ConsolePrinter>(),
+            std::make_unique<ConsoleReader>(),
+            states_factory);
+    std::unique_ptr<Controller> model_controller = std::make_unique<Controller>(
+            std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
+            std::make_unique<TaskValidator>());
+    std::unique_ptr<ViewController> view_controller = std::make_unique<ViewController>(
+            std::move(model_controller),
+            std::move(user_interface));
+
+    view_controller->RunUserInterface();
     return 0;
 }
 
