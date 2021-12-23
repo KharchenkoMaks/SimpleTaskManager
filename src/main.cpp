@@ -11,10 +11,10 @@
 
 int main() {
     std::shared_ptr<CommandFactory> command_factory = std::make_shared<CommandFactory>();
-    std::shared_ptr<StatesFactory> states_factory = std::make_shared<StatesFactory>(command_factory);
+    std::shared_ptr<StatesFactory> states_factory = std::make_shared<StatesFactory>(command_factory,
+                                                                                    std::make_unique<ConsolePrinter>(),
+                                                                                    std::make_unique<ConsoleReader>());
     std::unique_ptr<UserInterface> user_interface = std::make_unique<UserInterface>(
-            std::make_unique<ConsolePrinter>(),
-            std::make_unique<ConsoleReader>(),
             states_factory);
     std::unique_ptr<Controller> model_controller = std::make_unique<Controller>(
             std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),

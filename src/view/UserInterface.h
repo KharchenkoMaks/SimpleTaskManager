@@ -15,14 +15,10 @@
 
 class UserInterface {
 public:
-    UserInterface(std::unique_ptr<ConsolePrinter> printer,
-                  std::unique_ptr<ConsoleReader> reader,
-                  const std::shared_ptr<StatesFactory>& states_factory);
+    UserInterface(const std::shared_ptr<StatesFactory>& states_factory);
 public:
     std::shared_ptr<CommandInterface> AskUserForAction();
 private:
-    std::shared_ptr<ConsolePrinter> printer_;
-    std::shared_ptr<ConsoleReader> reader_;
     std::shared_ptr<StatesFactory> states_factory_;
 };
 

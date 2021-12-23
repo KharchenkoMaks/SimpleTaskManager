@@ -42,9 +42,13 @@ public:
     };
 
 public:
-    StatesFactory(const std::shared_ptr<CommandFactory>& command_factory);
+    StatesFactory(const std::shared_ptr<CommandFactory>& command_factory,
+                  const std::shared_ptr<ConsolePrinter>& printer,
+                  const std::shared_ptr<ConsoleReader>& reader);
 
 public:
+    std::shared_ptr<ConsolePrinter> GetPrinter() const;
+    std::shared_ptr<ConsoleReader> GetReader() const;
     std::shared_ptr<CommandFactory> GetCommandFactory() const;
 
 public:
@@ -99,6 +103,9 @@ private:
 
 private:
     std::map<States, std::shared_ptr<StateInterface>> states_;
+
+    std::shared_ptr<ConsolePrinter> printer_;
+    std::shared_ptr<ConsoleReader> reader_;
 
     std::shared_ptr<CommandFactory> command_factory_;
 };

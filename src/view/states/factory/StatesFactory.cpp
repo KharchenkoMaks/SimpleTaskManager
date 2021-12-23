@@ -22,8 +22,12 @@
 #include "states/persistence/SaveState.h"
 #include "states/persistence/LoadState.h"
 
-StatesFactory::StatesFactory(const std::shared_ptr<CommandFactory>& command_factory) :
-                             command_factory_(command_factory) {}
+StatesFactory::StatesFactory(const std::shared_ptr<CommandFactory>& command_factory,
+                             const std::shared_ptr<ConsolePrinter>& printer,
+                             const std::shared_ptr<ConsoleReader>& reader) :
+                             command_factory_(command_factory),
+                             printer_(printer),
+                             reader_(reader) {}
 
 std::shared_ptr<StateInterface> StatesFactory::GetStateByCommand(const std::string &command) {
     if (command == "add") {
@@ -315,4 +319,12 @@ std::unique_ptr<ConsoleStateMachine> StatesFactory::CreateStateMachine() const {
 
 std::shared_ptr<CommandFactory> StatesFactory::GetCommandFactory() const {
     return command_factory_;
+}
+
+std::shared_ptr<ConsolePrinter> StatesFactory::GetPrinter() const {
+    return printer_;
+}
+
+std::shared_ptr<ConsoleReader> StatesFactory::GetReader() const {
+    return reader_;
 }

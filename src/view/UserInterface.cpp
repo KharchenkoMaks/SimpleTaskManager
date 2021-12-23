@@ -4,11 +4,7 @@
 
 #include "UserInterface.h"
 
-UserInterface::UserInterface(std::unique_ptr<ConsolePrinter> printer,
-                             std::unique_ptr<ConsoleReader> reader,
-                             const std::shared_ptr<StatesFactory>& states_factory) :
-                             printer_(std::move(printer)),
-                             reader_(std::move(reader)),
+UserInterface::UserInterface(const std::shared_ptr<StatesFactory>& states_factory) :
                              states_factory_(states_factory) {
 
 }
