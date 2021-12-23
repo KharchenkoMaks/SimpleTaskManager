@@ -14,9 +14,9 @@
 
 class AddTaskCommand : public CommandInterface {
 public:
-    AddTaskCommand(const Task& task);
+    explicit AddTaskCommand(const Task& task);
 public:
-    void Execute(const std::shared_ptr<Controller>& controller) override;
+    CommandResult Execute(const std::shared_ptr<Controller>& controller) override;
 private:
     Task task_;
 };

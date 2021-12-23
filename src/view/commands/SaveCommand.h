@@ -16,7 +16,7 @@ class SaveCommand : public CommandInterface {
 public:
     SaveCommand(const std::string& file_name);
 public:
-    void Execute(const std::shared_ptr<Controller>& controller) override;
+    CommandResult Execute(const std::shared_ptr<Controller>& controller) override;
 private:
     std::string file_name_;
 };

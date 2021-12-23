@@ -18,7 +18,7 @@ public:
     SetLabelCommand(const TaskId& task_id,
                     const std::string& label);
 public:
-    void Execute(const std::shared_ptr<Controller>& controller) override;
+    CommandResult Execute(const std::shared_ptr<Controller>& controller) override;
 private:
     TaskId task_id_;
     std::string label_;

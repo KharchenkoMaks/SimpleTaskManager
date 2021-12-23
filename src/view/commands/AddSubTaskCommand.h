@@ -17,7 +17,7 @@ public:
     AddSubTaskCommand(const Task& task,
                       const TaskId& parent_id);
 public:
-    void Execute(const std::shared_ptr<Controller>& controller) override;
+    CommandResult Execute(const std::shared_ptr<Controller>& controller) override;
 private:
     Task task_;
     TaskId task_parent_id_;

@@ -16,7 +16,7 @@ class ShowTasksCommand : public CommandInterface {
 public:
     ShowTasksCommand();
 public:
-    void Execute(const std::shared_ptr<Controller>& controller) override;
+    CommandResult Execute(const std::shared_ptr<Controller>& controller) override;
 };
 
 

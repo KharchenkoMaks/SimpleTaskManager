@@ -18,7 +18,7 @@ public:
     EditTaskCommand(const TaskBuilder& task_builder,
                     const TaskId& task_id);
 public:
-    void Execute(const std::shared_ptr<Controller>& controller) override;
+    CommandResult Execute(const std::shared_ptr<Controller>& controller) override;
 private:
     TaskBuilder task_builder_;
     TaskId task_id_;

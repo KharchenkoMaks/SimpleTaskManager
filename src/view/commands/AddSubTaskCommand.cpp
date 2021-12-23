@@ -11,7 +11,7 @@ AddSubTaskCommand::AddSubTaskCommand(const Task& task,
 
 }
 
-void AddSubTaskCommand::Execute(const std::shared_ptr<Controller>& controller) {
+CommandResult AddSubTaskCommand::Execute(const std::shared_ptr<Controller>& controller) {
     auto controller_answer = controller->AddSubTask(task_, task_parent_id_);
     switch(controller_answer.first) {
         case TaskActionResult::SUCCESS: {

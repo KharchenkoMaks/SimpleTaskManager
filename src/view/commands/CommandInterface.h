@@ -6,10 +6,11 @@
 #define SIMPLETASKMANAGER_COMMANDINTERFACE_H
 
 #include "controller/Controller.h"
+#include "CommandResult.h"
 
 class CommandInterface {
 public:
-    virtual void Execute(const std::shared_ptr<Controller>& controller) = 0;
+    virtual CommandResult Execute(const std::shared_ptr<Controller>& controller) = 0;
 public:
     virtual ~CommandInterface() = default;
 };

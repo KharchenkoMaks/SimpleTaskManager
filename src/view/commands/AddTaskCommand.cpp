@@ -9,7 +9,7 @@ AddTaskCommand::AddTaskCommand(const Task& task) :
 
 }
 
-void AddTaskCommand::Execute(const std::shared_ptr<Controller>& controller) {
+CommandResult AddTaskCommand::Execute(const std::shared_ptr<Controller>& controller) {
     std::pair<TaskActionResult, std::optional<TaskId>> add_task_result = controller->AddTask(task_);
 
     switch (add_task_result.first) {

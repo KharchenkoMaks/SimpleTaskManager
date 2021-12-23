@@ -14,9 +14,9 @@
 
 class DeleteTaskCommand : public CommandInterface {
 public:
-    DeleteTaskCommand(const TaskId& task_id);
+    explicit DeleteTaskCommand(const TaskId& task_id);
 public:
-    void Execute(const std::shared_ptr<Controller>& controller) override;
+    CommandResult Execute(const std::shared_ptr<Controller>& controller) override;
 private:
     TaskId task_id_;
 };
