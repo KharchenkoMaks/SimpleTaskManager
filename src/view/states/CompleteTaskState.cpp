@@ -3,7 +3,7 @@
 //
 
 #include "CompleteTaskState.h"
-#include "console_io/ConsoleUtilities.h"
+#include "user_interface/console_io/ConsoleUtilities.h"
 
 CompleteTaskState::CompleteTaskState(const std::shared_ptr<StatesFactory>& factory) :
                                     factory_(factory) {

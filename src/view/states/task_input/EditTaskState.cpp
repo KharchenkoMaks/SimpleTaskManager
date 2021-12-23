@@ -3,7 +3,7 @@
 //
 
 #include "states/task_input/EditTaskState.h"
-#include "console_io/ConsoleUtilities.h"
+#include "user_interface/console_io/ConsoleUtilities.h"
 
 EditTaskState::EditTaskState(const std::shared_ptr<StatesFactory>& factory) :
                             factory_(factory) {

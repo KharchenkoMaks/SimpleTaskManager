@@ -3,7 +3,7 @@
 //
 
 #include "QuitState.h"
-#include "console_io/ConsoleUtilities.h"
+#include "user_interface/console_io/ConsoleUtilities.h"
 
 std::shared_ptr<StateInterface> QuitState::Execute(std::shared_ptr<StateContext> context) {
     if (console_io::util::UserConfirm("Are you sure?", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader())) {

@@ -3,7 +3,7 @@
 //
 
 #include "states/task_input/AddTaskState.h"
-#include "console_io/ConsoleUtilities.h"
+#include "user_interface/console_io/ConsoleUtilities.h"
 
 std::shared_ptr<StateInterface> AddTaskState::Execute(StateContext& context) {
     auto state_machine = factory_.lock()->CreateStateMachine();

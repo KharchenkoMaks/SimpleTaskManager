@@ -5,8 +5,8 @@
 #ifndef SIMPLETASKMANAGER_CONSOLEUTILITIES_H
 #define SIMPLETASKMANAGER_CONSOLEUTILITIES_H
 
-#include "ConsoleReader.h"
-#include "ConsolePrinter.h"
+#include "user_interface/console_io/ConsoleReader.h"
+#include "user_interface/console_io/ConsolePrinter.h"
 #include "Task.pb.h"
 #include "utilities/TaskConvertors.h"
 

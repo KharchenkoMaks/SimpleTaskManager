@@ -5,8 +5,8 @@
 #ifndef SIMPLETASKMANAGER_USERINTERFACE_H
 #define SIMPLETASKMANAGER_USERINTERFACE_H
 
-#include "console_io/ConsolePrinter.h"
-#include "console_io/ConsoleReader.h"
+#include "user_interface/console_io/ConsolePrinter.h"
+#include "user_interface/console_io/ConsoleReader.h"
 #include "states/factory/StatesFactory.h"
 #include "commands/CommandInterface.h"
 #include "utilities/TaskActionResult.h"

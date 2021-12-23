@@ -4,7 +4,7 @@
 
 #include "states/task_input/InputTaskPriorityState.h"
 #include "utilities/TaskConvertors.h"
-#include "console_io/ConsoleUtilities.h"
+#include "user_interface/console_io/ConsoleUtilities.h"
 
 InputTaskPriorityState::InputTaskPriorityState(const std::shared_ptr<StatesFactory>& factory) :
                                                 factory_(factory) {

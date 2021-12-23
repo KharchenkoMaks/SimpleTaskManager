@@ -8,7 +8,6 @@
 #include "CommandInterface.h"
 #include "Task.pb.h"
 #include "controller/Controller.h"
-#include "console_io/ConsolePrinter.h"
 #include "utilities/TaskBuilder.h"
 
 #include <memory>

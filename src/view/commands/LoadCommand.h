@@ -7,7 +7,6 @@
 
 #include "CommandInterface.h"
 #include "controller/Controller.h"
-#include "console_io/ConsolePrinter.h"
 
 #include <memory>
 #include <string>

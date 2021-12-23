@@ -6,8 +6,8 @@
 #define SIMPLETASKMANAGER_STATEINTERFACE_H
 
 #include "user_interface/StateContext.h"
-#include "console_io/ConsolePrinter.h"
-#include "console_io/ConsoleReader.h"
+#include "user_interface/console_io/ConsolePrinter.h"
+#include "user_interface/console_io/ConsoleReader.h"
 
 #include <memory>
 #include <optional>

@@ -8,7 +8,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "console_io/ConsolePrinter.h"
+#include "user_interface/console_io/ConsolePrinter.h"
 
 class MockConsolePrinter : public ConsolePrinter {
 public:

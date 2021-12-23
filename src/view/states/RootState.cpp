@@ -3,7 +3,7 @@
 //
 
 #include "RootState.h"
-#include "console_io/ConsoleUtilities.h"
+#include "user_interface/console_io/ConsoleUtilities.h"
 
 RootState::RootState(const std::shared_ptr<StatesFactory>& factory) :
                     factory_(factory) {

@@ -3,7 +3,7 @@
 //
 
 #include "ShowState.h"
-#include "console_io/ConsoleUtilities.h"
+#include "user_interface/console_io/ConsoleUtilities.h"
 #include "utilities/TaskConvertors.h"
 
 ShowState::ShowState(const std::shared_ptr<StatesFactory>& factory) :

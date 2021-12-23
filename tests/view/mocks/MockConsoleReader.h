@@ -8,7 +8,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "console_io/ConsoleReader.h"
+#include "user_interface/console_io/ConsoleReader.h"
 
 class MockConsoleReader : public ConsoleReader {
 public:

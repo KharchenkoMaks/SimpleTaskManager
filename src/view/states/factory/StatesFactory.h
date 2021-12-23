@@ -6,8 +6,8 @@
 #define SIMPLETASKMANAGER_STATESFACTORY_H
 
 #include "states/StateInterface.h"
-#include "console_io/ConsolePrinter.h"
-#include "console_io/ConsoleReader.h"
+#include "user_interface/console_io/ConsolePrinter.h"
+#include "user_interface/console_io/ConsoleReader.h"
 #include "Controller.h"
 #include "user_interface/ConsoleStateMachine.h"
 #include "commands/factory/CommandFactory.h"

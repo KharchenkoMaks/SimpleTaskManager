@@ -8,7 +8,6 @@
 #include "view/commands/CommandInterface.h"
 #include "controller/Controller.h"
 #include "user_interface/StateContext.h"
-#include "console_io/ConsolePrinter.h"
 
 #include <memory>
 #include <optional>
