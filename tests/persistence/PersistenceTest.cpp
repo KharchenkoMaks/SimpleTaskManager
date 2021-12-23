@@ -5,9 +5,9 @@
 #include "gtest/gtest.h"
 
 #include "persistence/TasksPersistence.h"
-#include "utilities/TaskUtilities.h"
 #include "utilities/SaveLoadStatus.h"
 #include "Task.pb.h"
+#include "utilities/TaskComparators.h"
 
 #include <utility>
 #include <google/protobuf/util/time_util.h>

@@ -3,7 +3,7 @@
 //
 
 #include "MainTask.h"
-#include "utilities/TaskUtilities.h"
+#include "utilities/TaskComparators.h"
 
 MainTask::MainTask(const Task& task) {
     task_.CopyFrom(task);

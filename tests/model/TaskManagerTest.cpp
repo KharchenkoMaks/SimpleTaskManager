@@ -9,7 +9,7 @@
 #include "id/IdGenerator.h"
 #include "Task.pb.h"
 #include "utilities/TaskActionResult.h"
-#include "utilities/TaskUtilities.h"
+#include "utilities/TaskComparators.h"
 
 #include <ctime>
 #include <string>

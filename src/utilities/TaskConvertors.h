@@ -1,9 +1,9 @@
 //
-// Created by Maksym Kharchenko on 14.12.2021.
+// Created by Maksym Kharchenko on 23.12.2021.
 //
 
-#ifndef SIMPLETASKMANAGER_TASKUTILITIES_H
-#define SIMPLETASKMANAGER_TASKUTILITIES_H
+#ifndef SIMPLETASKMANAGER_TASKCONVERTORS_H
+#define SIMPLETASKMANAGER_TASKCONVERTORS_H
 
 #include "Task.pb.h"
 
@@ -18,20 +18,13 @@ std::string TaskPriorityToString(Task::Priority priority);
 
 std::optional<Task::Priority> StringToTaskPriority(const std::string& str);
 
-bool operator<(const TaskId& task_id1, const TaskId& task_id2);
-
-bool operator==(const TaskId& task_id1, const TaskId& task_id2);
-
 std::optional<google::protobuf::Timestamp> StringToTime(const std::string& time_string, const std::string& format = "%H:%M %d.%m.%Y");
 
 std::string TimeToString(google::protobuf::Timestamp time, const std::string& format = "%H:%M %d.%m.%Y");
 
-std::string TaskToString(const TaskId& task_id, const Task& task);\
-
-bool operator==(const Task& task1, const Task& task2);
+std::string TaskToString(const TaskId& task_id, const Task& task);
 
 std::optional<TaskId> StringToTaskId(const std::string& task_id_str);
 
-bool operator==(const TaskTransfer& task1, const TaskTransfer& task2);
 
-#endif //SIMPLETASKMANAGER_TASKUTILITIES_H
+#endif //SIMPLETASKMANAGER_TASKCONVERTORS_H

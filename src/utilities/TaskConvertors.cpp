@@ -1,8 +1,8 @@
 //
-// Created by Maksym Kharchenko on 14.12.2021.
+// Created by Maksym Kharchenko on 23.12.2021.
 //
 
-#include "TaskUtilities.h"
+#include "TaskConvertors.h"
 
 std::string TaskPriorityToString(const Task::Priority priority) {
     switch(priority) {
@@ -33,14 +33,6 @@ std::optional<Task::Priority> StringToTaskPriority(const std::string& str) {
     } else {
         return std::nullopt;
     }
-}
-
-bool operator<(const TaskId& task_id1, const TaskId& task_id2) {
-    return task_id1.id() < task_id2.id();
-}
-
-bool operator==(const TaskId& task_id1, const TaskId& task_id2) {
-    return task_id1.id() == task_id2.id();
 }
 
 std::optional<google::protobuf::Timestamp> StringToTime(const std::string& time_string, const std::string& format) {
@@ -80,23 +72,6 @@ std::string TaskToString(const TaskId& task_id, const Task& task) {
     return return_string;
 }
 
-bool operator==(const Task& task1, const Task& task2) {
-    if (task1.has_due_date() && task2.has_due_date()) {
-        return task1.title() == task2.title() &&
-               task1.priority() == task2.priority() &&
-               task1.due_date() == task2.due_date() &&
-               task1.completed() == task2.completed() &&
-               task1.label() == task2.label();
-    } else if (!task1.has_due_date() && !task2.has_due_date()) {
-        return task1.title() == task2.title() &&
-               task1.priority() == task2.priority() &&
-               task1.completed() == task2.completed() &&
-               task1.label() == task2.label();
-    } else {
-        return false;
-    }
-}
-
 std::optional<TaskId> StringToTaskId(const std::string& task_id_str) {
     try {
         int id = std::stoi(task_id_str);
@@ -106,16 +81,4 @@ std::optional<TaskId> StringToTaskId(const std::string& task_id_str) {
     } catch (std::invalid_argument) {
         return std::nullopt;
     }
-}
-
-bool operator==(const TaskTransfer& task1, const TaskTransfer& task2) {
-    if (task1.has_parent_id() && task2.has_parent_id()) {
-        return task1.task_id() == task2.task_id() &&
-            task1.task() == task2.task() &&
-            task1.parent_id() == task2.parent_id();
-    } else if (!task1.has_parent_id() && !task2.has_parent_id()) {
-        return task1.task_id() == task2.task_id() &&
-               task1.task() == task2.task();
-    }
-    return false;
 }
