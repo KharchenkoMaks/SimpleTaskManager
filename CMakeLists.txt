@@ -39,13 +39,13 @@ find_program(_PROTOBUF_PROTOC protoc)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-file(GLOB_RECURSE PROTO_SOURCES CONFIGURE_DEPENDS src/proto/*.proto)
+file(GLOB_RECURSE PROTO_SOURCES CONFIGURE_DEPENDS proto/*.proto)
 message("PROTO_SOURCES ${PROTO_SOURCES}")
 
 include_directories(${Protobuf_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS src/proto/Task.proto)
+protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS proto/Task.proto)
 message("${PROTO_HDRS}")
 
 add_executable(SimpleTaskManager
