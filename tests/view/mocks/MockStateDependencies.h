@@ -9,7 +9,7 @@
 #include "gmock/gmock.h"
 
 #include "states/abstract/StateDependencies.h"
-#include "ConsoleStateMachine.h"
+#include "user_interface/ConsoleStateMachine.h"
 
 class MockStateDependencies : public StateDependencies {
 public:

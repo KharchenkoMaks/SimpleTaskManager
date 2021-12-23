@@ -9,7 +9,7 @@
 #include "console_io/ConsolePrinter.h"
 #include "console_io/ConsoleReader.h"
 #include "Controller.h"
-#include "ConsoleStateMachine.h"
+#include "user_interface/ConsoleStateMachine.h"
 #include "commands/factory/CommandFactory.h"
 
 #include <memory>

@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_MOCKCONSOLESTATEMACHINE_H
 #define SIMPLETASKMANAGER_MOCKCONSOLESTATEMACHINE_H
 
-#include "ConsoleStateMachine.h"
+#include "user_interface/ConsoleStateMachine.h"
 
 class MockConsoleStateMachine : public ConsoleStateMachine {
 public:

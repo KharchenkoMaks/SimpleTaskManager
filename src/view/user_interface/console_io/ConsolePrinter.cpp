@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 23.11.2021.
 //
 
-#include "console_io/ConsolePrinter.h"
+#include "ConsolePrinter.h"
 
 void ConsolePrinter::Write(const std::string &message) const {
     std::cout << message;

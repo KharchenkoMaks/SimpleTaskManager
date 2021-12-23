@@ -9,7 +9,7 @@
 #include "view/mocks/MockConsoleReader.h"
 
 #include "TaskManager.h"
-#include "ConsoleStateMachine.h"
+#include "user_interface/ConsoleStateMachine.h"
 #include "states/factory/StatesFactory.h"
 #include "Controller.h"
 

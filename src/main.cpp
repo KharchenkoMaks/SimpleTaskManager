@@ -1,11 +1,11 @@
 #include <iostream>
 
 #include "TaskManager.h"
-#include "ConsoleStateMachine.h"
+#include "user_interface/ConsoleStateMachine.h"
 #include "states/factory/StatesFactory.h"
 #include "Controller.h"
-#include "UserInterface.h"
-#include "controller/ViewController.h"
+#include "user_interface/UserInterface.h"
+#include "ViewController.h"
 
 #include <memory>
 

@@ -5,8 +5,8 @@
 #ifndef SIMPLETASKMANAGER_VIEWCONTROLLER_H
 #define SIMPLETASKMANAGER_VIEWCONTROLLER_H
 
-#include "UserInterface.h"
-#include "ConsoleStateMachine.h"
+#include "user_interface/UserInterface.h"
+#include "user_interface/ConsoleStateMachine.h"
 
 #include <memory>
 

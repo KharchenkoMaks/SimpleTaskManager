@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 26.11.2021.
 //
 
-#include "console_io/ConsoleReader.h"
+#include "ConsoleReader.h"
 
 std::string ConsoleReader::ReadLine() const {
     std::string line;

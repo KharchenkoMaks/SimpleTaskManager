@@ -8,6 +8,7 @@
 #include "ConsoleReader.h"
 #include "ConsolePrinter.h"
 #include "Task.pb.h"
+#include "utilities/TaskConvertors.h"
 
 #include <string>
 #include <optional>

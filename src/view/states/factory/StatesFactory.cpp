@@ -3,7 +3,7 @@
 //
 
 #include "StatesFactory.h"
-#include "ConsoleStateMachine.h"
+#include "user_interface/ConsoleStateMachine.h"
 
 #include "states/RootState.h"
 #include "states/HelpState.h"
