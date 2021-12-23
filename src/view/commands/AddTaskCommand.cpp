@@ -14,12 +14,10 @@ CommandResult AddTaskCommand::Execute(const std::shared_ptr<Controller>& control
 
     switch (add_task_result.first) {
         case TaskActionResult::SUCCESS: {
-            printer_->WriteLine("Task was successfully added. Task id: " + std::to_string(add_task_result.second.value().id()));
-            break;
+            return CommandResult::Create(add_task_result.second.value());
         }
         default: {
-            printer_->WriteError("Invalid task was given, try again.");
-            break;
+            return CommandResult::Create(add_task_result.first);
         }
     }
 }

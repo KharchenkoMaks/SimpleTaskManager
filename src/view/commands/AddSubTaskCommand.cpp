@@ -12,19 +12,13 @@ AddSubTaskCommand::AddSubTaskCommand(const Task& task,
 }
 
 CommandResult AddSubTaskCommand::Execute(const std::shared_ptr<Controller>& controller) {
-    auto controller_answer = controller->AddSubTask(task_, task_parent_id_);
-    switch(controller_answer.first) {
+    auto add_subtask_result = controller->AddSubTask(task_, task_parent_id_);
+    switch(add_subtask_result.first) {
         case TaskActionResult::SUCCESS: {
-            printer_->WriteLine("Subtask was successfully added. Task id: " + std::to_string(controller_answer.second.value().id()));
-            break;
-        }
-        case TaskActionResult::FAIL_NO_SUCH_TASK: {
-            printer_->WriteError("No parent task with this id was found.");
-            break;
+            return CommandResult::Create(add_subtask_result.second.value());
         }
         default: {
-            printer_->WriteError("Invalid task was given, try again.");
-            break;
+            return CommandResult::Create(add_subtask_result.first);
         }
     }
 }
