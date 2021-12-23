@@ -10,6 +10,8 @@
 class CommandInterface {
 public:
     virtual void Execute(const std::shared_ptr<Controller>& controller) = 0;
+public:
+    virtual ~CommandInterface() = default;
 };
 
 #endif //SIMPLETASKMANAGER_COMMANDINTERFACE_H

@@ -8,7 +8,7 @@ std::shared_ptr<StateContext> ConsoleStateMachine::Run(const std::shared_ptr<Sta
                                                         const std::shared_ptr<StateInterface>& initial_state) {
     state_ = initial_state;
     while (state_){
-        state_ = state_->Execute(context);
+        state_ = state_->Execute(*context);
     }
     return context;
 }
