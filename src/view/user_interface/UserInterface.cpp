@@ -55,7 +55,7 @@ void UserInterface::PrintResult(ControllerRequestResult action_result) {
 
 void UserInterface::ShowTasks(const std::vector<TaskTransfer>& tasks) {
     auto state_machine = states_factory_->CreateStateMachine();
-    std::shared_ptr<StateContext> context;
+    std::shared_ptr<StateContext> context = std::make_shared<StateContext>();
     context->SetTasksToShow(tasks);
     state_machine->Run(context, states_factory_->GetShowState());
 }
