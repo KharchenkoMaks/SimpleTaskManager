@@ -19,36 +19,36 @@ std::shared_ptr<CommandInterface> UserInterface::AskUserForAction() {
 }
 
 void UserInterface::PrintAddedTaskId(const TaskId& task_id) {
-    states_factory_->GetPrinter()->WriteLine("Task was successfully added, TaskId: " + std::to_string(task_id.id()));
+    states_factory_->GetConsolePrinter()->WriteLine("Task was successfully added, TaskId: " + std::to_string(task_id.id()));
 }
 
 void UserInterface::PrintResult(ControllerRequestResult action_result) {
     switch (action_result) {
         case ControllerRequestResult::SUCCESS: {
-            states_factory_->GetPrinter()->WriteLine("Action success.");
+            states_factory_->GetConsolePrinter()->WriteLine("Action success.");
             break;
         }
         case ControllerRequestResult::FAIL_INVALID_TASK: {
-            states_factory_->GetPrinter()->WriteError("Invalid task was given.");
+            states_factory_->GetConsolePrinter()->WriteError("Invalid task was given.");
             break;
         }
         case ControllerRequestResult::FAIL_UNCOMPLETED_SUBTASKS: {
-            states_factory_->GetPrinter()->WriteError("Found uncompleted subtasks of this task.");
+            states_factory_->GetConsolePrinter()->WriteError("Found uncompleted subtasks of this task.");
             break;
         }
         case ControllerRequestResult::FAIL_NOT_DELETED_SUBTASKS: {
-            states_factory_->GetPrinter()->WriteError("Found not deleted subtask of this task.");
+            states_factory_->GetConsolePrinter()->WriteError("Found not deleted subtask of this task.");
             break;
         }
         case ControllerRequestResult::FAIL_NO_SUCH_TASK: {
-            states_factory_->GetPrinter()->WriteError("No task with such id was found.");
+            states_factory_->GetConsolePrinter()->WriteError("No task with such id was found.");
             break;
         }
         case ControllerRequestResult::FILE_WAS_NOT_OPENED:
-            states_factory_->GetPrinter()->WriteError("Couldn't open the file.");
+            states_factory_->GetConsolePrinter()->WriteError("Couldn't open the file.");
             break;
         case ControllerRequestResult::FILE_DAMAGED:
-            states_factory_->GetPrinter()->WriteError("File is damaged.");
+            states_factory_->GetConsolePrinter()->WriteError("File is damaged.");
             break;
     }
 }
@@ -60,6 +60,6 @@ void UserInterface::ShowTasks(const std::vector<TaskTransfer>& tasks) {
             task_string += "\t";
         }
         task_string += TaskToString(task.task_id(), task.task());
-        states_factory_->GetPrinter()->WriteLine(task_string);
+        states_factory_->GetConsolePrinter()->WriteLine(task_string);
     }
 }

@@ -27,7 +27,7 @@ std::shared_ptr<StateInterface> AddSubTaskState::Execute(StateContext& context) 
         context.AddTaskTitle(task_to_add.title());
         context.AddTaskPriority(task_to_add.priority());
         context.AddTaskDueTime(task_to_add.due_date());
-        context.SetTaskId(context_with_added_task->GetTaskId().value());
+        context.SetTaskId(parent_task_id.value());
         context.SetCommand(factory_.lock()->GetCommandFactory()->CreateAddSubTaskCommand(context));
         return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
     } else {

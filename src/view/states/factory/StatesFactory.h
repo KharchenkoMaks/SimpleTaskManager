@@ -47,8 +47,8 @@ public:
                   const std::shared_ptr<ConsoleReader>& reader);
 
 public:
-    std::shared_ptr<ConsolePrinter> GetPrinter() const;
-    std::shared_ptr<ConsoleReader> GetReader() const;
+    std::shared_ptr<ConsolePrinter> GetConsolePrinter() const;
+    std::shared_ptr<ConsoleReader> GetConsoleReader() const;
     std::shared_ptr<CommandFactory> GetCommandFactory() const;
 
 public:

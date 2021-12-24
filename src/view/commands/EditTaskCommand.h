@@ -9,6 +9,7 @@
 #include "Task.pb.h"
 #include "controller/Controller.h"
 #include "utilities/TaskBuilder.h"
+#include "controller/ControllerRequestResult.h"
 
 #include <memory>
 

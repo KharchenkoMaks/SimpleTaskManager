@@ -321,10 +321,10 @@ std::shared_ptr<CommandFactory> StatesFactory::GetCommandFactory() const {
     return command_factory_;
 }
 
-std::shared_ptr<ConsolePrinter> StatesFactory::GetPrinter() const {
+std::shared_ptr<ConsolePrinter> StatesFactory::GetConsolePrinter() const {
     return printer_;
 }
 
-std::shared_ptr<ConsoleReader> StatesFactory::GetReader() const {
+std::shared_ptr<ConsoleReader> StatesFactory::GetConsoleReader() const {
     return reader_;
 }
