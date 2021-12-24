@@ -10,11 +10,11 @@ AddTaskCommand::AddTaskCommand(const Task& task) :
 }
 
 CommandResult AddTaskCommand::Execute(const std::shared_ptr<Controller>& controller) {
-    std::pair<TaskActionResult, std::optional<TaskId>> add_task_result = controller->AddTask(task_);
+    auto add_task_result = controller->AddTask(task_);
 
     switch (add_task_result.first) {
-        case TaskActionResult::SUCCESS: {
-            return CommandResult::Create(add_task_result.second.value());
+        case ControllerRequestResult::SUCCESS: {
+            return CommandResult::Create(add_task_result.second);
         }
         default: {
             return CommandResult::Create(add_task_result.first);

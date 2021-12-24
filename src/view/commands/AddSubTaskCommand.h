@@ -8,6 +8,7 @@
 #include "CommandInterface.h"
 #include "Task.pb.h"
 #include "controller/Controller.h"
+#include "controller/ControllerRequestResult.h"
 
 #include <memory>
 
