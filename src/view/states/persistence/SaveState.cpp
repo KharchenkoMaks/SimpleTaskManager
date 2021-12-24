@@ -10,17 +10,9 @@ SaveState::SaveState(const std::shared_ptr<StatesFactory>& factory) : factory_(f
 
 }
 
-std::shared_ptr<StateInterface> SaveState::Execute(std::shared_ptr<StateContext> context) {
+std::shared_ptr<StateInterface> SaveState::Execute(StateContext& context) {
     std::string file_name = console_io::util::GetUserInput("File name", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
-    switch (factory_.lock()->GetController()->SaveToFile(file_name)) {
-        case persistence::SaveLoadStatus::SUCCESS: {
-            factory_.lock()->GetConsolePrinter()->WriteLine("Tasks were successfully saved to " + file_name);
-            break;
-        }
-        default: {
-            factory_.lock()->GetConsolePrinter()->WriteError("Couldn't open file " + file_name + ", try again!");
-            break;
-        }
-    }
+    context.SetFileName(file_name);
+    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateSaveCommand(context));
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }
