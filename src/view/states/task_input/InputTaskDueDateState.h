@@ -18,10 +18,9 @@ class InputTaskDueDateState : public StateInterface {
 public:
     InputTaskDueDateState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<StateInterface> Execute(std::shared_ptr<StateContext> context) override;
+    std::shared_ptr<StateInterface> Execute(StateContext& context) override;
 private:
     std::string GetUserInputForDueDateAdd();
-    std::string GetUserInputForDueDateEdit(const Task& task);
 private:
     std::weak_ptr<StatesFactory> factory_;
 };

@@ -16,10 +16,9 @@ class InputTaskPriorityState : public StateInterface {
 public:
     explicit InputTaskPriorityState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<StateInterface> Execute(std::shared_ptr<StateContext> context) override;
+    std::shared_ptr<StateInterface> Execute(StateContext& context) override;
 private:
     std::string GetUserInputForPriorityAdd();
-    std::string GetUserInputForPriorityEdit(const Task& task);
 private:
     std::weak_ptr<StatesFactory> factory_;
 };

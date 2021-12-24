@@ -16,10 +16,9 @@ class InputTaskTitleState : public StateInterface {
 public:
     explicit InputTaskTitleState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<StateInterface> Execute(std::shared_ptr<StateContext> context) override;
+    std::shared_ptr<StateInterface> Execute(StateContext& context) override;
 public:
     std::string GetUserInputForTitleAdd();
-    std::string GetUserInputForTitleEdit(const Task& task);
 private:
     std::weak_ptr<StatesFactory> factory_;
 };

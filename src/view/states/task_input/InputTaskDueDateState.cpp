@@ -11,22 +11,15 @@ InputTaskDueDateState::InputTaskDueDateState(const std::shared_ptr<StatesFactory
 
 }
 
-std::shared_ptr<StateInterface> InputTaskDueDateState::Execute(std::shared_ptr<StateContext> context) {
-    std::string user_input;
-    if (context->GetTaskId().has_value()) {
-        // If TaskId has value in context, then we are editing task
-        user_input = GetUserInputForDueDateEdit(context->GetTask().value());
-    } else {
-        // If TaskId is nullopt, then we are adding new task
-        user_input = GetUserInputForDueDateAdd();
-    }
+std::shared_ptr<StateInterface> InputTaskDueDateState::Execute(StateContext& context) {
+    std::string user_input = GetUserInputForDueDateAdd();
 
     std::optional<google::protobuf::Timestamp> task_due_date = StringToTime(user_input);
     if (!task_due_date.has_value()) {
         task_due_date = StringToTime(user_input, "%d.%m.%Y");
     }
     if (task_due_date.has_value()) {
-        const bool due_time_adding_result = context->AddTaskDueTime(task_due_date.value());
+        const bool due_time_adding_result = context.AddTaskDueTime(task_due_date.value());
         if (!due_time_adding_result) {
             factory_.lock()->GetConsolePrinter()->WriteError("Due time should be in future, try again!");
             return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
@@ -37,16 +30,6 @@ std::shared_ptr<StateInterface> InputTaskDueDateState::Execute(std::shared_ptr<S
     }
 
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
-}
-
-std::string InputTaskDueDateState::GetUserInputForDueDateEdit(const Task &task) {
-    std::string user_input = console_io::util::GetUserInput("Due Date, default: " + TimeToString(task.due_date()),
-                                                            *factory_.lock()->GetConsolePrinter(),
-                                                            *factory_.lock()->GetConsoleReader());
-    if (user_input.empty()){
-        return TimeToString(task.due_date());
-    }
-    return user_input;
 }
 
 std::string InputTaskDueDateState::GetUserInputForDueDateAdd() {
