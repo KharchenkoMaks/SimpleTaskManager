@@ -9,7 +9,7 @@
 #include "user_interface/console_io/ConsoleReader.h"
 #include "states/factory/StatesFactory.h"
 #include "commands/CommandInterface.h"
-#include "utilities/TaskActionResult.h"
+#include "model/controller/ControllerRequestResult.h"
 
 #include <memory>
 #include <string>
@@ -21,7 +21,7 @@ public:
     std::shared_ptr<CommandInterface> AskUserForAction();
 public:
     void PrintAddedTaskId(const TaskId& task_id);
-    void PrintResult(TaskActionResult action_result);
+    void PrintResult(ControllerRequestResult action_result);
     void ShowTasks(const std::vector<TaskTransfer>& tasks);
 private:
     std::shared_ptr<StatesFactory> states_factory_;

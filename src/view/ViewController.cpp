@@ -20,7 +20,7 @@ void ViewController::RunUserInterface() {
         CommandResult cmd_result = user_command->Execute(controller_);
         
         switch (cmd_result.GetResult()) {
-            case TaskActionResult::SUCCESS: {
+            case ControllerRequestResult::SUCCESS: {
                 if (cmd_result.GetTaskId() != std::nullopt) {
                     user_interface_->PrintAddedTaskId(cmd_result.GetTaskId().value());
                     break;
