@@ -10,7 +10,7 @@ RootState::RootState(const std::shared_ptr<StatesFactory>& factory) :
 
 }
 
-std::shared_ptr<StateInterface> RootState::Execute(std::shared_ptr<StateContext> context) {
+std::shared_ptr<StateInterface> RootState::Execute(StateContext& context) {
     std::string command = console_io::util::GetUserInput("", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
     std::shared_ptr<StateInterface> next_state =
             factory_.lock()->GetStateByCommand(command);

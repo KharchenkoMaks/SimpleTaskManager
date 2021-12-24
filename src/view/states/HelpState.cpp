@@ -9,7 +9,7 @@ HelpState::HelpState(const std::shared_ptr<StatesFactory>& factory) :
 
 }
 
-std::shared_ptr<StateInterface> HelpState::Execute(std::shared_ptr<StateContext> context) {
+std::shared_ptr<StateInterface> HelpState::Execute(StateContext& context) {
     factory_.lock()->GetConsolePrinter()->WriteLine("Available commands:");
     factory_.lock()->GetConsolePrinter()->WriteLine("1. add");
     factory_.lock()->GetConsolePrinter()->WriteLine("2. add_subtask");

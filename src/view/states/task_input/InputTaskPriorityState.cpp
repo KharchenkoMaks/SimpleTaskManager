@@ -12,7 +12,7 @@ InputTaskPriorityState::InputTaskPriorityState(const std::shared_ptr<StatesFacto
 }
 
 std::shared_ptr<StateInterface> InputTaskPriorityState::Execute(StateContext& context) {
-    std::string user_input = user_input = GetUserInputForPriorityAdd();
+    std::string user_input = GetUserInputForPriorityAdd();
 
     std::optional<Task::Priority> task_priority = StringToTaskPriority(user_input);
     if (task_priority.has_value()) {
