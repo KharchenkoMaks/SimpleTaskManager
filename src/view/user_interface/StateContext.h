@@ -25,6 +25,7 @@ public:
     // Returns false if due time isn't added
     bool AddTaskDueTime(const google::protobuf::Timestamp& due_time);
     void AddTaskLabel(const std::string& task_label);
+    void SetTaskLabel(const std::string& label);
     std::string GetTaskLabel() const;
 
     void SetTaskBuilder(const TaskBuilder& task_builder);

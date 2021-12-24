@@ -70,3 +70,7 @@ void StateContext::SetTaskId(const TaskId& task_id) {
 void StateContext::SetTaskBuilder(const TaskBuilder& task_builder) {
     task_ = task_builder;
 }
+
+void StateContext::SetTaskLabel(const std::string& label) {
+    task_.SetLabel(label);
+}
