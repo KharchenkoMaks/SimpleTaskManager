@@ -23,6 +23,8 @@ public:
     TaskBuilder& Merge(const Task& task);
 public:
     Task BuildTask() const;
+public:
+    void operator= (const TaskBuilder& task_builder);
 private:
     TaskBuilder() = default;
 private:

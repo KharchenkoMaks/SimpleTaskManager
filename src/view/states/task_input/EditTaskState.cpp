@@ -21,10 +21,7 @@ std::shared_ptr<StateInterface> EditTaskState::Execute(StateContext& context) {
     std::shared_ptr<StateContext> context_with_edited_task =
             state_machine->Run(std::make_shared<StateContext>(),
                     factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT));
-
-    Task edited_task = context_with_edited_task->GetTaskBuilder().BuildTask();
-    context.AddTaskTitle(edited_task.title());
-    context.AddTaskPriority(edited_task.priority());
-    context.AddTaskDueTime(edited_task.due_date());
+    
+    context.SetTaskBuilder(context_with_edited_task->GetTaskBuilder());
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }

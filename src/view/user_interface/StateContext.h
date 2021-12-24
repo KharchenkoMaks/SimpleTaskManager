@@ -27,6 +27,7 @@ public:
     void AddTaskLabel(const std::string& task_label);
     std::string GetTaskLabel() const;
 
+    void SetTaskBuilder(const TaskBuilder& task_builder);
     TaskBuilder GetTaskBuilder() const;
 
     void SetTaskId(const TaskId& task_id);

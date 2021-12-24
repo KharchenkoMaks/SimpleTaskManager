@@ -59,3 +59,11 @@ Task TaskBuilder::BuildTask() const {
         task.set_allocated_due_date(new google::protobuf::Timestamp(due_date_.value()));
     return task;
 }
+
+void TaskBuilder::operator=(const TaskBuilder& task_builder) {
+    title_ = task_builder.title_;
+    priority_ = task_builder.priority_;
+    due_date_ = task_builder.due_date_;
+    is_completed_ = task_builder.is_completed_;
+    label_ = task_builder.label_;
+}
