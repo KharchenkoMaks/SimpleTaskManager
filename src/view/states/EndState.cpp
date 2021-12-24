@@ -9,6 +9,6 @@ EndState::EndState(const std::shared_ptr<StatesFactory>& factory) :
 
 }
 
-std::shared_ptr<StateInterface> EndState::Execute(std::shared_ptr<StateContext> context) {
+std::shared_ptr<StateInterface> EndState::Execute(StateContext& context) {
     return nullptr;
 }
