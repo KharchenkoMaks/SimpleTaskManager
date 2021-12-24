@@ -74,3 +74,11 @@ void StateContext::SetTaskBuilder(const TaskBuilder& task_builder) {
 void StateContext::SetTaskLabel(const std::string& label) {
     task_.SetLabel(label);
 }
+
+void StateContext::SetTasksToShow(const std::vector<TaskTransfer>& tasks) {
+    tasks_to_show_ = tasks;
+}
+
+std::vector<TaskTransfer> StateContext::GetTasksToShow() const {
+    return tasks_to_show_;
+}

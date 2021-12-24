@@ -1,23 +1,11 @@
 //
-// Created by Maksym Kharchenko on 30.11.2021.
+// Created by Maksym Kharchenko on 24.12.2021.
 //
 
 #include "ShowState.h"
-#include "user_interface/console_io/ConsoleUtilities.h"
 #include "utilities/TaskConvertors.h"
 
-ShowState::ShowState(const std::shared_ptr<StatesFactory>& factory) :
-                    factory_(factory) {
-
-}
-
-std::shared_ptr<StateInterface> ShowState::Execute(std::shared_ptr<StateContext> context) {
-    std::vector<TaskTransfer> tasks = factory_.lock()->GetController()->GetAllTasks();
-    PrintTasks(tasks);
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
-}
-
-void ShowState::PrintTasks(const std::vector<TaskTransfer>& tasks) {
+void ShowState::PrintTasks(const std::vector<TaskTransfer> &tasks) {
     for (auto task : tasks) {
         std::string task_string;
         if (task.has_parent_id()) {
@@ -26,4 +14,13 @@ void ShowState::PrintTasks(const std::vector<TaskTransfer>& tasks) {
         task_string += TaskToString(task.task_id(), task.task());
         factory_.lock()->GetConsolePrinter()->WriteLine(task_string);
     }
+}
+
+std::shared_ptr<StateInterface> ShowState::Execute(StateContext& context) {
+    PrintTasks(context.GetTasksToShow());
+    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
+}
+
+ShowState::ShowState(const std::shared_ptr<StatesFactory>& factory) : factory_(factory) {
+
 }

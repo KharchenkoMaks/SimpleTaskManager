@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "states/ShowState.h"
+#include "states/InputShowParametersState.h"
 
 #include "../mocks/MockStateDependencies.h"
 #include "../mocks/MockWizardContext.h"
@@ -129,10 +129,10 @@ TEST_F(StateTest, ShowStateExecute_ShouldPrintTasksReceivedFromController) {
     std::shared_ptr<StateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
     // Assert
     EXPECT_CALL(*controller_, GetAllTasks()).Times(1).WillOnce(Return(returned_tasks_from_controller));
-    EXPECT_CALL(*factory_, GetNextState(An<const ShowState&>(), StatesFactory::MoveType::NEXT))
+    EXPECT_CALL(*factory_, GetNextState(An<const InputShowParametersState&>(), StatesFactory::MoveType::NEXT))
         .Times(1).WillOnce(Return(expected_next_state));
     // Act & Assert
-    std::shared_ptr<StateInterface> show_state = std::make_shared<ShowState>(std::move(dependencies_));
+    std::shared_ptr<StateInterface> show_state = std::make_shared<InputShowParametersState>(std::move(dependencies_));
     ExecuteAndExpectReturn(show_state, expected_next_state);
 }
 

@@ -39,11 +39,16 @@ public:
 
     void SetCommand(std::unique_ptr<CommandInterface> command);
     std::shared_ptr<CommandInterface> GetCommand() const;
+
+    void SetTasksToShow(const std::vector<TaskTransfer>& tasks);
+    std::vector<TaskTransfer> GetTasksToShow() const;
 public:
     virtual ~StateContext() = default;
 private:
     TaskBuilder task_;
     std::optional<TaskId> task_id_;
+
+    std::vector<TaskTransfer> tasks_to_show_;
 
     std::string file_name_;
 

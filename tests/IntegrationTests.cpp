@@ -58,5 +58,5 @@ TEST_F(IntegrationTests, DISABLED_Script1) {
     EXPECT_CALL(*printer_, Write(testing::_)).Times(testing::AnyNumber());
     EXPECT_CALL(*printer_, WriteLine(expected_show)).Times(1);
     EXPECT_CALL(*printer_, WriteLine(testing::_)).Times(testing::AnyNumber());
-    state_machine.Run(std::make_shared<StateContext>(), states_factory->GetInitialState());
+    state_machine.Run(std::make_shared<StateContext>(), states_factory->GetRootState());
 }

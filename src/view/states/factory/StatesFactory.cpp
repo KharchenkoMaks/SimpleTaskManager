@@ -13,7 +13,7 @@
 #include "states/task_input/InputTaskTitleState.h"
 #include "states/task_input/InputTaskPriorityState.h"
 #include "states/task_input/InputTaskDueDateState.h"
-#include "states/ShowState.h"
+#include "states/InputShowParametersState.h"
 #include "states/CompleteTaskState.h"
 #include "states/task_input/AddSubTaskState.h"
 #include "states/DeleteTaskState.h"
@@ -21,6 +21,7 @@
 #include "states/EndState.h"
 #include "states/persistence/SaveState.h"
 #include "states/persistence/LoadState.h"
+#include "states/ShowState.h"
 
 StatesFactory::StatesFactory(const std::shared_ptr<CommandFactory>& command_factory,
                              const std::shared_ptr<ConsolePrinter>& printer,
@@ -41,7 +42,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetStateByCommand(const std::stri
     } else if (command == "complete") {
         return GetLazyStateByStatesEnum(States::kComplete);
     } else if (command == "show") {
-        return GetLazyStateByStatesEnum(States::kShow);
+        return GetLazyStateByStatesEnum(States::kInputShowParameters);
     } else if (command == "help") {
         return GetLazyStateByStatesEnum(States::kHelp);
     } else if (command == "quit") {
@@ -57,8 +58,12 @@ std::shared_ptr<StateInterface> StatesFactory::GetStateByCommand(const std::stri
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetInitialState() {
+std::shared_ptr<StateInterface> StatesFactory::GetRootState() {
     return GetLazyStateByStatesEnum(States::kRoot);
+}
+
+std::shared_ptr<StateInterface> StatesFactory::GetShowState() {
+    return GetLazyStateByStatesEnum(States::kShow);
 }
 
 std::shared_ptr<StateInterface> StatesFactory::GetNextState(const QuitState& state, const MoveType move_type) {
@@ -172,7 +177,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const RootState &sta
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const ShowState &state, StatesFactory::MoveType move_type) {
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const InputShowParametersState &state, StatesFactory::MoveType move_type) {
     switch (move_type) {
         default: {
             return GetLazyStateByStatesEnum(States::kEnd);
@@ -235,6 +240,10 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const LoadState &sta
     }
 }
 
+std::shared_ptr<StateInterface> StatesFactory::GetNextState(const ShowState& state, StatesFactory::MoveType move_type) {
+    return GetLazyStateByStatesEnum(States::kEnd);
+}
+
 std::shared_ptr<StateInterface> StatesFactory::GetLazyStateByStatesEnum(StatesFactory::States state) {
     auto found_state = states_.find(state);
     if (found_state == states_.end()) {
@@ -282,8 +291,8 @@ void StatesFactory::InitializeState(States state) {
             states_.insert_or_assign(state, std::make_shared<InputTaskDueDateState>(shared_from_this()));
             break;
         }
-        case States::kShow: {
-            states_.insert_or_assign(state, std::make_shared<ShowState>(shared_from_this()));
+        case States::kInputShowParameters: {
+            states_.insert_or_assign(state, std::make_shared<InputShowParametersState>(shared_from_this()));
             break;
         }
         case States::kComplete: {
@@ -308,6 +317,10 @@ void StatesFactory::InitializeState(States state) {
         }
         case States::kLoad: {
             states_.insert_or_assign(state, std::make_shared<LoadState>(shared_from_this()));
+            break;
+        }
+        case States::kShow: {
+            states_.insert_or_assign(state, std::make_shared<ShowState>(shared_from_this()));
             break;
         }
     }
