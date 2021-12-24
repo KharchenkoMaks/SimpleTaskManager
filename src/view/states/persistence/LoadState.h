@@ -18,7 +18,7 @@ class LoadState : public StateInterface {
 public:
     explicit LoadState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<StateInterface> Execute(std::shared_ptr<StateContext> context) override;
+    std::shared_ptr<StateInterface> Execute(StateContext& context) override;
 private:
     std::weak_ptr<StatesFactory> factory_;
 };
