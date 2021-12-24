@@ -21,54 +21,77 @@ Controller::Controller(std::unique_ptr<IModel> model,
 
 }
 
-std::pair<TaskActionResult, std::optional<TaskId>> Controller::AddTask(const Task &task) {
+std::pair<ControllerRequestResult, TaskId> Controller::AddTask(const Task& task) {
     if (task_validator_->ValidateTask(task)){
-        return model_->AddTask(task);
+        std::pair<TaskActionResult, std::optional<TaskId>> result = model_->AddTask(task);
+        if (result.first == TaskActionResult::SUCCESS) {
+            return std::make_pair(ControllerRequestResult::SUCCESS, TaskId::default_instance());
+        } else {
+            return std::make_pair(FormControllerRequestResult(result.first).value(), TaskId::default_instance());
+        }
     } else {
-        return std::pair(TaskActionResult::FAIL_INVALID_TASK, std::nullopt);
+        return std::make_pair(ControllerRequestResult::FAIL_INVALID_TASK, TaskId::default_instance());
     }
 }
 
-std::pair<TaskActionResult, std::optional<TaskId>> Controller::AddSubTask(const Task& task, const TaskId& parent_id) {
+std::pair<ControllerRequestResult, TaskId> Controller::AddSubTask(const Task& task, const TaskId& parent_id) {
     if (task_validator_->ValidateTask(task)) {
-        return model_->AddSubTask(task, parent_id);
+        std::pair<TaskActionResult, std::optional<TaskId>> result = model_->AddSubTask(task, parent_id);
+        if (result.first == TaskActionResult::SUCCESS) {
+            return std::make_pair(ControllerRequestResult::SUCCESS, TaskId::default_instance());
+        } else {
+            return std::make_pair(FormControllerRequestResult(result.first).value(), TaskId::default_instance());
+        }
     }
-    return std::pair(TaskActionResult::FAIL_INVALID_TASK, std::nullopt);
+    return std::make_pair(ControllerRequestResult::FAIL_INVALID_TASK, TaskId::default_instance());
 }
 
-TaskActionResult Controller::EditTask(const TaskId &task_id, const Task &task) {
+ControllerRequestResult Controller::EditTask(const TaskId& task_id, const Task& task) {
     if (task_validator_->ValidateTask(task) && task_validator_->ValidateTaskId(task_id)) {
-        return model_->EditTask(task_id, task);
+        TaskActionResult result = model_->EditTask(task_id, task);
+        return FormControllerRequestResult(result).value();
     }
-    return TaskActionResult::FAIL_INVALID_TASK;
+    return ControllerRequestResult::FAIL_INVALID_TASK;
 }
 
-TaskActionResult Controller::DeleteTask(const TaskId &task_id) {
+ControllerRequestResult Controller::DeleteTask(const TaskId& task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
-        return model_->DeleteTask(task_id);
+        TaskActionResult result = model_->DeleteTask(task_id);
+        if (FormControllerRequestResult(result) == std::nullopt) {
+            return ControllerRequestResult::FAIL_NOT_DELETED_SUBTASKS;
+        } else {
+            return FormControllerRequestResult(result).value();
+        }
     }
-    return TaskActionResult::FAIL_INVALID_TASK;
+    return ControllerRequestResult::FAIL_INVALID_TASK;
 }
 
-TaskActionResult Controller::DeleteTaskWithSubTasks(const TaskId& task_id) {
+ControllerRequestResult Controller::DeleteTaskWithSubTasks(const TaskId& task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
-        model_->DeleteTask(task_id, true);
+        TaskActionResult result = model_->DeleteTask(task_id, true);
+        return FormControllerRequestResult(result).value();
     }
-    return TaskActionResult::FAIL_INVALID_TASK;
+    return ControllerRequestResult::FAIL_INVALID_TASK;
 }
 
-TaskActionResult Controller::CompleteTask(const TaskId &task_id) {
+ControllerRequestResult Controller::CompleteTask(const TaskId& task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
-        return model_->CompleteTask(task_id);
+        TaskActionResult result = model_->CompleteTask(task_id);
+        if (FormControllerRequestResult(result) == std::nullopt) {
+            return ControllerRequestResult::FAIL_UNCOMPLETED_SUBTASKS;
+        } else {
+            return FormControllerRequestResult(result).value();
+        }
     }
-    return TaskActionResult::FAIL_INVALID_TASK;
+    return ControllerRequestResult::FAIL_INVALID_TASK;
 }
 
-TaskActionResult Controller::CompleteTaskWithSubTasks(const TaskId& task_id) {
+ControllerRequestResult Controller::CompleteTaskWithSubTasks(const TaskId& task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
-        model_->CompleteTask(task_id, true);
+        TaskActionResult result = model_->CompleteTask(task_id, true);
+        return FormControllerRequestResult(result).value();
     }
-    return TaskActionResult::FAIL_INVALID_TASK;
+    return ControllerRequestResult::FAIL_INVALID_TASK;
 }
 
 std::optional<TaskTransfer> Controller::GetTask(const TaskId& task_id) const {
@@ -79,22 +102,24 @@ std::vector<TaskTransfer> Controller::GetAllTasks() {
     return model_->GetTasks();
 }
 
-TaskActionResult Controller::SetTaskLabel(const TaskId& task_id, const std::string& label) {
-    return model_->SetTaskLabel(task_id, label);
+ControllerRequestResult Controller::SetTaskLabel(const TaskId& task_id, const std::string& label) {
+    TaskActionResult result = model_->SetTaskLabel(task_id, label);
+    return FormControllerRequestResult(result).value();
 }
 
-persistence::SaveLoadStatus Controller::SaveToFile(const std::string& file_name) {
-    return tm_persistence_->SaveToFile(file_name, model_->GetTasks());
+ControllerRequestResult Controller::SaveToFile(const std::string& file_name) {
+    persistence::SaveLoadStatus result = tm_persistence_->SaveToFile(file_name, model_->GetTasks());
+    return FormControllerRequestResult(result);
 }
 
-persistence::SaveLoadStatus Controller::LoadFromFile(const std::string& file_name) {
+ControllerRequestResult Controller::LoadFromFile(const std::string& file_name) {
     auto model_state = tm_persistence_->LoadFromFile(file_name);
     if (model_state.first != persistence::SaveLoadStatus::SUCCESS) {
-        return model_state.first;
+        return FormControllerRequestResult(model_state.first);
     }
     if (model_->LoadModelState(model_state.second)) {
-        return persistence::SaveLoadStatus::SUCCESS;
+        return ControllerRequestResult::SUCCESS;
     } else {
-        return persistence::SaveLoadStatus::INVALID_FILE_STRUCTURE;
+        return ControllerRequestResult::FILE_DAMAGED;
     }
 }
