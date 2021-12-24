@@ -19,5 +19,6 @@ std::shared_ptr<StateInterface> SetLabelState::Execute(StateContext& context) {
 
     std::string label_to_set = console_io::util::GetUserInput("Label", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
     context.SetTaskLabel(label_to_set);
+    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateSetLabelCommand(context));
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }

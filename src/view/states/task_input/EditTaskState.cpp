@@ -23,5 +23,6 @@ std::shared_ptr<StateInterface> EditTaskState::Execute(StateContext& context) {
                     factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT));
 
     context.SetTaskBuilder(context_with_edited_task->GetTaskBuilder());
+    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateEditCommand(context));
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }
