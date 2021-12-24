@@ -6,7 +6,7 @@
 #define SIMPLETASKMANAGER_CONTROLLER_H
 
 #include "Task.pb.h"
-#include "abstract_model/IModel.h"
+#include "IModel.h"
 #include "utilities/TaskValidator.h"
 #include "utilities/TaskActionResult.h"
 #include "utilities/SaveLoadStatus.h"

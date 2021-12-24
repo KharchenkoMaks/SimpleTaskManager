@@ -8,7 +8,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "abstract_model/IModel.h"
+#include "IModel.h"
 #include "utilities/TaskActionResult.h"
 
 class MockModel : public IModel {

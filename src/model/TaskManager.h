@@ -7,8 +7,8 @@
 
 #include "Task.pb.h"
 #include "MainTask.h"
-#include "abstract_model/IModel.h"
-#include "id/IdGenerator.h"
+#include "IModel.h"
+#include "IdGenerator.h"
 #include "utilities/TaskActionResult.h"
 #include "utilities/TaskValidator.h"
 
