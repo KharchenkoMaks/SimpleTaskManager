@@ -64,7 +64,7 @@ std::shared_ptr<CommandInterface> StateContext::GetCommand() const {
 }
 
 void StateContext::SetTaskId(const TaskId& task_id) {
-    task_id_.value().CopyFrom(task_id);
+    task_id_ = task_id;
 }
 
 void StateContext::SetTaskBuilder(const TaskBuilder& task_builder) {

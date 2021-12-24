@@ -25,7 +25,7 @@ std::pair<ControllerRequestResult, TaskId> Controller::AddTask(const Task& task)
     if (task_validator_->ValidateTask(task)){
         std::pair<TaskActionResult, std::optional<TaskId>> result = model_->AddTask(task);
         if (result.first == TaskActionResult::SUCCESS) {
-            return std::make_pair(ControllerRequestResult::SUCCESS, TaskId::default_instance());
+            return std::make_pair(ControllerRequestResult::SUCCESS, result.second.value());
         } else {
             return std::make_pair(FormControllerRequestResult(result.first).value(), TaskId::default_instance());
         }
@@ -38,7 +38,7 @@ std::pair<ControllerRequestResult, TaskId> Controller::AddSubTask(const Task& ta
     if (task_validator_->ValidateTask(task)) {
         std::pair<TaskActionResult, std::optional<TaskId>> result = model_->AddSubTask(task, parent_id);
         if (result.first == TaskActionResult::SUCCESS) {
-            return std::make_pair(ControllerRequestResult::SUCCESS, TaskId::default_instance());
+            return std::make_pair(ControllerRequestResult::SUCCESS, result.second.value());
         } else {
             return std::make_pair(FormControllerRequestResult(result.first).value(), TaskId::default_instance());
         }
