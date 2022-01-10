@@ -53,7 +53,7 @@ public:
     virtual std::shared_ptr<CommandFactory> GetCommandFactory() const;
 
 public:
-    std::unique_ptr<ConsoleStateMachine> CreateStateMachine() const;
+    virtual std::unique_ptr<ConsoleStateMachine> CreateStateMachine() const;
 
 public:
     virtual std::shared_ptr<StateInterface> GetStateByCommand(const std::string& command);

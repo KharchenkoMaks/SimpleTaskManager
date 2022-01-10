@@ -31,6 +31,7 @@ public:
     MOCK_METHOD(std::shared_ptr<ConsolePrinter>, GetConsolePrinter, (), (const, override));
     MOCK_METHOD(std::shared_ptr<ConsoleReader>, GetConsoleReader, (), (const, override));
     MOCK_METHOD(std::shared_ptr<CommandFactory>, GetCommandFactory, (), (const, override));
+    MOCK_METHOD(std::unique_ptr<ConsoleStateMachine>, CreateStateMachine, (), (const, override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKSTATESFACTORY_H

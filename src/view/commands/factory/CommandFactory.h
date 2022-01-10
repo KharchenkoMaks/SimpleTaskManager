@@ -23,6 +23,8 @@ public:
     virtual std::unique_ptr<CommandInterface> CreateShowCommand(const StateContext& context);
     virtual std::unique_ptr<CommandInterface> CreateSaveCommand(const StateContext& context);
     virtual std::unique_ptr<CommandInterface> CreateLoadCommand(const StateContext& context);
+public:
+    virtual ~CommandFactory() = default;
 };
 
 
