@@ -13,6 +13,7 @@
 #include "view/states/task_input/InputTaskTitleState.h"
 #include "view/states/task_input/InputTaskPriorityState.h"
 #include "view/states/task_input/InputTaskDueDateState.h"
+#include "view/states/task_input/SetLabelState.h"
 #include "view/states/RootState.h"
 #include "view/states/EndState.h"
 
@@ -331,6 +332,49 @@ TEST_F(StatesTests, InputTaskPriorityStateExecuteGivingEmptyTitle_ShouldPrintErr
     EXPECT_CALL(*console_printer_, WriteError("Task title was wrong, please, try again!")).Times(1);
     // Act
     std::shared_ptr<StateInterface> actual_next_state = input_title_state.Execute(input_title_context);
+    // Assert
+    EXPECT_EQ(expected_next_state, actual_next_state);
+}
+
+TEST_F(StatesTests, SetLabelStateExecute_ShouldCreateSetLabelCommand) {
+    // Arrange
+    std::shared_ptr<StateInterface> expected_next_state = std::shared_ptr<EndState>(nullptr);
+    StateContext set_label_context;
+    SetLabelState set_label_state(states_factory_);
+
+    const std::string expected_input_label = "Some Task Label";
+    // Assert
+    {
+        testing::InSequence s;
+        EXPECT_CALL(*console_printer_, Write("Task ID> ")).Times(1);
+        EXPECT_CALL(*console_printer_, Write("Label> ")).Times(1);
+    }
+    EXPECT_CALL(*console_reader_, ReadLine())
+        .WillOnce(Return("5"))
+        .WillOnce(Return(expected_input_label));
+    EXPECT_CALL(*command_factory_, CreateSetLabelCommand(testing::Ref(set_label_context))).Times(1);
+    EXPECT_CALL(*states_factory_, GetNextState(testing::An<const SetLabelState&>(), StatesFactory::MoveType::PREVIOUS))
+        .WillOnce(Return(expected_next_state));
+    // Act
+    std::shared_ptr<StateInterface> actual_next_state = set_label_state.Execute(set_label_context);
+    // Assert
+    EXPECT_EQ(expected_next_state, actual_next_state);
+}
+
+TEST_F(StatesTests, SetLabelStateExecuteGivingWrongTaskId_ShouldPrintError) {
+    // Arrange
+    std::shared_ptr<StateInterface> expected_next_state = std::shared_ptr<EndState>(nullptr);
+    StateContext set_label_context;
+    SetLabelState set_label_state(states_factory_);
+
+    const std::string expected_input_id = "some text, not task id";
+    // Assert
+    ExpectGetUserInput("Task ID", expected_input_id);
+    EXPECT_CALL(*states_factory_, GetNextState(testing::An<const SetLabelState&>(), StatesFactory::MoveType::ERROR))
+            .WillOnce(Return(expected_next_state));
+    EXPECT_CALL(*console_printer_, WriteError("Incorrect task id was given, try again!")).Times(1);
+    // Act
+    std::shared_ptr<StateInterface> actual_next_state = set_label_state.Execute(set_label_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
