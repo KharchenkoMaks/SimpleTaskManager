@@ -2,8 +2,8 @@
 // Created by Maksym Kharchenko on 03.12.2021.
 //
 
-#ifndef SIMPLETASKMANAGER_MOCKWIZARDSTATESFACTORY_H
-#define SIMPLETASKMANAGER_MOCKWIZARDSTATESFACTORY_H
+#ifndef SIMPLETASKMANAGER_MOCKSTATESFACTORY_H
+#define SIMPLETASKMANAGER_MOCKSTATESFACTORY_H
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
@@ -11,9 +11,9 @@
 #include "states/factory/StatesFactory.h"
 #include "Controller.h"
 
-class MockWizardStatesFactory : public StatesFactory {
+class MockStatesFactory : public StatesFactory {
 public:
-    MockWizardStatesFactory() : StatesFactory(nullptr, nullptr, nullptr) {}
+    MockStatesFactory() : StatesFactory(nullptr, nullptr, nullptr) {}
 
     MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const QuitState& state, MoveType move_type), (override));
     MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const RootState& state, MoveType move_type), (override));
@@ -28,6 +28,9 @@ public:
     MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const SaveState& state, MoveType move_type), (override));
     MOCK_METHOD(std::shared_ptr<StateInterface>, GetNextState, (const LoadState& state, MoveType move_type), (override));
     MOCK_METHOD(std::shared_ptr<StateInterface>, GetStateByCommand, (const std::string& command), (override));
+    MOCK_METHOD(std::shared_ptr<ConsolePrinter>, GetConsolePrinter, (), (const, override));
+    MOCK_METHOD(std::shared_ptr<ConsoleReader>, GetConsoleReader, (), (const, override));
+    MOCK_METHOD(std::shared_ptr<CommandFactory>, GetCommandFactory, (), (const, override));
 };
 
-#endif //SIMPLETASKMANAGER_MOCKWIZARDSTATESFACTORY_H
+#endif //SIMPLETASKMANAGER_MOCKSTATESFACTORY_H

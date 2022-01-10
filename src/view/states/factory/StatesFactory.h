@@ -48,9 +48,9 @@ public:
                   const std::shared_ptr<ConsoleReader>& reader);
 
 public:
-    std::shared_ptr<ConsolePrinter> GetConsolePrinter() const;
-    std::shared_ptr<ConsoleReader> GetConsoleReader() const;
-    std::shared_ptr<CommandFactory> GetCommandFactory() const;
+    virtual std::shared_ptr<ConsolePrinter> GetConsolePrinter() const;
+    virtual std::shared_ptr<ConsoleReader> GetConsoleReader() const;
+    virtual std::shared_ptr<CommandFactory> GetCommandFactory() const;
 
 public:
     std::unique_ptr<ConsoleStateMachine> CreateStateMachine() const;
