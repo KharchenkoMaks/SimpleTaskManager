@@ -14,6 +14,7 @@ std::shared_ptr<StateInterface> AddTaskState::Execute(StateContext& context) {
     context.AddTaskTitle(task_to_add.title());
     context.AddTaskPriority(task_to_add.priority());
     context.AddTaskDueTime(task_to_add.due_date());
+    context.AddTaskLabel(task_to_add.label());
     context.SetCommand(factory_.lock()->GetCommandFactory()->CreateAddTaskCommand(context));
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }

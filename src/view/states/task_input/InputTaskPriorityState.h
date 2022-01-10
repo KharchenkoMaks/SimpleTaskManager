@@ -18,8 +18,6 @@ public:
 public:
     std::shared_ptr<StateInterface> Execute(StateContext& context) override;
 private:
-    std::string GetUserInputForPriorityAdd();
-private:
     std::weak_ptr<StatesFactory> factory_;
 };
 

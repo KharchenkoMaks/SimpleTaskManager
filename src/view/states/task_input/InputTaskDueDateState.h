@@ -20,8 +20,6 @@ public:
 public:
     std::shared_ptr<StateInterface> Execute(StateContext& context) override;
 private:
-    std::string GetUserInputForDueDateAdd();
-private:
     std::weak_ptr<StatesFactory> factory_;
 };
 

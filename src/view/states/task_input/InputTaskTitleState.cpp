@@ -11,7 +11,8 @@ InputTaskTitleState::InputTaskTitleState(const std::shared_ptr<StatesFactory>& f
 }
 
 std::shared_ptr<StateInterface> InputTaskTitleState::Execute(StateContext& context) {
-    std::string user_input = GetUserInputForTitleAdd();
+    std::string user_input =
+            console_io::util::GetUserInput("Title", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
 
     if (!context.AddTaskTitle(user_input)) {
         factory_.lock()->GetConsolePrinter()->WriteError("Task title was wrong, please, try again!");
@@ -19,8 +20,4 @@ std::shared_ptr<StateInterface> InputTaskTitleState::Execute(StateContext& conte
     }
 
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
-}
-
-std::string InputTaskTitleState::GetUserInputForTitleAdd() {
-    return console_io::util::GetUserInput("Title", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
 }

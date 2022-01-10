@@ -12,7 +12,8 @@ InputTaskDueDateState::InputTaskDueDateState(const std::shared_ptr<StatesFactory
 }
 
 std::shared_ptr<StateInterface> InputTaskDueDateState::Execute(StateContext& context) {
-    std::string user_input = GetUserInputForDueDateAdd();
+    std::string user_input =
+            console_io::util::GetUserInput("Due Date, format: 12:00 01.01.2000", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
 
     std::optional<google::protobuf::Timestamp> task_due_date = StringToTime(user_input);
     if (!task_due_date.has_value()) {
@@ -30,8 +31,4 @@ std::shared_ptr<StateInterface> InputTaskDueDateState::Execute(StateContext& con
     }
 
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
-}
-
-std::string InputTaskDueDateState::GetUserInputForDueDateAdd() {
-    return console_io::util::GetUserInput("Due Date, format: 12:00 01.01.2000", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
 }
