@@ -19,7 +19,7 @@ using ::testing::InSequence;
 
 class IntegrationTests : public ::testing::Test {
 public:
-    void LaunchTest(const std::string& expected_show,
+    void LaunchTest(const std::vector<std::string>& expected_show,
                     const std::vector<std::string>& inputs) {
         std::unique_ptr<MockConsolePrinter> printer_ = std::make_unique<MockConsolePrinter>();
         std::unique_ptr<MockConsoleReader> reader_ = std::make_unique<MockConsoleReader>();
@@ -28,12 +28,21 @@ public:
             for (const std::string &input: inputs) {
                 EXPECT_CALL(*reader_, ReadLine()).WillOnce(Return(input));
             }
+            EXPECT_CALL(*reader_, ReadLine())
+                .WillOnce(Return("show"))
+                .WillOnce(Return("quit"))
+                .WillOnce(Return("y"));
         }
         EXPECT_CALL(*printer_, WriteError(testing::_)).Times(testing::AnyNumber());
         EXPECT_CALL(*printer_, Write(testing::_)).Times(testing::AnyNumber());
 
         EXPECT_CALL(*printer_, WriteLine(testing::_)).Times(testing::AnyNumber());
-        EXPECT_CALL(*printer_, WriteLine(expected_show)).Times(1);
+        {
+            InSequence s;
+            for (const std::string& show : expected_show) {
+                EXPECT_CALL(*printer_, WriteLine(show)).Times(1);
+            }
+        }
         // Arrange
         std::shared_ptr<CommandFactory> command_factory = std::make_shared<CommandFactory>();
         std::shared_ptr<StatesFactory> states_factory = std::make_shared<StatesFactory>(command_factory,
@@ -54,7 +63,6 @@ public:
 
 TEST_F(IntegrationTests, Script1) {
     // Arrange
-    std::string expected_show = "ID: 0, SomeTask, Priority: High, Due to: 16:30 01.01.2023, Completed: Yes";
     std::vector<std::string> inputs = {
             "qwe",
             "complete",
@@ -72,10 +80,41 @@ TEST_F(IntegrationTests, Script1) {
             "y",
             "complete",
             "0",
-            "y",
-            "show",
-            "quit",
             "y"
+    };
+    std::vector<std::string> expected_show = { "ID: 0, SomeTask, Priority: High, Due to: 16:30 01.01.2023, Completed: Yes" };
+    // Act
+    LaunchTest(expected_show, inputs);
+}
+
+TEST_F(IntegrationTests, Script2) {
+    // Arrange
+    std::vector<std::string> inputs = {
+            "add",
+            "First task",
+            "Low",
+            "01.02.2025",
+            "add_subtask",
+            "0",
+            "Subtask",
+            "None",
+            "15:00 15.01.2025",
+            "add_subtask",
+            "0",
+            "Second Subtask",
+            "High",
+            "15:00 15.01.2025",
+            "complete",
+            "0",
+            "n",
+            "complete",
+            "2",
+            "n",
+    };
+    std::vector<std::string> expected_show = {
+            "ID: 0, First task, Priority: Low, Due to: 00:00 01.02.2025, Completed: No",
+            "\tID: 1, Subtask, Priority: None, Due to: 15:00 15.01.2025, Completed: No",
+            "\tID: 2, Second Subtask, Priority: High, Due to: 15:00 15.01.2025, Completed: Yes"
     };
     // Act
     LaunchTest(expected_show, inputs);
