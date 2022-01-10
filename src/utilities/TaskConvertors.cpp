@@ -57,7 +57,7 @@ std::string TimeToString(google::protobuf::Timestamp time, const std::string& fo
 
 std::string TaskToString(const TaskId& task_id, const Task& task) {
     std::string return_string = "ID: " + std::to_string(task_id.id())
-                                + ", Title: " + task.title()
+                                + ", " + task.title()
                                 + ", Priority: " + TaskPriorityToString(task.priority())
                                 + ", Due to: " + TimeToString(task.due_date())
                                 + ", Completed: ";

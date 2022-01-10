@@ -12,7 +12,7 @@
 
 class MockConsoleReader : public ConsoleReader {
 public:
-    MOCK_METHOD(std::string, ReadLine, (), (override));
+    MOCK_METHOD(std::string, ReadLine, (), (const, override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKCONSOLEREADER_H

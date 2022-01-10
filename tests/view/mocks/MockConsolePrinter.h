@@ -12,9 +12,9 @@
 
 class MockConsolePrinter : public ConsolePrinter {
 public:
-    MOCK_METHOD(void, Write, (const std::string& message), (override));
-    MOCK_METHOD(void, WriteLine, (const std::string& message), (override));
-    MOCK_METHOD(void, WriteError, (const std::string& message), (override));
+    MOCK_METHOD(void, Write, (const std::string& message), (const, override));
+    MOCK_METHOD(void, WriteLine, (const std::string& message), (const, override));
+    MOCK_METHOD(void, WriteError, (const std::string& message), (const, override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKCONSOLEPRINTER_H

@@ -22,23 +22,3 @@ TEST_F(IdGeneratorTest, CreateNewTaskId_shouldIncrementTaskId){
         EXPECT_EQ(task.id(), expected);
     }
 }
-
-// Initializing IdGenerator with custom last_id
-// Should increment TaskId starting from given last_id
-TEST_F(IdGeneratorTest, InitializeIdGenerator_shouldIncrementTaskIdFromLastId){
-    // Arrange
-    const int last_id = 20;
-    const int test_times = 5;
-    IdGenerator generator(last_id);
-    // Act & Assert
-    for (int expected = last_id; expected < last_id + test_times; ++expected){
-        TaskId task = generator.CreateNewTaskId();
-        EXPECT_EQ(task.id(), expected);
-    }
-}
-
-// Initializing IdGenerator with negative last_id
-// Should throw std::invalid_argument
-TEST_F(IdGeneratorTest, InitializeIdGeneratorWithNegativeLastId_shouldThrowInvalidArgument){
-    EXPECT_THROW(IdGenerator generator(-4), std::invalid_argument);
-}

@@ -14,40 +14,37 @@
 
 class PersistenceTest : public ::testing::Test{
 public:
-    persistence::TasksPersistence::TaskManagerParameters parameters_to_save;
+    std::vector<TaskTransfer> tasks_to_save;
 
     void SetUp() override {
-        TaskId last_id;
-        last_id.set_id(42);
-        parameters_to_save.last_id_ = last_id;
         std::vector<std::pair<TaskId, Task>> tasks = GenerateTasks(5);
         TaskTransfer task_transfer;
         task_transfer.set_allocated_task_id(new TaskId(tasks[0].first));
         task_transfer.set_allocated_task(new Task(tasks[0].second));
-        parameters_to_save.tasks_.push_back(task_transfer);
+        tasks_to_save.push_back(task_transfer);
         task_transfer.clear_parent_id();
 
         task_transfer.set_allocated_task_id(new TaskId(tasks[1].first));
         task_transfer.set_allocated_task(new Task(tasks[1].second));
         task_transfer.set_allocated_parent_id(new TaskId(tasks[0].first));
-        parameters_to_save.tasks_.push_back(task_transfer);
+        tasks_to_save.push_back(task_transfer);
         task_transfer.clear_parent_id();
 
         task_transfer.set_allocated_task_id(new TaskId(tasks[2].first));
         task_transfer.set_allocated_task(new Task(tasks[2].second));
         task_transfer.set_allocated_parent_id(new TaskId(tasks[0].first));
-        parameters_to_save.tasks_.push_back(task_transfer);
+        tasks_to_save.push_back(task_transfer);
         task_transfer.clear_parent_id();
 
         task_transfer.set_allocated_task_id(new TaskId(tasks[3].first));
         task_transfer.set_allocated_task(new Task(tasks[3].second));
-        parameters_to_save.tasks_.push_back(task_transfer);
+        tasks_to_save.push_back(task_transfer);
         task_transfer.clear_parent_id();
 
         task_transfer.set_allocated_task_id(new TaskId(tasks[4].first));
         task_transfer.set_allocated_task(new Task(tasks[4].second));
         task_transfer.set_allocated_parent_id(new TaskId(tasks[3].first));
-        parameters_to_save.tasks_.push_back(task_transfer);
+        tasks_to_save.push_back(task_transfer);
     }
 private:
     std::vector<std::pair<TaskId, Task>> GenerateTasks(int count) {
@@ -71,17 +68,16 @@ TEST_F(PersistenceTest, FileReadWrite_ShouldWriteTasksAndReadTasksFromFile) {
     persistence::TasksPersistence tm_persistence;
     const std::string file_name = "some_file";
     // Act
-    const persistence::SaveLoadStatus actual_save_answer = tm_persistence.SaveToFile(file_name, parameters_to_save);
+    const persistence::SaveLoadStatus actual_save_answer = tm_persistence.SaveToFile(file_name, tasks_to_save);
     // Assert
     ASSERT_EQ(persistence::SaveLoadStatus::SUCCESS, actual_save_answer);
     // Act
-    const std::pair<persistence::SaveLoadStatus, persistence::TasksPersistence::TaskManagerParameters> actual_loaded_parameters =
+    const std::pair<persistence::SaveLoadStatus, std::vector<TaskTransfer>> actual_loaded_tasks =
             tm_persistence.LoadFromFile(file_name);
     // Assert
-    ASSERT_EQ(persistence::SaveLoadStatus::SUCCESS, actual_loaded_parameters.first);
-    EXPECT_EQ(parameters_to_save.last_id_, actual_loaded_parameters.second.last_id_);
-    ASSERT_EQ(parameters_to_save.tasks_.size(), actual_loaded_parameters.second.tasks_.size());
-    for (int i = 0; i < parameters_to_save.tasks_.size(); ++i) {
-        EXPECT_EQ(parameters_to_save.tasks_[i], actual_loaded_parameters.second.tasks_[i]);
+    ASSERT_EQ(persistence::SaveLoadStatus::SUCCESS, actual_loaded_tasks.first);
+    ASSERT_EQ(tasks_to_save.size(), actual_loaded_tasks.second.size());
+    for (int i = 0; i < tasks_to_save.size(); ++i) {
+        EXPECT_EQ(tasks_to_save[i], actual_loaded_tasks.second[i]);
     }
 }
