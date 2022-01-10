@@ -18,6 +18,6 @@ std::shared_ptr<StateInterface> CompleteTaskState::Execute(StateContext& context
     }
 
     context.SetTaskId(task_id.value());
-    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateCompleteCommand(context));
+    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateCompleteCommand(context, console_io::util::UserConfirm("Complete all subtasks?", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader())));
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }

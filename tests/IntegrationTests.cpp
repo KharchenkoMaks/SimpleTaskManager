@@ -42,8 +42,10 @@ TEST_F(IntegrationTests, Script1) {
             .WillOnce(Return("16:30 01.01.2023"))
             .WillOnce(Return("complete"))
             .WillOnce(Return("5"))
+            .WillOnce(Return("y"))
             .WillOnce(Return("complete"))
             .WillOnce(Return("0"))
+            .WillOnce(Return("y"))
             .WillOnce(Return("show"))
             .WillOnce(Return("quit"))
             .WillOnce(Return("y"));

@@ -13,11 +13,12 @@
 
 class DeleteTaskCommand : public CommandInterface {
 public:
-    explicit DeleteTaskCommand(const TaskId& task_id);
+    explicit DeleteTaskCommand(const TaskId& task_id, bool force_delete_subtasks);
 public:
     CommandResult Execute(const std::shared_ptr<Controller>& controller) override;
 private:
     TaskId task_id_;
+    bool force_delete_subtasks_;
 };
 
 

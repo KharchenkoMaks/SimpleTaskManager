@@ -13,11 +13,12 @@
 
 class CompleteTaskCommand : public CommandInterface {
 public:
-    explicit CompleteTaskCommand(const TaskId& task_id);
+    explicit CompleteTaskCommand(const TaskId& task_id, bool force_complete_subtasks);
 public:
     CommandResult Execute(const std::shared_ptr<Controller>& controller) override;
 private:
     TaskId task_id_;
+    bool force_complete_subtasks_;
 };
 
 

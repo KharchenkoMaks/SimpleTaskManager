@@ -17,8 +17,8 @@ public:
     std::unique_ptr<CommandInterface> CreateAddTaskCommand(const StateContext& context);
     std::unique_ptr<CommandInterface> CreateAddSubTaskCommand(const StateContext& context);
     std::unique_ptr<CommandInterface> CreateEditCommand(const StateContext& context);
-    std::unique_ptr<CommandInterface> CreateCompleteCommand(const StateContext& context);
-    std::unique_ptr<CommandInterface> CreateDeleteCommand(const StateContext& context);
+    std::unique_ptr<CommandInterface> CreateCompleteCommand(const StateContext& context, bool force_complete_subtasks);
+    std::unique_ptr<CommandInterface> CreateDeleteCommand(const StateContext& context, bool force_delete_subtasks);
     std::unique_ptr<CommandInterface> CreateSetLabelCommand(const StateContext& context);
     std::unique_ptr<CommandInterface> CreateShowCommand(const StateContext& context);
     std::unique_ptr<CommandInterface> CreateSaveCommand(const StateContext& context);

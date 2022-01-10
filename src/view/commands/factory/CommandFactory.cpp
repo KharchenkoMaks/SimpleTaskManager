@@ -40,18 +40,18 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateEditCommand(const StateC
     return nullptr;
 }
 
-std::unique_ptr<CommandInterface> CommandFactory::CreateCompleteCommand(const StateContext& context) {
+std::unique_ptr<CommandInterface> CommandFactory::CreateCompleteCommand(const StateContext& context, bool force_complete_subtasks) {
     std::optional<TaskId> task_id = context.GetTaskId();
     if (task_id.has_value())
-        return std::make_unique<CompleteTaskCommand>(task_id.value());
+        return std::make_unique<CompleteTaskCommand>(task_id.value(), force_complete_subtasks);
 
     return nullptr;
 }
 
-std::unique_ptr<CommandInterface> CommandFactory::CreateDeleteCommand(const StateContext& context) {
+std::unique_ptr<CommandInterface> CommandFactory::CreateDeleteCommand(const StateContext& context, bool force_delete_subtasks) {
     std::optional<TaskId> task_id = context.GetTaskId();
     if (task_id.has_value())
-        return std::make_unique<DeleteTaskCommand>(task_id.value());
+        return std::make_unique<DeleteTaskCommand>(task_id.value(), force_delete_subtasks);
 
     return nullptr;
 }
