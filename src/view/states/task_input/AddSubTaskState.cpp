@@ -13,7 +13,7 @@ std::shared_ptr<StateInterface> AddSubTaskState::Execute(StateContext& context) 
     std::optional<TaskId> parent_task_id = console_io::util::GetTaskIdFromUser("Parent Task ID", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
     if (!parent_task_id.has_value()) {
         factory_.lock()->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
+        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
     }
 
     auto state_machine = factory_.lock()->CreateStateMachine();
@@ -22,15 +22,11 @@ std::shared_ptr<StateInterface> AddSubTaskState::Execute(StateContext& context) 
             state_machine->Run(std::make_shared<StateContext>(),
                                            factory_.lock()->GetNextState(*this,StatesFactory::MoveType::NEXT));
 
-    if (context_with_added_task->GetTaskId().has_value()) {
-        Task task_to_add = context_with_added_task->GetTaskBuilder().BuildTask();
-        context.AddTaskTitle(task_to_add.title());
-        context.AddTaskPriority(task_to_add.priority());
-        context.AddTaskDueTime(task_to_add.due_date());
-        context.SetTaskId(parent_task_id.value());
-        context.SetCommand(factory_.lock()->GetCommandFactory()->CreateAddSubTaskCommand(context));
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
-    } else {
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
-    }
+    Task task_to_add = context_with_added_task->GetTaskBuilder().BuildTask();
+    context.AddTaskTitle(task_to_add.title());
+    context.AddTaskPriority(task_to_add.priority());
+    context.AddTaskDueTime(task_to_add.due_date());
+    context.SetTaskId(parent_task_id.value());
+    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateAddSubTaskCommand(context));
+    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }
