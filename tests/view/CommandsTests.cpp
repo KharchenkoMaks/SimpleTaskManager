@@ -18,6 +18,11 @@
 #include "view/commands/AddTaskCommand.h"
 #include "view/commands/CompleteTaskCommand.h"
 #include "view/commands/DeleteTaskCommand.h"
+#include "view/commands/EditTaskCommand.h"
+#include "view/commands/LoadCommand.h"
+#include "view/commands/SaveCommand.h"
+#include "view/commands/SetLabelCommand.h"
+#include "view/commands/ShowTasksCommand.h"
 
 #include <ctime>
 #include <utility>
@@ -160,4 +165,121 @@ TEST_F(CommandsTests, DeleteTaskCommandExecuteNoForceComplete_ShouldCallDeleteTa
     CommandResult actual_result = delete_task_command.Execute(controller_);
     // Assert
     EXPECT_EQ(expected_result, actual_result.GetResult());
+}
+
+TEST_F(CommandsTests, EditTaskCommandExecute_ShouldMergeAndEditTask) {
+    // Arrange
+    TaskBuilder edited_task = TaskBuilder::Create().SetTitle("new title");
+    TaskId task_id;
+    task_id.set_id(42);
+    Task task_to_edit = TaskBuilder::Create()
+            .SetTitle("old title")
+            .SetPriority(Task::Priority::Task_Priority_LOW)
+            .SetDueDate(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0)))
+            .BuildTask();
+    Task expected_edited_task = edited_task.Merge(task_to_edit).BuildTask();
+    TaskTransfer returned_task_from_controller;
+    returned_task_from_controller.set_allocated_task(new Task(expected_edited_task));
+    EditTaskCommand edit_task_command(edited_task, task_id);
+    const ControllerRequestResult expected_result = ControllerRequestResult::SUCCESS;
+    // Assert
+    EXPECT_CALL(*controller_, GetTask(task_id)).WillOnce(Return(returned_task_from_controller));
+    EXPECT_CALL(*controller_, EditTask(task_id, expected_edited_task)).WillOnce(Return(expected_result));
+    // Act
+    CommandResult actual_result = edit_task_command.Execute(controller_);
+    // Assert
+    EXPECT_EQ(expected_result, actual_result.GetResult());
+}
+
+TEST_F(CommandsTests, EditTaskCommandExecuteWithNonExistentTask_ShouldReturnNoSuchTask) {
+    // Arrange
+    TaskId task_id;
+    task_id.set_id(100);
+    EditTaskCommand edit_task_command(TaskBuilder::Create(), task_id);
+    const ControllerRequestResult expected_result = ControllerRequestResult::FAIL_NO_SUCH_TASK;
+    // Assert
+    EXPECT_CALL(*controller_, GetTask(task_id)).WillOnce(Return(std::nullopt));
+    // Act
+    CommandResult actual_result = edit_task_command.Execute(controller_);
+    // Assert
+    EXPECT_EQ(expected_result, actual_result.GetResult());
+}
+
+TEST_F(CommandsTests, LoadCommandExecute_ShouldCallLoadFromController) {
+    // Arrange
+    const std::string file_name = "file name";
+    LoadCommand load_command(file_name);
+    const ControllerRequestResult expected_result = ControllerRequestResult::FILE_DAMAGED;
+    // Assert
+    EXPECT_CALL(*controller_, LoadFromFile(file_name)).WillOnce(Return(expected_result));
+    // Act
+    CommandResult actual_result = load_command.Execute(controller_);
+    // Assert
+    EXPECT_EQ(expected_result, actual_result.GetResult());
+}
+
+TEST_F(CommandsTests, SaveCommandExecute_ShouldCallSaveFromController) {
+    // Arrange
+    const std::string file_name = "file name";
+    SaveCommand save_command(file_name);
+    const ControllerRequestResult expected_result = ControllerRequestResult::SUCCESS;
+    // Assert
+    EXPECT_CALL(*controller_, SaveToFile(file_name)).WillOnce(Return(expected_result));
+    // Act
+    CommandResult actual_result = save_command.Execute(controller_);
+    // Assert
+    EXPECT_EQ(expected_result, actual_result.GetResult());
+}
+
+TEST_F(CommandsTests, SetLabelCommandExecute_ShouldSetLabelInController) {
+    // Arrange
+    const std::string label = "some label";
+    TaskId task_id;
+    task_id.set_id(9);
+    SetLabelCommand set_label_command(task_id, label);
+    const ControllerRequestResult expected_result = ControllerRequestResult::SUCCESS;
+    // Assert
+    EXPECT_CALL(*controller_, SetTaskLabel(task_id, label)).WillOnce(Return(expected_result));
+    // Act
+    CommandResult actual_result = set_label_command.Execute(controller_);
+    // Assert
+    EXPECT_EQ(expected_result, actual_result.GetResult());
+}
+
+TEST_F(CommandsTests, ShowTasksCommandExecute_ShouldFetchAllTasksFromControllerAndReturnThem) {
+    // Arrange
+    ShowTasksCommand show_tasks_command;
+    const ControllerRequestResult expected_result = ControllerRequestResult::SUCCESS;
+    // Arrange tasks to show
+    TaskId parent_task_id;
+    TaskId task2_id;
+    task2_id.set_id(2);
+    TaskId task3_id;
+    task3_id.set_id(3);
+    Task t1 = TaskBuilder::Create()
+            .SetTitle("task1").SetPriority(Task::Priority::Task_Priority_LOW).SetDueDate(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))).BuildTask();
+    Task t2 = TaskBuilder::Create()
+            .SetTitle("task2").SetPriority(Task::Priority::Task_Priority_MEDIUM).SetDueDate(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))).BuildTask();
+    Task t3 = TaskBuilder::Create()
+            .SetTitle("subtask").SetPriority(Task::Priority::Task_Priority_MEDIUM).SetDueDate(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))).BuildTask();
+    TaskTransfer tt1;
+    tt1.set_allocated_task_id(new TaskId(parent_task_id));
+    tt1.set_allocated_task(new Task(t1));
+    TaskTransfer tt2;
+    tt2.set_allocated_task_id(new TaskId(task2_id));
+    tt2.set_allocated_task(new Task(t2));
+    TaskTransfer tt3;
+    tt3.set_allocated_task_id(new TaskId(task3_id));
+    tt3.set_allocated_task(new Task(t3));
+    tt3.set_allocated_parent_id(new TaskId(parent_task_id));
+
+    std::vector<TaskTransfer> tasks_to_show { tt1, tt3, tt2 };
+
+    // Assert
+    EXPECT_CALL(*controller_, GetAllTasks()).WillOnce(Return(tasks_to_show));
+    // Act
+    CommandResult actual_result = show_tasks_command.Execute(controller_);
+    // Assert
+    EXPECT_EQ(expected_result, actual_result.GetResult());
+    EXPECT_EQ(tasks_to_show, actual_result.GetTasksToShow());
 }
