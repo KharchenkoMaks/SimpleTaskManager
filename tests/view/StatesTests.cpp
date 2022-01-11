@@ -328,24 +328,6 @@ TEST_F(StatesTests, InputTaskTitleStateExecute_ShouldPutTitleInContext) {
     EXPECT_EQ(expected_input_title, input_title_context.GetTaskBuilder().BuildTask().title());
 }
 
-TEST_F(StatesTests, InputTaskPriorityStateExecuteGivingEmptyTitle_ShouldPrintError) {
-    // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<InputTaskTitleState>(nullptr);
-    StateContext input_title_context;
-    InputTaskTitleState input_title_state(states_factory_);
-
-    const std::string expected_input_title = "";
-    // Assert
-    ExpectGetUserInput("Title", expected_input_title);
-    EXPECT_CALL(*states_factory_, GetNextState(testing::An<const InputTaskTitleState&>(), StatesFactory::MoveType::ERROR))
-            .WillOnce(Return(expected_next_state));
-    EXPECT_CALL(*console_printer_, WriteError("Task title was wrong, please, try again!")).Times(1);
-    // Act
-    std::shared_ptr<StateInterface> actual_next_state = input_title_state.Execute(input_title_context);
-    // Assert
-    EXPECT_EQ(expected_next_state, actual_next_state);
-}
-
 TEST_F(StatesTests, SetLabelStateExecute_ShouldCreateSetLabelCommand) {
     // Arrange
     std::shared_ptr<StateInterface> expected_next_state = std::make_shared<EndState>(nullptr);
