@@ -37,13 +37,13 @@ TaskBuilder& TaskBuilder::SetLabel(const std::string &label) {
 TaskBuilder& TaskBuilder::Merge(const Task& task) {
     if (!title_.has_value())
         title_ = task.title();
-    else if (!priority_.has_value())
+    if (!priority_.has_value())
         priority_ = task.priority();
-    else if (!due_date_.has_value())
+    if (!due_date_.has_value())
         due_date_ = task.due_date();
-    else if (!is_completed_.has_value())
+    if (!is_completed_.has_value())
         is_completed_ = task.completed();
-    else if (!label_.has_value())
+    if (!label_.has_value())
         label_ = task.label();
 
     return *this;

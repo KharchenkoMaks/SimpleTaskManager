@@ -94,7 +94,7 @@ ControllerRequestResult Controller::CompleteTaskWithSubTasks(const TaskId& task_
     return ControllerRequestResult::FAIL_INVALID_TASK;
 }
 
-std::optional<TaskTransfer> Controller::GetTask(const TaskId& task_id) const {
+std::optional<TaskTransfer> Controller::GetTask(const TaskId& task_id) {
     return model_->GetTask(task_id);
 }
 

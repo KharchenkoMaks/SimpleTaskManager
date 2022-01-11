@@ -18,7 +18,7 @@ std::shared_ptr<StateInterface> InputTaskPriorityState::Execute(StateContext& co
     std::optional<Task::Priority> task_priority = StringToTaskPriority(user_input);
     if (task_priority.has_value()) {
         context.AddTaskPriority(task_priority.value());
-    } else {
+    } else if (!user_input.empty()) {
         factory_.lock()->GetConsolePrinter()->WriteError("Wrong task priority was given, try [High, Medium, Low, None]!");
         return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
     }

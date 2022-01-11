@@ -26,17 +26,17 @@ public:
 public:
     virtual std::pair<ControllerRequestResult, TaskId> AddTask(const Task& task);
     virtual std::pair<ControllerRequestResult, TaskId> AddSubTask(const Task& task, const TaskId& parent_id);
-    ControllerRequestResult EditTask(const TaskId& task_id, const Task& task);
+    virtual ControllerRequestResult EditTask(const TaskId& task_id, const Task& task);
     virtual ControllerRequestResult DeleteTask(const TaskId& task_id);
-    ControllerRequestResult CompleteTask(const TaskId& task_id);
-    ControllerRequestResult SetTaskLabel(const TaskId& task_id, const std::string& label);
+    virtual ControllerRequestResult CompleteTask(const TaskId& task_id);
+    virtual ControllerRequestResult SetTaskLabel(const TaskId& task_id, const std::string& label);
 
-    ControllerRequestResult DeleteTaskWithSubTasks(const TaskId& task_id);
-    ControllerRequestResult CompleteTaskWithSubTasks(const TaskId& task_id);
+    virtual ControllerRequestResult DeleteTaskWithSubTasks(const TaskId& task_id);
+    virtual ControllerRequestResult CompleteTaskWithSubTasks(const TaskId& task_id);
 
 public:
     virtual std::vector<TaskTransfer> GetAllTasks();
-    std::optional<TaskTransfer> GetTask(const TaskId& task_id) const;
+    virtual std::optional<TaskTransfer> GetTask(const TaskId& task_id);
 public:
     virtual ControllerRequestResult SaveToFile(const std::string& file_name);
     virtual ControllerRequestResult LoadFromFile(const std::string& file_name);

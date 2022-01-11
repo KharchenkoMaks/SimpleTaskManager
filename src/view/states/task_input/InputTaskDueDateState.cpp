@@ -20,12 +20,12 @@ std::shared_ptr<StateInterface> InputTaskDueDateState::Execute(StateContext& con
         task_due_date = StringToTime(user_input, "%d.%m.%Y");
     }
     if (task_due_date.has_value()) {
-        const bool due_time_adding_result = context.AddTaskDueTime(task_due_date.value());
-        if (!due_time_adding_result) {
+        context.AddTaskDueTime(task_due_date.value());
+        if (google::protobuf::util::TimeUtil::TimestampToTimeT(task_due_date.value()) < time(0)) {
             factory_.lock()->GetConsolePrinter()->WriteError("Due time should be in future, try again!");
             return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
         }
-    } else {
+    } else if (!user_input.empty()) {
         factory_.lock()->GetConsolePrinter()->WriteError("Wrong due date was given, try again!");
         return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
     }

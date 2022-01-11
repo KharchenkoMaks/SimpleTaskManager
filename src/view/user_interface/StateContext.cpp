@@ -14,25 +14,16 @@ TaskBuilder StateContext::GetTaskBuilder() const {
     return task_;
 }
 
-bool StateContext::AddTaskTitle(const std::string& title) {
-    if (title.empty()) {
-        return false;
-    }
+void StateContext::AddTaskTitle(const std::string& title) {
     task_.SetTitle(title);
-    return true;
 }
 
-bool StateContext::AddTaskPriority(const Task::Priority priority) {
+void StateContext::AddTaskPriority(const Task::Priority priority) {
     task_.SetPriority(priority);
-    return true;
 }
 
-bool StateContext::AddTaskDueTime(const google::protobuf::Timestamp& due_time) {
-    if (due_time.seconds() <= time(0)) {
-        return false;
-    }
+void StateContext::AddTaskDueTime(const google::protobuf::Timestamp& due_time) {
     task_.SetDueDate(due_time);
-    return true;
 }
 
 std::optional<TaskId> StateContext::GetTaskId() const {
@@ -69,10 +60,6 @@ void StateContext::SetTaskId(const TaskId& task_id) {
 
 void StateContext::SetTaskBuilder(const TaskBuilder& task_builder) {
     task_ = task_builder;
-}
-
-void StateContext::SetTaskLabel(const std::string& label) {
-    task_.SetLabel(label);
 }
 
 void StateContext::SetTasksToShow(const std::vector<TaskTransfer>& tasks) {
