@@ -18,6 +18,6 @@ std::shared_ptr<StateInterface> DeleteTaskState::Execute(StateContext& context) 
     }
 
     context.SetTaskId(task_id.value());
-    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateDeleteCommand(context, console_io::util::UserConfirm("Complete all subtasks?", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader())));
+    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateDeleteCommand(context, console_io::util::UserConfirm("Delete all subtasks?", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader())));
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }

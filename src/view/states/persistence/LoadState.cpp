@@ -14,5 +14,5 @@ std::shared_ptr<StateInterface> LoadState::Execute(StateContext& context) {
     std::string file_name = console_io::util::GetUserInput("File name", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
     context.SetFileName(file_name);
     context.SetCommand(factory_.lock()->GetCommandFactory()->CreateLoadCommand(context));
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
+    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
 }
