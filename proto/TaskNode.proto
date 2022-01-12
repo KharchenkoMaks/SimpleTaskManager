@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+import "Task.proto";
+
+message TaskNode {
+  Task task = 1;
+  TaskId parent_id = 2;
+}
