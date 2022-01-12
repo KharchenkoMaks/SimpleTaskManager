@@ -137,7 +137,7 @@ std::pair<TaskActionResult, std::vector<TaskTransfer>> TaskManager::GetTaskSubTa
     return std::pair(TaskActionResult::SUCCESS, subtasks_transfer);
 }
 
-TaskActionResult TaskManager::SetTaskLabel(const TaskId& id, const std::string& label) {
+TaskActionResult TaskManager::AddTaskLabel(const TaskId& id, const std::string& label) {
     if (tasks_.find(id) != tasks_.end()) {
         auto task = tasks_.find(id);
         task->second.SetTaskLabel(label);

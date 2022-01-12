@@ -30,7 +30,7 @@ public:
     MOCK_METHOD(std::optional<TaskTransfer>, GetTask, (const TaskId& task_id), (override));
     MOCK_METHOD(bool, IsTaskExist, (const TaskId& task_id), (override));
     MOCK_METHOD((std::pair<TaskActionResult, std::vector<TaskTransfer>>), GetTaskSubTasks, (const TaskId& task_id), (override));
-    MOCK_METHOD(TaskActionResult, SetTaskLabel, (const TaskId& id, const std::string& label), (override));
+    MOCK_METHOD(TaskActionResult, AddTaskLabel, (const TaskId& id, const std::string& label), (override));
     MOCK_METHOD((std::pair<TaskId, std::vector<TaskTransfer>>), GetModelState, (), (override));
     MOCK_METHOD(bool, LoadModelState, (std::unique_ptr<IdGenerator> generator, const std::vector<TaskTransfer>& tasks), (override));
 };

@@ -92,7 +92,7 @@ std::vector<TaskTransfer> Controller::GetAllTasks() {
 }
 
 ControllerRequestResult Controller::SetTaskLabel(const TaskId& task_id, const std::string& label) {
-    TaskActionResult result = model_->SetTaskLabel(task_id, label);
+    TaskActionResult result = model_->AddTaskLabel(task_id, label);
     return FormControllerRequestResult(result).value();
 }
 
