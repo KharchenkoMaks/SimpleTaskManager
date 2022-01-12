@@ -10,6 +10,8 @@ enable_testing()
 
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=nullability")
+
 include_directories(src/model/)
 include_directories(src/view/)
 include_directories(src/model/controller/)
@@ -45,18 +47,23 @@ message("PROTO_SOURCES ${PROTO_SOURCES}")
 include_directories(${Protobuf_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS proto/Task.proto)
+protobuf_generate_cpp(PROTO_TASK_SRCS PROTO_TASK_HDRS proto/Task.proto)
+protobuf_generate_cpp(PROTO_TASK_NODE_SRCS PROTO_TASK_NODE_HDRS proto/TaskNode.proto)
 message("${PROTO_HDRS}")
 
 add_executable(SimpleTaskManager
-        ${PROTO_SRCS}
-        ${PROTO_HDRS}
+        ${PROTO_TASK_SRCS}
+        ${PROTO_TASK_HDRS}
+        ${PROTO_TASK_NODE_SRCS}
+        ${PROTO_TASK_NODE_HDRS}
         ${TaskManager_SRCS}
         src/main.cpp)
 
 add_executable(SimpleTaskManager_test
-        ${PROTO_SRCS}
-        ${PROTO_HDRS}
+        ${PROTO_TASK_SRCS}
+        ${PROTO_TASK_HDRS}
+        ${PROTO_TASK_NODE_SRCS}
+        ${PROTO_TASK_NODE_HDRS}
         ${TaskManager_SRCS}
         ${TaskManager_TEST})
 

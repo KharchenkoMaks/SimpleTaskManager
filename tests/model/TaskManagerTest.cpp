@@ -8,6 +8,7 @@
 #include "TaskManager.h"
 #include "IdGenerator.h"
 #include "Task.pb.h"
+#include "TaskNode.pb.h"
 #include "utilities/TaskActionResult.h"
 #include "utilities/TaskComparators.h"
 
@@ -77,7 +78,7 @@ TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
     std::vector<TaskTransfer> tasks = task_manager.GetTasks();
     // Assert
     // Check size of task vector equals 2
-    EXPECT_EQ(tasks.size(), 2);
+    ASSERT_EQ(tasks.size(), 2);
     // Check equality of task1
     EXPECT_EQ(tasks[0].task_id(), expected_first_task_id);
     EXPECT_EQ(tasks[0].task().title(), expected_title[0]);
@@ -154,8 +155,8 @@ TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
     TaskId actual_task_id = tasks[0].task_id();
     Task actual_task = tasks[0].task();
     // Assert
-    EXPECT_TRUE(tasks.size() == 1);
-    EXPECT_TRUE(actual_task_id == expected_second_task_id);
+    ASSERT_TRUE(tasks.size() == 1);
+    EXPECT_EQ(actual_task_id, expected_second_task_id);
     EXPECT_EQ(actual_task.title(), expected_title[1]);
     EXPECT_EQ(actual_task.priority(), expected_priority[1]);
     EXPECT_EQ(actual_task.due_date(), expected_time);
@@ -321,6 +322,6 @@ TEST_F(TaskManagerTest, TryCompleteSubTask_ShouldCompleteSubTask) {
     task_manager.CompleteTask(subtask1_id);
     const std::optional<TaskTransfer> actual_subtask = task_manager.GetTask(subtask1_id);
     // Assert
-    EXPECT_NE(actual_subtask, std::nullopt);
+    ASSERT_NE(actual_subtask, std::nullopt);
     EXPECT_TRUE(actual_subtask->task().completed());
 }

@@ -79,10 +79,10 @@ TEST_F(DISABLED_IntegrationTests, Script1) {
             "5",
             "y",
             "complete",
-            "0",
+            "1",
             "y"
     };
-    std::vector<std::string> expected_show = { "ID: 0, SomeTask, Priority: High, Due to: 16:30 01.01.2023, Completed: Yes" };
+    std::vector<std::string> expected_show = { "ID: 1, SomeTask, Priority: High, Due to: 16:30 01.01.2023, Completed: Yes" };
     // Act
     LaunchTest(expected_show, inputs);
 }
@@ -95,26 +95,26 @@ TEST_F(DISABLED_IntegrationTests, Script2) {
             "Low",
             "01.02.2025",
             "add_subtask",
-            "0",
+            "1",
             "Subtask",
             "None",
             "15:00 15.01.2025",
             "add_subtask",
-            "0",
+            "1",
             "Second Subtask",
             "High",
             "15:00 15.01.2025",
             "complete",
-            "0",
+            "1",
             "n",
             "complete",
-            "2",
+            "3",
             "n",
     };
     std::vector<std::string> expected_show = {
-            "ID: 0, First task, Priority: Low, Due to: 00:00 01.02.2025, Completed: No",
-            "\tID: 1, Subtask, Priority: None, Due to: 15:00 15.01.2025, Completed: No",
-            "\tID: 2, Second Subtask, Priority: High, Due to: 15:00 15.01.2025, Completed: Yes"
+            "ID: 1, First task, Priority: Low, Due to: 00:00 01.02.2025, Completed: No",
+            "\tID: 2, Subtask, Priority: None, Due to: 15:00 15.01.2025, Completed: No",
+            "\tID: 3, Second Subtask, Priority: High, Due to: 15:00 15.01.2025, Completed: Yes"
     };
     // Act
     LaunchTest(expected_show, inputs);

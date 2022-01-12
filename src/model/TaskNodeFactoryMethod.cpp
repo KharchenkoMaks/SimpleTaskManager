@@ -4,14 +4,26 @@
 
 #include "TaskNodeFactoryMethod.h"
 
-using namespace model;
+namespace model {
 
-TaskNode Create(Task task) {
+TaskNode CreateTaskNode(Task task) {
     TaskNode task_node;
     task_node.set_allocated_task(new Task(task));
+    return task_node;
 }
 
-TaskNode Create (Task task, TaskId parent_id) {
-    TaskNode task_node = ::Create(task);
+TaskNode CreateTaskNode(Task task, TaskId parent_id) {
+    TaskNode task_node = CreateTaskNode(task);
     task_node.set_allocated_parent_id(new TaskId(parent_id));
+    return task_node;
+}
+
+TaskNode CreateTaskNode(TaskTransfer task) {
+    if (task.has_parent_id()) {
+        return CreateTaskNode(task.task(), task.parent_id());
+    } else {
+        return CreateTaskNode(task.task());
+    }
+}
+
 }

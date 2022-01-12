@@ -6,7 +6,7 @@
 #define SIMPLETASKMANAGER_TASKMANAGER_H
 
 #include "Task.pb.h"
-#include "MainTask.h"
+#include "TaskNode.pb.h"
 #include "Model.h"
 #include "IdGenerator.h"
 #include "utilities/TaskActionResult.h"
@@ -32,21 +32,18 @@ public:
     TaskActionResult AddTaskLabel(const TaskId& id, const std::string& label) override;
 
     std::vector<TaskTransfer> GetTasks() override;
-    std::pair<TaskActionResult, std::vector<TaskTransfer>> GetTaskSubTasks(const TaskId& task_id) override;
     std::optional<TaskTransfer> GetTask(const TaskId& task_id) override;
 public:
     bool IsTaskExist(const TaskId& task_id) override;
 public: // Persistence
     bool LoadModelState(const std::vector<TaskTransfer>& tasks) override;
 private:
-    TaskTransfer CreateTaskTransferFromTask(const TaskId& task_id, const Task& task);
-    TaskTransfer CreateTaskTransferFromSubTask(const TaskId& task_id, const Task& task, const TaskId& parent_id);
-    std::vector<TaskTransfer> CreateTaskTransferFromMainTask(const TaskId& task_id, const MainTask& main_task);
-    std::optional<std::map<TaskId, MainTask>::iterator> GetMainTaskWithSubTask(const TaskId& subtask_id);
+    TaskTransfer CreateTaskTransferFromTask(const std::map<TaskId, model::TaskNode>::iterator task);
+    std::vector<TaskTransfer> GetAllTaskChildren(const TaskId& task_id);
 private:
-    std::map<TaskId, MainTask> tasks_;
+    std::map<TaskId, model::TaskNode> tasks_;
 
-    std::map<TaskId, MainTask> deleted_tasks_;
+    std::map<TaskId, model::TaskNode> deleted_tasks_;
 
     std::unique_ptr<IdGenerator> generator_;
     std::unique_ptr<TaskValidator> task_validator_;

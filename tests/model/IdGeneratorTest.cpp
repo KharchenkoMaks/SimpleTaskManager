@@ -17,7 +17,7 @@ TEST_F(IdGeneratorTest, CreateNewTaskId_shouldIncrementTaskId){
     const int test_times = 5;
     IdGenerator generator;
     // Act & Assert
-    for (int expected = 0; expected < test_times; ++expected){
+    for (int expected = 1; expected < test_times; ++expected){
         TaskId task = generator.CreateNewTaskId();
         EXPECT_EQ(task.id(), expected);
     }

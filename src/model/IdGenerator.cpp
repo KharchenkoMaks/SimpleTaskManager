@@ -10,7 +10,7 @@ TaskId IdGenerator::CreateNewTaskId() {
     return task_id;
 }
 
-IdGenerator::IdGenerator() : last_id_(0) {}
+IdGenerator::IdGenerator() : last_id_(1) {}
 
 bool IdGenerator::SetLastTaskId(const TaskId& task_id) {
     if (task_id.id() >= 0) {

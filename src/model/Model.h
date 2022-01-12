@@ -23,7 +23,6 @@ public:
 
     virtual std::vector<TaskTransfer> GetTasks() = 0;
     virtual std::optional<TaskTransfer> GetTask(const TaskId& task_id) = 0;
-    virtual std::pair<TaskActionResult, std::vector<TaskTransfer>> GetTaskSubTasks(const TaskId& task_id) = 0;
 
     virtual bool IsTaskExist(const TaskId& task_id) = 0;
 

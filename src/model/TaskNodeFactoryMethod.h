@@ -10,9 +10,11 @@
 
 namespace model {
 
-TaskNode Create(Task task);
+TaskNode CreateTaskNode(Task task);
 
-TaskNode Create (Task task, TaskId parent_id);
+TaskNode CreateTaskNode (Task task, TaskId parent_id);
+
+TaskNode CreateTaskNode(TaskTransfer task);
 
 }
 
