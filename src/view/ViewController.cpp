@@ -29,11 +29,11 @@ void ViewController::RunUserInterface() {
                     user_interface_->ShowTasks(cmd_result.GetTasksToShow());
                     break;
                 }
-                user_interface_->PrintResult(cmd_result.GetResult());
+                user_interface_->PrintRequestResult(cmd_result.GetResult());
                 break;
             }
             default: {
-                user_interface_->PrintResult(cmd_result.GetResult());
+                user_interface_->PrintRequestResult(cmd_result.GetResult());
                 break;
             }
         }

@@ -58,8 +58,8 @@ public:
 public:
     virtual std::shared_ptr<StateInterface> GetStateByCommand(const std::string& command);
 
-    std::shared_ptr<StateInterface> GetRootState();
-    std::shared_ptr<StateInterface> GetShowState();
+    virtual std::shared_ptr<StateInterface> GetRootState();
+    virtual std::shared_ptr<StateInterface> GetShowState();
 
     virtual std::shared_ptr<StateInterface> GetNextState(const RootState& state, MoveType move_type);
     virtual std::shared_ptr<StateInterface> GetNextState(const HelpState& state, MoveType move_type);

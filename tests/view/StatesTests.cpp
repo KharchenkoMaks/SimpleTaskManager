@@ -46,19 +46,15 @@ public:
     std::shared_ptr<MockConsoleReader> console_reader_;
     std::shared_ptr<MockCommandFactory> command_factory_;
 
-    std::unique_ptr<MockStateMachine> state_machine_;
-
     testing::Sequence user_input_sequence_;
     void SetUp() override {
         states_factory_ = std::make_shared<MockStatesFactory>();
         console_printer_ = std::make_shared<MockConsolePrinter>();
         console_reader_ = std::make_shared<MockConsoleReader>();
         command_factory_ = std::make_shared<MockCommandFactory>();
-        state_machine_ = std::make_unique<MockStateMachine>();
         EXPECT_CALL(*states_factory_, GetConsolePrinter()).WillRepeatedly(Return(console_printer_));
         EXPECT_CALL(*states_factory_, GetConsoleReader()).WillRepeatedly(Return(console_reader_));
         EXPECT_CALL(*states_factory_, GetCommandFactory()).WillRepeatedly(Return(command_factory_));
-        EXPECT_CALL(*states_factory_, CreateStateMachine()).WillRepeatedly(Return(testing::ByMove(std::move(state_machine_))));
     }
     void ExpectGetUserInput(const std::string& message, const std::string& returned_input) {
         EXPECT_CALL(*console_printer_, Write(message + "> ")).InSequence(user_input_sequence_);
