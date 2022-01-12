@@ -71,8 +71,8 @@ TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
 
     TaskManager task_manager(std::move(gen));
     // Act
-    TaskId task1 = task_manager.AddTask(expected_first_task).second.value();
-    TaskId task2 = task_manager.AddTask(expected_second_task).second.value();
+    TaskId task1 = task_manager.AddTask(expected_first_task).second;
+    TaskId task2 = task_manager.AddTask(expected_second_task).second;
 
     std::vector<TaskTransfer> tasks = task_manager.GetTasks();
     // Assert
@@ -110,8 +110,8 @@ TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
     edited_task.set_priority(expected_priority);
     edited_task.set_allocated_due_date(new google::protobuf::Timestamp(expected_time));
 
-    TaskId main_task_id = task_manager.AddTask(expected_first_task).second.value();
-    TaskId subtask_id = task_manager.AddSubTask(expected_second_task, main_task_id).second.value();
+    TaskId main_task_id = task_manager.AddTask(expected_first_task).second;
+    TaskId subtask_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
     // Act
     task_manager.EditTask(main_task_id, edited_task);
     task_manager.EditTask(subtask_id, edited_task);
@@ -146,8 +146,8 @@ TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
         .WillOnce(Return(expected_second_task_id));
 
     TaskManager task_manager(std::move(gen));
-    TaskId task_id_1 = task_manager.AddTask(expected_first_task).second.value();
-    TaskId task_id_2 = task_manager.AddTask(expected_second_task).second.value();
+    TaskId task_id_1 = task_manager.AddTask(expected_first_task).second;
+    TaskId task_id_2 = task_manager.AddTask(expected_second_task).second;
     // Act
     task_manager.DeleteTask(task_id_1);
     std::vector<TaskTransfer> tasks = task_manager.GetTasks();
@@ -201,9 +201,9 @@ TEST_F(TaskManagerTest, TryCompletingDifferentTasks_ShouldCompleteThoseTasks){
     expected_not_completed_task.set_priority(Task::Priority::Task_Priority_HIGH);
     expected_not_completed_task.set_allocated_due_date(new google::protobuf::Timestamp(expected_time));
 
-    TaskId task1 = task_manager.AddTask(expected_first_task).second.value();
-    TaskId task2 = task_manager.AddTask(expected_not_completed_task).second.value();
-    TaskId task3 = task_manager.AddTask(expected_second_task).second.value();
+    TaskId task1 = task_manager.AddTask(expected_first_task).second;
+    TaskId task2 = task_manager.AddTask(expected_not_completed_task).second;
+    TaskId task3 = task_manager.AddTask(expected_second_task).second;
     // Act
     task_manager.CompleteTask(task1);
     task_manager.CompleteTask(task3);
@@ -248,8 +248,8 @@ TEST_F(TaskManagerTest, TryAddingSubtask_ShouldReturnRightTask) {
     TaskManager task_manager(std::move(gen));
 
     // Act
-    TaskId main_task_id = task_manager.AddTask(expected_first_task).second.value();
-    TaskId subtask_id = task_manager.AddSubTask(expected_second_task, main_task_id).second.value();
+    TaskId main_task_id = task_manager.AddTask(expected_first_task).second;
+    TaskId subtask_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
     std::optional<TaskTransfer> get_subtask = task_manager.GetTask(subtask_id);
     // Assert
     ASSERT_NE(get_subtask, std::nullopt);
@@ -280,9 +280,9 @@ TEST_F(TaskManagerTest, TryDeletingSubTask_ShouldDeleteSubTaskProperly) {
 
     TaskManager task_manager(std::move(gen));
 
-    TaskId main_task_id = task_manager.AddTask(expected_first_task).second.value();
-    TaskId subtask1_id = task_manager.AddSubTask(expected_second_task, main_task_id).second.value();
-    TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, main_task_id).second.value();
+    TaskId main_task_id = task_manager.AddTask(expected_first_task).second;
+    TaskId subtask1_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
+    TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, main_task_id).second;
 
     // Act
     task_manager.DeleteTask(subtask1_id);
@@ -313,9 +313,9 @@ TEST_F(TaskManagerTest, TryCompleteSubTask_ShouldCompleteSubTask) {
 
     TaskManager task_manager(std::move(gen));
 
-    TaskId main_task_id = task_manager.AddTask(expected_first_task).second.value();
-    TaskId subtask1_id = task_manager.AddSubTask(expected_second_task, main_task_id).second.value();
-    TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, main_task_id).second.value();
+    TaskId main_task_id = task_manager.AddTask(expected_first_task).second;
+    TaskId subtask1_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
+    TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, main_task_id).second;
 
     // Act
     task_manager.CompleteTask(subtask1_id);

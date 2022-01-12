@@ -18,22 +18,22 @@ TaskManager::TaskManager(std::unique_ptr<IdGenerator> generator,
 
 }
 
-std::pair<TaskActionResult, std::optional<TaskId>> TaskManager::AddTask(const Task& task) {
+std::pair<TaskActionResult, TaskId> TaskManager::AddTask(const Task& task) {
     if (!task_validator_->ValidateTask(task)) {
-        return std::pair(TaskActionResult::FAIL_INVALID_TASK, std::nullopt);
+        return std::pair(TaskActionResult::FAIL_INVALID_TASK, TaskId::default_instance());
     }
     TaskId task_id = generator_->CreateNewTaskId();
     tasks_.insert({ task_id, MainTask::Create(task) });
     return std::pair(TaskActionResult::SUCCESS, task_id);
 }
 
-std::pair<TaskActionResult, std::optional<TaskId>> TaskManager::AddSubTask(const Task& task, const TaskId& parent_id) {
+std::pair<TaskActionResult, TaskId> TaskManager::AddSubTask(const Task& task, const TaskId& parent_id) {
     if (!task_validator_->ValidateTask(task)) {
-        return std::pair(TaskActionResult::FAIL_INVALID_TASK, std::nullopt);
+        return std::pair(TaskActionResult::FAIL_INVALID_TASK, TaskId::default_instance());
     }
     auto parent_task = tasks_.find(parent_id);
     if (parent_task == tasks_.end()) {
-        return std::pair(TaskActionResult::FAIL_NO_SUCH_TASK, std::nullopt);
+        return std::pair(TaskActionResult::FAIL_NO_SUCH_TASK, TaskId::default_instance());
     }
     TaskId subtask_id = generator_->CreateNewTaskId();
     parent_task->second.AddSubTask(subtask_id, task);

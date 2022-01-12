@@ -24,8 +24,8 @@ public:
     explicit TaskManager(std::unique_ptr<IdGenerator> generator);
     TaskManager(std::unique_ptr<IdGenerator> generator, std::unique_ptr<TaskValidator> task_validator);
 public:
-    std::pair<TaskActionResult, std::optional<TaskId>> AddTask(const Task& task) override;
-    std::pair<TaskActionResult, std::optional<TaskId>> AddSubTask(const Task& task, const TaskId& parent_id) override;
+    std::pair<TaskActionResult, TaskId> AddTask(const Task& task) override;
+    std::pair<TaskActionResult, TaskId> AddSubTask(const Task& task, const TaskId& parent_id) override;
     TaskActionResult EditTask(const TaskId& id, const Task& task) override;
     TaskActionResult DeleteTask(const TaskId& id, bool force_delete_subtasks = false) override;
     TaskActionResult CompleteTask(const TaskId& id, bool force_complete_subtasks = false) override;

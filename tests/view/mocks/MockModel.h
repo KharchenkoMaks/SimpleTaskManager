@@ -13,8 +13,16 @@
 
 class MockModel : public Model {
 public:
-    MOCK_METHOD((std::pair<TaskActionResult, std::optional<TaskId>>), AddTask, (const Task& t), (override));
-    MOCK_METHOD((std::pair<TaskActionResult, std::optional<TaskId>>), AddSubTask, (const Task& task, const TaskId& parent_id), (override));
+    MOCK_METHOD((std::pair<TaskActionResult, std::optional<TaskId>>), AddTask, (const Task& t), (override))
+
+    std::pair<TaskActionResult, TaskId>
+
+    ;
+    MOCK_METHOD((std::pair<TaskActionResult, std::optional<TaskId>>), AddSubTask, (const Task& task, const TaskId& parent_id), (override))
+
+    std::pair<TaskActionResult, TaskId>
+
+    ;
     MOCK_METHOD(TaskActionResult, EditTask, (const TaskId& id, const Task& t), (override));
     MOCK_METHOD(TaskActionResult, DeleteTask, (const TaskId& id, bool force_delete_subtasks), (override));
     MOCK_METHOD(TaskActionResult, CompleteTask, (const TaskId& id, bool force_complete_subtasks), (override));
