@@ -7,7 +7,7 @@
 
 #include "Task.pb.h"
 #include "MainTask.h"
-#include "IModel.h"
+#include "Model.h"
 #include "IdGenerator.h"
 #include "utilities/TaskActionResult.h"
 #include "utilities/TaskValidator.h"
@@ -19,7 +19,7 @@
 #include <optional>
 #include <algorithm>
 
-class TaskManager : public IModel {
+class TaskManager : public Model {
 public:
     explicit TaskManager(std::unique_ptr<IdGenerator> generator);
     TaskManager(std::unique_ptr<IdGenerator> generator, std::unique_ptr<TaskValidator> task_validator);

@@ -2,8 +2,8 @@
 // Created by Maksym Kharchenko on 01.12.2021.
 //
 
-#ifndef SIMPLETASKMANAGER_IMODEL_H
-#define SIMPLETASKMANAGER_IMODEL_H
+#ifndef SIMPLETASKMANAGER_MODEL_H
+#define SIMPLETASKMANAGER_MODEL_H
 
 #include "Task.pb.h"
 #include "utilities/TaskActionResult.h"
@@ -12,7 +12,7 @@
 #include <optional>
 #include <utility>
 
-class IModel{
+class Model {
 public:
     virtual std::pair<TaskActionResult, std::optional<TaskId>> AddTask(const Task& task) = 0;
     virtual std::pair<TaskActionResult, std::optional<TaskId>> AddSubTask(const Task& task, const TaskId& parent_id) = 0;
@@ -29,7 +29,7 @@ public:
 
     virtual bool LoadModelState(const std::vector<TaskTransfer>& tasks) = 0;
 
-    virtual ~IModel() = default;
+    virtual ~Model() = default;
 };
 
-#endif //SIMPLETASKMANAGER_IMODEL_H
+#endif //SIMPLETASKMANAGER_MODEL_H

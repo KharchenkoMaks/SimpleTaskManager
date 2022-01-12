@@ -4,7 +4,7 @@
 
 #include "Controller.h"
 
-Controller::Controller(std::unique_ptr<IModel> model,
+Controller::Controller(std::unique_ptr<Model> model,
                        std::unique_ptr<TaskValidator> task_validator) :
                        model_(std::move(model)),
                        task_validator_(std::move(task_validator)),
@@ -12,7 +12,7 @@ Controller::Controller(std::unique_ptr<IModel> model,
 
 }
 
-Controller::Controller(std::unique_ptr<IModel> model,
+Controller::Controller(std::unique_ptr<Model> model,
                        std::unique_ptr<TaskValidator> task_validator,
                        std::unique_ptr<persistence::TasksPersistence> tm_persistence) :
         model_(std::move(model)),

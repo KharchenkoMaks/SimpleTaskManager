@@ -8,10 +8,10 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "IModel.h"
+#include "Model.h"
 #include "utilities/TaskActionResult.h"
 
-class MockModel : public IModel {
+class MockModel : public Model {
 public:
     MOCK_METHOD((std::pair<TaskActionResult, std::optional<TaskId>>), AddTask, (const Task& t), (override));
     MOCK_METHOD((std::pair<TaskActionResult, std::optional<TaskId>>), AddSubTask, (const Task& task, const TaskId& parent_id), (override));

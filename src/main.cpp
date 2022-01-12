@@ -76,7 +76,7 @@ int main() {
 // TODO: Make task validator general, move it to utilities
 // TODO_DONE: Make pure State interface - Done 10.12.2021
 // TODO_DONE: Return TaskActionResult in Model API - Done 09.12.2021
-// TODO: Rename IModel
+// TODO: Rename Model
 // TODO_DONE: Make TaskBuilder in StateContext - Done 10.12.2021
 // TODO: Make set_label part of edit
 // TODO: Make builder of integration tests

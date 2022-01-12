@@ -6,7 +6,7 @@
 #define SIMPLETASKMANAGER_CONTROLLER_H
 
 #include "Task.pb.h"
-#include "IModel.h"
+#include "Model.h"
 #include "utilities/TaskValidator.h"
 #include "utilities/TaskActionResult.h"
 #include "utilities/SaveLoadStatus.h"
@@ -19,8 +19,8 @@
 
 class Controller {
 public:
-    Controller(std::unique_ptr<IModel> model, std::unique_ptr<TaskValidator> task_validator);
-    Controller(std::unique_ptr<IModel> model,
+    Controller(std::unique_ptr<Model> model, std::unique_ptr<TaskValidator> task_validator);
+    Controller(std::unique_ptr<Model> model,
                std::unique_ptr<TaskValidator> task_validator,
                std::unique_ptr<persistence::TasksPersistence> tm_persistence);
 public:
@@ -44,7 +44,7 @@ public:
 public:
     virtual ~Controller() = default;
 private:
-    std::unique_ptr<IModel> model_;
+    std::unique_ptr<Model> model_;
 
     std::unique_ptr<TaskValidator> task_validator_;
 
