@@ -4,20 +4,9 @@
 
 #include "Controller.h"
 
-Controller::Controller(std::unique_ptr<Model> model,
-                       std::unique_ptr<TaskValidator> task_validator) :
-                       model_(std::move(model)),
-                       task_validator_(std::move(task_validator)),
-                       tm_persistence_(std::make_unique<persistence::TasksPersistence>()) {
-
-}
-
-Controller::Controller(std::unique_ptr<Model> model,
-                       std::unique_ptr<TaskValidator> task_validator,
-                       std::unique_ptr<persistence::TasksPersistence> tm_persistence) :
-        model_(std::move(model)),
-        task_validator_(std::move(task_validator)),
-        tm_persistence_(std::move(tm_persistence)) {
+Controller::Controller(std::unique_ptr<Model> model, std::unique_ptr<TaskValidator> task_validator) :
+                model_(std::move(model)),
+                task_validator_(std::move(task_validator)) {
 
 }
 
@@ -108,12 +97,14 @@ ControllerRequestResult Controller::SetTaskLabel(const TaskId& task_id, const st
 }
 
 ControllerRequestResult Controller::SaveToFile(const std::string& file_name) {
-    persistence::SaveLoadStatus result = tm_persistence_->SaveToFile(file_name, model_->GetTasks());
+    auto model_persistence = persistence::FilePersistence::Create(file_name);
+    persistence::SaveLoadStatus result = model_persistence->Save(model_->GetTasks());
     return FormControllerRequestResult(result);
 }
 
 ControllerRequestResult Controller::LoadFromFile(const std::string& file_name) {
-    auto model_state = tm_persistence_->LoadFromFile(file_name);
+    auto model_persistence = persistence::FilePersistence::Create(file_name);
+    auto model_state = model_persistence->Load();
     if (model_state.first != persistence::SaveLoadStatus::SUCCESS) {
         return FormControllerRequestResult(model_state.first);
     }

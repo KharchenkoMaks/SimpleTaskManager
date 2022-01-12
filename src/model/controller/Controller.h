@@ -10,7 +10,7 @@
 #include "utilities/TaskValidator.h"
 #include "utilities/TaskActionResult.h"
 #include "utilities/SaveLoadStatus.h"
-#include "persistence/TasksPersistence.h"
+#include "persistence/FilePersistence.h"
 #include "ControllerRequestResult.h"
 
 #include <memory>
@@ -20,9 +20,6 @@
 class Controller {
 public:
     Controller(std::unique_ptr<Model> model, std::unique_ptr<TaskValidator> task_validator);
-    Controller(std::unique_ptr<Model> model,
-               std::unique_ptr<TaskValidator> task_validator,
-               std::unique_ptr<persistence::TasksPersistence> tm_persistence);
 public:
     virtual std::pair<ControllerRequestResult, TaskId> AddTask(const Task& task);
     virtual std::pair<ControllerRequestResult, TaskId> AddSubTask(const Task& task, const TaskId& parent_id);
@@ -47,8 +44,6 @@ private:
     std::unique_ptr<Model> model_;
 
     std::unique_ptr<TaskValidator> task_validator_;
-
-    std::unique_ptr<persistence::TasksPersistence> tm_persistence_;
 };
 
 

@@ -232,7 +232,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const SaveState &sta
 std::shared_ptr<StateInterface> StatesFactory::GetNextState(const LoadState &state, const StatesFactory::MoveType move_type) {
     switch(move_type) {
         case MoveType::ERROR: {
-            return GetLazyStateByStatesEnum(States::kSave);
+            return GetLazyStateByStatesEnum(States::kLoad);
         }
         default: {
             return GetLazyStateByStatesEnum(States::kEnd);

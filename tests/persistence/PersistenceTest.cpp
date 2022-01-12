@@ -4,7 +4,7 @@
 
 #include "gtest/gtest.h"
 
-#include "persistence/TasksPersistence.h"
+#include "persistence/FilePersistence.h"
 #include "utilities/SaveLoadStatus.h"
 #include "Task.pb.h"
 #include "utilities/TaskComparators.h"
@@ -65,15 +65,14 @@ private:
 
 TEST_F(DISABLED_PersistenceTest, FileReadWrite_ShouldWriteTasksAndReadTasksFromFile) {
     // Arrange
-    persistence::TasksPersistence tm_persistence;
     const std::string file_name = "some_file";
+    auto model_persistence = persistence::FilePersistence::Create(file_name);
     // Act
-    const persistence::SaveLoadStatus actual_save_answer = tm_persistence.SaveToFile(file_name, tasks_to_save);
+    const persistence::SaveLoadStatus actual_save_answer = model_persistence->Save(tasks_to_save);
     // Assert
     ASSERT_EQ(persistence::SaveLoadStatus::SUCCESS, actual_save_answer);
     // Act
-    const std::pair<persistence::SaveLoadStatus, std::vector<TaskTransfer>> actual_loaded_tasks =
-            tm_persistence.LoadFromFile(file_name);
+    const std::pair<persistence::SaveLoadStatus, std::vector<TaskTransfer>> actual_loaded_tasks = model_persistence->Load();
     // Assert
     ASSERT_EQ(persistence::SaveLoadStatus::SUCCESS, actual_loaded_tasks.first);
     ASSERT_EQ(tasks_to_save.size(), actual_loaded_tasks.second.size());

@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 15.12.2021.
 //
 
-#include "TasksPersistence.h"
+#include "FilePersistence.h"
 
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/io/zero_copy_stream_impl.h>
@@ -11,8 +11,7 @@
 
 using namespace persistence;
 
-std::pair<SaveLoadStatus, std::vector<TaskTransfer>>
-        TasksPersistence::LoadFromFile(const std::string& file_name) {
+std::pair<SaveLoadStatus, std::vector<TaskTransfer>> FilePersistence::Load() {
     std::vector<TaskTransfer> loaded_tasks;
 
     std::ifstream file(file_name);
@@ -34,19 +33,26 @@ std::pair<SaveLoadStatus, std::vector<TaskTransfer>>
     return std::make_pair(SaveLoadStatus::SUCCESS, loaded_tasks);
 }
 
-SaveLoadStatus TasksPersistence::SaveToFile(const std::string& file_name,
-                                        const std::vector<TaskTransfer>& tasks_to_save) {
+SaveLoadStatus FilePersistence::Save(const std::vector<TaskTransfer>& tasks) {
 
     std::ofstream file(file_name);
     if (!file.is_open()) {
         return SaveLoadStatus::FILE_WAS_NOT_OPENED;
     }
 
-    for (const auto& task : tasks_to_save) {
+    for (const auto& task : tasks) {
         google::protobuf::util::SerializeDelimitedToOstream(task, &file);
     }
 
     file.close();
 
     return SaveLoadStatus::SUCCESS;
+}
+
+std::unique_ptr<FilePersistence> FilePersistence::Create(const std::string& file_name) {
+    return std::unique_ptr<FilePersistence>(new FilePersistence(file_name));
+}
+
+FilePersistence::FilePersistence(const std::string& file_name) : file_name(file_name) {
+
 }
