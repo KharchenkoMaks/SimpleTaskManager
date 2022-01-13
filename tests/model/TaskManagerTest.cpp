@@ -11,6 +11,7 @@
 #include "TaskNode.pb.h"
 #include "utilities/TaskActionResult.h"
 #include "utilities/TaskComparators.h"
+#include "../utilities/MockTaskValidator.h"
 
 #include <ctime>
 #include <string>
@@ -56,6 +57,22 @@ public:
         expected_third_task.set_title(expected_title[2]);
         expected_third_task.set_priority(expected_priority[2]);
         expected_third_task.set_allocated_due_date(new google::protobuf::Timestamp(expected_time));
+    }
+    std::vector<TaskTransfer> FormTasksToVector() const {
+        TaskTransfer tt1;
+        tt1.set_allocated_task(new Task(expected_first_task));
+        tt1.set_allocated_task_id(new TaskId(expected_first_task_id));
+        TaskTransfer tt2;
+        tt2.set_allocated_task(new Task(expected_second_task));
+        tt2.set_allocated_task_id(new TaskId(expected_second_task_id));
+        tt2.set_allocated_parent_id(new TaskId(expected_first_task_id));
+        TaskTransfer tt3;
+        tt3.set_allocated_task(new Task(expected_third_task));
+        tt3.set_allocated_task_id(new TaskId(expected_third_task_id));
+        tt3.set_allocated_parent_id(new TaskId(expected_first_task_id));
+
+        std::vector<TaskTransfer> tasks { tt1, tt2, tt3 };
+        return tasks;
     }
 };
 
@@ -324,4 +341,224 @@ TEST_F(TaskManagerTest, TryCompleteSubTask_ShouldCompleteSubTask) {
     // Assert
     ASSERT_NE(actual_subtask, std::nullopt);
     EXPECT_TRUE(actual_subtask->task().completed());
+}
+
+TEST_F(TaskManagerTest, AddTaskLabel_ShouldAddLabelsToDifferentTasksProperly) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+            .WillOnce(Return(expected_first_task_id))
+            .WillOnce(Return(expected_second_task_id));
+
+    TaskManager task_manager(std::move(gen));
+    TaskId main_task_id = task_manager.AddTask(expected_first_task).second;
+    TaskId subtask_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
+    std::string expected_main_task_label = "main task label";
+    std::string expected_subtask_label = "subtask label";
+    // Act
+    TaskActionResult actual_main_task_result = task_manager.AddTaskLabel(main_task_id, expected_main_task_label);
+    TaskActionResult actual_subtask_result = task_manager.AddTaskLabel(subtask_id, expected_subtask_label);
+    Task actual_main_task = task_manager.GetTask(main_task_id).value().task();
+    Task actual_subtask = task_manager.GetTask(subtask_id).value().task();
+    // ASSERT
+    ASSERT_EQ(TaskActionResult::SUCCESS, actual_main_task_result);
+    ASSERT_EQ(TaskActionResult::SUCCESS, actual_subtask_result);
+    EXPECT_EQ(expected_main_task_label, actual_main_task.label());
+    EXPECT_EQ(expected_subtask_label, actual_subtask.label());
+}
+
+TEST_F(TaskManagerTest, AddTaskLabel_TryAddLabelForNonExistentTask_ShouldReturnError) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId()).Times(0);
+    TaskManager task_manager(std::move(gen));
+    const TaskActionResult expected_result = TaskActionResult::FAIL_NO_SUCH_TASK;
+    // Act
+    TaskActionResult actual_result = task_manager.AddTaskLabel(TaskId::default_instance(), "label");
+    // Assert
+    EXPECT_EQ(expected_result, actual_result);
+}
+
+TEST_F(TaskManagerTest, AddTask_TryAddInvalidTask_ShouldReturnError) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    std::unique_ptr<MockTaskValidator> task_validator = std::make_unique<MockTaskValidator>();
+    EXPECT_CALL(*task_validator, ValidateTask(Task::default_instance())).Times(2).WillRepeatedly(Return(false));
+    EXPECT_CALL(*gen, CreateNewTaskId()).Times(0);
+    TaskManager task_manager(std::move(gen), std::move(task_validator));
+    const TaskActionResult expected_error = TaskActionResult::FAIL_INVALID_TASK;
+    // Act
+    const auto actual_add_task_result = task_manager.AddTask(Task::default_instance());
+    const auto actual_add_subtask_result = task_manager.AddSubTask(Task::default_instance(), TaskId::default_instance());
+    // Assert
+    EXPECT_EQ(expected_error, actual_add_task_result.first);
+    EXPECT_EQ(TaskId::default_instance(), actual_add_task_result.second);
+    EXPECT_EQ(expected_error, actual_add_subtask_result.first);
+    EXPECT_EQ(TaskId::default_instance(), actual_add_subtask_result.second);
+}
+
+TEST_F(TaskManagerTest, EditTask_TryEditInvalidTask_ShouldReturnError) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    std::unique_ptr<MockTaskValidator> task_validator = std::make_unique<MockTaskValidator>();
+    EXPECT_CALL(*task_validator, ValidateTask(Task::default_instance())).WillOnce(Return(false));
+    EXPECT_CALL(*gen, CreateNewTaskId()).Times(0);
+    TaskManager task_manager(std::move(gen), std::move(task_validator));
+    const TaskActionResult expected_error = TaskActionResult::FAIL_INVALID_TASK;
+    // Act
+    const TaskActionResult actual_result = task_manager.EditTask(TaskId::default_instance(), Task::default_instance());
+    // Assert
+    EXPECT_EQ(expected_error, actual_result);
+}
+
+TEST_F(TaskManagerTest, AddSubTask_TryAddSubTaskForNonExistentParentTask_ShouldReturnError) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId()).Times(0);
+    TaskManager task_manager(std::move(gen));
+    const TaskActionResult expected_error = TaskActionResult::FAIL_NO_SUCH_TASK;
+    // Act
+    const auto actual_result = task_manager.AddSubTask(expected_first_task, TaskId::default_instance());
+    // Assert
+    EXPECT_EQ(expected_error, actual_result.first);
+    EXPECT_EQ(TaskId::default_instance(), actual_result.second);
+}
+
+TEST_F(TaskManagerTest, DeleteTask_TryDeleteMainTaskWithNotDeletedSubtasks_ShouldReturnError) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+            .Times(3)
+            .WillOnce(Return(expected_first_task_id))
+            .WillOnce(Return(expected_second_task_id))
+            .WillOnce(Return(expected_third_task_id));
+
+    TaskManager task_manager(std::move(gen));
+
+    TaskId main_task_id = task_manager.AddTask(expected_first_task).second;
+    TaskId subtask1_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
+    TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, main_task_id).second;
+
+    const TaskActionResult expected_result = TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
+    // Act
+    const TaskActionResult actual_result = task_manager.DeleteTask(main_task_id, false);
+    // Assert
+    EXPECT_EQ(expected_result, actual_result);
+}
+
+TEST_F(TaskManagerTest, CompleteTask_TryCompleteMainTaskWithNotCompletedSubtasks_ShouldReturnError) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+            .Times(3)
+            .WillOnce(Return(expected_first_task_id))
+            .WillOnce(Return(expected_second_task_id))
+            .WillOnce(Return(expected_third_task_id));
+
+    TaskManager task_manager(std::move(gen));
+
+    TaskId main_task_id = task_manager.AddTask(expected_first_task).second;
+    TaskId subtask1_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
+    TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, main_task_id).second;
+
+    const TaskActionResult expected_result = TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
+    // Act
+    const TaskActionResult actual_result = task_manager.CompleteTask(main_task_id, false);
+    // Assert
+    EXPECT_EQ(expected_result, actual_result);
+}
+
+TEST_F(TaskManagerTest, DeleteTask_TryDeleteMainTaskWithForceDeleteSubtasks_ShouldDeleteAllTasks) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+            .Times(3)
+            .WillOnce(Return(expected_first_task_id))
+            .WillOnce(Return(expected_second_task_id))
+            .WillOnce(Return(expected_third_task_id));
+
+    TaskManager task_manager(std::move(gen));
+
+    TaskId main_task_id = task_manager.AddTask(expected_first_task).second;
+    TaskId subtask1_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
+    TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, main_task_id).second;
+
+    const TaskActionResult expected_result = TaskActionResult::SUCCESS;
+    const size_t expected_tasks_size = 0;
+    // Act
+    const TaskActionResult actual_result = task_manager.DeleteTask(main_task_id, true);
+    const auto actual_tasks_size = task_manager.GetTasks().size();
+    // Assert
+    ASSERT_EQ(expected_result, actual_result);
+    EXPECT_EQ(expected_tasks_size, actual_tasks_size);
+}
+
+TEST_F(TaskManagerTest, CompleteTask_TryCompleteMainTaskWithForceCompleteSubtasks_ShouldCompleteAllTasks) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+            .Times(3)
+            .WillOnce(Return(expected_first_task_id))
+            .WillOnce(Return(expected_second_task_id))
+            .WillOnce(Return(expected_third_task_id));
+
+    TaskManager task_manager(std::move(gen));
+
+    TaskId main_task_id = task_manager.AddTask(expected_first_task).second;
+    TaskId subtask1_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
+    TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, main_task_id).second;
+
+    const TaskActionResult expected_result = TaskActionResult::SUCCESS;
+    const size_t expected_tasks_size = 3;
+    // Act
+    const TaskActionResult actual_result = task_manager.CompleteTask(main_task_id, true);
+    const auto actual_tasks = task_manager.GetTasks();
+    // Assert
+    ASSERT_EQ(expected_result, actual_result);
+    ASSERT_EQ(expected_tasks_size, actual_tasks.size());
+    EXPECT_EQ(true, actual_tasks[0].task().completed());
+    EXPECT_EQ(true, actual_tasks[1].task().completed());
+    EXPECT_EQ(true, actual_tasks[2].task().completed());
+}
+
+TEST_F(TaskManagerTest, LoadState_ShouldLoadAllTasks) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    std::unique_ptr<MockTaskValidator> task_validator = std::make_unique<MockTaskValidator>();
+    EXPECT_CALL(*gen, CreateNewTaskId()).Times(0);
+    {
+        testing::InSequence s;
+        EXPECT_CALL(*task_validator, ValidateTask(expected_first_task)).WillOnce(Return(true));
+        EXPECT_CALL(*task_validator, ValidateTask(expected_second_task)).WillOnce(Return(true));
+        EXPECT_CALL(*task_validator, ValidateTask(expected_third_task)).WillOnce(Return(true));
+    }
+    TaskManager task_manager { std::move(gen), std::move(task_validator) };
+    const auto expected_tasks = FormTasksToVector();
+    const bool expected_result = true;
+    // Act
+    const bool actual_result = task_manager.LoadModelState(expected_tasks);
+    const std::vector<TaskTransfer> actual_tasks = task_manager.GetTasks();
+    // Assert
+    ASSERT_EQ(expected_result, actual_result);
+    EXPECT_EQ(expected_tasks, actual_tasks);
+}
+
+TEST_F(TaskManagerTest, LoadState_TryLoadInvalidTasks_ShouldReturnFalse) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    std::unique_ptr<MockTaskValidator> task_validator = std::make_unique<MockTaskValidator>();
+    EXPECT_CALL(*gen, CreateNewTaskId()).Times(0);
+    {
+        testing::InSequence s;
+        EXPECT_CALL(*task_validator, ValidateTask(expected_first_task)).WillOnce(Return(true));
+        EXPECT_CALL(*task_validator, ValidateTask(expected_second_task)).WillOnce(Return(true));
+        EXPECT_CALL(*task_validator, ValidateTask(expected_third_task)).WillOnce(Return(false));
+    }
+    TaskManager task_manager { std::move(gen), std::move(task_validator) };
+    const auto tasks_to_load = FormTasksToVector();
+    const bool expected_result = false;
+    // Act
+    const bool actual_result = task_manager.LoadModelState(tasks_to_load);
+    // Assert
+    EXPECT_EQ(expected_result, actual_result);
 }
