@@ -5,13 +5,13 @@
 #ifndef SIMPLETASKMANAGER_SAVECOMMAND_H
 #define SIMPLETASKMANAGER_SAVECOMMAND_H
 
-#include "CommandInterface.h"
+#include "Command.h"
 #include "controller/Controller.h"
 
 #include <memory>
 #include <string>
 
-class SaveCommand : public CommandInterface {
+class SaveCommand : public Command {
 public:
     SaveCommand(const std::string& file_name);
 public:

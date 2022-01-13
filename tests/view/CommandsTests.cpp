@@ -13,7 +13,7 @@
 
 #include "mocks/MockController.h"
 
-#include "view/commands/CommandInterface.h"
+#include "view/commands/Command.h"
 #include "view/commands/AddSubTaskCommand.h"
 #include "view/commands/AddTaskCommand.h"
 #include "view/commands/CompleteTaskCommand.h"

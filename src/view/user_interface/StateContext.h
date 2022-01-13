@@ -6,7 +6,7 @@
 #define SIMPLETASKMANAGER_STATECONTEXT_H
 
 #include "Task.pb.h"
-#include "commands/CommandInterface.h"
+#include "commands/Command.h"
 #include "utilities/TaskBuilder.h"
 
 #include <memory>
@@ -36,8 +36,8 @@ public:
     void SetFileName(const std::string& file_name);
     std::string GetFileName() const;
 
-    void SetCommand(std::unique_ptr<CommandInterface> command);
-    std::shared_ptr<CommandInterface> GetCommand() const;
+    void SetCommand(std::unique_ptr<Command> command);
+    std::shared_ptr<Command> GetCommand() const;
 
     void SetTasksToShow(const std::vector<TaskTransfer>& tasks);
     std::vector<TaskTransfer> GetTasksToShow() const;
@@ -51,7 +51,7 @@ private:
 
     std::string file_name_;
 
-    std::shared_ptr<CommandInterface> command_;
+    std::shared_ptr<Command> command_;
 };
 
 

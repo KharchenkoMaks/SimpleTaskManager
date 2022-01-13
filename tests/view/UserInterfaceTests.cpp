@@ -58,7 +58,7 @@ TEST_F(UserInterfaceTests, AskUserForAction_ShouldRunStateMachineAndReturnComman
     EXPECT_CALL(*states_factory_, CreateStateMachine()).WillOnce(Return(testing::ByMove(std::move(state_machine))));
     EXPECT_CALL(*states_factory_, GetRootState()).WillOnce(Return(expected_root_state));
     // Act
-    std::shared_ptr<CommandInterface> actual_returned_command = ui.AskUserForAction();
+    std::shared_ptr<Command> actual_returned_command = ui.AskUserForAction();
     // Assert
     EXPECT_EQ(&expected_returned_command.get(), actual_returned_command.get());
 }

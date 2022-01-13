@@ -2,17 +2,17 @@
 // Created by Maksym Kharchenko on 21.12.2021.
 //
 
-#ifndef SIMPLETASKMANAGER_COMMANDINTERFACE_H
-#define SIMPLETASKMANAGER_COMMANDINTERFACE_H
+#ifndef SIMPLETASKMANAGER_COMMAND_H
+#define SIMPLETASKMANAGER_COMMAND_H
 
 #include "controller/Controller.h"
 #include "CommandResult.h"
 
-class CommandInterface {
+class Command {
 public:
     virtual CommandResult Execute(const std::shared_ptr<Controller>& controller) = 0;
 public:
-    virtual ~CommandInterface() = default;
+    virtual ~Command() = default;
 };
 
-#endif //SIMPLETASKMANAGER_COMMANDINTERFACE_H
+#endif //SIMPLETASKMANAGER_COMMAND_H

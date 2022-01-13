@@ -5,14 +5,14 @@
 #ifndef SIMPLETASKMANAGER_SETLABELCOMMAND_H
 #define SIMPLETASKMANAGER_SETLABELCOMMAND_H
 
-#include "CommandInterface.h"
+#include "Command.h"
 #include "Task.pb.h"
 #include "controller/Controller.h"
 
 #include <string>
 #include <memory>
 
-class SetLabelCommand : public CommandInterface {
+class SetLabelCommand : public Command {
 public:
     SetLabelCommand(const TaskId& task_id,
                     const std::string& label);

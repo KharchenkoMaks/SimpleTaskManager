@@ -13,7 +13,7 @@ ViewController::ViewController(std::unique_ptr<Controller> controller,
 
 void ViewController::RunUserInterface() {
     while (true) {
-        std::shared_ptr<CommandInterface> user_command = user_interface_->AskUserForAction();
+        std::shared_ptr<Command> user_command = user_interface_->AskUserForAction();
         if (user_command == nullptr)
             break;
 

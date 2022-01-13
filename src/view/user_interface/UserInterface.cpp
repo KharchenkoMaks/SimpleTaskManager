@@ -10,7 +10,7 @@ UserInterface::UserInterface(const std::shared_ptr<StatesFactory>& states_factor
 
 }
 
-std::shared_ptr<CommandInterface> UserInterface::AskUserForAction() {
+std::shared_ptr<Command> UserInterface::AskUserForAction() {
     auto state_machine = states_factory_->CreateStateMachine();
     std::shared_ptr<StateContext> result_context =
             state_machine->Run(std::make_shared<StateContext>(), states_factory_->GetRootState());

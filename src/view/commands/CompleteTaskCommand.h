@@ -5,13 +5,13 @@
 #ifndef SIMPLETASKMANAGER_COMPLETETASKCOMMAND_H
 #define SIMPLETASKMANAGER_COMPLETETASKCOMMAND_H
 
-#include "CommandInterface.h"
+#include "Command.h"
 #include "Task.pb.h"
 #include "controller/Controller.h"
 
 #include <memory>
 
-class CompleteTaskCommand : public CommandInterface {
+class CompleteTaskCommand : public Command {
 public:
     explicit CompleteTaskCommand(const TaskId& task_id, bool force_complete_subtasks);
 public:

@@ -8,7 +8,7 @@
 #include "user_interface/console_io/ConsolePrinter.h"
 #include "user_interface/console_io/ConsoleReader.h"
 #include "states/factory/StatesFactory.h"
-#include "commands/CommandInterface.h"
+#include "commands/Command.h"
 #include "model/controller/ControllerRequestResult.h"
 
 #include <memory>
@@ -18,7 +18,7 @@ class UserInterface {
 public:
     UserInterface(const std::shared_ptr<StatesFactory>& states_factory);
 public:
-    virtual std::shared_ptr<CommandInterface> AskUserForAction();
+    virtual std::shared_ptr<Command> AskUserForAction();
 public:
     virtual void PrintAddedTaskId(const TaskId& task_id);
     virtual void PrintRequestResult(ControllerRequestResult action_result);

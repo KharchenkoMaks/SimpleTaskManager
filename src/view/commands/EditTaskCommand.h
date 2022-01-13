@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_EDITTASKCOMMAND_H
 #define SIMPLETASKMANAGER_EDITTASKCOMMAND_H
 
-#include "CommandInterface.h"
+#include "Command.h"
 #include "Task.pb.h"
 #include "controller/Controller.h"
 #include "utilities/TaskBuilder.h"
@@ -13,7 +13,7 @@
 
 #include <memory>
 
-class EditTaskCommand : public CommandInterface {
+class EditTaskCommand : public Command {
 public:
     EditTaskCommand(const TaskBuilder& task_builder,
                     const TaskId& task_id);

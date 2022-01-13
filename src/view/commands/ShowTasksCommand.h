@@ -5,13 +5,13 @@
 #ifndef SIMPLETASKMANAGER_SHOWTASKSCOMMAND_H
 #define SIMPLETASKMANAGER_SHOWTASKSCOMMAND_H
 
-#include "CommandInterface.h"
+#include "Command.h"
 #include "Task.pb.h"
 #include "controller/Controller.h"
 
 #include <memory>
 
-class ShowTasksCommand : public CommandInterface {
+class ShowTasksCommand : public Command {
 public:
     ShowTasksCommand();
 public:

@@ -14,7 +14,7 @@
 #include "commands/SaveCommand.h"
 #include "commands/LoadCommand.h"
 
-std::unique_ptr<CommandInterface> CommandFactory::CreateAddTaskCommand(const StateContext& context) {
+std::unique_ptr<Command> CommandFactory::CreateAddTaskCommand(const StateContext& context) {
     std::optional<Task> task_to_add = context.GetTaskBuilder().BuildTask();
     if (task_to_add.has_value())
         return std::make_unique<AddTaskCommand>(task_to_add.value());
@@ -22,7 +22,7 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateAddTaskCommand(const Sta
     return nullptr;
 }
 
-std::unique_ptr<CommandInterface> CommandFactory::CreateAddSubTaskCommand(const StateContext& context) {
+std::unique_ptr<Command> CommandFactory::CreateAddSubTaskCommand(const StateContext& context) {
     std::optional<Task> task_to_add = context.GetTaskBuilder().BuildTask();
     std::optional<TaskId> parent_task_id = context.GetTaskId();
     if (task_to_add.has_value() && parent_task_id.has_value())
@@ -31,7 +31,7 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateAddSubTaskCommand(const 
     return nullptr;
 }
 
-std::unique_ptr<CommandInterface> CommandFactory::CreateEditCommand(const StateContext& context) {
+std::unique_ptr<Command> CommandFactory::CreateEditCommand(const StateContext& context) {
     TaskBuilder edited_task = context.GetTaskBuilder();
     std::optional<TaskId> edited_task_id = context.GetTaskId();
     if (edited_task_id.has_value())
@@ -40,7 +40,7 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateEditCommand(const StateC
     return nullptr;
 }
 
-std::unique_ptr<CommandInterface> CommandFactory::CreateCompleteCommand(const StateContext& context, bool force_complete_subtasks) {
+std::unique_ptr<Command> CommandFactory::CreateCompleteCommand(const StateContext& context, bool force_complete_subtasks) {
     std::optional<TaskId> task_id = context.GetTaskId();
     if (task_id.has_value())
         return std::make_unique<CompleteTaskCommand>(task_id.value(), force_complete_subtasks);
@@ -48,7 +48,7 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateCompleteCommand(const St
     return nullptr;
 }
 
-std::unique_ptr<CommandInterface> CommandFactory::CreateDeleteCommand(const StateContext& context, bool force_delete_subtasks) {
+std::unique_ptr<Command> CommandFactory::CreateDeleteCommand(const StateContext& context, bool force_delete_subtasks) {
     std::optional<TaskId> task_id = context.GetTaskId();
     if (task_id.has_value())
         return std::make_unique<DeleteTaskCommand>(task_id.value(), force_delete_subtasks);
@@ -56,7 +56,7 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateDeleteCommand(const Stat
     return nullptr;
 }
 
-std::unique_ptr<CommandInterface> CommandFactory::CreateSetLabelCommand(const StateContext& context) {
+std::unique_ptr<Command> CommandFactory::CreateSetLabelCommand(const StateContext& context) {
     std::optional<TaskId> task_id = context.GetTaskId();
     std::string task_label = context.GetTaskLabel();
     if (task_id.has_value() && !task_label.empty())
@@ -65,11 +65,11 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateSetLabelCommand(const St
     return nullptr;
 }
 
-std::unique_ptr<CommandInterface> CommandFactory::CreateShowCommand(const StateContext& context) {
+std::unique_ptr<Command> CommandFactory::CreateShowCommand(const StateContext& context) {
     return std::make_unique<ShowTasksCommand>();
 }
 
-std::unique_ptr<CommandInterface> CommandFactory::CreateSaveCommand(const StateContext& context) {
+std::unique_ptr<Command> CommandFactory::CreateSaveCommand(const StateContext& context) {
     std::string file_name = context.GetFileName();
     if (!file_name.empty())
         return std::make_unique<SaveCommand>(file_name);
@@ -77,7 +77,7 @@ std::unique_ptr<CommandInterface> CommandFactory::CreateSaveCommand(const StateC
     return nullptr;
 }
 
-std::unique_ptr<CommandInterface> CommandFactory::CreateLoadCommand(const StateContext& context) {
+std::unique_ptr<Command> CommandFactory::CreateLoadCommand(const StateContext& context) {
     std::string file_name = context.GetFileName();
     if (!file_name.empty())
         return std::make_unique<LoadCommand>(file_name);

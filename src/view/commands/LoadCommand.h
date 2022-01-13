@@ -5,13 +5,13 @@
 #ifndef SIMPLETASKMANAGER_LOADCOMMAND_H
 #define SIMPLETASKMANAGER_LOADCOMMAND_H
 
-#include "CommandInterface.h"
+#include "Command.h"
 #include "controller/Controller.h"
 
 #include <memory>
 #include <string>
 
-class LoadCommand : public CommandInterface {
+class LoadCommand : public Command {
 public:
     explicit LoadCommand(const std::string& file_name);
 public:

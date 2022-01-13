@@ -5,13 +5,13 @@
 #ifndef SIMPLETASKMANAGER_DELETETASKCOMMAND_H
 #define SIMPLETASKMANAGER_DELETETASKCOMMAND_H
 
-#include "CommandInterface.h"
+#include "Command.h"
 #include "Task.pb.h"
 #include "controller/Controller.h"
 
 #include <memory>
 
-class DeleteTaskCommand : public CommandInterface {
+class DeleteTaskCommand : public Command {
 public:
     explicit DeleteTaskCommand(const TaskId& task_id, bool force_delete_subtasks);
 public:

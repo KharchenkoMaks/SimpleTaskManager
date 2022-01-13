@@ -8,9 +8,9 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "view/commands/CommandInterface.h"
+#include "view/commands/Command.h"
 
-class MockCommand : public CommandInterface {
+class MockCommand : public Command {
 public:
     MOCK_METHOD(CommandResult, Execute, (const std::shared_ptr<Controller>& controller), (override));
 };

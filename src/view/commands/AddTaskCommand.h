@@ -5,14 +5,14 @@
 #ifndef SIMPLETASKMANAGER_ADDTASKCOMMAND_H
 #define SIMPLETASKMANAGER_ADDTASKCOMMAND_H
 
-#include "CommandInterface.h"
+#include "Command.h"
 #include "Task.pb.h"
 #include "controller/Controller.h"
 #include "controller/ControllerRequestResult.h"
 
 #include <memory>
 
-class AddTaskCommand : public CommandInterface {
+class AddTaskCommand : public Command {
 public:
     explicit AddTaskCommand(const Task& task);
 public:

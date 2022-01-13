@@ -5,14 +5,14 @@
 #ifndef SIMPLETASKMANAGER_ADDSUBTASKCOMMAND_H
 #define SIMPLETASKMANAGER_ADDSUBTASKCOMMAND_H
 
-#include "CommandInterface.h"
+#include "Command.h"
 #include "Task.pb.h"
 #include "controller/Controller.h"
 #include "controller/ControllerRequestResult.h"
 
 #include <memory>
 
-class AddSubTaskCommand : public CommandInterface {
+class AddSubTaskCommand : public Command {
 public:
     AddSubTaskCommand(const Task& task,
                       const TaskId& parent_id);

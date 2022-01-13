@@ -46,11 +46,11 @@ std::string StateContext::GetFileName() const {
     return file_name_;
 }
 
-void StateContext::SetCommand(std::unique_ptr<CommandInterface> command){
+void StateContext::SetCommand(std::unique_ptr<Command> command){
     command_ = std::move(command);
 }
 
-std::shared_ptr<CommandInterface> StateContext::GetCommand() const {
+std::shared_ptr<Command> StateContext::GetCommand() const {
     return command_;
 }
 
