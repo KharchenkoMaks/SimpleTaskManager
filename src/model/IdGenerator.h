@@ -13,7 +13,7 @@ public:
 public:
     virtual TaskId CreateNewTaskId();
 public:
-    bool SetLastTaskId(const TaskId& task_id);
+    virtual bool SetLastTaskId(const TaskId& task_id);
 public:
     virtual ~IdGenerator();
 private:

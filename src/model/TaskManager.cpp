@@ -147,6 +147,9 @@ bool TaskManager::LoadModelState(const std::vector<TaskTransfer>& tasks) {
         if (!task.has_task() || !task.has_task_id() || !task_validator_->ValidateTask(task.task())) {
             return false;
         }
+        if (task.task_id().id() > max_id.id())
+            max_id = task.task_id();
+
         tasks_to_add.insert_or_assign(task.task_id(), model::CreateTaskNode(task));
     }
     max_id.set_id(max_id.id() + 1);

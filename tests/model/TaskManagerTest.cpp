@@ -25,6 +25,7 @@ using ::testing::Return;
 class MockIdGenerator : public IdGenerator{
 public:
     MOCK_METHOD(TaskId, CreateNewTaskId, (), (override));
+    MOCK_METHOD(bool, SetLastTaskId, (const TaskId& task_id), (override));
 };
 
 class TaskManagerTest : public ::testing::Test {
@@ -525,7 +526,11 @@ TEST_F(TaskManagerTest, LoadState_ShouldLoadAllTasks) {
     // Arrange
     std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
     std::unique_ptr<MockTaskValidator> task_validator = std::make_unique<MockTaskValidator>();
+    TaskId expected_last_id;
+    expected_last_id.set_id(expected_third_task_id.id() + 1);
     EXPECT_CALL(*gen, CreateNewTaskId()).Times(0);
+    EXPECT_CALL(*gen, SetLastTaskId(TaskId(expected_last_id))).Times(1);
+
     {
         testing::InSequence s;
         EXPECT_CALL(*task_validator, ValidateTask(expected_first_task)).WillOnce(Return(true));
