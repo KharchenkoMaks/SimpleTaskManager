@@ -10,7 +10,7 @@ LoadState::LoadState(const std::shared_ptr<StatesFactory>& factory) : factory_(f
 
 }
 
-std::shared_ptr<StateInterface> LoadState::Execute(StateContext& context) {
+std::shared_ptr<State> LoadState::Execute(StateContext& context) {
     std::string file_name = console_io::util::GetUserInput("File name", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
     context.SetFileName(file_name);
     context.SetCommand(factory_.lock()->GetCommandFactory()->CreateLoadCommand(context));

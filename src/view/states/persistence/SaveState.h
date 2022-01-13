@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_SAVESTATE_H
 #define SIMPLETASKMANAGER_SAVESTATE_H
 
-#include "states/StateInterface.h"
+#include "states/State.h"
 #include "states/factory/StatesFactory.h"
 #include "user_interface/StateContext.h"
 #include "Task.pb.h"
@@ -14,11 +14,11 @@
 #include <memory>
 #include <optional>
 
-class SaveState : public StateInterface {
+class SaveState : public State {
 public:
     explicit SaveState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<StateInterface> Execute(StateContext& context) override;
+    std::shared_ptr<State> Execute(StateContext& context) override;
 private:
     std::weak_ptr<StatesFactory> factory_;
 };

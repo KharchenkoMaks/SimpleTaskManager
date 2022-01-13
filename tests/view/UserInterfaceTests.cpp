@@ -48,7 +48,7 @@ TEST_F(UserInterfaceTests, AskUserForAction_ShouldRunStateMachineAndReturnComman
     // Arrange
     UserInterface ui { states_factory_ };
     std::unique_ptr<MockStateMachine> state_machine = std::make_unique<MockStateMachine>();
-    std::shared_ptr<StateInterface> expected_root_state = std::make_shared<RootState>(nullptr);
+    std::shared_ptr<State> expected_root_state = std::make_shared<RootState>(nullptr);
     std::shared_ptr<StateContext> returned_context = std::make_shared<StateContext>();
     std::unique_ptr<AddTaskCommand> expected_command = std::make_unique<AddTaskCommand>(Task::default_instance());
     std::reference_wrapper<AddTaskCommand> expected_returned_command(*expected_command);
@@ -78,7 +78,7 @@ TEST_F(UserInterfaceTests, ShowTasks_ShouldStartStateMachineToShowTasks) {
     // Arrange
     UserInterface ui { states_factory_ };
     std::unique_ptr<MockStateMachine> state_machine = std::make_unique<MockStateMachine>();
-    std::shared_ptr<StateInterface> expected_show_state = std::make_shared<ShowState>(nullptr);
+    std::shared_ptr<State> expected_show_state = std::make_shared<ShowState>(nullptr);
     std::shared_ptr<StateContext> expected_show_state_context = std::make_shared<StateContext>();
 
     // Arrange tasks to show

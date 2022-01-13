@@ -11,7 +11,7 @@ InputTaskPriorityState::InputTaskPriorityState(const std::shared_ptr<StatesFacto
 
 }
 
-std::shared_ptr<StateInterface> InputTaskPriorityState::Execute(StateContext& context) {
+std::shared_ptr<State> InputTaskPriorityState::Execute(StateContext& context) {
     std::string user_input =
             console_io::util::GetUserInput("Priority (High, Medium, Low, None)", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
 

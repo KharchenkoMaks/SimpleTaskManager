@@ -72,8 +72,8 @@ public:
 
 TEST_F(StatesTests, AddSubTaskStateExecuteShouldCreateAddSubTaskCommand) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_state_machine_initial_state = std::make_shared<InputTaskTitleState>(nullptr);
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<EndState>(nullptr);
+    std::shared_ptr<State> expected_state_machine_initial_state = std::make_shared<InputTaskTitleState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<EndState>(nullptr);
     std::shared_ptr<StateContext> expected_returned_context_from_state_machine = GetContextWithFilledTask();
     StateContext add_subtask_context;
     AddSubTaskState add_subtask_state(states_factory_);
@@ -94,7 +94,7 @@ TEST_F(StatesTests, AddSubTaskStateExecuteShouldCreateAddSubTaskCommand) {
 
     EXPECT_CALL(*command_factory_, CreateAddSubTaskCommand(testing::Ref(add_subtask_context))).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = add_subtask_state.Execute(add_subtask_context);
+    std::shared_ptr<State> actual_next_state = add_subtask_state.Execute(add_subtask_context);
     // Assert
     EXPECT_EQ(add_subtask_context.GetTaskBuilder().BuildTask(), expected_returned_context_from_state_machine->GetTaskBuilder().BuildTask());
     EXPECT_EQ(expected_next_state, actual_next_state);
@@ -102,7 +102,7 @@ TEST_F(StatesTests, AddSubTaskStateExecuteShouldCreateAddSubTaskCommand) {
 
 TEST_F(StatesTests, AddSubTaskStateExecuteGivenWrongParentId_ShouldReturnErrorNextState) {
     // Assert
-    std::shared_ptr<StateInterface> expected_next_state = std::shared_ptr<RootState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::shared_ptr<RootState>(nullptr);
     StateContext add_subtask_context;
     AddSubTaskState add_subtask_state(states_factory_);
     // Assert
@@ -113,14 +113,14 @@ TEST_F(StatesTests, AddSubTaskStateExecuteGivenWrongParentId_ShouldReturnErrorNe
 
     EXPECT_CALL(*console_printer_, WriteError("Incorrect task id was given, try again!")).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = add_subtask_state.Execute(add_subtask_context);
+    std::shared_ptr<State> actual_next_state = add_subtask_state.Execute(add_subtask_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
 
 TEST_F(StatesTests, AddTaskExecuteShouldCreateAddTaskCommand) {
-    std::shared_ptr<StateInterface> expected_state_machine_initial_state = std::make_shared<InputTaskTitleState>(nullptr);
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<EndState>(nullptr);
+    std::shared_ptr<State> expected_state_machine_initial_state = std::make_shared<InputTaskTitleState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<EndState>(nullptr);
     std::shared_ptr<StateContext> expected_returned_context_from_state_machine = GetContextWithFilledTask();
     StateContext add_task_context;
     AddTaskState add_task_state(states_factory_);
@@ -137,7 +137,7 @@ TEST_F(StatesTests, AddTaskExecuteShouldCreateAddTaskCommand) {
 
     EXPECT_CALL(*command_factory_, CreateAddTaskCommand(testing::Ref(add_task_context))).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = add_task_state.Execute(add_task_context);
+    std::shared_ptr<State> actual_next_state = add_task_state.Execute(add_task_context);
     // Assert
     EXPECT_EQ(add_task_context.GetTaskBuilder().BuildTask(), expected_returned_context_from_state_machine->GetTaskBuilder().BuildTask());
     EXPECT_EQ(expected_next_state, actual_next_state);
@@ -145,8 +145,8 @@ TEST_F(StatesTests, AddTaskExecuteShouldCreateAddTaskCommand) {
 
 TEST_F(StatesTests, EditTaskExecuteShouldCreateEditTaskCommand) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_state_machine_initial_state = std::make_shared<InputTaskTitleState>(nullptr);
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<EndState>(nullptr);
+    std::shared_ptr<State> expected_state_machine_initial_state = std::make_shared<InputTaskTitleState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<EndState>(nullptr);
     std::shared_ptr<StateContext> expected_returned_context_from_state_machine = GetContextWithFilledTask();
     StateContext edit_task_context;
     EditTaskState edit_task_state(states_factory_);
@@ -167,7 +167,7 @@ TEST_F(StatesTests, EditTaskExecuteShouldCreateEditTaskCommand) {
 
     EXPECT_CALL(*command_factory_, CreateEditCommand(testing::Ref(edit_task_context))).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = edit_task_state.Execute(edit_task_context);
+    std::shared_ptr<State> actual_next_state = edit_task_state.Execute(edit_task_context);
     // Assert
     EXPECT_EQ(edit_task_context.GetTaskBuilder().BuildTask(), expected_returned_context_from_state_machine->GetTaskBuilder().BuildTask());
     EXPECT_EQ(expected_next_state, actual_next_state);
@@ -175,7 +175,7 @@ TEST_F(StatesTests, EditTaskExecuteShouldCreateEditTaskCommand) {
 
 TEST_F(StatesTests, EditTaskStateExecuteGivenWrongTaskId_ShouldReturnErrorNextState) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<RootState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<RootState>(nullptr);
     StateContext edit_task_context;
     EditTaskState edit_task_state(states_factory_);
     // Assert
@@ -186,7 +186,7 @@ TEST_F(StatesTests, EditTaskStateExecuteGivenWrongTaskId_ShouldReturnErrorNextSt
 
     EXPECT_CALL(*console_printer_, WriteError("Incorrect task id was given, try again!")).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = edit_task_state.Execute(edit_task_context);
+    std::shared_ptr<State> actual_next_state = edit_task_state.Execute(edit_task_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
@@ -194,7 +194,7 @@ TEST_F(StatesTests, EditTaskStateExecuteGivenWrongTaskId_ShouldReturnErrorNextSt
 // Inputting due date with time
 TEST_F(StatesTests, InputTaskDueDateStateExecute_ShouldAddTimeToContext) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<EndState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<EndState>(nullptr);
     StateContext input_due_date_context;
     InputTaskDueDateState input_due_date_state(states_factory_);
 
@@ -205,7 +205,7 @@ TEST_F(StatesTests, InputTaskDueDateStateExecute_ShouldAddTimeToContext) {
     EXPECT_CALL(*states_factory_, GetNextState(testing::An<const InputTaskDueDateState&>(), StatesFactory::MoveType::NEXT))
             .WillOnce(Return(expected_next_state));
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = input_due_date_state.Execute(input_due_date_context);
+    std::shared_ptr<State> actual_next_state = input_due_date_state.Execute(input_due_date_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
     EXPECT_EQ(expected_timestamp, input_due_date_context.GetTaskBuilder().BuildTask().due_date());
@@ -214,7 +214,7 @@ TEST_F(StatesTests, InputTaskDueDateStateExecute_ShouldAddTimeToContext) {
 // Inputting due date without time
 TEST_F(StatesTests, InputTaskDueDateStateExecuteGivingDueDateWithoutTime_ShouldPrintError) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<EndState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<EndState>(nullptr);
     StateContext input_due_date_context;
     InputTaskDueDateState input_due_date_state(states_factory_);
 
@@ -225,7 +225,7 @@ TEST_F(StatesTests, InputTaskDueDateStateExecuteGivingDueDateWithoutTime_ShouldP
     EXPECT_CALL(*states_factory_, GetNextState(testing::An<const InputTaskDueDateState&>(), StatesFactory::MoveType::NEXT))
             .WillOnce(Return(expected_next_state));
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = input_due_date_state.Execute(input_due_date_context);
+    std::shared_ptr<State> actual_next_state = input_due_date_state.Execute(input_due_date_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
     EXPECT_EQ(expected_timestamp, input_due_date_context.GetTaskBuilder().BuildTask().due_date());
@@ -234,7 +234,7 @@ TEST_F(StatesTests, InputTaskDueDateStateExecuteGivingDueDateWithoutTime_ShouldP
 // Inputting incorrect due date
 TEST_F(StatesTests, InputTaskDueDateStateExecuteGivingIncorrectDueDate_ShouldPrintError) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<InputTaskDueDateState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<InputTaskDueDateState>(nullptr);
     StateContext input_due_date_context;
     InputTaskDueDateState input_due_date_state(states_factory_);
 
@@ -245,7 +245,7 @@ TEST_F(StatesTests, InputTaskDueDateStateExecuteGivingIncorrectDueDate_ShouldPri
             .WillOnce(Return(expected_next_state));
     EXPECT_CALL(*console_printer_, WriteError("Wrong due date was given, try again!")).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = input_due_date_state.Execute(input_due_date_context);
+    std::shared_ptr<State> actual_next_state = input_due_date_state.Execute(input_due_date_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
@@ -253,7 +253,7 @@ TEST_F(StatesTests, InputTaskDueDateStateExecuteGivingIncorrectDueDate_ShouldPri
 // Inputting due date from past
 TEST_F(StatesTests, InputTaskDueDateStateExecuteGivingDueDateFromPast_ShouldPrintError) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<InputTaskDueDateState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<InputTaskDueDateState>(nullptr);
     StateContext input_due_date_context;
     InputTaskDueDateState input_due_date_state(states_factory_);
 
@@ -264,14 +264,14 @@ TEST_F(StatesTests, InputTaskDueDateStateExecuteGivingDueDateFromPast_ShouldPrin
             .WillOnce(Return(expected_next_state));
     EXPECT_CALL(*console_printer_, WriteError("Due time should be in future, try again!")).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = input_due_date_state.Execute(input_due_date_context);
+    std::shared_ptr<State> actual_next_state = input_due_date_state.Execute(input_due_date_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
 
 TEST_F(StatesTests, InputTaskPriorityStateExecute_ShouldPutPriorityInContext) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<InputTaskDueDateState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<InputTaskDueDateState>(nullptr);
     StateContext input_priority_context;
     InputTaskPriorityState input_priority_state(states_factory_);
 
@@ -282,7 +282,7 @@ TEST_F(StatesTests, InputTaskPriorityStateExecute_ShouldPutPriorityInContext) {
     EXPECT_CALL(*states_factory_, GetNextState(testing::An<const InputTaskPriorityState&>(), StatesFactory::MoveType::NEXT))
             .WillOnce(Return(expected_next_state));
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = input_priority_state.Execute(input_priority_context);
+    std::shared_ptr<State> actual_next_state = input_priority_state.Execute(input_priority_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
     EXPECT_EQ(expected_priority, input_priority_context.GetTaskBuilder().BuildTask().priority());
@@ -290,7 +290,7 @@ TEST_F(StatesTests, InputTaskPriorityStateExecute_ShouldPutPriorityInContext) {
 
 TEST_F(StatesTests, InputTaskPriorityStateExecuteGivingIncorrectPriority_ShouldPrintError) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<InputTaskPriorityState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<InputTaskPriorityState>(nullptr);
     StateContext input_priority_context;
     InputTaskPriorityState input_priority_state(states_factory_);
 
@@ -301,14 +301,14 @@ TEST_F(StatesTests, InputTaskPriorityStateExecuteGivingIncorrectPriority_ShouldP
             .WillOnce(Return(expected_next_state));
     EXPECT_CALL(*console_printer_, WriteError("Wrong task priority was given, try [High, Medium, Low, None]!")).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = input_priority_state.Execute(input_priority_context);
+    std::shared_ptr<State> actual_next_state = input_priority_state.Execute(input_priority_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
 
 TEST_F(StatesTests, InputTaskTitleStateExecute_ShouldPutTitleInContext) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<InputTaskPriorityState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<InputTaskPriorityState>(nullptr);
     StateContext input_title_context;
     InputTaskTitleState input_title_state(states_factory_);
 
@@ -318,7 +318,7 @@ TEST_F(StatesTests, InputTaskTitleStateExecute_ShouldPutTitleInContext) {
     EXPECT_CALL(*states_factory_, GetNextState(testing::An<const InputTaskTitleState&>(), StatesFactory::MoveType::NEXT))
             .WillOnce(Return(expected_next_state));
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = input_title_state.Execute(input_title_context);
+    std::shared_ptr<State> actual_next_state = input_title_state.Execute(input_title_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
     EXPECT_EQ(expected_input_title, input_title_context.GetTaskBuilder().BuildTask().title());
@@ -326,7 +326,7 @@ TEST_F(StatesTests, InputTaskTitleStateExecute_ShouldPutTitleInContext) {
 
 TEST_F(StatesTests, SetLabelStateExecute_ShouldCreateSetLabelCommand) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<EndState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<EndState>(nullptr);
     StateContext set_label_context;
     SetLabelState set_label_state(states_factory_);
 
@@ -344,14 +344,14 @@ TEST_F(StatesTests, SetLabelStateExecute_ShouldCreateSetLabelCommand) {
     EXPECT_CALL(*states_factory_, GetNextState(testing::An<const SetLabelState&>(), StatesFactory::MoveType::PREVIOUS))
         .WillOnce(Return(expected_next_state));
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = set_label_state.Execute(set_label_context);
+    std::shared_ptr<State> actual_next_state = set_label_state.Execute(set_label_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
 
 TEST_F(StatesTests, SetLabelStateExecuteGivingWrongTaskId_ShouldPrintError) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<EndState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<EndState>(nullptr);
     StateContext set_label_context;
     SetLabelState set_label_state(states_factory_);
 
@@ -362,14 +362,14 @@ TEST_F(StatesTests, SetLabelStateExecuteGivingWrongTaskId_ShouldPrintError) {
             .WillOnce(Return(expected_next_state));
     EXPECT_CALL(*console_printer_, WriteError("Incorrect task id was given, try again!")).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = set_label_state.Execute(set_label_context);
+    std::shared_ptr<State> actual_next_state = set_label_state.Execute(set_label_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
 
 TEST_F(StatesTests, CompleteTaskStateExecute_ShouldCreateCompleteTaskCommand) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<EndState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<EndState>(nullptr);
     StateContext complete_task_context;
     CompleteTaskState complete_task_state(states_factory_);
 
@@ -384,14 +384,14 @@ TEST_F(StatesTests, CompleteTaskStateExecute_ShouldCreateCompleteTaskCommand) {
             .WillOnce(Return(expected_next_state));
     EXPECT_CALL(*command_factory_, CreateCompleteCommand(testing::Ref(complete_task_context), expected_confirmation)).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = complete_task_state.Execute(complete_task_context);
+    std::shared_ptr<State> actual_next_state = complete_task_state.Execute(complete_task_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
 
 TEST_F(StatesTests, CompleteTaskStateExecuteWithIncorrectTaskId_ShouldPrintError) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<CompleteTaskState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<CompleteTaskState>(nullptr);
     StateContext complete_task_context;
     CompleteTaskState complete_task_state(states_factory_);
 
@@ -402,14 +402,14 @@ TEST_F(StatesTests, CompleteTaskStateExecuteWithIncorrectTaskId_ShouldPrintError
             .WillOnce(Return(expected_next_state));
     EXPECT_CALL(*console_printer_, WriteError("Incorrect task id was given, try again!")).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = complete_task_state.Execute(complete_task_context);
+    std::shared_ptr<State> actual_next_state = complete_task_state.Execute(complete_task_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
 
 TEST_F(StatesTests, DeleteTaskStateExecute_ShouldCreateDeleteTaskCommand) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<EndState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<EndState>(nullptr);
     StateContext delete_task_context;
     DeleteTaskState delete_task_state(states_factory_);
 
@@ -424,14 +424,14 @@ TEST_F(StatesTests, DeleteTaskStateExecute_ShouldCreateDeleteTaskCommand) {
             .WillOnce(Return(expected_next_state));
     EXPECT_CALL(*command_factory_, CreateDeleteCommand(testing::Ref(delete_task_context), expected_confirmation)).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = delete_task_state.Execute(delete_task_context);
+    std::shared_ptr<State> actual_next_state = delete_task_state.Execute(delete_task_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
 
 TEST_F(StatesTests, DeleteTaskStateExecuteWithIncorrectTaskId_ShouldPrintError) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = std::make_shared<DeleteTaskState>(nullptr);
+    std::shared_ptr<State> expected_next_state = std::make_shared<DeleteTaskState>(nullptr);
     StateContext delete_task_context;
     DeleteTaskState delete_task_state(states_factory_);
 
@@ -442,18 +442,18 @@ TEST_F(StatesTests, DeleteTaskStateExecuteWithIncorrectTaskId_ShouldPrintError) 
             .WillOnce(Return(expected_next_state));
     EXPECT_CALL(*console_printer_, WriteError("Incorrect task id was given, try again!")).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = delete_task_state.Execute(delete_task_context);
+    std::shared_ptr<State> actual_next_state = delete_task_state.Execute(delete_task_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
 
 TEST_F(StatesTests, EndStateExecute_ShouldReturnNullptr) {
     // Arrange
-    std::shared_ptr<StateInterface> expected_next_state = nullptr;
+    std::shared_ptr<State> expected_next_state = nullptr;
     StateContext end_state_context;
     EndState end_state(states_factory_);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = end_state.Execute(end_state_context);
+    std::shared_ptr<State> actual_next_state = end_state.Execute(end_state_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
@@ -481,7 +481,7 @@ TEST_F(StatesTests, HelpStateExecute_ShouldPrintHelpMessage) {
         EXPECT_CALL(*console_printer_, WriteLine("10. quit"));
     }
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = help_state.Execute(help_state_context);
+    std::shared_ptr<State> actual_next_state = help_state.Execute(help_state_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
@@ -496,7 +496,7 @@ TEST_F(StatesTests, InputShowParametersStateExecute_ShouldCreateShowCommand) {
             .WillOnce(Return(expected_next_state));
     EXPECT_CALL(*command_factory_, CreateShowCommand(testing::Ref(show_state_context))).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = input_show_state.Execute(show_state_context);
+    std::shared_ptr<State> actual_next_state = input_show_state.Execute(show_state_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
@@ -512,7 +512,7 @@ TEST_F(StatesTests, QuitStateExecuteConfirm_ShouldReturnNextState) {
     EXPECT_CALL(*states_factory_, GetNextState(testing::An<const QuitState&>(), StatesFactory::MoveType::NEXT))
             .WillOnce(Return(expected_next_state));
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = quit_state.Execute(quit_state_context);
+    std::shared_ptr<State> actual_next_state = quit_state.Execute(quit_state_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
@@ -528,7 +528,7 @@ TEST_F(StatesTests, QuitStateExecuteNotConfirm_ShouldReturnPreviousState) {
     EXPECT_CALL(*states_factory_, GetNextState(testing::An<const QuitState&>(), StatesFactory::MoveType::PREVIOUS))
             .WillOnce(Return(expected_next_state));
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = quit_state.Execute(quit_state_context);
+    std::shared_ptr<State> actual_next_state = quit_state.Execute(quit_state_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
@@ -544,7 +544,7 @@ TEST_F(StatesTests, RootStateExecuteWithRightCommand_ShouldReturnNextState) {
     ExpectGetUserInput("", expected_input_command);
     EXPECT_CALL(*states_factory_, GetStateByCommand(expected_input_command)).WillOnce(Return(expected_next_state));
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = root_state.Execute(root_state_context);
+    std::shared_ptr<State> actual_next_state = root_state.Execute(root_state_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
@@ -563,7 +563,7 @@ TEST_F(StatesTests, RootStateExecuteWithIncorrectCommand_ShouldPrintError) {
             .WillOnce(Return(expected_next_state));
     EXPECT_CALL(*console_printer_, WriteError("Unknown command! Use help.")).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = root_state.Execute(root_state_context);
+    std::shared_ptr<State> actual_next_state = root_state.Execute(root_state_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
@@ -611,7 +611,7 @@ TEST_F(StatesTests, ShowStateExecute_ShouldPrintAllTasksFromContext) {
     EXPECT_CALL(*states_factory_, GetNextState(testing::An<const ShowState&>(), StatesFactory::MoveType::PREVIOUS))
             .WillOnce(Return(expected_next_state));
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = show_state.Execute(show_state_context);
+    std::shared_ptr<State> actual_next_state = show_state.Execute(show_state_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
@@ -629,7 +629,7 @@ TEST_F(StatesTests, LoadStateExecute_ShouldCreateLoadCommand) {
             .WillOnce(Return(expected_next_state));
     EXPECT_CALL(*command_factory_, CreateLoadCommand(testing::Ref(load_state_context))).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = load_state.Execute(load_state_context);
+    std::shared_ptr<State> actual_next_state = load_state.Execute(load_state_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
     EXPECT_EQ(expected_input_file_name, load_state_context.GetFileName());
@@ -648,7 +648,7 @@ TEST_F(StatesTests, SaveStateExecute_ShouldCreateSaveCommand) {
             .WillOnce(Return(expected_next_state));
     EXPECT_CALL(*command_factory_, CreateSaveCommand(testing::Ref(save_state_context))).Times(1);
     // Act
-    std::shared_ptr<StateInterface> actual_next_state = save_state.Execute(save_state_context);
+    std::shared_ptr<State> actual_next_state = save_state.Execute(save_state_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
     EXPECT_EQ(expected_input_file_name, save_state_context.GetFileName());

@@ -16,7 +16,7 @@ void ShowState::PrintTasks(const std::vector<TaskTransfer> &tasks) {
     }
 }
 
-std::shared_ptr<StateInterface> ShowState::Execute(StateContext& context) {
+std::shared_ptr<State> ShowState::Execute(StateContext& context) {
     PrintTasks(context.GetTasksToShow());
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }

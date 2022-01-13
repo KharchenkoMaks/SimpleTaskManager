@@ -10,7 +10,7 @@ DeleteTaskState::DeleteTaskState(const std::shared_ptr<StatesFactory>& factory) 
 
 }
 
-std::shared_ptr<StateInterface> DeleteTaskState::Execute(StateContext& context) {
+std::shared_ptr<State> DeleteTaskState::Execute(StateContext& context) {
     std::optional<TaskId> task_id = console_io::util::GetTaskIdFromUser("Task ID", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
     if (!task_id.has_value()){
         factory_.lock()->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");

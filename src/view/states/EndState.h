@@ -5,18 +5,18 @@
 #ifndef SIMPLETASKMANAGER_ENDSTATE_H
 #define SIMPLETASKMANAGER_ENDSTATE_H
 
-#include "StateInterface.h"
+#include "State.h"
 #include "states/factory/StatesFactory.h"
 #include "user_interface/StateContext.h"
 
 #include <memory>
 #include <string>
 
-class EndState : public StateInterface {
+class EndState : public State {
 public:
     EndState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<StateInterface> Execute(StateContext& context) override;
+    std::shared_ptr<State> Execute(StateContext& context) override;
 private:
     std::weak_ptr<StatesFactory> factory_;
 };

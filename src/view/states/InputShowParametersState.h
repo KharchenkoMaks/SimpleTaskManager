@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_INPUTSHOWPARAMETERSSTATE_H
 #define SIMPLETASKMANAGER_INPUTSHOWPARAMETERSSTATE_H
 
-#include "StateInterface.h"
+#include "State.h"
 #include "states/factory/StatesFactory.h"
 #include "user_interface/StateContext.h"
 #include "Task.pb.h"
@@ -13,11 +13,11 @@
 #include <memory>
 #include <optional>
 
-class InputShowParametersState : public StateInterface {
+class InputShowParametersState : public State {
 public:
     explicit InputShowParametersState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<StateInterface> Execute(StateContext& context) override;
+    std::shared_ptr<State> Execute(StateContext& context) override;
 private:
     std::weak_ptr<StatesFactory> factory_;
 };

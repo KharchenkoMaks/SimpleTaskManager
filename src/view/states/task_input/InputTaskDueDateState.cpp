@@ -11,7 +11,7 @@ InputTaskDueDateState::InputTaskDueDateState(const std::shared_ptr<StatesFactory
 
 }
 
-std::shared_ptr<StateInterface> InputTaskDueDateState::Execute(StateContext& context) {
+std::shared_ptr<State> InputTaskDueDateState::Execute(StateContext& context) {
     std::string user_input =
             console_io::util::GetUserInput("Due Date, format: 12:00 01.01.2000", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
 

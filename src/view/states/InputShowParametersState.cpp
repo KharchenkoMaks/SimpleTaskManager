@@ -11,7 +11,7 @@ InputShowParametersState::InputShowParametersState(const std::shared_ptr<StatesF
 
 }
 
-std::shared_ptr<StateInterface> InputShowParametersState::Execute(StateContext& context) {
+std::shared_ptr<State> InputShowParametersState::Execute(StateContext& context) {
     context.SetCommand(factory_.lock()->GetCommandFactory()->CreateShowCommand(context));
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
 }

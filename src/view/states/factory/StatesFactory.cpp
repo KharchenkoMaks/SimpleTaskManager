@@ -30,7 +30,7 @@ StatesFactory::StatesFactory(const std::shared_ptr<CommandFactory>& command_fact
                              printer_(printer),
                              reader_(reader) {}
 
-std::shared_ptr<StateInterface> StatesFactory::GetStateByCommand(const std::string &command) {
+std::shared_ptr<State> StatesFactory::GetStateByCommand(const std::string &command) {
     if (command == "add") {
         return GetLazyStateByStatesEnum(States::kAddTask);
     } else if (command == "add_subtask") {
@@ -58,15 +58,15 @@ std::shared_ptr<StateInterface> StatesFactory::GetStateByCommand(const std::stri
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetRootState() {
+std::shared_ptr<State> StatesFactory::GetRootState() {
     return GetLazyStateByStatesEnum(States::kRoot);
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetShowState() {
+std::shared_ptr<State> StatesFactory::GetShowState() {
     return GetLazyStateByStatesEnum(States::kShow);
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const QuitState& state, const MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const QuitState& state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -80,21 +80,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const QuitState& sta
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const AddTaskState &state, const MoveType move_type) {
-    switch (move_type) {
-        case MoveType::PREVIOUS: {
-            return GetLazyStateByStatesEnum(States::kEnd);
-        }
-        case MoveType::ERROR: {
-            return GetLazyStateByStatesEnum(States::kRoot);
-        }
-        case MoveType::NEXT: {
-            return GetLazyStateByStatesEnum(States::kInputTaskTitle);
-        }
-    }
-}
-
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const AddSubTaskState& state, const MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const AddTaskState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kEnd);
@@ -108,7 +94,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const AddSubTaskStat
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const EditTaskState &state, const MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const AddSubTaskState& state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kEnd);
@@ -122,7 +108,21 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const EditTaskState 
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const InputTaskTitleState &state, const MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const EditTaskState &state, const MoveType move_type) {
+    switch (move_type) {
+        case MoveType::PREVIOUS: {
+            return GetLazyStateByStatesEnum(States::kEnd);
+        }
+        case MoveType::ERROR: {
+            return GetLazyStateByStatesEnum(States::kRoot);
+        }
+        case MoveType::NEXT: {
+            return GetLazyStateByStatesEnum(States::kInputTaskTitle);
+        }
+    }
+}
+
+std::shared_ptr<State> StatesFactory::GetNextState(const InputTaskTitleState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::NEXT: {
             return GetLazyStateByStatesEnum(States::kInputTaskPriority);
@@ -133,7 +133,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const InputTaskTitle
     };
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const InputTaskPriorityState &state, const MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const InputTaskPriorityState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kInputTaskTitle);
@@ -147,7 +147,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const InputTaskPrior
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const InputTaskDueDateState &state, const MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const InputTaskDueDateState &state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::PREVIOUS: {
             return GetLazyStateByStatesEnum(States::kInputTaskPriority);
@@ -161,7 +161,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const InputTaskDueDa
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const HelpState &state, MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const HelpState &state, MoveType move_type) {
     switch (move_type) {
         default: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -169,7 +169,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const HelpState &sta
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const RootState &state, StatesFactory::MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const RootState &state, StatesFactory::MoveType move_type) {
     switch (move_type) {
         default: {
             return GetLazyStateByStatesEnum(States::kRoot);
@@ -177,7 +177,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const RootState &sta
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const InputShowParametersState &state, StatesFactory::MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const InputShowParametersState &state, StatesFactory::MoveType move_type) {
     switch (move_type) {
         default: {
             return GetLazyStateByStatesEnum(States::kEnd);
@@ -185,7 +185,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const InputShowParam
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const CompleteTaskState &state, StatesFactory::MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const CompleteTaskState &state, StatesFactory::MoveType move_type) {
     switch (move_type) {
         case MoveType::ERROR: {
             return GetLazyStateByStatesEnum(States::kComplete);
@@ -196,7 +196,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const CompleteTaskSt
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const DeleteTaskState& state, const MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const DeleteTaskState& state, const MoveType move_type) {
     switch (move_type) {
         case MoveType::ERROR: {
             return GetLazyStateByStatesEnum(States::kDelete);
@@ -207,7 +207,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const DeleteTaskStat
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const SetLabelState &state, const StatesFactory::MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const SetLabelState &state, const StatesFactory::MoveType move_type) {
     switch (move_type) {
         case MoveType::ERROR: {
             return GetLazyStateByStatesEnum(States::kSetLabel);
@@ -218,7 +218,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const SetLabelState 
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const SaveState &state, const StatesFactory::MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const SaveState &state, const StatesFactory::MoveType move_type) {
     switch(move_type) {
         case MoveType::ERROR: {
             return GetLazyStateByStatesEnum(States::kSave);
@@ -229,7 +229,7 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const SaveState &sta
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const LoadState &state, const StatesFactory::MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const LoadState &state, const StatesFactory::MoveType move_type) {
     switch(move_type) {
         case MoveType::ERROR: {
             return GetLazyStateByStatesEnum(States::kLoad);
@@ -240,11 +240,11 @@ std::shared_ptr<StateInterface> StatesFactory::GetNextState(const LoadState &sta
     }
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetNextState(const ShowState& state, StatesFactory::MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const ShowState& state, StatesFactory::MoveType move_type) {
     return GetLazyStateByStatesEnum(States::kEnd);
 }
 
-std::shared_ptr<StateInterface> StatesFactory::GetLazyStateByStatesEnum(StatesFactory::States state) {
+std::shared_ptr<State> StatesFactory::GetLazyStateByStatesEnum(StatesFactory::States state) {
     auto found_state = states_.find(state);
     if (found_state == states_.end()) {
         InitializeState(state);

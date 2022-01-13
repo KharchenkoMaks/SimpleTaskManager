@@ -9,7 +9,7 @@
 
 class MockStateMachine : public ConsoleStateMachine {
 public:
-    MOCK_METHOD(std::shared_ptr<StateContext>, Run, (const std::shared_ptr<StateContext>& context, const std::shared_ptr<StateInterface>& initial_state), (override));
+    MOCK_METHOD(std::shared_ptr<StateContext>, Run, (const std::shared_ptr<StateContext>& context, const std::shared_ptr<State>& initial_state), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKSTATEMACHINE_H

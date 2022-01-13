@@ -5,17 +5,17 @@
 #ifndef SIMPLETASKMANAGER_HELPSTATE_H
 #define SIMPLETASKMANAGER_HELPSTATE_H
 
-#include "StateInterface.h"
+#include "State.h"
 #include "states/factory/StatesFactory.h"
 
 #include <string>
 #include <memory>
 
-class HelpState : public StateInterface {
+class HelpState : public State {
 public:
     explicit HelpState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<StateInterface> Execute(StateContext& context) override;
+    std::shared_ptr<State> Execute(StateContext& context) override;
 private:
     std::weak_ptr<StatesFactory> factory_;
 };

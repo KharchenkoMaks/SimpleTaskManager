@@ -10,7 +10,7 @@ EditTaskState::EditTaskState(const std::shared_ptr<StatesFactory>& factory) :
 
 }
 
-std::shared_ptr<StateInterface> EditTaskState::Execute(StateContext& context) {
+std::shared_ptr<State> EditTaskState::Execute(StateContext& context) {
     std::optional<TaskId> editing_task_id = console_io::util::GetTaskIdFromUser("Task ID", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
     if (!editing_task_id.has_value()) {
         factory_.lock()->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");

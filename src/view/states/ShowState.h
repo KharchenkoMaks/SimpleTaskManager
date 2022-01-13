@@ -6,16 +6,16 @@
 #define SIMPLETASKMANAGER_SHOWSTATE_H
 
 #include "Task.pb.h"
-#include "StateInterface.h"
+#include "State.h"
 #include "factory/StatesFactory.h"
 
 #include <vector>
 
-class ShowState : public StateInterface {
+class ShowState : public State {
 public:
     explicit ShowState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<StateInterface> Execute(StateContext& context) override;
+    std::shared_ptr<State> Execute(StateContext& context) override;
 private:
     void PrintTasks(const std::vector<TaskTransfer>& tasks);
 private:

@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_STATESFACTORY_H
 #define SIMPLETASKMANAGER_STATESFACTORY_H
 
-#include "states/StateInterface.h"
+#include "states/State.h"
 #include "user_interface/console_io/ConsolePrinter.h"
 #include "user_interface/console_io/ConsoleReader.h"
 #include "Controller.h"
@@ -56,27 +56,27 @@ public:
     virtual std::unique_ptr<ConsoleStateMachine> CreateStateMachine() const;
 
 public:
-    virtual std::shared_ptr<StateInterface> GetStateByCommand(const std::string& command);
+    virtual std::shared_ptr<State> GetStateByCommand(const std::string& command);
 
-    virtual std::shared_ptr<StateInterface> GetRootState();
-    virtual std::shared_ptr<StateInterface> GetShowState();
+    virtual std::shared_ptr<State> GetRootState();
+    virtual std::shared_ptr<State> GetShowState();
 
-    virtual std::shared_ptr<StateInterface> GetNextState(const RootState& state, MoveType move_type);
-    virtual std::shared_ptr<StateInterface> GetNextState(const HelpState& state, MoveType move_type);
-    virtual std::shared_ptr<StateInterface> GetNextState(const QuitState& state, MoveType move_type);
-    virtual std::shared_ptr<StateInterface> GetNextState(const AddTaskState& state, MoveType move_type);
-    virtual std::shared_ptr<StateInterface> GetNextState(const EditTaskState& state, MoveType move_type);
-    virtual std::shared_ptr<StateInterface> GetNextState(const InputTaskTitleState& state, MoveType move_type);
-    virtual std::shared_ptr<StateInterface> GetNextState(const InputTaskPriorityState& state, MoveType move_type);
-    virtual std::shared_ptr<StateInterface> GetNextState(const InputTaskDueDateState& state, MoveType move_type);
-    virtual std::shared_ptr<StateInterface> GetNextState(const InputShowParametersState& state, MoveType move_type);
-    virtual std::shared_ptr<StateInterface> GetNextState(const CompleteTaskState& state, MoveType move_type);
-    virtual std::shared_ptr<StateInterface> GetNextState(const AddSubTaskState& state, MoveType move_type);
-    virtual std::shared_ptr<StateInterface> GetNextState(const DeleteTaskState& state, MoveType move_type);
-    virtual std::shared_ptr<StateInterface> GetNextState(const SetLabelState& state, MoveType move_type);
-    virtual std::shared_ptr<StateInterface> GetNextState(const SaveState& state, MoveType move_type);
-    virtual std::shared_ptr<StateInterface> GetNextState(const LoadState& state, MoveType move_type);
-    virtual std::shared_ptr<StateInterface> GetNextState(const ShowState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const RootState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const HelpState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const QuitState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const AddTaskState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const EditTaskState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const InputTaskTitleState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const InputTaskPriorityState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const InputTaskDueDateState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const InputShowParametersState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const CompleteTaskState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const AddSubTaskState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const DeleteTaskState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const SetLabelState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const SaveState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const LoadState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const ShowState& state, MoveType move_type);
 
 public:
     virtual ~StatesFactory() = default;
@@ -102,11 +102,11 @@ private:
         kShow
     };
 private:
-    std::shared_ptr<StateInterface> GetLazyStateByStatesEnum(States state);
+    std::shared_ptr<State> GetLazyStateByStatesEnum(States state);
     void InitializeState(States state);
 
 private:
-    std::map<States, std::shared_ptr<StateInterface>> states_;
+    std::map<States, std::shared_ptr<State>> states_;
 
     std::shared_ptr<ConsolePrinter> printer_;
     std::shared_ptr<ConsoleReader> reader_;

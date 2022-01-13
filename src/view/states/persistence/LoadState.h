@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_LOADSTATE_H
 #define SIMPLETASKMANAGER_LOADSTATE_H
 
-#include "states/StateInterface.h"
+#include "states/State.h"
 #include "states/factory/StatesFactory.h"
 #include "user_interface/StateContext.h"
 #include "Task.pb.h"
@@ -14,11 +14,11 @@
 #include <memory>
 #include <optional>
 
-class LoadState : public StateInterface {
+class LoadState : public State {
 public:
     explicit LoadState(const std::shared_ptr<StatesFactory>& factory);
 public:
-    std::shared_ptr<StateInterface> Execute(StateContext& context) override;
+    std::shared_ptr<State> Execute(StateContext& context) override;
 private:
     std::weak_ptr<StatesFactory> factory_;
 };

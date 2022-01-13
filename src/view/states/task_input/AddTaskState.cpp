@@ -5,7 +5,7 @@
 #include "states/task_input/AddTaskState.h"
 #include "user_interface/console_io/ConsoleUtilities.h"
 
-std::shared_ptr<StateInterface> AddTaskState::Execute(StateContext& context) {
+std::shared_ptr<State> AddTaskState::Execute(StateContext& context) {
     auto state_machine = factory_.lock()->CreateStateMachine();
     std::shared_ptr<StateContext> context_with_added_task = state_machine->Run(std::make_shared<StateContext>(),
                     factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT));

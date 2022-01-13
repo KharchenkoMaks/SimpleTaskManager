@@ -6,7 +6,7 @@
 #define SIMPLETASKMANAGER_CONSOLESTATEMACHINE_H
 
 #include "StateContext.h"
-#include "states/StateInterface.h"
+#include "states/State.h"
 
 #include <memory>
 #include <optional>
@@ -14,11 +14,11 @@
 class ConsoleStateMachine {
 public:
     virtual std::shared_ptr<StateContext> Run(const std::shared_ptr<StateContext>& context,
-                                               const std::shared_ptr<StateInterface>& initial_state);
+                                               const std::shared_ptr<State>& initial_state);
 public:
     virtual ~ConsoleStateMachine() = default;
 private:
-    std::shared_ptr<StateInterface> state_;
+    std::shared_ptr<State> state_;
 };
 
 

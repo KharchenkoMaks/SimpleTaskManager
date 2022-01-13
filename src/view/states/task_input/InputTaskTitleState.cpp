@@ -10,7 +10,7 @@ InputTaskTitleState::InputTaskTitleState(const std::shared_ptr<StatesFactory>& f
 
 }
 
-std::shared_ptr<StateInterface> InputTaskTitleState::Execute(StateContext& context) {
+std::shared_ptr<State> InputTaskTitleState::Execute(StateContext& context) {
     std::string user_input =
             console_io::util::GetUserInput("Title", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
 

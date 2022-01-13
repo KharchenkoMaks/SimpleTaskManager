@@ -9,7 +9,7 @@ AddSubTaskState::AddSubTaskState(const std::shared_ptr<StatesFactory>& factory) 
 
 }
 
-std::shared_ptr<StateInterface> AddSubTaskState::Execute(StateContext& context) {
+std::shared_ptr<State> AddSubTaskState::Execute(StateContext& context) {
     std::optional<TaskId> parent_task_id = console_io::util::GetTaskIdFromUser("Parent Task ID", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
     if (!parent_task_id.has_value()) {
         factory_.lock()->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
