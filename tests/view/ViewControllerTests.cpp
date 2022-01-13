@@ -35,6 +35,8 @@ TEST_F(ViewControllerTests, RunUserInterface_ShouldAskUserInterfaceToPrintResult
     const CommandResult expected_command_result = CommandResult::Create(ControllerRequestResult::SUCCESS);
     SetExpectedCommandResult(expected_command_result);
 
+    EXPECT_CALL(*user_interface, PrintRequestResult(expected_command_result.GetResult())).Times(1);
+
     ViewController view_controller { std::move(controller), std::move(user_interface) };
     // Act
     view_controller.RunUserInterface();

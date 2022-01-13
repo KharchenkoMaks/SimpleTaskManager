@@ -22,8 +22,10 @@ void ViewController::RunUserInterface() {
         if (cmd_result.GetResult() == ControllerRequestResult::SUCCESS) {
             if (cmd_result.GetTaskId() != std::nullopt) {
                 user_interface_->PrintAddedTaskId(cmd_result.GetTaskId().value());
+                continue;
             } else if (!cmd_result.GetTasksToShow().empty()) {
                 user_interface_->ShowTasks(cmd_result.GetTasksToShow());
+                continue;
             }
         }
 
