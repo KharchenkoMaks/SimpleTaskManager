@@ -18,11 +18,13 @@ class UserInterface {
 public:
     UserInterface(const std::shared_ptr<StatesFactory>& states_factory);
 public:
-    std::shared_ptr<CommandInterface> AskUserForAction();
+    virtual std::shared_ptr<CommandInterface> AskUserForAction();
 public:
-    void PrintAddedTaskId(const TaskId& task_id);
-    void PrintRequestResult(ControllerRequestResult action_result);
-    void ShowTasks(const std::vector<TaskTransfer>& tasks);
+    virtual void PrintAddedTaskId(const TaskId& task_id);
+    virtual void PrintRequestResult(ControllerRequestResult action_result);
+    virtual void ShowTasks(const std::vector<TaskTransfer>& tasks);
+public:
+    virtual ~UserInterface() = default;
 private:
     std::shared_ptr<StatesFactory> states_factory_;
 };
