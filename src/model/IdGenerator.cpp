@@ -6,18 +6,14 @@
 
 TaskId IdGenerator::CreateNewTaskId() {
     TaskId task_id;
-    task_id.set_id(last_id_++);
+    task_id.set_id(++last_id_);
     return task_id;
 }
 
-IdGenerator::IdGenerator() : last_id_(1) {}
+IdGenerator::IdGenerator() : last_id_(0) {}
 
-bool IdGenerator::SetLastTaskId(const TaskId& task_id) {
-    if (task_id.id() >= 0) {
-        last_id_ = task_id.id();
-        return true;
-    }
-    return false;
+void IdGenerator::SetLastTaskId(const TaskId& task_id) {
+    last_id_ = task_id.id();
 }
 
 IdGenerator::~IdGenerator() = default;

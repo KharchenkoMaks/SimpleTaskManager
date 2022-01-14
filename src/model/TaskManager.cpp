@@ -152,7 +152,6 @@ bool TaskManager::LoadModelState(const std::vector<TaskTransfer>& tasks) {
 
         tasks_to_add.insert_or_assign(task.task_id(), model::CreateTaskNode(task));
     }
-    max_id.set_id(max_id.id() + 1);
     generator_->SetLastTaskId(max_id);
     tasks_.swap(tasks_to_add);
     return true;
