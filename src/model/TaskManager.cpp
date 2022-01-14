@@ -74,7 +74,7 @@ TaskActionResult TaskManager::DeleteTask(const TaskId& id, bool force_delete_sub
             subtask = std::find_if(tasks_.begin(), tasks_.end(), search_child_rule);
         }
     } else if (std::find_if(tasks_.begin(), tasks_.end(), search_child_rule) != tasks_.end()) {
-        return TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
+        return TaskActionResult::FAIL_NOT_DELETED_SUBTASKS;
     }
 
     deleted_tasks_.insert_or_assign(deleting_task->first, deleting_task->second);
@@ -96,7 +96,7 @@ TaskActionResult TaskManager::CompleteTask(const TaskId& id, bool force_complete
             if (task.second.parent_id() == id && !task.second.task().completed())
                 this->CompleteTask(task.first, true);
     } else if (std::find_if(tasks_.begin(), tasks_.end(), search_uncompleted_child_rule) != tasks_.end()) {
-        return TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
+        return TaskActionResult::FAIL_UNCOMPLETED_SUBTASKS;
     }
 
     Task task_to_complete = completing_task->second.task();

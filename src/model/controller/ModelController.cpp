@@ -14,13 +14,9 @@ ModelController::ModelController(std::unique_ptr<Model> model,
 }
 
 std::pair<ControllerRequestResult, TaskId> ModelController::AddTask(const Task& task) {
-    if (task_validator_->ValidateTask(task)){
+    if (task_validator_->ValidateTask(task)) {
         std::pair<TaskActionResult, TaskId> result = model_->AddTask(task);
-        if (result.first == TaskActionResult::SUCCESS) {
-            return std::make_pair(ControllerRequestResult::SUCCESS, result.second);
-        } else {
-            return std::make_pair(FormControllerRequestResult(result.first).value(), TaskId::default_instance());
-        }
+        return std::make_pair(FormControllerRequestResult(result.first), result.second);
     } else {
         return std::make_pair(ControllerRequestResult::FAIL_INVALID_TASK, TaskId::default_instance());
     }
@@ -29,11 +25,7 @@ std::pair<ControllerRequestResult, TaskId> ModelController::AddTask(const Task& 
 std::pair<ControllerRequestResult, TaskId> ModelController::AddSubTask(const Task& task, const TaskId& parent_id) {
     if (task_validator_->ValidateTask(task)) {
         std::pair<TaskActionResult, TaskId> result = model_->AddSubTask(task, parent_id);
-        if (result.first == TaskActionResult::SUCCESS) {
-            return std::make_pair(ControllerRequestResult::SUCCESS, result.second);
-        } else {
-            return std::make_pair(FormControllerRequestResult(result.first).value(), TaskId::default_instance());
-        }
+        return std::make_pair(FormControllerRequestResult(result.first), result.second);
     }
     return std::make_pair(ControllerRequestResult::FAIL_INVALID_TASK, TaskId::default_instance());
 }
@@ -41,7 +33,7 @@ std::pair<ControllerRequestResult, TaskId> ModelController::AddSubTask(const Tas
 ControllerRequestResult ModelController::EditTask(const TaskId& task_id, const Task& task) {
     if (task_validator_->ValidateTask(task) && task_validator_->ValidateTaskId(task_id)) {
         TaskActionResult result = model_->EditTask(task_id, task);
-        return FormControllerRequestResult(result).value();
+        return FormControllerRequestResult(result);
     }
     return ControllerRequestResult::FAIL_INVALID_TASK;
 }
@@ -49,11 +41,7 @@ ControllerRequestResult ModelController::EditTask(const TaskId& task_id, const T
 ControllerRequestResult ModelController::DeleteTask(const TaskId& task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
         TaskActionResult result = model_->DeleteTask(task_id);
-        if (FormControllerRequestResult(result) == std::nullopt) {
-            return ControllerRequestResult::FAIL_NOT_DELETED_SUBTASKS;
-        } else {
-            return FormControllerRequestResult(result).value();
-        }
+        return FormControllerRequestResult(result);
     }
     return ControllerRequestResult::FAIL_INVALID_TASK;
 }
@@ -61,7 +49,7 @@ ControllerRequestResult ModelController::DeleteTask(const TaskId& task_id) {
 ControllerRequestResult ModelController::DeleteTaskWithSubTasks(const TaskId& task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
         TaskActionResult result = model_->DeleteTask(task_id, true);
-        return FormControllerRequestResult(result).value();
+        return FormControllerRequestResult(result);
     }
     return ControllerRequestResult::FAIL_INVALID_TASK;
 }
@@ -69,11 +57,7 @@ ControllerRequestResult ModelController::DeleteTaskWithSubTasks(const TaskId& ta
 ControllerRequestResult ModelController::CompleteTask(const TaskId& task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
         TaskActionResult result = model_->CompleteTask(task_id);
-        if (FormControllerRequestResult(result) == std::nullopt) {
-            return ControllerRequestResult::FAIL_UNCOMPLETED_SUBTASKS;
-        } else {
-            return FormControllerRequestResult(result).value();
-        }
+        return FormControllerRequestResult(result);
     }
     return ControllerRequestResult::FAIL_INVALID_TASK;
 }
@@ -81,7 +65,7 @@ ControllerRequestResult ModelController::CompleteTask(const TaskId& task_id) {
 ControllerRequestResult ModelController::CompleteTaskWithSubTasks(const TaskId& task_id) {
     if (task_validator_->ValidateTaskId(task_id)) {
         TaskActionResult result = model_->CompleteTask(task_id, true);
-        return FormControllerRequestResult(result).value();
+        return FormControllerRequestResult(result);
     }
     return ControllerRequestResult::FAIL_INVALID_TASK;
 }
@@ -96,7 +80,7 @@ std::vector<TaskTransfer> ModelController::GetAllTasks() {
 
 ControllerRequestResult ModelController::SetTaskLabel(const TaskId& task_id, const std::string& label) {
     TaskActionResult result = model_->AddTaskLabel(task_id, label);
-    return FormControllerRequestResult(result).value();
+    return FormControllerRequestResult(result);
 }
 
 ControllerRequestResult ModelController::SaveToFile(const std::string& file_name) {

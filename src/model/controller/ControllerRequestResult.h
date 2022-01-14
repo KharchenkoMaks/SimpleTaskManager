@@ -20,7 +20,7 @@ enum class ControllerRequestResult {
     FILE_DAMAGED
 };
 
-std::optional<ControllerRequestResult> FormControllerRequestResult(TaskActionResult result);
+ControllerRequestResult FormControllerRequestResult(TaskActionResult result);
 
 ControllerRequestResult FormControllerRequestResult(persistence::SaveLoadStatus result);
 
