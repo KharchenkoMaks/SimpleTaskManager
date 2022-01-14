@@ -15,18 +15,15 @@
 #include "commands/LoadCommand.h"
 
 std::unique_ptr<Command> CommandFactory::CreateAddTaskCommand(const StateContext& context) {
-    std::optional<Task> task_to_add = context.GetTaskBuilder().BuildTask();
-    if (task_to_add.has_value())
-        return std::make_unique<AddTaskCommand>(task_to_add.value());
-
-    return nullptr;
+    Task task_to_add = context.GetTaskBuilder().BuildTask();
+    return std::make_unique<AddTaskCommand>(task_to_add);
 }
 
 std::unique_ptr<Command> CommandFactory::CreateAddSubTaskCommand(const StateContext& context) {
-    std::optional<Task> task_to_add = context.GetTaskBuilder().BuildTask();
+    Task task_to_add = context.GetTaskBuilder().BuildTask();
     std::optional<TaskId> parent_task_id = context.GetTaskId();
-    if (task_to_add.has_value() && parent_task_id.has_value())
-        return std::make_unique<AddSubTaskCommand>(task_to_add.value(), parent_task_id.value());
+    if (parent_task_id.has_value())
+        return std::make_unique<AddSubTaskCommand>(task_to_add, parent_task_id.value());
 
     return nullptr;
 }
