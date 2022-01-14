@@ -31,7 +31,7 @@ std::pair<ControllerRequestResult, TaskId> ModelController::AddSubTask(const Tas
 }
 
 ControllerRequestResult ModelController::EditTask(const TaskId& task_id, const Task& task) {
-    if (task_validator_->ValidateTask(task) && task_validator_->ValidateTaskId(task_id)) {
+    if (task_validator_->ValidateTask(task)) {
         TaskActionResult result = model_->EditTask(task_id, task);
         return FormControllerRequestResult(result);
     }
@@ -39,35 +39,23 @@ ControllerRequestResult ModelController::EditTask(const TaskId& task_id, const T
 }
 
 ControllerRequestResult ModelController::DeleteTask(const TaskId& task_id) {
-    if (task_validator_->ValidateTaskId(task_id)) {
-        TaskActionResult result = model_->DeleteTask(task_id);
-        return FormControllerRequestResult(result);
-    }
-    return ControllerRequestResult::FAIL_INVALID_TASK;
+    TaskActionResult result = model_->DeleteTask(task_id, false);
+    return FormControllerRequestResult(result);
 }
 
 ControllerRequestResult ModelController::DeleteTaskWithSubTasks(const TaskId& task_id) {
-    if (task_validator_->ValidateTaskId(task_id)) {
-        TaskActionResult result = model_->DeleteTask(task_id, true);
-        return FormControllerRequestResult(result);
-    }
-    return ControllerRequestResult::FAIL_INVALID_TASK;
+    TaskActionResult result = model_->DeleteTask(task_id, true);
+    return FormControllerRequestResult(result);
 }
 
 ControllerRequestResult ModelController::CompleteTask(const TaskId& task_id) {
-    if (task_validator_->ValidateTaskId(task_id)) {
-        TaskActionResult result = model_->CompleteTask(task_id);
-        return FormControllerRequestResult(result);
-    }
-    return ControllerRequestResult::FAIL_INVALID_TASK;
+    TaskActionResult result = model_->CompleteTask(task_id, false);
+    return FormControllerRequestResult(result);
 }
 
 ControllerRequestResult ModelController::CompleteTaskWithSubTasks(const TaskId& task_id) {
-    if (task_validator_->ValidateTaskId(task_id)) {
-        TaskActionResult result = model_->CompleteTask(task_id, true);
-        return FormControllerRequestResult(result);
-    }
-    return ControllerRequestResult::FAIL_INVALID_TASK;
+    TaskActionResult result = model_->CompleteTask(task_id, true);
+    return FormControllerRequestResult(result);
 }
 
 std::optional<TaskTransfer> ModelController::GetTask(const TaskId& task_id) {

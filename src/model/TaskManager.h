@@ -27,8 +27,8 @@ public:
     std::pair<TaskActionResult, TaskId> AddTask(const Task& task) override;
     std::pair<TaskActionResult, TaskId> AddSubTask(const Task& task, const TaskId& parent_id) override;
     TaskActionResult EditTask(const TaskId& id, const Task& task) override;
-    TaskActionResult DeleteTask(const TaskId& id, bool force_delete_subtasks = false) override;
-    TaskActionResult CompleteTask(const TaskId& id, bool force_complete_subtasks = false) override;
+    TaskActionResult DeleteTask(const TaskId& id, bool force_delete_subtasks) override;
+    TaskActionResult CompleteTask(const TaskId& id, bool force_complete_subtasks) override;
     TaskActionResult AddTaskLabel(const TaskId& id, const std::string& label) override;
 
     std::vector<TaskTransfer> GetTasks() override;

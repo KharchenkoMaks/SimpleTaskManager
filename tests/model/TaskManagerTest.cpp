@@ -168,7 +168,7 @@ TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
     TaskId task_id_1 = task_manager.AddTask(expected_first_task).second;
     TaskId task_id_2 = task_manager.AddTask(expected_second_task).second;
     // Act
-    task_manager.DeleteTask(task_id_1);
+    task_manager.DeleteTask(task_id_1, false);
     std::vector<TaskTransfer> tasks = task_manager.GetTasks();
     TaskId actual_task_id = tasks[0].task_id();
     Task actual_task = tasks[0].task();
@@ -203,7 +203,7 @@ TEST_F(TaskManagerTest, TryDeletingNonExistentTask_ShouldReturnFalse){
 
     TaskManager task_manager(std::move(gen));
     // Act & Assert
-    EXPECT_EQ(task_manager.DeleteTask(expected_first_task_id), TaskActionResult::FAIL_NO_SUCH_TASK);
+    EXPECT_EQ(task_manager.DeleteTask(expected_first_task_id, false), TaskActionResult::FAIL_NO_SUCH_TASK);
 }
 
 // Creating three Tasks
@@ -224,8 +224,8 @@ TEST_F(TaskManagerTest, TryCompletingDifferentTasks_ShouldCompleteThoseTasks){
     TaskId task2 = task_manager.AddTask(expected_not_completed_task).second;
     TaskId task3 = task_manager.AddTask(expected_second_task).second;
     // Act
-    task_manager.CompleteTask(task1);
-    task_manager.CompleteTask(task3);
+    task_manager.CompleteTask(task1, false);
+    task_manager.CompleteTask(task3, false);
     std::vector<TaskTransfer> tasks = task_manager.GetTasks();
     Task actual_first_completed_task = tasks[0].task();
     Task actual_second_completed_task = tasks[2].task();
@@ -251,7 +251,7 @@ TEST_F(TaskManagerTest, TryCompletingNonExistentTask_ShouldReturnFalse){
 
     TaskManager task_manager(std::move(gen));
     // Act & Assert
-    EXPECT_EQ(task_manager.CompleteTask(expected_first_task_id), TaskActionResult::FAIL_NO_SUCH_TASK);
+    EXPECT_EQ(task_manager.CompleteTask(expected_first_task_id, false), TaskActionResult::FAIL_NO_SUCH_TASK);
 }
 
 // Adding subtask to task manager
@@ -304,7 +304,7 @@ TEST_F(TaskManagerTest, TryDeletingSubTask_ShouldDeleteSubTaskProperly) {
     TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, main_task_id).second;
 
     // Act
-    task_manager.DeleteTask(subtask1_id);
+    task_manager.DeleteTask(subtask1_id, false);
     const std::vector<TaskTransfer> tasks = task_manager.GetTasks();
     const TaskTransfer main_task_transfer = tasks[0];
     const TaskTransfer subtask_transfer = tasks[1];
@@ -337,7 +337,7 @@ TEST_F(TaskManagerTest, TryCompleteSubTask_ShouldCompleteSubTask) {
     TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, main_task_id).second;
 
     // Act
-    task_manager.CompleteTask(subtask1_id);
+    task_manager.CompleteTask(subtask1_id, false);
     const std::optional<TaskTransfer> actual_subtask = task_manager.GetTask(subtask1_id);
     // Assert
     ASSERT_NE(actual_subtask, std::nullopt);
@@ -440,7 +440,7 @@ TEST_F(TaskManagerTest, DeleteTask_TryDeleteMainTaskWithNotDeletedSubtasks_Shoul
     TaskId subtask1_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
     TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, main_task_id).second;
 
-    const TaskActionResult expected_result = TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
+    const TaskActionResult expected_result = TaskActionResult::FAIL_NOT_DELETED_SUBTASKS;
     // Act
     const TaskActionResult actual_result = task_manager.DeleteTask(main_task_id, false);
     // Assert
@@ -462,7 +462,7 @@ TEST_F(TaskManagerTest, CompleteTask_TryCompleteMainTaskWithNotCompletedSubtasks
     TaskId subtask1_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
     TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, main_task_id).second;
 
-    const TaskActionResult expected_result = TaskActionResult::FAIL_CONTROVERSIAL_SUBTASKS;
+    const TaskActionResult expected_result = TaskActionResult::FAIL_UNCOMPLETED_SUBTASKS;
     // Act
     const TaskActionResult actual_result = task_manager.CompleteTask(main_task_id, false);
     // Assert

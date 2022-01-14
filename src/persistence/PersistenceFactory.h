@@ -13,7 +13,7 @@ namespace persistence {
 
 class PersistenceFactory {
 public:
-    std::unique_ptr<persistence::Persistence> CreateFilePersistence(const std::string& file_name);
+    virtual std::unique_ptr<persistence::Persistence> CreateFilePersistence(const std::string& file_name);
 };
 
 }
