@@ -49,10 +49,6 @@ SaveLoadStatus FilePersistence::Save(const std::vector<TaskTransfer>& tasks) {
     return SaveLoadStatus::SUCCESS;
 }
 
-std::unique_ptr<FilePersistence> FilePersistence::Create(const std::string& file_name) {
-    return std::unique_ptr<FilePersistence>(new FilePersistence(file_name));
-}
-
 FilePersistence::FilePersistence(const std::string& file_name) : file_name(file_name) {
 
 }

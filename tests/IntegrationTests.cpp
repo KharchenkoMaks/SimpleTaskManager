@@ -11,13 +11,14 @@
 #include "TaskManager.h"
 #include "states/factory/StatesFactory.h"
 #include "Controller.h"
-#include <user_interface/UserInterface.h>
-#include <ViewController.h>
+#include "user_interface/UserInterface.h"
+#include "ViewController.h"
+#include "persistence/PersistenceFactory.h"
 
 using ::testing::Return;
 using ::testing::InSequence;
 
-class DISABLED_IntegrationTests : public ::testing::Test {
+class IntegrationTests : public ::testing::Test {
 public:
     void LaunchTest(const std::vector<std::string>& expected_show,
                     const std::vector<std::string>& inputs) {
@@ -52,7 +53,8 @@ public:
                 states_factory);
         std::unique_ptr<Controller> model_controller = std::make_unique<Controller>(
                 std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
-                std::make_unique<TaskValidator>());
+                std::make_unique<TaskValidator>(),
+                std::make_unique<persistence::PersistenceFactory>());
         std::unique_ptr<ViewController> view_controller = std::make_unique<ViewController>(
                 std::move(model_controller),
                 std::move(user_interface));
@@ -61,7 +63,7 @@ public:
     }
 };
 
-TEST_F(DISABLED_IntegrationTests, Script1) {
+TEST_F(IntegrationTests, Script1) {
     // Arrange
     std::vector<std::string> inputs = {
             "qwe",
@@ -87,7 +89,7 @@ TEST_F(DISABLED_IntegrationTests, Script1) {
     LaunchTest(expected_show, inputs);
 }
 
-TEST_F(DISABLED_IntegrationTests, Script2) {
+TEST_F(IntegrationTests, Script2) {
     // Arrange
     std::vector<std::string> inputs = {
             "add",

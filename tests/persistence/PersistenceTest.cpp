@@ -12,7 +12,7 @@
 #include <utility>
 #include <google/protobuf/util/time_util.h>
 
-class DISABLED_PersistenceTest : public ::testing::Test{
+class PersistenceTest : public ::testing::Test{
 public:
     std::vector<TaskTransfer> tasks_to_save;
 
@@ -63,10 +63,10 @@ private:
     }
 };
 
-TEST_F(DISABLED_PersistenceTest, FileReadWrite_ShouldWriteTasksAndReadTasksFromFile) {
+TEST_F(PersistenceTest, FileReadWrite_ShouldWriteTasksAndReadTasksFromFile) {
     // Arrange
     const std::string file_name = "some_file";
-    auto model_persistence = persistence::FilePersistence::Create(file_name);
+    auto model_persistence = std::make_unique<persistence::FilePersistence>(file_name);
     // Act
     const persistence::SaveLoadStatus actual_save_answer = model_persistence->Save(tasks_to_save);
     // Assert

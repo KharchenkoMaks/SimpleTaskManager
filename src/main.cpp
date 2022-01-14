@@ -6,6 +6,7 @@
 #include "Controller.h"
 #include "user_interface/UserInterface.h"
 #include "ViewController.h"
+#include "persistence/PersistenceFactory.h"
 
 #include <memory>
 
@@ -18,7 +19,8 @@ int main() {
             states_factory);
     std::unique_ptr<Controller> model_controller = std::make_unique<Controller>(
             std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
-            std::make_unique<TaskValidator>());
+            std::make_unique<TaskValidator>(),
+            std::make_unique<persistence::PersistenceFactory>());
     std::unique_ptr<ViewController> view_controller = std::make_unique<ViewController>(
             std::move(model_controller),
             std::move(user_interface));

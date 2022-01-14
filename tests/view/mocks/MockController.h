@@ -17,7 +17,7 @@
 
 class MockController : public Controller {
 public:
-    MockController() : Controller(nullptr, nullptr) {}
+    MockController() : Controller(nullptr, nullptr, nullptr) {}
 
     MOCK_METHOD((std::pair<ControllerRequestResult, TaskId>), AddTask, (const Task& task), (override));
     MOCK_METHOD((std::pair<ControllerRequestResult, TaskId>), AddSubTask, (const Task& task, const TaskId& parent_id), (override));

@@ -18,13 +18,11 @@ namespace persistence {
 
 class FilePersistence : public Persistence {
 public:
-    static std::unique_ptr<FilePersistence> Create(const std::string& file_name);
+    explicit FilePersistence(const std::string& file_name);
 public:
     std::pair<SaveLoadStatus, std::vector<TaskTransfer>> Load() override;
 
     SaveLoadStatus Save(const std::vector<TaskTransfer>& tasks) override;
-private:
-    explicit FilePersistence(const std::string& file_name);
 private:
     std::string file_name;
 };
