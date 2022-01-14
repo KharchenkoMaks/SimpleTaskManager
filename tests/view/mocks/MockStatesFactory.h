@@ -9,7 +9,7 @@
 #include "gmock/gmock.h"
 
 #include "states/factory/StatesFactory.h"
-#include "Controller.h"
+#include "ModelController.h"
 
 class MockStatesFactory : public StatesFactory {
 public:

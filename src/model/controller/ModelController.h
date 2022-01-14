@@ -2,8 +2,8 @@
 // Created by Maksym Kharchenko on 29.11.2021.
 //
 
-#ifndef SIMPLETASKMANAGER_CONTROLLER_H
-#define SIMPLETASKMANAGER_CONTROLLER_H
+#ifndef SIMPLETASKMANAGER_MODELCONTROLLER_H
+#define SIMPLETASKMANAGER_MODELCONTROLLER_H
 
 #include "Task.pb.h"
 #include "Model.h"
@@ -17,9 +17,9 @@
 #include <utility>
 #include <vector>
 
-class Controller {
+class ModelController {
 public:
-    Controller(std::unique_ptr<Model> model,
+    ModelController(std::unique_ptr<Model> model,
                std::unique_ptr<TaskValidator> task_validator,
                std::unique_ptr<persistence::PersistenceFactory> persistence_factory);
 public:
@@ -41,7 +41,7 @@ public:
     virtual ControllerRequestResult LoadFromFile(const std::string& file_name);
 
 public:
-    virtual ~Controller() = default;
+    virtual ~ModelController() = default;
 private:
     std::unique_ptr<Model> model_;
     std::unique_ptr<TaskValidator> task_validator_;
@@ -49,4 +49,4 @@ private:
 };
 
 
-#endif //SIMPLETASKMANAGER_CONTROLLER_H
+#endif //SIMPLETASKMANAGER_MODELCONTROLLER_H

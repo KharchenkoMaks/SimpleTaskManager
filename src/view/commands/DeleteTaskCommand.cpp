@@ -10,7 +10,7 @@ DeleteTaskCommand::DeleteTaskCommand(const TaskId& task_id, const bool force_del
 
 }
 
-CommandResult DeleteTaskCommand::Execute(const std::shared_ptr<Controller>& controller) {
+CommandResult DeleteTaskCommand::Execute(const std::shared_ptr<ModelController>& controller) {
     ControllerRequestResult delete_task_result;
     if (force_delete_subtasks_) {
         delete_task_result = controller->DeleteTaskWithSubTasks(task_id_);

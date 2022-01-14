@@ -12,14 +12,14 @@
 
 class ViewController {
 public:
-    ViewController(std::unique_ptr<Controller> controller,
+    ViewController(std::unique_ptr<ModelController> controller,
                    std::unique_ptr<UserInterface> user_interface);
 public:
     void RunUserInterface();
 private:
     std::unique_ptr<UserInterface> user_interface_;
 
-    std::shared_ptr<Controller> controller_;
+    std::shared_ptr<ModelController> controller_;
 };
 
 

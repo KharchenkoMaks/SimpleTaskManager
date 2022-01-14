@@ -4,7 +4,7 @@
 
 #include "ViewController.h"
 
-ViewController::ViewController(std::unique_ptr<Controller> controller,
+ViewController::ViewController(std::unique_ptr<ModelController> controller,
                                std::unique_ptr<UserInterface> user_interface) :
                                controller_(std::move(controller)),
                                user_interface_(std::move(user_interface)) {

@@ -11,7 +11,7 @@ SetLabelCommand::SetLabelCommand(const TaskId& task_id,
 
 }
 
-CommandResult SetLabelCommand::Execute(const std::shared_ptr<Controller>& controller) {
+CommandResult SetLabelCommand::Execute(const std::shared_ptr<ModelController>& controller) {
     ControllerRequestResult set_label_result = controller->SetTaskLabel(task_id_, label_);
 
     return CommandResult::Create(set_label_result);

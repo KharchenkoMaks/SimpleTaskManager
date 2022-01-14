@@ -6,7 +6,7 @@
 
 ShowTasksCommand::ShowTasksCommand() = default;
 
-CommandResult ShowTasksCommand::Execute(const std::shared_ptr<Controller>& controller) {
+CommandResult ShowTasksCommand::Execute(const std::shared_ptr<ModelController>& controller) {
     auto tasks = controller->GetAllTasks();
     return CommandResult::Create(tasks);
 }

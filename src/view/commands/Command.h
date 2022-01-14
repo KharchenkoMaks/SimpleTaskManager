@@ -5,12 +5,12 @@
 #ifndef SIMPLETASKMANAGER_COMMAND_H
 #define SIMPLETASKMANAGER_COMMAND_H
 
-#include "controller/Controller.h"
+#include "controller/ModelController.h"
 #include "CommandResult.h"
 
 class Command {
 public:
-    virtual CommandResult Execute(const std::shared_ptr<Controller>& controller) = 0;
+    virtual CommandResult Execute(const std::shared_ptr<ModelController>& controller) = 0;
 public:
     virtual ~Command() = default;
 };

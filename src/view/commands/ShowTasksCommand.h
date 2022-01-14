@@ -7,7 +7,7 @@
 
 #include "Command.h"
 #include "Task.pb.h"
-#include "controller/Controller.h"
+#include "controller/ModelController.h"
 
 #include <memory>
 
@@ -15,7 +15,7 @@ class ShowTasksCommand : public Command {
 public:
     ShowTasksCommand();
 public:
-    CommandResult Execute(const std::shared_ptr<Controller>& controller) override;
+    CommandResult Execute(const std::shared_ptr<ModelController>& controller) override;
 };
 
 

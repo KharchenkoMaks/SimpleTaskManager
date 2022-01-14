@@ -8,7 +8,7 @@
 #include "states/State.h"
 #include "user_interface/console_io/ConsolePrinter.h"
 #include "user_interface/console_io/ConsoleReader.h"
-#include "Controller.h"
+#include "ModelController.h"
 #include "user_interface/ConsoleStateMachine.h"
 #include "commands/factory/CommandFactory.h"
 

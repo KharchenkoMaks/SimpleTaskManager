@@ -10,7 +10,7 @@ CompleteTaskCommand::CompleteTaskCommand(const TaskId& task_id, const bool force
 
 }
 
-CommandResult CompleteTaskCommand::Execute(const std::shared_ptr<Controller>& controller) {
+CommandResult CompleteTaskCommand::Execute(const std::shared_ptr<ModelController>& controller) {
     ControllerRequestResult complete_result;
     if (force_complete_subtasks_) {
         complete_result = controller->CompleteTaskWithSubTasks(task_id_);

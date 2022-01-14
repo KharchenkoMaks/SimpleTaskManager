@@ -6,7 +6,7 @@
 #define SIMPLETASKMANAGER_SAVECOMMAND_H
 
 #include "Command.h"
-#include "controller/Controller.h"
+#include "controller/ModelController.h"
 
 #include <memory>
 #include <string>
@@ -15,7 +15,7 @@ class SaveCommand : public Command {
 public:
     SaveCommand(const std::string& file_name);
 public:
-    CommandResult Execute(const std::shared_ptr<Controller>& controller) override;
+    CommandResult Execute(const std::shared_ptr<ModelController>& controller) override;
 private:
     std::string file_name_;
 };

@@ -7,7 +7,7 @@
 
 #include "Command.h"
 #include "Task.pb.h"
-#include "controller/Controller.h"
+#include "controller/ModelController.h"
 #include "controller/ControllerRequestResult.h"
 
 #include <memory>
@@ -17,7 +17,7 @@ public:
     AddSubTaskCommand(const Task& task,
                       const TaskId& parent_id);
 public:
-    CommandResult Execute(const std::shared_ptr<Controller>& controller) override;
+    CommandResult Execute(const std::shared_ptr<ModelController>& controller) override;
 private:
     Task task_;
     TaskId task_parent_id_;

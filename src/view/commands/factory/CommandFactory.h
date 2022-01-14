@@ -6,7 +6,7 @@
 #define SIMPLETASKMANAGER_COMMANDFACTORY_H
 
 #include "view/commands/Command.h"
-#include "controller/Controller.h"
+#include "controller/ModelController.h"
 #include "user_interface/StateContext.h"
 
 #include <memory>

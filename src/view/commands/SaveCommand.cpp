@@ -9,7 +9,7 @@ SaveCommand::SaveCommand(const std::string& file_name) :
 
 }
 
-CommandResult SaveCommand::Execute(const std::shared_ptr<Controller>& controller) {
+CommandResult SaveCommand::Execute(const std::shared_ptr<ModelController>& controller) {
     auto save_tasks_result = controller->SaveToFile(file_name_);
     return CommandResult::Create(save_tasks_result);
 }

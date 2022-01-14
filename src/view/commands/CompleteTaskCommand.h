@@ -7,7 +7,7 @@
 
 #include "Command.h"
 #include "Task.pb.h"
-#include "controller/Controller.h"
+#include "controller/ModelController.h"
 
 #include <memory>
 
@@ -15,7 +15,7 @@ class CompleteTaskCommand : public Command {
 public:
     explicit CompleteTaskCommand(const TaskId& task_id, bool force_complete_subtasks);
 public:
-    CommandResult Execute(const std::shared_ptr<Controller>& controller) override;
+    CommandResult Execute(const std::shared_ptr<ModelController>& controller) override;
 private:
     TaskId task_id_;
     bool force_complete_subtasks_;

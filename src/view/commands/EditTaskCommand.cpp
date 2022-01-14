@@ -11,7 +11,7 @@ EditTaskCommand::EditTaskCommand(const TaskBuilder& task_builder,
 
 }
 
-CommandResult EditTaskCommand::Execute(const std::shared_ptr<Controller>& controller) {
+CommandResult EditTaskCommand::Execute(const std::shared_ptr<ModelController>& controller) {
     auto editing_task = controller->GetTask(task_id_);
     if (!editing_task.has_value()) {
         return CommandResult::Create(ControllerRequestResult::FAIL_NO_SUCH_TASK);

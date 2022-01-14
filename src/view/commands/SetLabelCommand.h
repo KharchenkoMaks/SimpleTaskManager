@@ -7,7 +7,7 @@
 
 #include "Command.h"
 #include "Task.pb.h"
-#include "controller/Controller.h"
+#include "controller/ModelController.h"
 
 #include <string>
 #include <memory>
@@ -17,7 +17,7 @@ public:
     SetLabelCommand(const TaskId& task_id,
                     const std::string& label);
 public:
-    CommandResult Execute(const std::shared_ptr<Controller>& controller) override;
+    CommandResult Execute(const std::shared_ptr<ModelController>& controller) override;
 private:
     TaskId task_id_;
     std::string label_;

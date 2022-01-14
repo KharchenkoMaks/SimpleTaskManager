@@ -3,7 +3,7 @@
 #include "TaskManager.h"
 #include "user_interface/ConsoleStateMachine.h"
 #include "states/factory/StatesFactory.h"
-#include "Controller.h"
+#include "ModelController.h"
 #include "user_interface/UserInterface.h"
 #include "ViewController.h"
 #include "persistence/PersistenceFactory.h"
@@ -17,7 +17,7 @@ int main() {
                                                                                     std::make_unique<ConsoleReader>());
     std::unique_ptr<UserInterface> user_interface = std::make_unique<UserInterface>(
             states_factory);
-    std::unique_ptr<Controller> model_controller = std::make_unique<Controller>(
+    std::unique_ptr<ModelController> model_controller = std::make_unique<ModelController>(
             std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
             std::make_unique<TaskValidator>(),
             std::make_unique<persistence::PersistenceFactory>());

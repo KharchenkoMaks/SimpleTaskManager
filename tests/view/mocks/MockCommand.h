@@ -12,7 +12,7 @@
 
 class MockCommand : public Command {
 public:
-    MOCK_METHOD(CommandResult, Execute, (const std::shared_ptr<Controller>& controller), (override));
+    MOCK_METHOD(CommandResult, Execute, (const std::shared_ptr<ModelController>& controller), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKCOMMAND_H
