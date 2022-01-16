@@ -68,175 +68,133 @@ std::shared_ptr<State> StatesFactory::GetShowState() {
 
 std::shared_ptr<State> StatesFactory::GetNextState(const QuitState& state, const MoveType move_type) {
     switch (move_type) {
-        case MoveType::PREVIOUS: {
+        case MoveType::PREVIOUS:
             return GetLazyStateByStatesEnum(States::kRoot);
-        }
-        case MoveType::ERROR: {
+        case MoveType::ERROR:
             return GetLazyStateByStatesEnum(States::kRoot);
-        }
-        case MoveType::NEXT: {
+        case MoveType::NEXT:
             return GetLazyStateByStatesEnum(States::kEnd);
-        }
     }
 }
 
 std::shared_ptr<State> StatesFactory::GetNextState(const AddTaskState &state, const MoveType move_type) {
     switch (move_type) {
-        case MoveType::PREVIOUS: {
+        case MoveType::PREVIOUS:
             return GetLazyStateByStatesEnum(States::kEnd);
-        }
-        case MoveType::ERROR: {
+        case MoveType::ERROR:
             return GetLazyStateByStatesEnum(States::kRoot);
-        }
-        case MoveType::NEXT: {
+        case MoveType::NEXT:
             return GetLazyStateByStatesEnum(States::kInputTaskTitle);
-        }
     }
 }
 
 std::shared_ptr<State> StatesFactory::GetNextState(const AddSubTaskState& state, const MoveType move_type) {
     switch (move_type) {
-        case MoveType::PREVIOUS: {
+        case MoveType::PREVIOUS:
             return GetLazyStateByStatesEnum(States::kEnd);
-        }
-        case MoveType::ERROR: {
+        case MoveType::ERROR:
             return GetLazyStateByStatesEnum(States::kRoot);
-        }
-        case MoveType::NEXT: {
+        case MoveType::NEXT:
             return GetLazyStateByStatesEnum(States::kInputTaskTitle);
-        }
     }
 }
 
 std::shared_ptr<State> StatesFactory::GetNextState(const EditTaskState &state, const MoveType move_type) {
     switch (move_type) {
-        case MoveType::PREVIOUS: {
+        case MoveType::PREVIOUS:
             return GetLazyStateByStatesEnum(States::kEnd);
-        }
-        case MoveType::ERROR: {
+        case MoveType::ERROR:
             return GetLazyStateByStatesEnum(States::kRoot);
-        }
-        case MoveType::NEXT: {
+        case MoveType::NEXT:
             return GetLazyStateByStatesEnum(States::kInputTaskTitle);
-        }
     }
 }
 
 std::shared_ptr<State> StatesFactory::GetNextState(const InputTaskTitleState &state, const MoveType move_type) {
     switch (move_type) {
-        case MoveType::NEXT: {
+        case MoveType::NEXT:
             return GetLazyStateByStatesEnum(States::kInputTaskPriority);
-        }
-        default: {
+        default:
             return GetLazyStateByStatesEnum(States::kInputTaskTitle);
-        }
-    };
+    }
 }
 
 std::shared_ptr<State> StatesFactory::GetNextState(const InputTaskPriorityState &state, const MoveType move_type) {
     switch (move_type) {
-        case MoveType::PREVIOUS: {
+        case MoveType::PREVIOUS:
             return GetLazyStateByStatesEnum(States::kInputTaskTitle);
-        }
-        case MoveType::ERROR: {
+        case MoveType::ERROR:
             return GetLazyStateByStatesEnum(States::kInputTaskPriority);
-        }
-        case MoveType::NEXT: {
+        case MoveType::NEXT:
             return GetLazyStateByStatesEnum(States::kInputTaskDueDate);
-        }
     }
 }
 
 std::shared_ptr<State> StatesFactory::GetNextState(const InputTaskDueDateState &state, const MoveType move_type) {
     switch (move_type) {
-        case MoveType::PREVIOUS: {
+        case MoveType::PREVIOUS:
             return GetLazyStateByStatesEnum(States::kInputTaskPriority);
-        }
-        case MoveType::ERROR: {
+        case MoveType::ERROR:
             return GetLazyStateByStatesEnum(States::kInputTaskDueDate);
-        }
-        case MoveType::NEXT: {
+        case MoveType::NEXT:
             return GetLazyStateByStatesEnum(States::kEnd);
-        }
     }
 }
 
 std::shared_ptr<State> StatesFactory::GetNextState(const HelpState &state, MoveType move_type) {
-    switch (move_type) {
-        default: {
-            return GetLazyStateByStatesEnum(States::kRoot);
-        }
-    }
+    return GetLazyStateByStatesEnum(States::kRoot);
 }
 
 std::shared_ptr<State> StatesFactory::GetNextState(const RootState &state, StatesFactory::MoveType move_type) {
-    switch (move_type) {
-        default: {
-            return GetLazyStateByStatesEnum(States::kRoot);
-        }
-    }
+    return GetLazyStateByStatesEnum(States::kRoot);
 }
 
 std::shared_ptr<State> StatesFactory::GetNextState(const InputShowParametersState &state, StatesFactory::MoveType move_type) {
-    switch (move_type) {
-        default: {
-            return GetLazyStateByStatesEnum(States::kEnd);
-        }
-    }
+    return GetLazyStateByStatesEnum(States::kEnd);
 }
 
 std::shared_ptr<State> StatesFactory::GetNextState(const CompleteTaskState &state, StatesFactory::MoveType move_type) {
     switch (move_type) {
-        case MoveType::ERROR: {
+        case MoveType::ERROR:
             return GetLazyStateByStatesEnum(States::kComplete);
-        }
-        default: {
+        default:
             return GetLazyStateByStatesEnum(States::kEnd);
-        }
     }
 }
 
 std::shared_ptr<State> StatesFactory::GetNextState(const DeleteTaskState& state, const MoveType move_type) {
     switch (move_type) {
-        case MoveType::ERROR: {
+        case MoveType::ERROR:
             return GetLazyStateByStatesEnum(States::kDelete);
-        }
-        default: {
+        default:
             return GetLazyStateByStatesEnum(States::kEnd);
-        }
     }
 }
 
 std::shared_ptr<State> StatesFactory::GetNextState(const SetLabelState &state, const StatesFactory::MoveType move_type) {
     switch (move_type) {
-        case MoveType::ERROR: {
+        case MoveType::ERROR:
             return GetLazyStateByStatesEnum(States::kSetLabel);
-        }
-        default: {
+        default:
             return GetLazyStateByStatesEnum(States::kEnd);
-        }
     }
 }
 
 std::shared_ptr<State> StatesFactory::GetNextState(const SaveState &state, const StatesFactory::MoveType move_type) {
     switch(move_type) {
-        case MoveType::ERROR: {
+        case MoveType::ERROR:
             return GetLazyStateByStatesEnum(States::kSave);
-        }
-        default: {
+        default:
             return GetLazyStateByStatesEnum(States::kEnd);
-        }
     }
 }
 
 std::shared_ptr<State> StatesFactory::GetNextState(const LoadState &state, const StatesFactory::MoveType move_type) {
     switch(move_type) {
-        case MoveType::ERROR: {
+        case MoveType::ERROR:
             return GetLazyStateByStatesEnum(States::kLoad);
-        }
-        default: {
+        default:
             return GetLazyStateByStatesEnum(States::kEnd);
-        }
     }
 }
 
@@ -255,74 +213,57 @@ std::shared_ptr<State> StatesFactory::GetLazyStateByStatesEnum(StatesFactory::St
 
 void StatesFactory::InitializeState(States state) {
     switch (state) {
-        case States::kRoot: {
+        case States::kRoot:
             states_.insert_or_assign(state, std::make_shared<RootState>(shared_from_this()));
             break;
-        }
-        case States::kHelp: {
+        case States::kHelp:
             states_.insert_or_assign(state, std::make_shared<HelpState>(shared_from_this()));
             break;
-        }
-        case States::kQuit: {
+        case States::kQuit:
             states_.insert_or_assign(state, std::make_shared<QuitState>(shared_from_this()));
             break;
-        }
-        case States::kAddTask: {
+        case States::kAddTask:
             states_.insert_or_assign(state, std::make_shared<AddTaskState>(shared_from_this()));
             break;
-        }
-        case States::kAddSubTask: {
+        case States::kAddSubTask:
             states_.insert_or_assign(state, std::make_shared<AddSubTaskState>(shared_from_this()));
             break;
-        }
-        case States::kEditTask: {
+        case States::kEditTask:
             states_.insert_or_assign(state, std::make_shared<EditTaskState>(shared_from_this()));
             break;
-        }
-        case States::kInputTaskTitle: {
+        case States::kInputTaskTitle:
             states_.insert_or_assign(state, std::make_shared<InputTaskTitleState>(shared_from_this()));
             break;
-        }
-        case States::kInputTaskPriority: {
+        case States::kInputTaskPriority:
             states_.insert_or_assign(state, std::make_shared<InputTaskPriorityState>(shared_from_this()));
             break;
-        }
-        case States::kInputTaskDueDate: {
+        case States::kInputTaskDueDate:
             states_.insert_or_assign(state, std::make_shared<InputTaskDueDateState>(shared_from_this()));
             break;
-        }
-        case States::kInputShowParameters: {
+        case States::kInputShowParameters:
             states_.insert_or_assign(state, std::make_shared<InputShowParametersState>(shared_from_this()));
             break;
-        }
-        case States::kComplete: {
+        case States::kComplete:
             states_.insert_or_assign(state, std::make_shared<CompleteTaskState>(shared_from_this()));
             break;
-        }
-        case States::kDelete: {
+        case States::kDelete:
             states_.insert_or_assign(state, std::make_shared<DeleteTaskState>(shared_from_this()));
             break;
-        }
-        case States::kSetLabel: {
+        case States::kSetLabel:
             states_.insert_or_assign(state, std::make_shared<SetLabelState>(shared_from_this()));
             break;
-        }
-        case States::kEnd: {
+        case States::kEnd:
             states_.insert_or_assign(state, std::make_shared<EndState>(shared_from_this()));
             break;
-        }
-        case States::kSave: {
+        case States::kSave:
             states_.insert_or_assign(state, std::make_shared<SaveState>(shared_from_this()));
             break;
-        }
-        case States::kLoad: {
+        case States::kLoad:
             states_.insert_or_assign(state, std::make_shared<LoadState>(shared_from_this()));
             break;
-        }
-        case States::kShow: {
+        case States::kShow:
             states_.insert_or_assign(state, std::make_shared<ShowState>(shared_from_this()));
             break;
-        }
     }
 }
 
