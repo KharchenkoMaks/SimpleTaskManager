@@ -14,6 +14,8 @@ namespace persistence {
 class PersistenceFactory {
 public:
     virtual std::unique_ptr<persistence::Persistence> CreateFilePersistence(const std::string& file_name);
+public:
+    virtual ~PersistenceFactory() = default;
 };
 
 }

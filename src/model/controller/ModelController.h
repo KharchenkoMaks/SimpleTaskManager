@@ -28,7 +28,7 @@ public:
     virtual ControllerRequestResult EditTask(const TaskId& task_id, const Task& task);
     virtual ControllerRequestResult DeleteTask(const TaskId& task_id);
     virtual ControllerRequestResult CompleteTask(const TaskId& task_id);
-    virtual ControllerRequestResult SetTaskLabel(const TaskId& task_id, const std::string& label);
+    virtual ControllerRequestResult AddTaskLabel(const TaskId& task_id, const std::string& label);
 
     virtual ControllerRequestResult DeleteTaskWithSubTasks(const TaskId& task_id);
     virtual ControllerRequestResult CompleteTaskWithSubTasks(const TaskId& task_id);

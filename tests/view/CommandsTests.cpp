@@ -239,7 +239,7 @@ TEST_F(CommandsTests, SetLabelCommandExecute_ShouldSetLabelInController) {
     SetLabelCommand set_label_command(task_id, label);
     const ControllerRequestResult expected_result = ControllerRequestResult::SUCCESS;
     // Assert
-    EXPECT_CALL(*controller_, SetTaskLabel(task_id, label)).WillOnce(Return(expected_result));
+    EXPECT_CALL(*controller_, AddTaskLabel(task_id, label)).WillOnce(Return(expected_result));
     // Act
     CommandResult actual_result = set_label_command.Execute(controller_);
     // Assert
