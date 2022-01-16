@@ -6,18 +6,14 @@
 
 std::string TaskPriorityToString(const Task::Priority priority) {
     switch(priority) {
-        case Task::Priority::Task_Priority_LOW: {
+        case Task::Priority::Task_Priority_LOW:
             return "Low";
-        }
-        case Task::Priority::Task_Priority_MEDIUM: {
+        case Task::Priority::Task_Priority_MEDIUM:
             return "Medium";
-        }
-        case Task::Priority::Task_Priority_HIGH: {
+        case Task::Priority::Task_Priority_HIGH:
             return "High";
-        }
-        default: {
+        default:
             return "None";
-        }
     }
 }
 
@@ -75,6 +71,8 @@ std::string TaskToString(const TaskId& task_id, const Task& task) {
 std::optional<TaskId> StringToTaskId(const std::string& task_id_str) {
     try {
         int id = std::stoi(task_id_str);
+        if (id < 0)
+            return std::nullopt;
         TaskId task_id;
         task_id.set_id(id);
         return task_id;
