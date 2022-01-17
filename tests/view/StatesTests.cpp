@@ -151,8 +151,10 @@ TEST_F(StatesTests, EditTaskExecuteShouldCreateEditTaskCommand) {
     StateContext edit_task_context;
     EditTaskState edit_task_state(states_factory_);
 
+    const std::string expected_input_id = "5";
+
     // Assert
-    ExpectGetUserInput("Task ID", "5");
+    ExpectGetUserInput("Task ID", expected_input_id);
 
     EXPECT_CALL(*states_factory_, GetNextState(testing::An<const EditTaskState&>(), StatesFactory::MoveType::NEXT))
             .WillOnce(Return(expected_state_machine_initial_state));
@@ -170,6 +172,7 @@ TEST_F(StatesTests, EditTaskExecuteShouldCreateEditTaskCommand) {
     std::shared_ptr<State> actual_next_state = edit_task_state.Execute(edit_task_context);
     // Assert
     EXPECT_EQ(edit_task_context.GetTaskBuilder().BuildTask(), expected_returned_context_from_state_machine->GetTaskBuilder().BuildTask());
+    EXPECT_EQ(std::stoi(expected_input_id), edit_task_context.GetTaskId().value().id());
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
 
@@ -389,6 +392,7 @@ TEST_F(StatesTests, CompleteTaskStateExecute_ShouldCreateCompleteTaskCommand) {
     // Act
     std::shared_ptr<State> actual_next_state = complete_task_state.Execute(complete_task_context);
     // Assert
+    EXPECT_EQ(std::stoi(expected_input_string_id), complete_task_context.GetTaskId().value().id());
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
 
@@ -429,6 +433,7 @@ TEST_F(StatesTests, DeleteTaskStateExecute_ShouldCreateDeleteTaskCommand) {
     // Act
     std::shared_ptr<State> actual_next_state = delete_task_state.Execute(delete_task_context);
     // Assert
+    EXPECT_EQ(std::stoi(expected_input_string_id), delete_task_context.GetTaskId().value().id());
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
 
