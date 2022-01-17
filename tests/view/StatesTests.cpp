@@ -331,6 +331,7 @@ TEST_F(StatesTests, SetLabelStateExecute_ShouldCreateSetLabelCommand) {
     SetLabelState set_label_state(states_factory_);
 
     const std::string expected_input_label = "Some Task Label";
+    const std::string expected_input_id = "5";
     // Assert
     {
         testing::InSequence s;
@@ -338,7 +339,7 @@ TEST_F(StatesTests, SetLabelStateExecute_ShouldCreateSetLabelCommand) {
         EXPECT_CALL(*console_printer_, Write("Label> ")).Times(1);
     }
     EXPECT_CALL(*console_reader_, ReadLine())
-        .WillOnce(Return("5"))
+        .WillOnce(Return(expected_input_id))
         .WillOnce(Return(expected_input_label));
     EXPECT_CALL(*command_factory_, CreateSetLabelCommand(testing::Ref(set_label_context))).Times(1);
     EXPECT_CALL(*states_factory_, GetNextState(testing::An<const SetLabelState&>(), StatesFactory::MoveType::PREVIOUS))
@@ -346,6 +347,8 @@ TEST_F(StatesTests, SetLabelStateExecute_ShouldCreateSetLabelCommand) {
     // Act
     std::shared_ptr<State> actual_next_state = set_label_state.Execute(set_label_context);
     // Assert
+    EXPECT_EQ(std::stoi(expected_input_id), set_label_context.GetTaskId().value().id());
+    EXPECT_EQ(expected_input_label, set_label_context.GetTaskLabel());
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
 
