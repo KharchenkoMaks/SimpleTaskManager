@@ -482,11 +482,12 @@ TEST_F(StatesTests, HelpStateExecute_ShouldPrintHelpMessage) {
         EXPECT_CALL(*console_printer_, WriteLine("3. edit"));
         EXPECT_CALL(*console_printer_, WriteLine("4. delete"));
         EXPECT_CALL(*console_printer_, WriteLine("5. complete"));
-        EXPECT_CALL(*console_printer_, WriteLine("6. label"));
-        EXPECT_CALL(*console_printer_, WriteLine("7. show"));
-        EXPECT_CALL(*console_printer_, WriteLine("8. save"));
-        EXPECT_CALL(*console_printer_, WriteLine("9. load"));
-        EXPECT_CALL(*console_printer_, WriteLine("10. quit"));
+        EXPECT_CALL(*console_printer_, WriteLine("6. add_label"));
+        EXPECT_CALL(*console_printer_, WriteLine("7. remove_label"));
+        EXPECT_CALL(*console_printer_, WriteLine("8. show"));
+        EXPECT_CALL(*console_printer_, WriteLine("9. save"));
+        EXPECT_CALL(*console_printer_, WriteLine("10. load"));
+        EXPECT_CALL(*console_printer_, WriteLine("11. quit"));
     }
     // Act
     std::shared_ptr<State> actual_next_state = help_state.Execute(help_state_context);
