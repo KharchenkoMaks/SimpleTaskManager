@@ -17,7 +17,7 @@ message Task {
   Priority priority = 2;
   google.protobuf.Timestamp due_date = 3;
   bool completed = 4;
-  string label = 5;
+  repeated string label = 5;
 }
 
 message RelationalTask {
