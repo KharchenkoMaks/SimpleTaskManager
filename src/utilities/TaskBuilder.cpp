@@ -34,8 +34,10 @@ TaskBuilder& TaskBuilder::AddLabel(const std::string& label) {
     return *this;
 }
 
-TaskBuilder &TaskBuilder::RemoveLabel(const std::string& label) {
-    std::remove(labels_.begin(), labels_.end(), label);
+TaskBuilder& TaskBuilder::RemoveLabel(const std::string& label) {
+    auto label_to_remove = std::find(labels_.begin(), labels_.end(), label);
+    if (label_to_remove != labels_.end())
+        labels_.erase(label_to_remove);
     return *this;
 }
 
