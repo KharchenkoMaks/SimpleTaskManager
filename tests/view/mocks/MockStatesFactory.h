@@ -32,6 +32,7 @@ public:
     MOCK_METHOD(std::shared_ptr<State>, GetNextState, (const RemoveLabelState& state, MoveType move_type), (override));
     MOCK_METHOD(std::shared_ptr<State>, GetNextState, (const CompleteTaskState& state, MoveType move_type), (override));
     MOCK_METHOD(std::shared_ptr<State>, GetNextState, (const InputShowParametersState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::shared_ptr<State>, GetNextState, (const InputShowTaskLabelState& state, MoveType move_type), (override));
     MOCK_METHOD(std::shared_ptr<State>, GetRootState, (), (override));
     MOCK_METHOD(std::shared_ptr<State>, GetShowState, (), (override));
     MOCK_METHOD(std::shared_ptr<State>, GetStateByCommand, (const std::string& command), (override));

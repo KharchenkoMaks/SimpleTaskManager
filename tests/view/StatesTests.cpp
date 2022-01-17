@@ -561,6 +561,26 @@ TEST_F(StatesTests, InputShowParametersStateExecute_ShouldCreateShowCommand) {
     // Act
     std::shared_ptr<State> actual_next_state = input_show_state.Execute(show_state_context);
     // Assert
+    EXPECT_EQ("", show_state_context.GetTaskLabel());
+    EXPECT_EQ(expected_next_state, actual_next_state);
+}
+
+TEST_F(StatesTests, InputShowTaskLabelStateExecute_ShouldAskUserForTaskLabelToShow) {
+    // Arrange
+    std::shared_ptr expected_next_state = std::make_shared<EndState>(nullptr);
+    StateContext input_show_label_state_context;
+    InputShowTaskLabelState input_show_label_state(states_factory_);
+
+    const std::string expected_label_input = "some label";
+    // Assert
+    EXPECT_CALL(*console_printer_, Write("Label to sort by> ")).Times(1);
+    EXPECT_CALL(*console_reader_, ReadLine()).WillOnce(Return(expected_label_input));
+    EXPECT_CALL(*states_factory_, GetNextState(testing::An<const InputShowTaskLabelState&>(), StatesFactory::MoveType::NEXT))
+            .WillOnce(Return(expected_next_state));
+    // Act
+    std::shared_ptr<State> actual_next_state = input_show_label_state.Execute(input_show_label_state_context);
+    // Assert
+    EXPECT_EQ(expected_label_input, input_show_label_state_context.GetTaskLabel());
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
 
@@ -670,6 +690,54 @@ TEST_F(StatesTests, ShowStateExecute_ShouldPrintAllTasksFromContext) {
         testing::InSequence s;
         EXPECT_CALL(*console_printer_, WriteLine(TaskToString(parent_task_id, t1))).Times(1);
         EXPECT_CALL(*console_printer_, WriteLine("\t" + TaskToString(task3_id, t3))).Times(1);
+        EXPECT_CALL(*console_printer_, WriteLine(TaskToString(task2_id, t2))).Times(1);
+    }
+    EXPECT_CALL(*states_factory_, GetNextState(testing::An<const ShowState&>(), StatesFactory::MoveType::PREVIOUS))
+            .WillOnce(Return(expected_next_state));
+    // Act
+    std::shared_ptr<State> actual_next_state = show_state.Execute(show_state_context);
+    // Assert
+    EXPECT_EQ(expected_next_state, actual_next_state);
+}
+
+TEST_F(StatesTests, ShowStateExecute_ShouldPrintAllTasksFromContextWithoutRelations) {
+    // Arrange
+    std::shared_ptr expected_next_state = std::make_shared<EndState>(nullptr);
+    StateContext show_state_context;
+    ShowState show_state(states_factory_);
+
+    // Arrange tasks to show
+    TaskId parent_task_id;
+    TaskId task2_id;
+    task2_id.set_id(2);
+    TaskId task3_id;
+    task3_id.set_id(3);
+    Task t1 = TaskBuilder::Create()
+            .SetTitle("task1").SetPriority(Task::Priority::Task_Priority_LOW).SetDueDate(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))).BuildTask();
+    Task t2 = TaskBuilder::Create()
+            .SetTitle("task2").SetPriority(Task::Priority::Task_Priority_MEDIUM).SetDueDate(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))).BuildTask();
+    Task t3 = TaskBuilder::Create()
+            .SetTitle("subtask").SetPriority(Task::Priority::Task_Priority_MEDIUM).SetDueDate(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))).BuildTask();
+    RelationalTask tt1;
+    tt1.set_allocated_task_id(new TaskId(parent_task_id));
+    tt1.set_allocated_task(new Task(t1));
+    RelationalTask tt2;
+    tt2.set_allocated_task_id(new TaskId(task2_id));
+    tt2.set_allocated_task(new Task(t2));
+    RelationalTask tt3;
+    tt3.set_allocated_task_id(new TaskId(task3_id));
+    tt3.set_allocated_task(new Task(t3));
+    tt3.set_allocated_parent_id(new TaskId(parent_task_id));
+
+    std::vector<RelationalTask> tasks {tt1, tt3, tt2 };
+    CommandResult::TasksToShow tasks_to_show { tasks, false };
+
+    show_state_context.SetTasksToShow(tasks_to_show);
+    // Assert
+    {
+        testing::InSequence s;
+        EXPECT_CALL(*console_printer_, WriteLine(TaskToString(parent_task_id, t1))).Times(1);
+        EXPECT_CALL(*console_printer_, WriteLine(TaskToString(task3_id, t3))).Times(1);
         EXPECT_CALL(*console_printer_, WriteLine(TaskToString(task2_id, t2))).Times(1);
     }
     EXPECT_CALL(*states_factory_, GetNextState(testing::An<const ShowState&>(), StatesFactory::MoveType::PREVIOUS))
