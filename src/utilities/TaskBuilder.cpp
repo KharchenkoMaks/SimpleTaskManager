@@ -29,8 +29,13 @@ TaskBuilder& TaskBuilder::SetCompletion(bool is_completed) {
     return *this;
 }
 
-TaskBuilder& TaskBuilder::SetLabel(const std::string &label) {
-    label_ = label;
+TaskBuilder& TaskBuilder::AddLabel(const std::string& label) {
+    labels_.push_back(label);
+    return *this;
+}
+
+TaskBuilder &TaskBuilder::RemoveLabel(const std::string& label) {
+    std::remove(labels_.begin(), labels_.end(), label);
     return *this;
 }
 
@@ -43,8 +48,11 @@ TaskBuilder& TaskBuilder::Merge(const Task& task) {
         due_date_ = task.due_date();
     if (!is_completed_.has_value())
         is_completed_ = task.completed();
-    if (!label_.has_value())
-        label_ = task.label();
+    if (labels_.empty()) {
+        for (int i = 0; i < task.label_size(); ++i) {
+            labels_.push_back(task.label(i));
+        }
+    }
 
     return *this;
 }
@@ -54,7 +62,9 @@ Task TaskBuilder::BuildTask() const {
     task.set_title(title_.value_or(""));
     task.set_priority(priority_.value_or(Task::Priority::Task_Priority_NONE));
     task.set_completed(is_completed_.value_or(false));
-    task.set_label(label_.value_or(""));
+    for (const auto& label : labels_) {
+        task.add_label(label);
+    }
     if (due_date_.has_value())
         task.set_allocated_due_date(new google::protobuf::Timestamp(due_date_.value()));
     return task;
@@ -65,5 +75,5 @@ void TaskBuilder::operator=(const TaskBuilder& task_builder) {
     priority_ = task_builder.priority_;
     due_date_ = task_builder.due_date_;
     is_completed_ = task_builder.is_completed_;
-    label_ = task_builder.label_;
+    labels_ = task_builder.labels_;
 }
