@@ -3,6 +3,7 @@
 //
 
 #include "CommandResult.h"
+#include "utilities/TaskComparators.h"
 
 CommandResult CommandResult::Create(const ControllerRequestResult result) {
     CommandResult cmd_result;
@@ -35,4 +36,9 @@ std::optional<TaskId> CommandResult::GetTaskId() const {
 
 CommandResult::TasksToShow CommandResult::GetTasksToShow() const {
     return tasks_to_show_;
+}
+
+bool CommandResult::TasksToShow::operator==(const CommandResult::TasksToShow& tasks_to_show) const {
+    return this->tasks_ == tasks_to_show.tasks_ &&
+        this->show_task_relations_ == tasks_to_show.show_task_relations_;
 }

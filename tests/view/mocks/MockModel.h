@@ -19,6 +19,7 @@ public:
     MOCK_METHOD(TaskActionResult, DeleteTask, (const TaskId& id, bool force_delete_subtasks), (override));
     MOCK_METHOD(TaskActionResult, CompleteTask, (const TaskId& id, bool force_complete_subtasks), (override));
     MOCK_METHOD(std::vector<RelationalTask>, GetTasks, (), (override));
+    MOCK_METHOD(std::vector<RelationalTask>, GetTasksByLabel, (const std::string& task_label), (override));
     MOCK_METHOD(std::optional<RelationalTask>, GetTask, (const TaskId& task_id), (override));
     MOCK_METHOD(bool, IsTaskExist, (const TaskId& task_id), (override));
     MOCK_METHOD(TaskActionResult, AddTaskLabel, (const TaskId& id, const std::string& label), (override));

@@ -17,7 +17,7 @@ public:
     MOCK_METHOD(std::shared_ptr<Command>, AskUserForAction, (), (override));
     MOCK_METHOD(void, PrintAddedTaskId, (const TaskId& task_id), (override));
     MOCK_METHOD(void, PrintRequestResult, (ControllerRequestResult action_result), (override));
-    MOCK_METHOD(void, ShowTasks, (const std::vector<RelationalTask>& tasks), (override));
+    MOCK_METHOD(void, ShowTasks, (const CommandResult::TasksToShow& tasks), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKUSERINTERFACE_H

@@ -41,7 +41,8 @@ public:
 };
 
 bool operator==(const std::shared_ptr<StateContext>& context1, const std::shared_ptr<StateContext>& context2) {
-    return context1->GetTasksToShow() == context2->GetTasksToShow();
+    return context1->GetTasksToShow().tasks_ == context2->GetTasksToShow().tasks_ &&
+        context1->GetTasksToShow().show_task_relations_ == context2->GetTasksToShow().show_task_relations_;
 }
 
 TEST_F(UserInterfaceTests, AskUserForAction_ShouldRunStateMachineAndReturnCommandFromContext) {
@@ -104,7 +105,8 @@ TEST_F(UserInterfaceTests, ShowTasks_ShouldStartStateMachineToShowTasks) {
     tt3.set_allocated_task(new Task(t3));
     tt3.set_allocated_parent_id(new TaskId(parent_task_id));
 
-    std::vector<RelationalTask> tasks_to_show {tt1, tt3, tt2 };
+    std::vector<RelationalTask> tasks { tt1, tt3, tt2 };
+    CommandResult::TasksToShow tasks_to_show { tasks, true };
 
     expected_show_state_context->SetTasksToShow(tasks_to_show);
     // Assert

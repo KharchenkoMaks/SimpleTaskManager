@@ -156,7 +156,7 @@ TEST_F(DISABLED_IntegrationTests, Script3) {
     };
     std::vector<std::string> expected_show {
         "ID: 1, Main task, Priority: High, Due to: 00:00 01.01.2030, Completed: No",
-        "\tID: 2, edited subtask, Priority: None, Due to: 00:00 01.01.2030, Completed: No, Label: subtask label"
+        "\tID: 2, edited subtask, Priority: None, Due to: 00:00 01.01.2030, Completed: No, Labels: subtask label"
     };
     // Act & Assert
     LaunchTest(expected_show, inputs);

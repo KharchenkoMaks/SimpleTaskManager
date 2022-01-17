@@ -25,6 +25,8 @@
 #include "view/commands/ShowTasksCommand.h"
 #include "view/commands/RemoveLabelCommand.h"
 
+#include "view/commands/CommandResult.h"
+
 #include <ctime>
 #include <utility>
 
@@ -264,7 +266,7 @@ TEST_F(CommandsTests, RemoveLabelCommandExecute_ShouldRemoveLabelInController) {
 
 TEST_F(CommandsTests, ShowTasksCommandExecute_ShouldFetchAllTasksFromControllerAndReturnThem) {
     // Arrange
-    ShowTasksCommand show_tasks_command;
+    ShowTasksCommand show_tasks_command { "" };
     const ControllerRequestResult expected_result = ControllerRequestResult::SUCCESS;
     // Arrange tasks to show
     TaskId parent_task_id;
@@ -289,13 +291,14 @@ TEST_F(CommandsTests, ShowTasksCommandExecute_ShouldFetchAllTasksFromControllerA
     tt3.set_allocated_task(new Task(t3));
     tt3.set_allocated_parent_id(new TaskId(parent_task_id));
 
-    std::vector<RelationalTask> tasks_to_show {tt1, tt3, tt2 };
+    std::vector<RelationalTask> tasks { tt1, tt3, tt2 };
+    const CommandResult::TasksToShow expected_tasks_to_show { tasks, true };
 
     // Assert
-    EXPECT_CALL(*controller_, GetAllTasks()).WillOnce(Return(tasks_to_show));
+    EXPECT_CALL(*controller_, GetAllTasks()).WillOnce(Return(tasks));
     // Act
     CommandResult actual_result = show_tasks_command.Execute(controller_);
     // Assert
     EXPECT_EQ(expected_result, actual_result.GetResult());
-    EXPECT_EQ(tasks_to_show, actual_result.GetTasksToShow());
+    EXPECT_EQ(expected_tasks_to_show, actual_result.GetTasksToShow());
 }

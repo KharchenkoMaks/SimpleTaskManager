@@ -13,6 +13,7 @@
 class CommandResult {
 public:
     struct TasksToShow {
+        bool operator== (const TasksToShow& tasks) const;
         std::vector<RelationalTask> tasks_;
         bool show_task_relations_;
     };
