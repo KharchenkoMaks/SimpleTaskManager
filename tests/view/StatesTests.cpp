@@ -87,9 +87,9 @@ TEST_F(StatesTests, AddSubTaskStateExecuteShouldCreateAddSubTaskCommand) {
             .WillOnce(Return(expected_next_state));
 
     std::unique_ptr<MockStateMachine> state_machine = std::make_unique<MockStateMachine>();
-    EXPECT_CALL(*state_machine, Run(testing::_, expected_state_machine_initial_state))
+    EXPECT_CALL(*state_machine, Run())
             .WillOnce(Return(expected_returned_context_from_state_machine));
-    EXPECT_CALL(*states_factory_, CreateStateMachine())
+    EXPECT_CALL(*states_factory_, CreateStateMachine(expected_state_machine_initial_state, testing::_))
         .WillOnce(Return(testing::ByMove(std::move(state_machine))));
 
     EXPECT_CALL(*command_factory_, CreateAddSubTaskCommand(testing::Ref(add_subtask_context))).Times(1);
@@ -130,9 +130,9 @@ TEST_F(StatesTests, AddTaskExecuteShouldCreateAddTaskCommand) {
     EXPECT_CALL(*states_factory_, GetNextState(testing::An<const AddTaskState&>(), StatesFactory::MoveType::PREVIOUS))
             .WillOnce(Return(expected_next_state));
     std::unique_ptr<MockStateMachine> state_machine = std::make_unique<MockStateMachine>();
-    EXPECT_CALL(*state_machine, Run(testing::_, expected_state_machine_initial_state))
+    EXPECT_CALL(*state_machine, Run())
             .WillOnce(Return(expected_returned_context_from_state_machine));
-    EXPECT_CALL(*states_factory_, CreateStateMachine())
+    EXPECT_CALL(*states_factory_, CreateStateMachine(expected_state_machine_initial_state, testing::_))
             .WillOnce(Return(testing::ByMove(std::move(state_machine))));
 
     EXPECT_CALL(*command_factory_, CreateAddTaskCommand(testing::Ref(add_task_context))).Times(1);
@@ -160,9 +160,9 @@ TEST_F(StatesTests, EditTaskExecuteShouldCreateEditTaskCommand) {
             .WillOnce(Return(expected_next_state));
 
     std::unique_ptr<MockStateMachine> state_machine = std::make_unique<MockStateMachine>();
-    EXPECT_CALL(*state_machine, Run(testing::_, expected_state_machine_initial_state))
+    EXPECT_CALL(*state_machine, Run())
             .WillOnce(Return(expected_returned_context_from_state_machine));
-    EXPECT_CALL(*states_factory_, CreateStateMachine())
+    EXPECT_CALL(*states_factory_, CreateStateMachine(expected_state_machine_initial_state, testing::_))
             .WillOnce(Return(testing::ByMove(std::move(state_machine))));
 
     EXPECT_CALL(*command_factory_, CreateEditCommand(testing::Ref(edit_task_context))).Times(1);

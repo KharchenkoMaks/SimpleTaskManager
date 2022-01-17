@@ -17,10 +17,9 @@ std::shared_ptr<State> EditTaskState::Execute(StateContext& context) {
         return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
     }
 
-    auto state_machine = factory_.lock()->CreateStateMachine();
-    std::shared_ptr<StateContext> context_with_edited_task =
-            state_machine->Run(std::make_shared<StateContext>(),
-                    factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT));
+    auto state_machine = factory_.lock()->CreateStateMachine(factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT),
+                                                             std::make_shared<StateContext>());
+    std::shared_ptr<StateContext> context_with_edited_task = state_machine->Run();
 
     context.SetTaskBuilder(context_with_edited_task->GetTaskBuilder());
     context.SetTaskId(editing_task_id.value());

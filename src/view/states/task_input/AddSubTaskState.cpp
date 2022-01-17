@@ -16,11 +16,10 @@ std::shared_ptr<State> AddSubTaskState::Execute(StateContext& context) {
         return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
     }
 
-    auto state_machine = factory_.lock()->CreateStateMachine();
+    auto state_machine = factory_.lock()->CreateStateMachine(factory_.lock()->GetNextState(*this,StatesFactory::MoveType::NEXT),
+                                                             std::make_shared<StateContext>());
 
-    std::shared_ptr<StateContext> context_with_added_task =
-            state_machine->Run(std::make_shared<StateContext>(),
-                                           factory_.lock()->GetNextState(*this,StatesFactory::MoveType::NEXT));
+    std::shared_ptr<StateContext> context_with_added_task = state_machine->Run();
 
     Task task_to_add = context_with_added_task->GetTaskBuilder().BuildTask();
     context.AddTaskTitle(task_to_add.title());

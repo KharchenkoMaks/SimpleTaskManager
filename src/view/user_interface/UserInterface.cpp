@@ -11,9 +11,9 @@ UserInterface::UserInterface(const std::shared_ptr<StatesFactory>& states_factor
 }
 
 std::shared_ptr<Command> UserInterface::AskUserForAction() {
-    auto state_machine = states_factory_->CreateStateMachine();
-    std::shared_ptr<StateContext> result_context =
-            state_machine->Run(std::make_shared<StateContext>(), states_factory_->GetRootState());
+    auto state_machine = states_factory_->CreateStateMachine(states_factory_->GetRootState(),
+                                                             std::make_shared<StateContext>());
+    std::shared_ptr<StateContext> result_context = state_machine->Run();
 
     return result_context->GetCommand();
 }
@@ -49,8 +49,10 @@ void UserInterface::PrintRequestResult(ControllerRequestResult action_result) {
 }
 
 void UserInterface::ShowTasks(const std::vector<TaskTransfer>& tasks) {
-    auto state_machine = states_factory_->CreateStateMachine();
     std::shared_ptr<StateContext> context = std::make_shared<StateContext>();
     context->SetTasksToShow(tasks);
-    state_machine->Run(context, states_factory_->GetShowState());
+
+    auto state_machine = states_factory_->CreateStateMachine(states_factory_->GetShowState(), context);
+
+    state_machine->Run();
 }

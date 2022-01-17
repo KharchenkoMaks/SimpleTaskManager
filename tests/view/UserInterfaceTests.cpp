@@ -54,8 +54,8 @@ TEST_F(UserInterfaceTests, AskUserForAction_ShouldRunStateMachineAndReturnComman
     std::reference_wrapper<AddTaskCommand> expected_returned_command(*expected_command);
     returned_context->SetCommand(std::move(expected_command));
     // Assert
-    EXPECT_CALL(*state_machine, Run(testing::_, expected_root_state)).WillOnce(Return(returned_context));
-    EXPECT_CALL(*states_factory_, CreateStateMachine()).WillOnce(Return(testing::ByMove(std::move(state_machine))));
+    EXPECT_CALL(*state_machine, Run()).WillOnce(Return(returned_context));
+    EXPECT_CALL(*states_factory_, CreateStateMachine(expected_root_state, testing::_)).WillOnce(Return(testing::ByMove(std::move(state_machine))));
     EXPECT_CALL(*states_factory_, GetRootState()).WillOnce(Return(expected_root_state));
     // Act
     std::shared_ptr<Command> actual_returned_command = ui.AskUserForAction();
@@ -108,8 +108,8 @@ TEST_F(UserInterfaceTests, ShowTasks_ShouldStartStateMachineToShowTasks) {
 
     expected_show_state_context->SetTasksToShow(tasks_to_show);
     // Assert
-    EXPECT_CALL(*state_machine, Run(expected_show_state_context, expected_show_state)).Times(1);
-    EXPECT_CALL(*states_factory_, CreateStateMachine()).WillOnce(Return(testing::ByMove(std::move(state_machine))));
+    EXPECT_CALL(*state_machine, Run()).Times(1);
+    EXPECT_CALL(*states_factory_, CreateStateMachine(expected_show_state, expected_show_state_context)).WillOnce(Return(testing::ByMove(std::move(state_machine))));
     EXPECT_CALL(*states_factory_, GetShowState()).WillOnce(Return(expected_show_state));
     // Act
     ui.ShowTasks(tasks_to_show);

@@ -267,8 +267,9 @@ void StatesFactory::InitializeState(States state) {
     }
 }
 
-std::unique_ptr<ConsoleStateMachine> StatesFactory::CreateStateMachine() const {
-    return std::make_unique<ConsoleStateMachine>();
+std::unique_ptr<ConsoleStateMachine> StatesFactory::CreateStateMachine(const std::shared_ptr<State>& initial_state,
+                                                                       const std::shared_ptr<StateContext>& context) const {
+    return std::make_unique<ConsoleStateMachine>(initial_state, context);
 }
 
 std::shared_ptr<CommandFactory> StatesFactory::GetCommandFactory() const {

@@ -13,12 +13,15 @@
 
 class ConsoleStateMachine {
 public:
-    virtual std::shared_ptr<StateContext> Run(const std::shared_ptr<StateContext>& context,
-                                               const std::shared_ptr<State>& initial_state);
+    ConsoleStateMachine(const std::shared_ptr<State>& initial_state,
+                        const std::shared_ptr<StateContext>& context);
+public:
+    virtual std::shared_ptr<StateContext> Run();
 public:
     virtual ~ConsoleStateMachine() = default;
 private:
     std::shared_ptr<State> state_;
+    std::shared_ptr<StateContext> context_;
 };
 
 

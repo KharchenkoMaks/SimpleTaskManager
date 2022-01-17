@@ -26,9 +26,9 @@ TEST_F(StateMachineTests, Run_ShouldStartWithInitialStateAndReturnContextAtTheEn
         .WillOnce(Return(second_state));
     EXPECT_CALL(*second_state, Execute(testing::Ref(*context)))
         .WillOnce(Return(nullptr));
-    ConsoleStateMachine state_machine;
+    ConsoleStateMachine state_machine { initial_state, context };
     // Act
-    std::shared_ptr<StateContext> actual_returned_context = state_machine.Run(context, initial_state);
+    std::shared_ptr<StateContext> actual_returned_context = state_machine.Run();
     // Assert
     EXPECT_EQ(context, actual_returned_context);
 }
