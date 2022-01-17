@@ -202,11 +202,24 @@ std::vector<RelationalTask> TaskManager::GetAllTaskChildren(const TaskId& task_i
 }
 
 RelationalTask TaskManager::CreateTaskTransferFromTask(const std::map<TaskId, TaskNode>::iterator& task) {
+    return CreateTaskTransferFromTask(task->first, task->second.task(), task->second.parent_id());
+}
+
+RelationalTask TaskManager::CreateTaskTransferFromTask(const TaskId& task_id, const Task& task, const TaskId& parent_id) {
     RelationalTask task_transfer;
-    task_transfer.set_allocated_task_id(new TaskId(task->first));
-    task_transfer.set_allocated_task(new Task(task->second.task()));
-    if (task->second.has_parent_id()) {
-        task_transfer.set_allocated_parent_id(new TaskId(task->second.parent_id()));
-    }
+    task_transfer.set_allocated_task_id(new TaskId(task_id));
+    task_transfer.set_allocated_task(new Task(task));
+    if (!(parent_id == TaskId::default_instance()))
+        task_transfer.set_allocated_parent_id(new TaskId(parent_id));
+
     return task_transfer;
+}
+
+std::vector<RelationalTask> TaskManager::GetTasksByLabel(const std::string& task_label) {
+    std::vector<RelationalTask> tasks;
+    for (const auto& task : tasks_) {
+        if (std::find(task.second.task().label().begin(), task.second.task().label().end(), task_label) != task.second.task().label().end())
+            tasks.push_back(CreateTaskTransferFromTask(task.first, task.second.task(), task.second.parent_id()));
+    }
+    return tasks;
 }

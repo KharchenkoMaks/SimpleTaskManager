@@ -33,6 +33,7 @@ public:
     TaskActionResult RemoveTaskLabel(const TaskId& id, const std::string& label) override;
 
     std::vector<RelationalTask> GetTasks() override;
+    std::vector<RelationalTask> GetTasksByLabel(const std::string& task_label) override;
     std::optional<RelationalTask> GetTask(const TaskId& task_id) override;
 public:
     bool IsTaskExist(const TaskId& task_id) override;
@@ -40,6 +41,9 @@ public: // Persistence
     bool LoadModelState(const std::vector<RelationalTask>& tasks) override;
 private:
     RelationalTask CreateTaskTransferFromTask(const std::map<TaskId, model::TaskNode>::iterator& task);
+    RelationalTask CreateTaskTransferFromTask(const TaskId& task_id,
+                                              const Task& task,
+                                              const TaskId& parent_id);
     std::vector<RelationalTask> GetAllTaskChildren(const TaskId& task_id);
 
     google::protobuf::internal::RepeatedPtrIterator<const std::string> FindTaskLabel(const Task& task, const std::string& label);

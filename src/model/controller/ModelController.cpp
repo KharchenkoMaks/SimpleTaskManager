@@ -94,3 +94,10 @@ ControllerRequestResult ModelController::LoadFromFile(const std::string& file_na
         return ControllerRequestResult::FILE_DAMAGED;
     }
 }
+
+std::vector<RelationalTask> ModelController::GetTasksByLabel(const std::string& task_label) {
+    if (task_label.empty())
+        return model_->GetTasks();
+    else
+        return model_->GetTasksByLabel(task_label);
+}
