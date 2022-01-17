@@ -10,11 +10,7 @@ std::shared_ptr<State> AddTaskState::Execute(StateContext& context) {
                                                              std::make_shared<StateContext>());
     std::shared_ptr<StateContext> context_with_added_task = state_machine->Run();
 
-    Task task_to_add = context_with_added_task->GetTaskBuilder().BuildTask();
-    context.AddTaskTitle(task_to_add.title());
-    context.AddTaskPriority(task_to_add.priority());
-    context.AddTaskDueTime(task_to_add.due_date());
-    context.AddTaskLabel(task_to_add.label());
+    context.SetTaskBuilder(context_with_added_task->GetTaskBuilder());
     context.SetCommand(factory_.lock()->GetCommandFactory()->CreateAddTaskCommand(context));
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }
