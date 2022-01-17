@@ -183,7 +183,7 @@ std::shared_ptr<State> StatesFactory::GetNextState(const SetLabelState &state, c
 std::shared_ptr<State> StatesFactory::GetNextState(const SaveState &state, const StatesFactory::MoveType move_type) {
     switch(move_type) {
         case MoveType::ERROR:
-            return GetLazyStateByStatesEnum(States::kSave);
+            return GetLazyStateByStatesEnum(States::kRoot);
         default:
             return GetLazyStateByStatesEnum(States::kEnd);
     }
@@ -192,7 +192,7 @@ std::shared_ptr<State> StatesFactory::GetNextState(const SaveState &state, const
 std::shared_ptr<State> StatesFactory::GetNextState(const LoadState &state, const StatesFactory::MoveType move_type) {
     switch(move_type) {
         case MoveType::ERROR:
-            return GetLazyStateByStatesEnum(States::kLoad);
+            return GetLazyStateByStatesEnum(States::kRoot);
         default:
             return GetLazyStateByStatesEnum(States::kEnd);
     }

@@ -643,6 +643,25 @@ TEST_F(StatesTests, LoadStateExecute_ShouldCreateLoadCommand) {
     EXPECT_EQ(expected_input_file_name, load_state_context.GetFileName());
 }
 
+TEST_F(StatesTests, LoadStateExecute_ShouldPrintErrorOnEmpyFileName) {
+    // Arrange
+    std::shared_ptr expected_next_state = std::make_shared<RootState>(nullptr);
+    StateContext load_state_context;
+    LoadState load_state(states_factory_);
+
+    const std::string expected_input_file_name = "";
+    // Assert
+    ExpectGetUserInput("File name", expected_input_file_name);
+    EXPECT_CALL(*states_factory_, GetNextState(testing::An<const LoadState&>(), StatesFactory::MoveType::ERROR))
+            .WillOnce(Return(expected_next_state));
+    EXPECT_CALL(*command_factory_, CreateLoadCommand(testing::Ref(load_state_context))).Times(0);
+    EXPECT_CALL(*console_printer_, WriteError("Invalid file name!")).Times(1);
+    // Act
+    std::shared_ptr<State> actual_next_state = load_state.Execute(load_state_context);
+    // Assert
+    EXPECT_EQ(expected_next_state, actual_next_state);
+}
+
 TEST_F(StatesTests, SaveStateExecute_ShouldCreateSaveCommand) {
     // Arrange
     std::shared_ptr expected_next_state = std::make_shared<EndState>(nullptr);
@@ -660,4 +679,23 @@ TEST_F(StatesTests, SaveStateExecute_ShouldCreateSaveCommand) {
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
     EXPECT_EQ(expected_input_file_name, save_state_context.GetFileName());
+}
+
+TEST_F(StatesTests, SaveStateExecute_ShouldPrintErrorOnEmpyFileName) {
+    // Arrange
+    std::shared_ptr expected_next_state = std::make_shared<RootState>(nullptr);
+    StateContext save_state_context;
+    SaveState save_state(states_factory_);
+
+    const std::string expected_input_file_name = "";
+    // Assert
+    ExpectGetUserInput("File name", expected_input_file_name);
+    EXPECT_CALL(*states_factory_, GetNextState(testing::An<const SaveState&>(), StatesFactory::MoveType::ERROR))
+        .WillOnce(Return(expected_next_state));
+    EXPECT_CALL(*command_factory_, CreateSaveCommand(testing::Ref(save_state_context))).Times(0);
+    EXPECT_CALL(*console_printer_, WriteError("Invalid file name!")).Times(1);
+    // Act
+    std::shared_ptr<State> actual_next_state = save_state.Execute(save_state_context);
+    // Assert
+    EXPECT_EQ(expected_next_state, actual_next_state);
 }

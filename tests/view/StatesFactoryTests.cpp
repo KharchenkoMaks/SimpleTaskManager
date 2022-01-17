@@ -100,11 +100,11 @@ TEST_F(StatesFactoryTests, GetNextStateOfSetLabelState) {
 }
 
 TEST_F(StatesFactoryTests, GetNextStateOfSaveState) {
-    TestGetNextState<SaveState, EndState, SaveState, EndState>();
+    TestGetNextState<SaveState, EndState, RootState, EndState>();
 }
 
 TEST_F(StatesFactoryTests, GetNextStateOfLoadState) {
-    TestGetNextState<LoadState, EndState, LoadState, EndState>();
+    TestGetNextState<LoadState, EndState, RootState, EndState>();
 }
 
 TEST_F(StatesFactoryTests, GetNextStateOfShowState) {
