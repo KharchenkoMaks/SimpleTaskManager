@@ -62,10 +62,10 @@ void StateContext::SetTaskBuilder(const TaskBuilder& task_builder) {
     task_ = task_builder;
 }
 
-void StateContext::SetTasksToShow(const std::vector<TaskTransfer>& tasks) {
+void StateContext::SetTasksToShow(const std::vector<RelationalTask>& tasks) {
     tasks_to_show_ = tasks;
 }
 
-std::vector<TaskTransfer> StateContext::GetTasksToShow() const {
+std::vector<RelationalTask> StateContext::GetTasksToShow() const {
     return tasks_to_show_;
 }

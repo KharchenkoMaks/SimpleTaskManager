@@ -586,18 +586,18 @@ TEST_F(StatesTests, ShowStateExecute_ShouldPrintAllTasksFromContext) {
                 .SetTitle("task2").SetPriority(Task::Priority::Task_Priority_MEDIUM).SetDueDate(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))).BuildTask();
     Task t3 = TaskBuilder::Create()
                 .SetTitle("subtask").SetPriority(Task::Priority::Task_Priority_MEDIUM).SetDueDate(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))).BuildTask();
-    TaskTransfer tt1;
+    RelationalTask tt1;
     tt1.set_allocated_task_id(new TaskId(parent_task_id));
     tt1.set_allocated_task(new Task(t1));
-    TaskTransfer tt2;
+    RelationalTask tt2;
     tt2.set_allocated_task_id(new TaskId(task2_id));
     tt2.set_allocated_task(new Task(t2));
-    TaskTransfer tt3;
+    RelationalTask tt3;
     tt3.set_allocated_task_id(new TaskId(task3_id));
     tt3.set_allocated_task(new Task(t3));
     tt3.set_allocated_parent_id(new TaskId(parent_task_id));
 
-    std::vector<TaskTransfer> tasks_to_show { tt1, tt3, tt2 };
+    std::vector<RelationalTask> tasks_to_show {tt1, tt3, tt2 };
 
     show_state_context.SetTasksToShow(tasks_to_show);
 

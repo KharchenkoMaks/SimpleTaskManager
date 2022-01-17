@@ -59,20 +59,20 @@ public:
         expected_third_task.set_priority(expected_priority[2]);
         expected_third_task.set_allocated_due_date(new google::protobuf::Timestamp(expected_time));
     }
-    std::vector<TaskTransfer> FormTasksToVector() const {
-        TaskTransfer tt1;
+    std::vector<RelationalTask> FormTasksToVector() const {
+        RelationalTask tt1;
         tt1.set_allocated_task(new Task(expected_first_task));
         tt1.set_allocated_task_id(new TaskId(expected_first_task_id));
-        TaskTransfer tt2;
+        RelationalTask tt2;
         tt2.set_allocated_task(new Task(expected_second_task));
         tt2.set_allocated_task_id(new TaskId(expected_second_task_id));
         tt2.set_allocated_parent_id(new TaskId(expected_first_task_id));
-        TaskTransfer tt3;
+        RelationalTask tt3;
         tt3.set_allocated_task(new Task(expected_third_task));
         tt3.set_allocated_task_id(new TaskId(expected_third_task_id));
         tt3.set_allocated_parent_id(new TaskId(expected_first_task_id));
 
-        std::vector<TaskTransfer> tasks { tt1, tt2, tt3 };
+        std::vector<RelationalTask> tasks {tt1, tt2, tt3 };
         return tasks;
     }
 };
@@ -93,7 +93,7 @@ TEST_F(TaskManagerTest, CreatingTasks_ShouldReturnTaskVector){
     TaskId task1 = task_manager.AddTask(expected_first_task).second;
     TaskId task2 = task_manager.AddTask(expected_second_task).second;
 
-    std::vector<TaskTransfer> tasks = task_manager.GetTasks();
+    std::vector<RelationalTask> tasks = task_manager.GetTasks();
     // Assert
     // Check size of task vector equals 2
     ASSERT_EQ(tasks.size(), 2);
@@ -134,8 +134,8 @@ TEST_F(TaskManagerTest, EditingTask_ShouldReturnEditedTask){
     // Act
     task_manager.EditTask(main_task_id, edited_task);
     task_manager.EditTask(subtask_id, edited_task);
-    std::optional<TaskTransfer> actual_main = task_manager.GetTask(main_task_id);
-    std::optional<TaskTransfer> actual_sub = task_manager.GetTask(subtask_id);
+    std::optional<RelationalTask> actual_main = task_manager.GetTask(main_task_id);
+    std::optional<RelationalTask> actual_sub = task_manager.GetTask(subtask_id);
     // Assert
     ASSERT_NE(actual_main, std::nullopt);
     ASSERT_NE(actual_sub, std::nullopt);
@@ -169,7 +169,7 @@ TEST_F(TaskManagerTest, DeleteTask_ShouldDeleteTaskProperly){
     TaskId task_id_2 = task_manager.AddTask(expected_second_task).second;
     // Act
     task_manager.DeleteTask(task_id_1, false);
-    std::vector<TaskTransfer> tasks = task_manager.GetTasks();
+    std::vector<RelationalTask> tasks = task_manager.GetTasks();
     TaskId actual_task_id = tasks[0].task_id();
     Task actual_task = tasks[0].task();
     // Assert
@@ -226,7 +226,7 @@ TEST_F(TaskManagerTest, TryCompletingDifferentTasks_ShouldCompleteThoseTasks){
     // Act
     task_manager.CompleteTask(task1, false);
     task_manager.CompleteTask(task3, false);
-    std::vector<TaskTransfer> tasks = task_manager.GetTasks();
+    std::vector<RelationalTask> tasks = task_manager.GetTasks();
     Task actual_first_completed_task = tasks[0].task();
     Task actual_second_completed_task = tasks[2].task();
     Task actual_not_completed_task = tasks[1].task();
@@ -269,7 +269,7 @@ TEST_F(TaskManagerTest, TryAddingSubtask_ShouldReturnRightTask) {
     // Act
     TaskId main_task_id = task_manager.AddTask(expected_first_task).second;
     TaskId subtask_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
-    std::optional<TaskTransfer> get_subtask = task_manager.GetTask(subtask_id);
+    std::optional<RelationalTask> get_subtask = task_manager.GetTask(subtask_id);
     // Assert
     ASSERT_NE(get_subtask, std::nullopt);
     EXPECT_EQ(get_subtask.value().task_id(), subtask_id);
@@ -283,7 +283,7 @@ TEST_F(TaskManagerTest, TryGetNonExistentTask_ShouldReturnNullopt) {
     // Arrange
     TaskManager task_manager(std::make_unique<IdGenerator>());
     // Act
-    std::optional<TaskTransfer> task = task_manager.GetTask(expected_first_task_id);
+    std::optional<RelationalTask> task = task_manager.GetTask(expected_first_task_id);
     // Assert
     EXPECT_EQ(task, std::nullopt);
 }
@@ -305,9 +305,9 @@ TEST_F(TaskManagerTest, TryDeletingSubTask_ShouldDeleteSubTaskProperly) {
 
     // Act
     task_manager.DeleteTask(subtask1_id, false);
-    const std::vector<TaskTransfer> tasks = task_manager.GetTasks();
-    const TaskTransfer main_task_transfer = tasks[0];
-    const TaskTransfer subtask_transfer = tasks[1];
+    const std::vector<RelationalTask> tasks = task_manager.GetTasks();
+    const RelationalTask main_task_transfer = tasks[0];
+    const RelationalTask subtask_transfer = tasks[1];
 
     // Assert
     ASSERT_EQ(tasks.size(), 2);
@@ -338,7 +338,7 @@ TEST_F(TaskManagerTest, TryCompleteSubTask_ShouldCompleteSubTask) {
 
     // Act
     task_manager.CompleteTask(subtask1_id, false);
-    const std::optional<TaskTransfer> actual_subtask = task_manager.GetTask(subtask1_id);
+    const std::optional<RelationalTask> actual_subtask = task_manager.GetTask(subtask1_id);
     // Assert
     ASSERT_NE(actual_subtask, std::nullopt);
     EXPECT_TRUE(actual_subtask->task().completed());
@@ -542,7 +542,7 @@ TEST_F(TaskManagerTest, LoadState_ShouldLoadAllTasks) {
     const bool expected_result = true;
     // Act
     const bool actual_result = task_manager.LoadModelState(expected_tasks);
-    const std::vector<TaskTransfer> actual_tasks = task_manager.GetTasks();
+    const std::vector<RelationalTask> actual_tasks = task_manager.GetTasks();
     // Assert
     ASSERT_EQ(expected_result, actual_result);
     EXPECT_EQ(expected_tasks, actual_tasks);

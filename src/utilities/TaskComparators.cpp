@@ -20,7 +20,7 @@ bool operator==(const Task& task1, const Task& task2) {
            task1.label() == task2.label();
 }
 
-bool operator==(const TaskTransfer& task1, const TaskTransfer& task2) {
+bool operator==(const RelationalTask& task1, const RelationalTask& task2) {
     return task1.task_id() == task2.task_id() &&
            task1.task() == task2.task() &&
            task1.parent_id() == task2.parent_id();

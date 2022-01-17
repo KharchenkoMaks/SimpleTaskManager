@@ -22,7 +22,7 @@ public:
 public:
     virtual void PrintAddedTaskId(const TaskId& task_id);
     virtual void PrintRequestResult(ControllerRequestResult action_result);
-    virtual void ShowTasks(const std::vector<TaskTransfer>& tasks);
+    virtual void ShowTasks(const std::vector<RelationalTask>& tasks);
 public:
     virtual ~UserInterface() = default;
 private:

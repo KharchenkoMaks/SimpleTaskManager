@@ -11,8 +11,8 @@
 
 using namespace persistence;
 
-std::pair<SaveLoadStatus, std::vector<TaskTransfer>> FilePersistence::Load() {
-    std::vector<TaskTransfer> loaded_tasks;
+std::pair<SaveLoadStatus, std::vector<RelationalTask>> FilePersistence::Load() {
+    std::vector<RelationalTask> loaded_tasks;
 
     std::ifstream file(file_name);
     if (!file.is_open()) {
@@ -22,7 +22,7 @@ std::pair<SaveLoadStatus, std::vector<TaskTransfer>> FilePersistence::Load() {
     std::unique_ptr<google::protobuf::io::ZeroCopyInputStream> raw_input =
             std::make_unique<google::protobuf::io::IstreamInputStream>(&file);
 
-    TaskTransfer read_task;
+    RelationalTask read_task;
     while (google::protobuf::util::ParseDelimitedFromZeroCopyStream(&read_task, raw_input.get(), nullptr)) {
         loaded_tasks.push_back(read_task);
         read_task.clear_parent_id();
@@ -33,7 +33,7 @@ std::pair<SaveLoadStatus, std::vector<TaskTransfer>> FilePersistence::Load() {
     return std::make_pair(SaveLoadStatus::SUCCESS, loaded_tasks);
 }
 
-SaveLoadStatus FilePersistence::Save(const std::vector<TaskTransfer>& tasks) {
+SaveLoadStatus FilePersistence::Save(const std::vector<RelationalTask>& tasks) {
 
     std::ofstream file(file_name);
     if (!file.is_open()) {

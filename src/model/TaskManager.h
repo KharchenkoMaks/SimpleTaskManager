@@ -31,15 +31,15 @@ public:
     TaskActionResult CompleteTask(const TaskId& id, bool force_complete_subtasks) override;
     TaskActionResult AddTaskLabel(const TaskId& id, const std::string& label) override;
 
-    std::vector<TaskTransfer> GetTasks() override;
-    std::optional<TaskTransfer> GetTask(const TaskId& task_id) override;
+    std::vector<RelationalTask> GetTasks() override;
+    std::optional<RelationalTask> GetTask(const TaskId& task_id) override;
 public:
     bool IsTaskExist(const TaskId& task_id) override;
 public: // Persistence
-    bool LoadModelState(const std::vector<TaskTransfer>& tasks) override;
+    bool LoadModelState(const std::vector<RelationalTask>& tasks) override;
 private:
-    TaskTransfer CreateTaskTransferFromTask(const std::map<TaskId, model::TaskNode>::iterator task);
-    std::vector<TaskTransfer> GetAllTaskChildren(const TaskId& task_id);
+    RelationalTask CreateTaskTransferFromTask(const std::map<TaskId, model::TaskNode>::iterator task);
+    std::vector<RelationalTask> GetAllTaskChildren(const TaskId& task_id);
 private:
     std::map<TaskId, model::TaskNode> tasks_;
 

@@ -14,15 +14,15 @@ class CommandResult {
 public:
     static CommandResult Create(ControllerRequestResult result);
     static CommandResult Create(const TaskId& task_id);
-    static CommandResult Create(const std::vector<TaskTransfer>& tasks_to_show);
+    static CommandResult Create(const std::vector<RelationalTask>& tasks_to_show);
 public:
     ControllerRequestResult GetResult() const;
     std::optional<TaskId> GetTaskId() const;
-    std::vector<TaskTransfer> GetTasksToShow() const;
+    std::vector<RelationalTask> GetTasksToShow() const;
 private:
     ControllerRequestResult result_;
     std::optional<TaskId> task_id_;
-    std::vector<TaskTransfer> tasks_to_show_;
+    std::vector<RelationalTask> tasks_to_show_;
 };
 
 

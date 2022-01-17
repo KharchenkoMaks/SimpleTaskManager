@@ -20,9 +20,9 @@ class FilePersistence : public Persistence {
 public:
     explicit FilePersistence(const std::string& file_name);
 public:
-    std::pair<SaveLoadStatus, std::vector<TaskTransfer>> Load() override;
+    std::pair<SaveLoadStatus, std::vector<RelationalTask>> Load() override;
 
-    SaveLoadStatus Save(const std::vector<TaskTransfer>& tasks) override;
+    SaveLoadStatus Save(const std::vector<RelationalTask>& tasks) override;
 private:
     std::string file_name;
 };

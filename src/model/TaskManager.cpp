@@ -105,8 +105,8 @@ TaskActionResult TaskManager::CompleteTask(const TaskId& id, bool force_complete
     return TaskActionResult::SUCCESS;
 }
 
-std::vector<TaskTransfer> TaskManager::GetTasks() {
-    std::vector<TaskTransfer> tasks;
+std::vector<RelationalTask> TaskManager::GetTasks() {
+    std::vector<RelationalTask> tasks;
     for (const auto& task : tasks_) {
         if (!task.second.has_parent_id()) {
             auto adding_tasks = GetAllTaskChildren(task.first);
@@ -120,7 +120,7 @@ bool TaskManager::IsTaskExist(const TaskId& task_id) {
     return tasks_.find(task_id) != tasks_.end();
 }
 
-std::optional<TaskTransfer> TaskManager::GetTask(const TaskId& task_id) {
+std::optional<RelationalTask> TaskManager::GetTask(const TaskId& task_id) {
     auto task = tasks_.find(task_id);
     if (task == tasks_.end())
         return std::nullopt;
@@ -139,7 +139,7 @@ TaskActionResult TaskManager::AddTaskLabel(const TaskId& id, const std::string& 
     return TaskActionResult::SUCCESS;
 }
 
-bool TaskManager::LoadModelState(const std::vector<TaskTransfer>& tasks) {
+bool TaskManager::LoadModelState(const std::vector<RelationalTask>& tasks) {
     std::map<TaskId, TaskNode> tasks_to_add;
     TaskId max_id;
     max_id.set_id(1);
@@ -157,8 +157,8 @@ bool TaskManager::LoadModelState(const std::vector<TaskTransfer>& tasks) {
     return true;
 }
 
-std::vector<TaskTransfer> TaskManager::GetAllTaskChildren(const TaskId& task_id) {
-    std::vector<TaskTransfer> tasks;
+std::vector<RelationalTask> TaskManager::GetAllTaskChildren(const TaskId& task_id) {
+    std::vector<RelationalTask> tasks;
     auto main_task = tasks_.find(task_id);
     if (main_task == tasks_.end())
         return tasks;
@@ -174,8 +174,8 @@ std::vector<TaskTransfer> TaskManager::GetAllTaskChildren(const TaskId& task_id)
     return tasks;
 }
 
-TaskTransfer TaskManager::CreateTaskTransferFromTask(const std::map<TaskId, TaskNode>::iterator task) {
-    TaskTransfer task_transfer;
+RelationalTask TaskManager::CreateTaskTransferFromTask(const std::map<TaskId, TaskNode>::iterator task) {
+    RelationalTask task_transfer;
     task_transfer.set_allocated_task_id(new TaskId(task->first));
     task_transfer.set_allocated_task(new Task(task->second.task()));
     if (task->second.has_parent_id()) {

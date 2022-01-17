@@ -12,8 +12,8 @@
 
 class MockPersistence : public persistence::Persistence {
 public:
-    MOCK_METHOD((std::pair<persistence::SaveLoadStatus, std::vector<TaskTransfer>>), Load, (), (override));
-    MOCK_METHOD(persistence::SaveLoadStatus, Save, (const std::vector<TaskTransfer> &tasks), (override));
+    MOCK_METHOD((std::pair<persistence::SaveLoadStatus, std::vector<RelationalTask>>), Load, (), (override));
+    MOCK_METHOD(persistence::SaveLoadStatus, Save, (const std::vector<RelationalTask>& tasks), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKPERSISTENCE_H

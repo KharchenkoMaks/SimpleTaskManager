@@ -14,11 +14,11 @@
 
 class DISABLED_PersistenceTest : public ::testing::Test{
 public:
-    std::vector<TaskTransfer> tasks_to_save;
+    std::vector<RelationalTask> tasks_to_save;
 
     void SetUp() override {
         std::vector<std::pair<TaskId, Task>> tasks = GenerateTasks(5);
-        TaskTransfer task_transfer;
+        RelationalTask task_transfer;
         task_transfer.set_allocated_task_id(new TaskId(tasks[0].first));
         task_transfer.set_allocated_task(new Task(tasks[0].second));
         tasks_to_save.push_back(task_transfer);
@@ -72,7 +72,7 @@ TEST_F(DISABLED_PersistenceTest, FileReadWrite_ShouldWriteTasksAndReadTasksFromF
     // Assert
     ASSERT_EQ(persistence::SaveLoadStatus::SUCCESS, actual_save_answer);
     // Act
-    const std::pair<persistence::SaveLoadStatus, std::vector<TaskTransfer>> actual_loaded_tasks = model_persistence->Load();
+    const std::pair<persistence::SaveLoadStatus, std::vector<RelationalTask>> actual_loaded_tasks = model_persistence->Load();
     // Assert
     ASSERT_EQ(persistence::SaveLoadStatus::SUCCESS, actual_loaded_tasks.first);
     ASSERT_EQ(tasks_to_save.size(), actual_loaded_tasks.second.size());

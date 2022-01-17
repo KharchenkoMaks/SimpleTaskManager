@@ -58,11 +58,11 @@ ControllerRequestResult ModelController::CompleteTaskWithSubTasks(const TaskId& 
     return FormControllerRequestResult(result);
 }
 
-std::optional<TaskTransfer> ModelController::GetTask(const TaskId& task_id) {
+std::optional<RelationalTask> ModelController::GetTask(const TaskId& task_id) {
     return model_->GetTask(task_id);
 }
 
-std::vector<TaskTransfer> ModelController::GetAllTasks() {
+std::vector<RelationalTask> ModelController::GetAllTasks() {
     return model_->GetTasks();
 }
 

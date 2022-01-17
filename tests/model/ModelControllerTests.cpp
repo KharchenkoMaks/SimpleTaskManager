@@ -29,7 +29,7 @@ public:
     Task expected_task_;
     TaskId task_id_;
     TaskId parent_id_;
-    TaskTransfer task_transfer_;
+    RelationalTask task_transfer_;
     void SetUp() override {
         task_validator_ = std::make_unique<MockTaskValidator>();
         model_ = std::make_unique<MockModel>();
@@ -198,7 +198,7 @@ TEST_F(ModelControllerTests, CompleteTaskWithSubTasks_ShouldAskModelToCompleteTa
 
 TEST_F(ModelControllerTests, GetTask_ShouldAskModelToGetTaskWithSpecifiedIdAndReturnIt) {
     // Arrange
-    const std::optional<TaskTransfer> expected_result = task_transfer_;
+    const std::optional<RelationalTask> expected_result = task_transfer_;
 
     EXPECT_CALL(*model_, GetTask(task_id_)).WillOnce(Return(task_transfer_));
 
@@ -212,7 +212,7 @@ TEST_F(ModelControllerTests, GetTask_ShouldAskModelToGetTaskWithSpecifiedIdAndRe
 
 TEST_F(ModelControllerTests, GetAllTasks_ShouldAskModelToGetAllTasksAndReturnVector) {
     // Arrange
-    const std::vector<TaskTransfer> expected_result { task_transfer_ };
+    const std::vector<RelationalTask> expected_result {task_transfer_ };
 
     EXPECT_CALL(*model_, GetTasks()).WillOnce(Return(expected_result));
 
@@ -240,7 +240,7 @@ TEST_F(ModelControllerTests, AddTaskLabel_ShouldAskModelToAddTaskLabelAndReturnR
 
 TEST_F(ModelControllerTests, SaveToFile_ShouldGetTasksFromModelAndGiveThemToFilePersistence) {
     // Arrange
-    const std::vector<TaskTransfer> expected_tasks_to_save { task_transfer_ };
+    const std::vector<RelationalTask> expected_tasks_to_save {task_transfer_ };
     const std::string expected_file_name = "some_file";
     const persistence::SaveLoadStatus expected_persistence_result = persistence::SaveLoadStatus::SUCCESS;
     const ControllerRequestResult expected_result = ControllerRequestResult::SUCCESS;
@@ -261,7 +261,7 @@ TEST_F(ModelControllerTests, SaveToFile_ShouldGetTasksFromModelAndGiveThemToFile
 
 TEST_F(ModelControllerTests, LoadFromFile_ShouldLoadTasksFromPersistenceAndGiveThemToModel) {
     // Arrange
-    const std::vector<TaskTransfer> expected_tasks_to_save { task_transfer_ };
+    const std::vector<RelationalTask> expected_tasks_to_save {task_transfer_ };
     const std::string expected_file_name = "some_file";
     const auto expected_persistence_result =
             std::make_pair(persistence::SaveLoadStatus::SUCCESS, expected_tasks_to_save);
@@ -286,7 +286,7 @@ TEST_F(ModelControllerTests, LoadFromFile_ShouldLoadTasksFromPersistenceAndGiveT
 TEST_F(ModelControllerTests, LoadFromFile_ShouldReturnErrorOnPersistenceLoadError) {
     const std::string expected_file_name = "some_file";
     const auto expected_persistence_result =
-            std::make_pair(persistence::SaveLoadStatus::FILE_WAS_NOT_OPENED, std::vector<TaskTransfer>());
+            std::make_pair(persistence::SaveLoadStatus::FILE_WAS_NOT_OPENED, std::vector<RelationalTask>());
     const ControllerRequestResult expected_result = ControllerRequestResult::FILE_WAS_NOT_OPENED;
     std::unique_ptr<MockPersistence> expected_persistence = std::make_unique<MockPersistence>();
 
@@ -305,7 +305,7 @@ TEST_F(ModelControllerTests, LoadFromFile_ShouldReturnErrorOnPersistenceLoadErro
 
 TEST_F(ModelControllerTests, LoadFromFile_ShouldReturnFileDamagedErrorOnModelLoadTasksError) {
     // Arrange
-    const std::vector<TaskTransfer> expected_tasks_to_save { task_transfer_ };
+    const std::vector<RelationalTask> expected_tasks_to_save {task_transfer_ };
     const std::string expected_file_name = "some_file";
     const auto expected_persistence_result =
             std::make_pair(persistence::SaveLoadStatus::SUCCESS, expected_tasks_to_save);

@@ -12,8 +12,8 @@ namespace persistence {
 
 class Persistence {
 public:
-    virtual std::pair<SaveLoadStatus, std::vector<TaskTransfer>> Load() = 0;
-    virtual SaveLoadStatus Save(const std::vector<TaskTransfer> &tasks) = 0;
+    virtual std::pair<SaveLoadStatus, std::vector<RelationalTask>> Load() = 0;
+    virtual SaveLoadStatus Save(const std::vector<RelationalTask> &tasks) = 0;
 
 public:
     virtual ~Persistence() = default;

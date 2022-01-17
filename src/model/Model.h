@@ -21,12 +21,12 @@ public:
     virtual TaskActionResult CompleteTask(const TaskId& id, bool force_complete_subtasks) = 0;
     virtual TaskActionResult AddTaskLabel(const TaskId& id, const std::string& label) = 0;
 
-    virtual std::vector<TaskTransfer> GetTasks() = 0;
-    virtual std::optional<TaskTransfer> GetTask(const TaskId& task_id) = 0;
+    virtual std::vector<RelationalTask> GetTasks() = 0;
+    virtual std::optional<RelationalTask> GetTask(const TaskId& task_id) = 0;
 
     virtual bool IsTaskExist(const TaskId& task_id) = 0;
 
-    virtual bool LoadModelState(const std::vector<TaskTransfer>& tasks) = 0;
+    virtual bool LoadModelState(const std::vector<RelationalTask>& tasks) = 0;
 
     virtual ~Model() = default;
 };

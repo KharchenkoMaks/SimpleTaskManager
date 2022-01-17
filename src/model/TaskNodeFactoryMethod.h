@@ -14,7 +14,7 @@ TaskNode CreateTaskNode(Task task);
 
 TaskNode CreateTaskNode (Task task, TaskId parent_id);
 
-TaskNode CreateTaskNode(TaskTransfer task);
+TaskNode CreateTaskNode(RelationalTask task);
 
 }
 

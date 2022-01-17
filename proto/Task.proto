@@ -20,7 +20,7 @@ message Task {
   string label = 5;
 }
 
-message TaskTransfer {
+message RelationalTask {
   TaskId task_id = 1;
   Task task = 2;
   TaskId parent_id = 3;

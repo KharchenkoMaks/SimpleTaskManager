@@ -34,8 +34,8 @@ public:
     virtual ControllerRequestResult CompleteTaskWithSubTasks(const TaskId& task_id);
 
 public:
-    virtual std::vector<TaskTransfer> GetAllTasks();
-    virtual std::optional<TaskTransfer> GetTask(const TaskId& task_id);
+    virtual std::vector<RelationalTask> GetAllTasks();
+    virtual std::optional<RelationalTask> GetTask(const TaskId& task_id);
 public:
     virtual ControllerRequestResult SaveToFile(const std::string& file_name);
     virtual ControllerRequestResult LoadFromFile(const std::string& file_name);

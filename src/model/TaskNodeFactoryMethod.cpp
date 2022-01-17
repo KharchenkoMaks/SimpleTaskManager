@@ -18,7 +18,7 @@ TaskNode CreateTaskNode(Task task, TaskId parent_id) {
     return task_node;
 }
 
-TaskNode CreateTaskNode(TaskTransfer task) {
+TaskNode CreateTaskNode(RelationalTask task) {
     if (task.has_parent_id()) {
         return CreateTaskNode(task.task(), task.parent_id());
     } else {

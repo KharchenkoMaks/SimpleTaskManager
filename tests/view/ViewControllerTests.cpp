@@ -58,12 +58,12 @@ TEST_F(ViewControllerTests, RunUserInterface_ShouldAskUIToPrintAddedTaskId) {
 
 TEST_F(ViewControllerTests, RunUserInterface_ShouldAskUIToShowTasks) {
     // Arrange
-    TaskTransfer tt;
+    RelationalTask tt;
     TaskId task_id;
     task_id.set_id(52);
     tt.set_allocated_task_id(new TaskId(task_id));
     tt.set_allocated_task(new Task(TaskBuilder::Create().SetTitle("title").BuildTask()));
-    std::vector<TaskTransfer> expected_show_tasks { tt };
+    std::vector<RelationalTask> expected_show_tasks {tt };
 
     const CommandResult expected_command_result = CommandResult::Create(expected_show_tasks);
     SetExpectedCommandResult(expected_command_result);

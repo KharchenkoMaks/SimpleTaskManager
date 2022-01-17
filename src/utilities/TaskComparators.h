@@ -13,7 +13,7 @@ bool operator<(const TaskId& task_id1, const TaskId& task_id2);
 
 bool operator==(const TaskId& task_id1, const TaskId& task_id2);
 
-bool operator==(const TaskTransfer& task1, const TaskTransfer& task2);
+bool operator==(const RelationalTask& task1, const RelationalTask& task2);
 
 bool operator==(const Task& task1, const Task& task2);
 
