@@ -129,6 +129,9 @@ std::optional<RelationalTask> TaskManager::GetTask(const TaskId& task_id) {
 }
 
 TaskActionResult TaskManager::AddTaskLabel(const TaskId& id, const std::string& label) {
+    if (label.empty())
+        return TaskActionResult::FAIL_LABEL_ALREADY_SET;
+
     auto task_to_add_label = tasks_.find(id);
     if (task_to_add_label == tasks_.end())
         return TaskActionResult::FAIL_NO_SUCH_TASK;
@@ -153,6 +156,7 @@ TaskActionResult TaskManager::RemoveTaskLabel(const TaskId& id, const std::strin
         return TaskActionResult::FAIL_NO_SUCH_LABEL;
 
     task.mutable_label()->erase(label_to_remove);
+    task_to_remove_label->second.set_allocated_task(new Task(task));
     return TaskActionResult::SUCCESS;
 }
 
