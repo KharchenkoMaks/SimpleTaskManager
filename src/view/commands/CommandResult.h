@@ -12,17 +12,22 @@
 
 class CommandResult {
 public:
+    struct TasksToShow {
+        std::vector<RelationalTask> tasks_;
+        bool show_task_relations_;
+    };
+public:
     static CommandResult Create(ControllerRequestResult result);
     static CommandResult Create(const TaskId& task_id);
-    static CommandResult Create(const std::vector<RelationalTask>& tasks_to_show);
+    static CommandResult Create(const std::vector<RelationalTask>& tasks_to_show, bool show_tasks_relations);
 public:
     ControllerRequestResult GetResult() const;
     std::optional<TaskId> GetTaskId() const;
-    std::vector<RelationalTask> GetTasksToShow() const;
+    CommandResult::TasksToShow GetTasksToShow() const;
 private:
     ControllerRequestResult result_;
     std::optional<TaskId> task_id_;
-    std::vector<RelationalTask> tasks_to_show_;
+    TasksToShow tasks_to_show_;
 };
 
 

@@ -15,7 +15,7 @@
 #include "states/task_input/InputTaskTitleState.h"
 #include "states/task_input/InputTaskPriorityState.h"
 #include "states/task_input/InputTaskDueDateState.h"
-#include "states/InputShowParametersState.h"
+#include "states/show_input/InputShowParametersState.h"
 #include "states/CompleteTaskState.h"
 #include "states/task_input/AddSubTaskState.h"
 #include "states/DeleteTaskState.h"

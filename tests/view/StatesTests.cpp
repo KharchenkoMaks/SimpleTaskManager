@@ -17,7 +17,7 @@
 #include "view/states/CompleteTaskState.h"
 #include "view/states/DeleteTaskState.h"
 #include "view/states/HelpState.h"
-#include "view/states/InputShowParametersState.h"
+#include "states/show_input/InputShowParametersState.h"
 #include "view/states/QuitState.h"
 #include "view/states/RootState.h"
 #include "view/states/EndState.h"

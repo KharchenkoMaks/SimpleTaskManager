@@ -18,6 +18,7 @@ public:
     std::shared_ptr<State> Execute(StateContext& context) override;
 private:
     void PrintTasks(const std::vector<RelationalTask>& tasks);
+    void PrintTasksWithoutRelations(const std::vector<RelationalTask>& tasks);
 private:
     std::weak_ptr<StatesFactory> factory_;
 };

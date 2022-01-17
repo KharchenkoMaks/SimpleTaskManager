@@ -39,8 +39,8 @@ public:
     void SetCommand(std::unique_ptr<Command> command);
     std::shared_ptr<Command> GetCommand() const;
 
-    void SetTasksToShow(const std::vector<RelationalTask>& tasks);
-    std::vector<RelationalTask> GetTasksToShow() const;
+    void SetTasksToShow(const CommandResult::TasksToShow& tasks);
+    CommandResult::TasksToShow GetTasksToShow() const;
 public:
     virtual ~StateContext() = default;
 private:
@@ -48,7 +48,7 @@ private:
     std::optional<TaskId> task_id_;
     std::string task_label_;
 
-    std::vector<RelationalTask> tasks_to_show_;
+    CommandResult::TasksToShow tasks_to_show_;
 
     std::string file_name_;
 

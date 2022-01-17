@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_INPUTSHOWPARAMETERSSTATE_H
 #define SIMPLETASKMANAGER_INPUTSHOWPARAMETERSSTATE_H
 
-#include "State.h"
+#include "states/State.h"
 #include "states/factory/StatesFactory.h"
 #include "user_interface/StateContext.h"
 #include "Task.pb.h"

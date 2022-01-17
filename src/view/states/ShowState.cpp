@@ -5,7 +5,7 @@
 #include "ShowState.h"
 #include "utilities/TaskConvertors.h"
 
-void ShowState::PrintTasks(const std::vector<RelationalTask> &tasks) {
+void ShowState::PrintTasks(const std::vector<RelationalTask>& tasks) {
     for (auto task : tasks) {
         std::string task_string;
         if (task.has_parent_id()) {
@@ -16,8 +16,18 @@ void ShowState::PrintTasks(const std::vector<RelationalTask> &tasks) {
     }
 }
 
+void ShowState::PrintTasksWithoutRelations(const std::vector<RelationalTask>& tasks) {
+    for (auto task : tasks) {
+        factory_.lock()->GetConsolePrinter()->WriteLine(TaskToString(task.task_id(), task.task()));
+    }
+}
+
+
 std::shared_ptr<State> ShowState::Execute(StateContext& context) {
-    PrintTasks(context.GetTasksToShow());
+    if (context.GetTasksToShow().show_task_relations_)
+        PrintTasks(context.GetTasksToShow().tasks_);
+    else
+        PrintTasksWithoutRelations(context.GetTasksToShow().tasks_);
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }
 
