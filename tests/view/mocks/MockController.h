@@ -29,6 +29,7 @@ public:
     MOCK_METHOD(ControllerRequestResult, DeleteTaskWithSubTasks, (const TaskId& task_id), (override));
     MOCK_METHOD(ControllerRequestResult, CompleteTaskWithSubTasks, (const TaskId& task_id), (override));
     MOCK_METHOD(std::vector<RelationalTask>, GetAllTasks, (), (override));
+    MOCK_METHOD(std::vector<RelationalTask>, GetTasksByLabel, (const std::string& task_label), (override));
     MOCK_METHOD(std::optional<RelationalTask>, GetTask, (const TaskId& task_id), (override));
     MOCK_METHOD(ControllerRequestResult, SaveToFile, (const std::string& file_name), (override));
     MOCK_METHOD(ControllerRequestResult, LoadFromFile, (const std::string& file_name), (override));
