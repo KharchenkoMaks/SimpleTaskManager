@@ -18,6 +18,7 @@ public:
     MOCK_METHOD(std::unique_ptr<Command>, CreateCompleteCommand, (const StateContext& context, bool force_complete_subtasks), (override));
     MOCK_METHOD(std::unique_ptr<Command>, CreateDeleteCommand, (const StateContext& context, bool force_delete_subtasks), (override));
     MOCK_METHOD(std::unique_ptr<Command>, CreateSetLabelCommand, (const StateContext& context), (override));
+    MOCK_METHOD(std::unique_ptr<Command>, CreateRemoveLabelCommand, (const StateContext& context), (override));
     MOCK_METHOD(std::unique_ptr<Command>, CreateShowCommand, (const StateContext& context), (override));
     MOCK_METHOD(std::unique_ptr<Command>, CreateSaveCommand, (const StateContext& context), (override));
     MOCK_METHOD(std::unique_ptr<Command>, CreateLoadCommand, (const StateContext& context), (override));

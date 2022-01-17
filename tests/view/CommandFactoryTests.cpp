@@ -18,6 +18,7 @@
 #include "commands/ShowTasksCommand.h"
 #include "commands/SaveCommand.h"
 #include "commands/LoadCommand.h"
+#include "commands/RemoveLabelCommand.h"
 
 #include "view/user_interface/StateContext.h"
 
@@ -147,6 +148,22 @@ TEST_F(CommandFactoryTests, CreateSetLabelCommand_ShouldCreateSetLabelCommand) {
 TEST_F(CommandFactoryTests, CreateSetLabelCommand_ShouldReturnNullptr) {
     // Act
     std::shared_ptr<Command> actual_command = factory_.CreateSetLabelCommand(context_);
+    // Assert
+    TestForNull(actual_command);
+}
+
+TEST_F(CommandFactoryTests, CreateRemoveLabelCommand_ShouldCreateRemoveLabelCommand) {
+    // Arrange
+    context_.SetTaskId(task_id_);
+    // Act
+    std::shared_ptr<Command> actual_command = factory_.CreateRemoveLabelCommand(context_);
+    // Assert
+    TestCommandType<RemoveLabelCommand>(*actual_command);
+}
+
+TEST_F(CommandFactoryTests, CreateRemoveLabelCommand_ShouldReturnNullptr) {
+    // Act
+    std::shared_ptr<Command> actual_command = factory_.CreateRemoveLabelCommand(context_);
     // Assert
     TestForNull(actual_command);
 }

@@ -24,6 +24,7 @@
 #include "view/states/ShowState.h"
 #include "view/states/persistence/LoadState.h"
 #include "view/states/persistence/SaveState.h"
+#include "view/states/task_input/RemoveLabelState.h"
 
 #include "mocks/MockStatesFactory.h"
 #include "mocks/MockCommandFactory.h"
@@ -369,6 +370,52 @@ TEST_F(StatesTests, SetLabelStateExecuteGivingWrongTaskId_ShouldPrintError) {
     EXPECT_CALL(*console_printer_, WriteError("Incorrect task id was given, try again!")).Times(1);
     // Act
     std::shared_ptr<State> actual_next_state = set_label_state.Execute(set_label_context);
+    // Assert
+    EXPECT_EQ(expected_next_state, actual_next_state);
+}
+
+TEST_F(StatesTests, RemoveLabelStateExecute_ShouldCreateRemoveLabelCommand) {
+    // Arrange
+    std::shared_ptr<State> expected_next_state = std::make_shared<EndState>(nullptr);
+    StateContext remove_label_context;
+    RemoveLabelState remove_label_state(states_factory_);
+
+    const std::string expected_input_label = "Some Task Label";
+    const std::string expected_input_id = "5";
+    // Assert
+    {
+        testing::InSequence s;
+        EXPECT_CALL(*console_printer_, Write("Task ID> ")).Times(1);
+        EXPECT_CALL(*console_printer_, Write("Label> ")).Times(1);
+    }
+    EXPECT_CALL(*console_reader_, ReadLine())
+            .WillOnce(Return(expected_input_id))
+            .WillOnce(Return(expected_input_label));
+    EXPECT_CALL(*command_factory_, CreateRemoveLabelCommand(testing::Ref(remove_label_context))).Times(1);
+    EXPECT_CALL(*states_factory_, GetNextState(testing::An<const RemoveLabelState&>(), StatesFactory::MoveType::PREVIOUS))
+            .WillOnce(Return(expected_next_state));
+    // Act
+    std::shared_ptr<State> actual_next_state = remove_label_state.Execute(remove_label_context);
+    // Assert
+    EXPECT_EQ(std::stoi(expected_input_id), remove_label_context.GetTaskId().value().id());
+    EXPECT_EQ(expected_input_label, remove_label_context.GetTaskLabel());
+    EXPECT_EQ(expected_next_state, actual_next_state);
+}
+
+TEST_F(StatesTests, RemoveLabelStateExecuteGivingWrongTaskId_ShouldPrintError) {
+    // Arrange
+    std::shared_ptr<State> expected_next_state = std::make_shared<EndState>(nullptr);
+    StateContext remove_label_context;
+    RemoveLabelState remove_label_state(states_factory_);
+
+    const std::string expected_input_id = "some text, not task id";
+    // Assert
+    ExpectGetUserInput("Task ID", expected_input_id);
+    EXPECT_CALL(*states_factory_, GetNextState(testing::An<const RemoveLabelState&>(), StatesFactory::MoveType::ERROR))
+            .WillOnce(Return(expected_next_state));
+    EXPECT_CALL(*console_printer_, WriteError("Incorrect task id was given, try again!")).Times(1);
+    // Act
+    std::shared_ptr<State> actual_next_state = remove_label_state.Execute(remove_label_context);
     // Assert
     EXPECT_EQ(expected_next_state, actual_next_state);
 }

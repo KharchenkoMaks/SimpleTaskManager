@@ -24,6 +24,7 @@
 #include "states/persistence/SaveState.h"
 #include "states/persistence/LoadState.h"
 #include "states/ShowState.h"
+#include "states/task_input/RemoveLabelState.h"
 
 #include <typeinfo>
 
@@ -99,6 +100,10 @@ TEST_F(StatesFactoryTests, GetNextStateOfSetLabelState) {
     TestGetNextState<SetLabelState, EndState, SetLabelState, EndState>();
 }
 
+TEST_F(StatesFactoryTests, GetNextStateOfRemoveLabelState) {
+    TestGetNextState<RemoveLabelState, EndState, RemoveLabelState, EndState>();
+}
+
 TEST_F(StatesFactoryTests, GetNextStateOfSaveState) {
     TestGetNextState<SaveState, EndState, RootState, EndState>();
 }
@@ -141,7 +146,8 @@ TEST_F(StatesFactoryTests, GetStateByCommand_ShouldReturnRightStates) {
         "show",
         "help",
         "quit",
-        "label",
+        "add_label",
+        "remove_label",
         "save",
         "load"
     };
@@ -155,6 +161,7 @@ TEST_F(StatesFactoryTests, GetStateByCommand_ShouldReturnRightStates) {
         std::make_shared<HelpState>(nullptr),
         std::make_shared<QuitState>(nullptr),
         std::make_shared<SetLabelState>(nullptr),
+        std::make_shared<RemoveLabelState>(nullptr),
         std::make_shared<SaveState>(nullptr),
         std::make_shared<LoadState>(nullptr)
     };
