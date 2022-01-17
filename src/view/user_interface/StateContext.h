@@ -46,6 +46,7 @@ public:
 private:
     TaskBuilder task_;
     std::optional<TaskId> task_id_;
+    std::string task_label_;
 
     std::vector<RelationalTask> tasks_to_show_;
 
