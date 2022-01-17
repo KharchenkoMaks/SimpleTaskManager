@@ -364,8 +364,10 @@ TEST_F(TaskManagerTest, AddTaskLabel_ShouldAddLabelsToDifferentTasksProperly) {
     // ASSERT
     ASSERT_EQ(TaskActionResult::SUCCESS, actual_main_task_result);
     ASSERT_EQ(TaskActionResult::SUCCESS, actual_subtask_result);
-    EXPECT_EQ(expected_main_task_label, actual_main_task.label());
-    EXPECT_EQ(expected_subtask_label, actual_subtask.label());
+    ASSERT_EQ(1, actual_main_task.label_size());
+    ASSERT_EQ(1, actual_subtask.label_size());
+    EXPECT_EQ(expected_main_task_label, actual_main_task.label(0));
+    EXPECT_EQ(expected_subtask_label, actual_subtask.label(0));
 }
 
 TEST_F(TaskManagerTest, AddTaskLabel_TryAddLabelForNonExistentTask_ShouldReturnError) {

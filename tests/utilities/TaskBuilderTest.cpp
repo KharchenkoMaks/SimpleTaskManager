@@ -23,7 +23,7 @@ public:
         expected_built_task.set_priority(expected_priority);
         expected_built_task.set_allocated_due_date(new google::protobuf::Timestamp(expected_due_time));
         expected_built_task.set_completed(expected_completion);
-        expected_built_task.set_label(expected_label);
+        expected_built_task.add_label(expected_label);
     }
 };
 
