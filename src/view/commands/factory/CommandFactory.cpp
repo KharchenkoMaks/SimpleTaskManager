@@ -56,7 +56,7 @@ std::unique_ptr<Command> CommandFactory::CreateDeleteCommand(const StateContext&
 std::unique_ptr<Command> CommandFactory::CreateSetLabelCommand(const StateContext& context) {
     std::optional<TaskId> task_id = context.GetTaskId();
     std::string task_label = context.GetTaskLabel();
-    if (task_id.has_value() && !task_label.empty())
+    if (task_id.has_value())
         return std::make_unique<SetLabelCommand>(task_id.value(), task_label);
 
     return nullptr;
