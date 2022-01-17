@@ -63,7 +63,10 @@ std::string TaskToString(const TaskId& task_id, const Task& task) {
         return_string += "No";
     }
     if (!task.label().empty()) {
-        return_string += ", Label: " + task.label();
+        return_string += ", Labels:";
+        for (const auto& label : task.label()) {
+            return_string += " " + label + ",";
+        }
     }
     return return_string;
 }
