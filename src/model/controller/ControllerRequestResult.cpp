@@ -20,6 +20,8 @@ ControllerRequestResult FormControllerRequestResult(TaskActionResult result) {
             return ControllerRequestResult::FAIL_LABEL_ALREADY_SET;
         case TaskActionResult::FAIL_NO_SUCH_LABEL:
             return ControllerRequestResult::FAIL_NO_SUCH_LABEL;
+        case TaskActionResult::FAIL_INVALID_LABEL:
+            return ControllerRequestResult::FAIL_INVALID_LABEL;
     }
 }
 

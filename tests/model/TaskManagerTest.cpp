@@ -380,7 +380,7 @@ TEST_F(TaskManagerTest, AddTaskLabel_TryAddEmptyLabel_ShouldReturnError) {
     EXPECT_CALL(*gen, CreateNewTaskId()).Times(0);
     TaskManager task_manager(std::move(gen));
     const std::string expected_label = "";
-    const TaskActionResult expected_result = TaskActionResult::FAIL_LABEL_ALREADY_SET;
+    const TaskActionResult expected_result = TaskActionResult::FAIL_INVALID_LABEL;
     // Act
     TaskActionResult actual_result = task_manager.AddTaskLabel(TaskId::default_instance(), expected_label);
     // Assert
