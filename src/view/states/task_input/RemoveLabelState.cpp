@@ -19,7 +19,7 @@ std::shared_ptr<State> RemoveLabelState::Execute(StateContext &context) {
 
     std::string label_to_set = console_io::util::GetUserInput("Label", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
     context.SetTaskId(task_id.value());
-    context.AddTaskLabel(label_to_set);
+    context.SetTaskLabel(label_to_set);
     context.SetCommand(factory_.lock()->GetCommandFactory()->CreateRemoveLabelCommand(context));
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }
