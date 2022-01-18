@@ -25,7 +25,7 @@ class InputTaskTitleState;
 class InputTaskPriorityState;
 class InputTaskDueDateState;
 class InputShowParametersState;
-class InputShowTaskLabelState;
+class InputSortByLabelState;
 class CompleteTaskState;
 class AddSubTaskState;
 class DeleteTaskState;
@@ -75,7 +75,7 @@ public:
     virtual std::shared_ptr<State> GetNextState(const InputTaskPriorityState& state, MoveType move_type);
     virtual std::shared_ptr<State> GetNextState(const InputTaskDueDateState& state, MoveType move_type);
     virtual std::shared_ptr<State> GetNextState(const InputShowParametersState& state, MoveType move_type);
-    virtual std::shared_ptr<State> GetNextState(const InputShowTaskLabelState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const InputSortByLabelState& state, MoveType move_type);
     virtual std::shared_ptr<State> GetNextState(const CompleteTaskState& state, MoveType move_type);
     virtual std::shared_ptr<State> GetNextState(const AddSubTaskState& state, MoveType move_type);
     virtual std::shared_ptr<State> GetNextState(const DeleteTaskState& state, MoveType move_type);

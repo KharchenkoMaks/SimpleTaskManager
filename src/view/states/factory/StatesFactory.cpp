@@ -23,7 +23,7 @@
 #include "states/persistence/SaveState.h"
 #include "states/persistence/LoadState.h"
 #include "states/ShowState.h"
-#include "states/show_input/InputShowTaskLabelState.h"
+#include "states/show_input/InputSortByLabelState.h"
 
 StatesFactory::StatesFactory(const std::shared_ptr<CommandFactory>& command_factory,
                              const std::shared_ptr<ConsolePrinter>& printer,
@@ -157,7 +157,7 @@ std::shared_ptr<State> StatesFactory::GetNextState(const InputShowParametersStat
     return GetLazyStateByStatesEnum(States::kEnd);
 }
 
-std::shared_ptr<State> StatesFactory::GetNextState(const InputShowTaskLabelState &state, StatesFactory::MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const InputSortByLabelState &state, StatesFactory::MoveType move_type) {
     return GetLazyStateByStatesEnum(States::kEnd);
 }
 
@@ -261,7 +261,7 @@ void StatesFactory::InitializeState(States state) {
             states_.insert_or_assign(state, std::make_shared<InputShowParametersState>(shared_from_this()));
             break;
         case States::kInputShowTaskLabel:
-            states_.insert_or_assign(state, std::make_shared<InputShowTaskLabelState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<InputSortByLabelState>(shared_from_this()));
             break;
         case States::kComplete:
             states_.insert_or_assign(state, std::make_shared<CompleteTaskState>(shared_from_this()));

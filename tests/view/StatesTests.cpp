@@ -18,7 +18,7 @@
 #include "view/states/DeleteTaskState.h"
 #include "view/states/HelpState.h"
 #include "states/show_input/InputShowParametersState.h"
-#include "states/show_input/InputShowTaskLabelState.h"
+#include "states/show_input/InputSortByLabelState.h"
 #include "view/states/QuitState.h"
 #include "view/states/RootState.h"
 #include "view/states/EndState.h"
@@ -546,7 +546,7 @@ TEST_F(StatesTests, HelpStateExecute_ShouldPrintHelpMessage) {
 TEST_F(StatesTests, InputShowParametersStateExecute_ShouldCreateShowCommand) {
     // Arrange
     std::shared_ptr expected_next_state = std::make_shared<EndState>(nullptr);
-    std::shared_ptr<State> expected_state_machine_initial_state = std::make_shared<InputShowTaskLabelState>(nullptr);
+    std::shared_ptr<State> expected_state_machine_initial_state = std::make_shared<InputSortByLabelState>(nullptr);
     StateContext show_state_context;
     InputShowParametersState input_show_state(states_factory_);
     std::unique_ptr<MockStateMachine> state_machine = std::make_unique<MockStateMachine>();
@@ -565,17 +565,17 @@ TEST_F(StatesTests, InputShowParametersStateExecute_ShouldCreateShowCommand) {
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
 
-TEST_F(StatesTests, InputShowTaskLabelStateExecute_ShouldAskUserForTaskLabelToShow) {
+TEST_F(StatesTests, InputSortByLabelStateExecute_ShouldAskUserForTaskLabelToShow) {
     // Arrange
     std::shared_ptr expected_next_state = std::make_shared<EndState>(nullptr);
     StateContext input_show_label_state_context;
-    InputShowTaskLabelState input_show_label_state(states_factory_);
+    InputSortByLabelState input_show_label_state(states_factory_);
 
     const std::string expected_label_input = "some label";
     // Assert
     EXPECT_CALL(*console_printer_, Write("Label to sort by> ")).Times(1);
     EXPECT_CALL(*console_reader_, ReadLine()).WillOnce(Return(expected_label_input));
-    EXPECT_CALL(*states_factory_, GetNextState(testing::An<const InputShowTaskLabelState&>(), StatesFactory::MoveType::NEXT))
+    EXPECT_CALL(*states_factory_, GetNextState(testing::An<const InputSortByLabelState&>(), StatesFactory::MoveType::NEXT))
             .WillOnce(Return(expected_next_state));
     // Act
     std::shared_ptr<State> actual_next_state = input_show_label_state.Execute(input_show_label_state_context);
