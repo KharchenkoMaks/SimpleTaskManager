@@ -223,7 +223,7 @@ TEST_F(ModelControllerTests, GetAllTasks_ShouldAskModelToGetAllTasksAndReturnVec
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, AddTaskLabel_ShouldAskModelToRemoveTaskLabelAndReturnResult) {
+TEST_F(ModelControllerTests, AddTaskLabel_ShouldAskModelToAddTaskLabelAndReturnResult) {
     // Arrange
     const ControllerRequestResult expected_result = ControllerRequestResult::SUCCESS;
     const TaskActionResult expected_model_result = TaskActionResult::SUCCESS;
@@ -238,7 +238,7 @@ TEST_F(ModelControllerTests, AddTaskLabel_ShouldAskModelToRemoveTaskLabelAndRetu
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, RemoveTaskLabel_ShouldAskModelToAddTaskLabelAndReturnResult) {
+TEST_F(ModelControllerTests, RemoveTaskLabel_ShouldAskModelToRemoveTaskLabelAndReturnResult) {
     // Arrange
     const ControllerRequestResult expected_result = ControllerRequestResult::FAIL_NO_SUCH_LABEL;
     const TaskActionResult expected_model_result = TaskActionResult::FAIL_NO_SUCH_LABEL;
