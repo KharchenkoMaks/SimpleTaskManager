@@ -30,7 +30,7 @@ std::optional<TaskId> StateContext::GetTaskId() const {
     return task_id_;
 }
 
-void StateContext::SetTaskLabel(const std::string& task_label) {
+void StateContext::AddTaskLabel(const std::string& task_label) {
     task_label_ = task_label;
 }
 
