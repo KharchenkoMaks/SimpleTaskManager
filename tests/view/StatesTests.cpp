@@ -78,9 +78,11 @@ TEST_F(StatesTests, AddSubTaskStateExecuteShouldCreateAddSubTaskCommand) {
     std::shared_ptr<StateContext> expected_returned_context_from_state_machine = GetContextWithFilledTask();
     StateContext add_subtask_context;
     AddSubTaskState add_subtask_state(states_factory_);
+    const std::string expected_parent_id_input = "5";
+    const int expected_task_id = std::stoi(expected_parent_id_input);
 
     // Assert
-    ExpectGetUserInput("Parent Task ID", "5");
+    ExpectGetUserInput("Parent Task ID", expected_parent_id_input);
 
     EXPECT_CALL(*states_factory_, GetNextState(testing::An<const AddSubTaskState&>(), StatesFactory::MoveType::NEXT))
         .WillOnce(Return(expected_state_machine_initial_state));
@@ -97,6 +99,8 @@ TEST_F(StatesTests, AddSubTaskStateExecuteShouldCreateAddSubTaskCommand) {
     // Act
     std::shared_ptr<State> actual_next_state = add_subtask_state.Execute(add_subtask_context);
     // Assert
+    ASSERT_TRUE(add_subtask_context.GetTaskId().has_value());
+    EXPECT_EQ(expected_task_id, add_subtask_context.GetTaskId().value().id());
     EXPECT_EQ(add_subtask_context.GetTaskBuilder().BuildTask(), expected_returned_context_from_state_machine->GetTaskBuilder().BuildTask());
     EXPECT_EQ(expected_next_state, actual_next_state);
 }
