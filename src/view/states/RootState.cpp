@@ -11,13 +11,12 @@ RootState::RootState(const std::shared_ptr<StatesFactory>& factory) :
 }
 
 std::shared_ptr<State> RootState::Execute(StateContext& context) {
-    std::string command = console_io::util::GetUserInput("", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
-    std::shared_ptr<State> next_state =
-            factory_.lock()->GetStateByCommand(command);
+    std::string command = console_io::util::GetUserInput("", *factory_->GetConsolePrinter(), *factory_->GetConsoleReader());
+    std::shared_ptr<State> next_state = factory_->GetStateByCommand(command);
     if (next_state) {
         return next_state;
     } else {
-        factory_.lock()->GetConsolePrinter()->WriteError("Unknown command! Use help.");
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
+        factory_->GetConsolePrinter()->WriteError("Unknown command! Use help.");
+        return factory_->GetNextState(*this, StatesFactory::MoveType::ERROR);
     }
 }

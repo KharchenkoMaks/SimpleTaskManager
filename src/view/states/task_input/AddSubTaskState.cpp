@@ -10,13 +10,13 @@ AddSubTaskState::AddSubTaskState(const std::shared_ptr<StatesFactory>& factory) 
 }
 
 std::shared_ptr<State> AddSubTaskState::Execute(StateContext& context) {
-    std::optional<TaskId> parent_task_id = console_io::util::GetTaskIdFromUser("Parent Task ID", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
+    std::optional<TaskId> parent_task_id = console_io::util::GetTaskIdFromUser("Parent Task ID", *factory_->GetConsolePrinter(), *factory_->GetConsoleReader());
     if (!parent_task_id.has_value()) {
-        factory_.lock()->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
+        factory_->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
+        return factory_->GetNextState(*this, StatesFactory::MoveType::ERROR);
     }
 
-    auto state_machine = factory_.lock()->CreateStateMachine(factory_.lock()->GetNextState(*this,StatesFactory::MoveType::NEXT),
+    auto state_machine = factory_->CreateStateMachine(factory_->GetNextState(*this,StatesFactory::MoveType::NEXT),
                                                              std::make_shared<StateContext>());
 
     std::shared_ptr<StateContext> context_with_added_task = state_machine->Run();
@@ -27,6 +27,6 @@ std::shared_ptr<State> AddSubTaskState::Execute(StateContext& context) {
     context.AddTaskDueTime(task_to_add.due_date());
     context.AddTaskLabel(task_to_add.label());
     context.SetTaskId(parent_task_id.value());
-    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateAddSubTaskCommand(context));
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
+    context.SetCommand(factory_->GetCommandFactory()->CreateAddSubTaskCommand(context));
+    return factory_->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }

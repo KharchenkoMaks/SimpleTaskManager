@@ -12,10 +12,9 @@ InputTaskTitleState::InputTaskTitleState(const std::shared_ptr<StatesFactory>& f
 
 std::shared_ptr<State> InputTaskTitleState::Execute(StateContext& context) {
     std::string user_input =
-            console_io::util::GetUserInput("Title", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
+            console_io::util::GetUserInput("Title", *factory_->GetConsolePrinter(), *factory_->GetConsoleReader());
 
-    if (!user_input.empty())
-        context.AddTaskTitle(user_input);
+    context.AddTaskTitle(user_input);
 
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
+    return factory_->GetNextState(*this, StatesFactory::MoveType::NEXT);
 }

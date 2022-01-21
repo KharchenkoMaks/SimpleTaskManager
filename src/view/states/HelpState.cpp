@@ -10,17 +10,17 @@ HelpState::HelpState(const std::shared_ptr<StatesFactory>& factory) :
 }
 
 std::shared_ptr<State> HelpState::Execute(StateContext& context) {
-    factory_.lock()->GetConsolePrinter()->WriteLine("Available commands:");
-    factory_.lock()->GetConsolePrinter()->WriteLine("1. add");
-    factory_.lock()->GetConsolePrinter()->WriteLine("2. add_subtask");
-    factory_.lock()->GetConsolePrinter()->WriteLine("3. edit");
-    factory_.lock()->GetConsolePrinter()->WriteLine("4. delete");
-    factory_.lock()->GetConsolePrinter()->WriteLine("5. complete");
-    factory_.lock()->GetConsolePrinter()->WriteLine("6. label");
-    factory_.lock()->GetConsolePrinter()->WriteLine("7. show");
-    factory_.lock()->GetConsolePrinter()->WriteLine("8. save");
-    factory_.lock()->GetConsolePrinter()->WriteLine("9. load");
-    factory_.lock()->GetConsolePrinter()->WriteLine("10. quit");
+    factory_->GetConsolePrinter()->WriteLine("Available commands:");
+    factory_->GetConsolePrinter()->WriteLine("1. add");
+    factory_->GetConsolePrinter()->WriteLine("2. add_subtask");
+    factory_->GetConsolePrinter()->WriteLine("3. edit");
+    factory_->GetConsolePrinter()->WriteLine("4. delete");
+    factory_->GetConsolePrinter()->WriteLine("5. complete");
+    factory_->GetConsolePrinter()->WriteLine("6. label");
+    factory_->GetConsolePrinter()->WriteLine("7. show");
+    factory_->GetConsolePrinter()->WriteLine("8. save");
+    factory_->GetConsolePrinter()->WriteLine("9. load");
+    factory_->GetConsolePrinter()->WriteLine("10. quit");
 
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
+    return factory_->GetNextState(*this, StatesFactory::MoveType::NEXT);
 }

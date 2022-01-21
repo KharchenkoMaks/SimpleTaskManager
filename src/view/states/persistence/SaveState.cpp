@@ -11,12 +11,12 @@ SaveState::SaveState(const std::shared_ptr<StatesFactory>& factory) : factory_(f
 }
 
 std::shared_ptr<State> SaveState::Execute(StateContext& context) {
-    std::string file_name = console_io::util::GetUserInput("File name", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
+    std::string file_name = console_io::util::GetUserInput("File name", *factory_->GetConsolePrinter(), *factory_->GetConsoleReader());
     if (file_name.empty()) {
-        factory_.lock()->GetConsolePrinter()->WriteError("Invalid file name!");
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
+        factory_->GetConsolePrinter()->WriteError("Invalid file name!");
+        return factory_->GetNextState(*this, StatesFactory::MoveType::ERROR);
     }
     context.SetFileName(file_name);
-    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateSaveCommand(context));
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
+    context.SetCommand(factory_->GetCommandFactory()->CreateSaveCommand(context));
+    return factory_->GetNextState(*this, StatesFactory::MoveType::NEXT);
 }

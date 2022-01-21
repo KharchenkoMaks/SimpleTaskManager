@@ -6,7 +6,7 @@
 #include "user_interface/console_io/ConsoleUtilities.h"
 
 std::shared_ptr<State> AddTaskState::Execute(StateContext& context) {
-    auto state_machine = factory_.lock()->CreateStateMachine(factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT),
+    auto state_machine = factory_->CreateStateMachine(factory_->GetNextState(*this, StatesFactory::MoveType::NEXT),
                                                              std::make_shared<StateContext>());
     std::shared_ptr<StateContext> context_with_added_task = state_machine->Run();
 
@@ -15,8 +15,8 @@ std::shared_ptr<State> AddTaskState::Execute(StateContext& context) {
     context.AddTaskPriority(task_to_add.priority());
     context.AddTaskDueTime(task_to_add.due_date());
     context.AddTaskLabel(task_to_add.label());
-    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateAddTaskCommand(context));
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
+    context.SetCommand(factory_->GetCommandFactory()->CreateAddTaskCommand(context));
+    return factory_->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }
 
 AddTaskState::AddTaskState(const std::shared_ptr<StatesFactory>& factory) :

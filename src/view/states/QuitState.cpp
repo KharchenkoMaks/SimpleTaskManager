@@ -6,10 +6,10 @@
 #include "user_interface/console_io/ConsoleUtilities.h"
 
 std::shared_ptr<State> QuitState::Execute(StateContext& context) {
-    if (console_io::util::UserConfirm("Are you sure?", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader())) {
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
+    if (console_io::util::UserConfirm("Are you sure?", *factory_->GetConsolePrinter(), *factory_->GetConsoleReader())) {
+        return factory_->GetNextState(*this, StatesFactory::MoveType::NEXT);
     } else {
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
+        return factory_->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
     }
 }
 

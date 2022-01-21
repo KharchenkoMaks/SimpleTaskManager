@@ -19,7 +19,7 @@ public:
 private:
     void PrintTasks(const std::vector<RelationalTask>& tasks);
 private:
-    std::weak_ptr<StatesFactory> factory_;
+    std::shared_ptr<StatesFactory> factory_;
 };
 
 

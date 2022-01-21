@@ -11,13 +11,13 @@ CompleteTaskState::CompleteTaskState(const std::shared_ptr<StatesFactory>& facto
 }
 
 std::shared_ptr<State> CompleteTaskState::Execute(StateContext& context) {
-    std::optional<TaskId> task_id = console_io::util::GetTaskIdFromUser("Task ID", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
+    std::optional<TaskId> task_id = console_io::util::GetTaskIdFromUser("Task ID", *factory_->GetConsolePrinter(), *factory_->GetConsoleReader());
     if (!task_id.has_value()) {
-        factory_.lock()->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
+        factory_->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
+        return factory_->GetNextState(*this, StatesFactory::MoveType::ERROR);
     }
 
     context.SetTaskId(task_id.value());
-    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateCompleteCommand(context, console_io::util::UserConfirm("Complete all subtasks?", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader())));
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
+    context.SetCommand(factory_->GetCommandFactory()->CreateCompleteCommand(context, console_io::util::UserConfirm("Complete all subtasks?", *factory_->GetConsolePrinter(), *factory_->GetConsoleReader())));
+    return factory_->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }

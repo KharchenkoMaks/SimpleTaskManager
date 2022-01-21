@@ -19,7 +19,7 @@ public:
 public:
     std::shared_ptr<State> Execute(StateContext& context) override;
 private:
-    std::weak_ptr<StatesFactory> factory_;
+    std::shared_ptr<StatesFactory> factory_;
 };
 
 

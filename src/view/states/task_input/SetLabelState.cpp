@@ -12,15 +12,15 @@ SetLabelState::SetLabelState(const std::shared_ptr<StatesFactory>& factory) :
 
 std::shared_ptr<State> SetLabelState::Execute(StateContext& context) {
     std::optional<TaskId> task_id =
-            console_io::util::GetTaskIdFromUser("Task ID", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
+            console_io::util::GetTaskIdFromUser("Task ID", *factory_->GetConsolePrinter(), *factory_->GetConsoleReader());
     if (!task_id.has_value()){
-        factory_.lock()->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
+        factory_->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
+        return factory_->GetNextState(*this, StatesFactory::MoveType::ERROR);
     }
 
-    std::string label_to_set = console_io::util::GetUserInput("Label", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
+    std::string label_to_set = console_io::util::GetUserInput("Label", *factory_->GetConsolePrinter(), *factory_->GetConsoleReader());
     context.SetTaskId(task_id.value());
     context.AddTaskLabel(label_to_set);
-    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateSetLabelCommand(context));
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
+    context.SetCommand(factory_->GetCommandFactory()->CreateSetLabelCommand(context));
+    return factory_->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }
