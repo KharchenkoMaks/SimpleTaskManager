@@ -67,6 +67,7 @@ std::string TaskToString(const TaskId& task_id, const Task& task) {
         for (const auto& label : task.label()) {
             return_string += " " + label + ",";
         }
+        return_string.pop_back();
     }
     return return_string;
 }
