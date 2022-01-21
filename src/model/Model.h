@@ -22,6 +22,7 @@ public:
     virtual TaskActionResult AddTaskLabel(const TaskId& id, const std::string& label) = 0;
 
     virtual std::vector<RelationalTask> GetTasks() = 0;
+    virtual std::vector<RelationalTask> GetTasksByLabel(const std::string& task_label) = 0;
     virtual std::optional<RelationalTask> GetTask(const TaskId& task_id) = 0;
 
     virtual bool IsTaskExist(const TaskId& task_id) = 0;
