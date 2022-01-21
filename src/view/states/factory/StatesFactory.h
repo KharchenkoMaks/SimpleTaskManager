@@ -34,7 +34,7 @@ class SaveState;
 class LoadState;
 class ShowState;
 
-class StatesFactory : public std::enable_shared_from_this<StatesFactory> {
+class StatesFactory {
 public:
     enum class MoveType{
         PREVIOUS,
@@ -103,6 +103,7 @@ private:
         kShow
     };
 private:
+    std::shared_ptr<StatesFactory> CreateStatesFactory() const;
     std::shared_ptr<State> GetLazyStateByStatesEnum(States state);
     void InitializeState(States state);
 

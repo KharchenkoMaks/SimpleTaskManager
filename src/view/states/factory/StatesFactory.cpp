@@ -214,55 +214,55 @@ std::shared_ptr<State> StatesFactory::GetLazyStateByStatesEnum(StatesFactory::St
 void StatesFactory::InitializeState(States state) {
     switch (state) {
         case States::kRoot:
-            states_.insert_or_assign(state, std::make_shared<RootState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<RootState>(CreateStatesFactory()));
             break;
         case States::kHelp:
-            states_.insert_or_assign(state, std::make_shared<HelpState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<HelpState>(CreateStatesFactory()));
             break;
         case States::kQuit:
-            states_.insert_or_assign(state, std::make_shared<QuitState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<QuitState>(CreateStatesFactory()));
             break;
         case States::kAddTask:
-            states_.insert_or_assign(state, std::make_shared<AddTaskState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<AddTaskState>(CreateStatesFactory()));
             break;
         case States::kAddSubTask:
-            states_.insert_or_assign(state, std::make_shared<AddSubTaskState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<AddSubTaskState>(CreateStatesFactory()));
             break;
         case States::kEditTask:
-            states_.insert_or_assign(state, std::make_shared<EditTaskState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<EditTaskState>(CreateStatesFactory()));
             break;
         case States::kInputTaskTitle:
-            states_.insert_or_assign(state, std::make_shared<InputTaskTitleState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<InputTaskTitleState>(CreateStatesFactory()));
             break;
         case States::kInputTaskPriority:
-            states_.insert_or_assign(state, std::make_shared<InputTaskPriorityState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<InputTaskPriorityState>(CreateStatesFactory()));
             break;
         case States::kInputTaskDueDate:
-            states_.insert_or_assign(state, std::make_shared<InputTaskDueDateState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<InputTaskDueDateState>(CreateStatesFactory()));
             break;
         case States::kInputShowParameters:
-            states_.insert_or_assign(state, std::make_shared<InputShowParametersState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<InputShowParametersState>(CreateStatesFactory()));
             break;
         case States::kComplete:
-            states_.insert_or_assign(state, std::make_shared<CompleteTaskState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<CompleteTaskState>(CreateStatesFactory()));
             break;
         case States::kDelete:
-            states_.insert_or_assign(state, std::make_shared<DeleteTaskState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<DeleteTaskState>(CreateStatesFactory()));
             break;
         case States::kSetLabel:
-            states_.insert_or_assign(state, std::make_shared<SetLabelState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<SetLabelState>(CreateStatesFactory()));
             break;
         case States::kEnd:
-            states_.insert_or_assign(state, std::make_shared<EndState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<EndState>(CreateStatesFactory()));
             break;
         case States::kSave:
-            states_.insert_or_assign(state, std::make_shared<SaveState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<SaveState>(CreateStatesFactory()));
             break;
         case States::kLoad:
-            states_.insert_or_assign(state, std::make_shared<LoadState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<LoadState>(CreateStatesFactory()));
             break;
         case States::kShow:
-            states_.insert_or_assign(state, std::make_shared<ShowState>(shared_from_this()));
+            states_.insert_or_assign(state, std::make_shared<ShowState>(CreateStatesFactory()));
             break;
     }
 }
@@ -282,4 +282,8 @@ std::shared_ptr<ConsolePrinter> StatesFactory::GetConsolePrinter() const {
 
 std::shared_ptr<ConsoleReader> StatesFactory::GetConsoleReader() const {
     return reader_;
+}
+
+std::shared_ptr<StatesFactory> StatesFactory::CreateStatesFactory() const {
+    return std::make_shared<StatesFactory>(command_factory_, printer_, reader_);
 }
