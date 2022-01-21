@@ -65,9 +65,9 @@ TEST_F(ViewControllerTests, RunUserInterface_ShouldAskUIToShowTasks) {
     tt.set_allocated_task(new Task(TaskBuilder::Create().SetTitle("title").BuildTask()));
     std::vector<RelationalTask> expected_show_tasks {tt };
 
-    const CommandResult expected_command_result = CommandResult::Create(expected_show_tasks);
+    const CommandResult expected_command_result = CommandResult::Create(expected_show_tasks, true);
     SetExpectedCommandResult(expected_command_result);
-    EXPECT_CALL(*user_interface, ShowTasks(expected_show_tasks)).Times(1);
+    EXPECT_CALL(*user_interface, ShowTasks(expected_command_result.GetTasksToShow())).Times(1);
 
     ViewController view_controller { std::move(controller), std::move(user_interface) };
     // Act

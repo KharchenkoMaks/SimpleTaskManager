@@ -31,12 +31,14 @@ public:
     MOCK_METHOD(std::shared_ptr<State>, GetNextState, (const SetLabelState& state, MoveType move_type), (override));
     MOCK_METHOD(std::shared_ptr<State>, GetNextState, (const CompleteTaskState& state, MoveType move_type), (override));
     MOCK_METHOD(std::shared_ptr<State>, GetNextState, (const InputShowParametersState& state, MoveType move_type), (override));
+    MOCK_METHOD(std::shared_ptr<State>, GetNextState, (const InputShowByLabelState& state, MoveType move_type), (override));
     MOCK_METHOD(std::shared_ptr<State>, GetRootState, (), (override));
     MOCK_METHOD(std::shared_ptr<State>, GetShowState, (), (override));
     MOCK_METHOD(std::shared_ptr<State>, GetStateByCommand, (const std::string& command), (override));
     MOCK_METHOD(std::shared_ptr<ConsolePrinter>, GetConsolePrinter, (), (const, override));
     MOCK_METHOD(std::shared_ptr<ConsoleReader>, GetConsoleReader, (), (const, override));
     MOCK_METHOD(std::shared_ptr<CommandFactory>, GetCommandFactory, (), (const, override));
+    MOCK_METHOD(std::shared_ptr<State>, GetInputShowParametersInitialState, (), (override));
     MOCK_METHOD(std::unique_ptr<ConsoleStateMachine>, CreateStateMachine, (const std::shared_ptr<State>& initial_state, const std::shared_ptr<StateContext>& context), (const, override));
 };
 

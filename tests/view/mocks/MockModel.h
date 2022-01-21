@@ -23,6 +23,7 @@ public:
     MOCK_METHOD(bool, IsTaskExist, (const TaskId& task_id), (override));
     MOCK_METHOD(TaskActionResult, AddTaskLabel, (const TaskId& id, const std::string& label), (override));
     MOCK_METHOD(bool, LoadModelState, (const std::vector<RelationalTask>& tasks), (override));
+    MOCK_METHOD(std::vector<RelationalTask>, GetTasksByLabel, (const std::string& task_label), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKMODEL_H

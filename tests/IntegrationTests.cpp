@@ -31,6 +31,7 @@ public:
             }
             EXPECT_CALL(*reader_, ReadLine())
                 .WillOnce(Return("show"))
+                .WillOnce(Return(""))
                 .WillOnce(Return("quit"))
                 .WillOnce(Return("y"));
         }

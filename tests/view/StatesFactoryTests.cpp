@@ -16,6 +16,7 @@
 #include "states/task_input/InputTaskPriorityState.h"
 #include "states/task_input/InputTaskDueDateState.h"
 #include "states/InputShowParametersState.h"
+#include "states/InputShowByLabelState.h"
 #include "states/CompleteTaskState.h"
 #include "states/task_input/AddSubTaskState.h"
 #include "states/DeleteTaskState.h"
@@ -85,6 +86,10 @@ TEST_F(StatesFactoryTests, GetNextStateOfRootState) {
 
 TEST_F(StatesFactoryTests, GetNextStateOfInputShowParametersState) {
     TestGetNextState<InputShowParametersState, EndState, EndState, EndState>();
+}
+
+TEST_F(StatesFactoryTests, GetNextStateOfInputShowByLabelStateState) {
+    TestGetNextState<InputShowByLabelState, EndState, EndState, EndState>();
 }
 
 TEST_F(StatesFactoryTests, GetNextStateOfCompleteState) {
