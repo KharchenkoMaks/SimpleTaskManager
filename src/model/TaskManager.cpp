@@ -201,5 +201,5 @@ std::vector<RelationalTask> TaskManager::GetTasksByLabel(const std::string& task
             tasks.push_back(CreateRelationalTask(rel_task.first, rel_task.second));
         }
     }
-    return tasks
+    return tasks;
 }
