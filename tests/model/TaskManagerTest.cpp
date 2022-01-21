@@ -374,17 +374,20 @@ TEST_F(TaskManagerTest, AddTaskLabel_ShouldAddLabelsToDifferentTasksProperly) {
     EXPECT_EQ(expected_subtask_label, actual_subtask.label(0));
 }
 
-TEST_F(TaskManagerTest, AddTaskLabel_TryAddEmptyLabel_ShouldReturnError) {
+TEST_F(TaskManagerTest, AddTaskLabel_TryAddEmptyLabel_ShouldNotAddAnyLabel) {
     // Arrange
     std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
-    EXPECT_CALL(*gen, CreateNewTaskId()).Times(0);
+    EXPECT_CALL(*gen, CreateNewTaskId()).WillOnce(Return(expected_first_task_id));
     TaskManager task_manager(std::move(gen));
+    task_manager.AddTask(expected_first_task);
     const std::string expected_label = "";
-    const TaskActionResult expected_result = TaskActionResult::FAIL_INVALID_LABEL;
+    const TaskActionResult expected_result = TaskActionResult::SUCCESS;
     // Act
     TaskActionResult actual_result = task_manager.AddTaskLabel(TaskId::default_instance(), expected_label);
+    Task actual_task = task_manager.GetTask(expected_first_task_id).value().task();
     // Assert
-    EXPECT_EQ(expected_result, actual_result);
+    ASSERT_EQ(expected_result, actual_result);
+    EXPECT_EQ(expected_first_task, actual_task);
 }
 
 TEST_F(TaskManagerTest, AddTaskLabel_TryAddLabelForNonExistentTask_ShouldReturnError) {
@@ -399,7 +402,7 @@ TEST_F(TaskManagerTest, AddTaskLabel_TryAddLabelForNonExistentTask_ShouldReturnE
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(TaskManagerTest, AddTaskLabel_TryAddSameLabel_ShouldReturnError) {
+TEST_F(TaskManagerTest, AddTaskLabel_TryAddSameLabel_ShouldNotAddItTwice) {
     // Arrange
     std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
     EXPECT_CALL(*gen, CreateNewTaskId())
@@ -415,7 +418,7 @@ TEST_F(TaskManagerTest, AddTaskLabel_TryAddSameLabel_ShouldReturnError) {
     Task actual_main_task = task_manager.GetTask(main_task_id).value().task();
     // ASSERT
     ASSERT_EQ(TaskActionResult::SUCCESS, actual_main_task_first_result);
-    ASSERT_EQ(TaskActionResult::FAIL_LABEL_ALREADY_SET, actual_main_task_second_result);
+    ASSERT_EQ(TaskActionResult::SUCCESS, actual_main_task_second_result);
     ASSERT_EQ(1, actual_main_task.label_size());
     EXPECT_EQ(expected_main_task_label, actual_main_task.label(0));
 }

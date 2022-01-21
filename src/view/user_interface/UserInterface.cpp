@@ -45,14 +45,8 @@ void UserInterface::PrintRequestResult(ControllerRequestResult action_result) {
         case ControllerRequestResult::FILE_DAMAGED:
             states_factory_->GetConsolePrinter()->WriteError("File is damaged.");
             break;
-        case ControllerRequestResult::FAIL_LABEL_ALREADY_SET:
-            states_factory_->GetConsolePrinter()->WriteError("This label is already set to current task.");
-            break;
         case ControllerRequestResult::FAIL_NO_SUCH_LABEL:
             states_factory_->GetConsolePrinter()->WriteError("Fail to remove label, current task doesn't include such label.");
-            break;
-        case ControllerRequestResult::FAIL_INVALID_LABEL:
-            states_factory_->GetConsolePrinter()->WriteError("Fail to add label, given label is invalid.");
             break;
     }
 }

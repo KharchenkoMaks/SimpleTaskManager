@@ -130,7 +130,7 @@ std::optional<RelationalTask> TaskManager::GetTask(const TaskId& task_id) {
 
 TaskActionResult TaskManager::AddTaskLabel(const TaskId& id, const std::string& label) {
     if (label.empty())
-        return TaskActionResult::FAIL_INVALID_LABEL;
+        return TaskActionResult::SUCCESS;
 
     auto task_to_add_label = tasks_.find(id);
     if (task_to_add_label == tasks_.end())
@@ -138,7 +138,7 @@ TaskActionResult TaskManager::AddTaskLabel(const TaskId& id, const std::string& 
 
     Task task = task_to_add_label->second.task();
     if (FindTaskLabel(task, label) != task.label().end())
-        return TaskActionResult::FAIL_LABEL_ALREADY_SET;
+        return TaskActionResult::SUCCESS;
 
     task.add_label(label);
     task_to_add_label->second.set_allocated_task(new Task(task));

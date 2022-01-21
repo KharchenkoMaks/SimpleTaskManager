@@ -18,7 +18,7 @@
 using ::testing::Return;
 using ::testing::InSequence;
 
-class IntegrationTests : public ::testing::Test {
+class DISABLED_IntegrationTests : public ::testing::Test {
 public:
     void LaunchTest(const std::vector<std::string>& expected_show,
                     const std::vector<std::string>& inputs) {
@@ -64,7 +64,7 @@ public:
     }
 };
 
-TEST_F(IntegrationTests, Script1) {
+TEST_F(DISABLED_IntegrationTests, Script1) {
     // Arrange
     std::vector<std::string> inputs = {
             "qwe",
@@ -90,7 +90,7 @@ TEST_F(IntegrationTests, Script1) {
     LaunchTest(expected_show, inputs);
 }
 
-TEST_F(IntegrationTests, Script2) {
+TEST_F(DISABLED_IntegrationTests, Script2) {
     // Arrange
     std::vector<std::string> inputs = {
             "add",
@@ -123,7 +123,7 @@ TEST_F(IntegrationTests, Script2) {
     LaunchTest(expected_show, inputs);
 }
 
-TEST_F(IntegrationTests, Script3) {
+TEST_F(DISABLED_IntegrationTests, Script3) {
     // Arrange
     std::vector<std::string> inputs {
         "help",

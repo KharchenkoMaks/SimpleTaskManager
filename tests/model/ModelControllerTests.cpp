@@ -350,9 +350,7 @@ TEST_F(ModelControllerTests, FormControllerRequestResult_ShouldConvertTaskAction
             TaskActionResult::FAIL_INVALID_TASK,
             TaskActionResult::FAIL_UNCOMPLETED_SUBTASKS,
             TaskActionResult::FAIL_NOT_DELETED_SUBTASKS,
-            TaskActionResult::FAIL_LABEL_ALREADY_SET,
-            TaskActionResult::FAIL_NO_SUCH_LABEL,
-            TaskActionResult::FAIL_INVALID_LABEL
+            TaskActionResult::FAIL_NO_SUCH_LABEL
     };
     const std::vector<ControllerRequestResult> expected_controller_results {
         ControllerRequestResult::SUCCESS,
@@ -360,9 +358,7 @@ TEST_F(ModelControllerTests, FormControllerRequestResult_ShouldConvertTaskAction
         ControllerRequestResult::FAIL_INVALID_TASK,
         ControllerRequestResult::FAIL_UNCOMPLETED_SUBTASKS,
         ControllerRequestResult::FAIL_NOT_DELETED_SUBTASKS,
-        ControllerRequestResult::FAIL_LABEL_ALREADY_SET,
-        ControllerRequestResult::FAIL_NO_SUCH_LABEL,
-        ControllerRequestResult::FAIL_INVALID_LABEL
+        ControllerRequestResult::FAIL_NO_SUCH_LABEL
     };
     // Act & Assert
     for (int i = 0; i < expected_task_action_results.size(); ++i) {

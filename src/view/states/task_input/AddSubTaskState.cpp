@@ -23,6 +23,7 @@ std::shared_ptr<State> AddSubTaskState::Execute(StateContext& context) {
 
     context.SetTaskId(parent_task_id.value());
     context.SetTaskBuilder(context_with_added_task->GetTaskBuilder());
+    context.SetTaskId(parent_task_id.value());
     context.SetCommand(factory_.lock()->GetCommandFactory()->CreateAddSubTaskCommand(context));
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
 }
