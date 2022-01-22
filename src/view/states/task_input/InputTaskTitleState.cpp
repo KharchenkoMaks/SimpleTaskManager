@@ -14,7 +14,8 @@ std::shared_ptr<State> InputTaskTitleState::Execute(StateContext& context) {
     std::string user_input =
             console_io::util::GetUserInput("Title", *factory_->GetConsolePrinter(), *factory_->GetConsoleReader());
 
-    context.AddTaskTitle(user_input);
+    if (!user_input.empty())
+        context.AddTaskTitle(user_input);
 
     return factory_->GetNextState(*this, StatesFactory::MoveType::NEXT);
 }
