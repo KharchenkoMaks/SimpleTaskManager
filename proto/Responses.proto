@@ -2,18 +2,14 @@ syntax = "proto3";
 
 import "Task.proto";
 
-message ControllerRequestStatus {
-  enum Status {
-      SUCCESS = 0;
-      FAIL_NO_SUCH_TASK = 1;
-      FAIL_UNCOMPLETED_SUBTASKS = 2;
-      FAIL_NOT_DELETED_SUBTASKS = 3;
-      FAIL_INVALID_TASK = 4;
-      FILE_WAS_NOT_OPENED = 5;
-      FILE_DAMAGED = 6;
-  }
-
-  Status status = 1;
+enum ControllerRequestStatus {
+    SUCCESS = 0;
+    FAIL_NO_SUCH_TASK = 1;
+    FAIL_UNCOMPLETED_SUBTASKS = 2;
+    FAIL_NOT_DELETED_SUBTASKS = 3;
+    FAIL_INVALID_TASK = 4;
+    FILE_WAS_NOT_OPENED = 5;
+    FILE_DAMAGED = 6;
 }
 
 message AddTaskResponse {

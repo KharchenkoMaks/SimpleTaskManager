@@ -1,0 +1,16 @@
+//
+// Created by Maksym Kharchenko on 24.01.2022.
+//
+
+#ifndef SIMPLETASKMANAGER_GRPCSERVERENDPOINT_H
+#define SIMPLETASKMANAGER_GRPCSERVERENDPOINT_H
+
+
+
+class GRPCServerEndPoint {
+
+};
+
+
+
+#endif //SIMPLETASKMANAGER_GRPCSERVERENDPOINT_H
