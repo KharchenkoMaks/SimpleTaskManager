@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+import "Task.proto";
+
+message AddTaskRequest {
+  Task task = 1;
+}
+
+message AddSubTaskRequest {
+  Task task = 1;
+  TaskId parent_id = 2;
+}
+
+message EditTaskRequest {
+  TaskId task_id = 1;
+  Task task = 2;
+}
+
+message DeleteTaskRequest {
+  TaskId task_id = 1;
+}
+
+message CompleteTaskRequest {
+  TaskId task_id = 1;
+}
+
+message AddTaskLabelRequest {
+  TaskId task_id = 1;
+  string label = 2;
+}
+
+message DeleteTaskWithSubTasksRequest {
+  TaskId task_id = 1;
+}
+
+message CompleteTaskWithSubTasksRequest {
+  TaskId task_id = 1;
+}
+
+message GetTaskRequest {
+  TaskId task_id = 1;
+}
+
+message SaveToFileRequest {
+  string file_name = 1;
+}
+
+message LoadFromFileRequest {
+  string file_name = 1;
+}
