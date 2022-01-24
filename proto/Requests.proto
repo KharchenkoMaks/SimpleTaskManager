@@ -37,6 +37,8 @@ message CompleteTaskWithSubTasksRequest {
   TaskId task_id = 1;
 }
 
+message GetAllTasksRequest {}
+
 message GetTaskRequest {
   TaskId task_id = 1;
 }
