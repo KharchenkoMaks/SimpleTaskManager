@@ -16,7 +16,8 @@
 
 class UserInterface {
 public:
-    UserInterface(const std::shared_ptr<StatesFactory>& states_factory);
+    UserInterface(const std::shared_ptr<StatesFactory>& states_factory,
+                  const std::shared_ptr<ConsolePrinter>& printer);
 public:
     virtual std::shared_ptr<Command> AskUserForAction();
 public:
@@ -27,6 +28,7 @@ public:
     virtual ~UserInterface() = default;
 private:
     std::shared_ptr<StatesFactory> states_factory_;
+    std::shared_ptr<ConsolePrinter> printer_;
 };
 
 
