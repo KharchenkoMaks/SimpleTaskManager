@@ -66,7 +66,7 @@ public:
         context_with_task->AddTaskTitle("Task title");
         context_with_task->AddTaskPriority(Task::Priority::Task_Priority_LOW);
         context_with_task->AddTaskDueTime(google::protobuf::Timestamp(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))));
-        context_with_task->AddTaskLabel("Task label");
+        context_with_task->SetTaskLabel("Task label");
         return context_with_task;
     }
 };

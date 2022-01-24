@@ -24,7 +24,7 @@ public:
     void AddTaskPriority(Task::Priority priority);
     // Returns false if due time isn't added
     void AddTaskDueTime(const google::protobuf::Timestamp& due_time);
-    void AddTaskLabel(const std::string& task_label);
+    void SetTaskLabel(const std::string& task_label);
     std::string GetTaskLabel() const;
 
     void SetTaskBuilder(const TaskBuilder& task_builder);
