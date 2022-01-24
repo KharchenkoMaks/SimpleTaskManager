@@ -33,40 +33,67 @@ file(GLOB_RECURSE TaskManager_TEST CONFIGURE_DEPENDS
         "tests/*.h"
         "tests/*.cpp")
 
-#list(REMOVE_ITEM TaskManager_SRCS "main.cpp")
-
-find_package(Protobuf REQUIRED)
+find_package(Protobuf CONFIG REQUIRED)
 message(STATUS "Using protobuf ${Protobuf_VERSION}")
 find_program(_PROTOBUF_PROTOC protoc)
+#
+
+find_package(gRPC CONFIG REQUIRED)
+message(STATUS "Using gRPC ${gRPC_VERSION}")
+find_program(_GRPC_CPP_PLUGIN_EXECUTABLE grpc_cpp_plugin)
+#
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 file(GLOB_RECURSE PROTO_SOURCES CONFIGURE_DEPENDS proto/*.proto)
 message("PROTO_SOURCES ${PROTO_SOURCES}")
 
-include_directories(${Protobuf_INCLUDE_DIRS})
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+set(PROTO_DIR ${SimpleTaskManager_SOURCE_DIR}/proto)
+set(GENERATED_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
-protobuf_generate_cpp(PROTO_TASK_SRCS PROTO_TASK_HDRS proto/Task.proto)
-protobuf_generate_cpp(PROTO_TASK_NODE_SRCS PROTO_TASK_NODE_HDRS proto/TaskNode.proto)
-message("${PROTO_HDRS}")
+macro(compile_proto_file filename)
+    get_filename_component(dirname ${filename} PATH)
+    get_filename_component(basename ${filename} NAME_WE)
+
+    message("macros ${filename}")
+    add_custom_command(
+            OUTPUT ${GENERATED_DIR}/${basename}.pb.cc ${GENERATED_DIR}/${basename}.grpc.pb.cc
+            DEPENDS ${_PROTOBUF_PROTOC} ${PROTO_DIR}/${basename}.proto
+            COMMAND ${_PROTOBUF_PROTOC} ${PROTO_DIR}/${basename}.proto
+            --proto_path=${GENERATED_DIR}
+            --cpp_out=${GENERATED_DIR}
+            --grpc_out=${GENERATED_DIR}
+            --plugin=protoc-gen-grpc=${_GRPC_CPP_PLUGIN_EXECUTABLE}
+            -I ${PROTO_DIR}
+            VERBATIM
+    )
+endmacro(compile_proto_file)
+
+foreach(proto_file ${PROTO_SOURCES})
+    message("compiling ${proto_file}")
+    compile_proto_file(${proto_file})
+    get_filename_component(basename ${proto_file} NAME_WE)
+    set(task_manager_generated_files ${task_manager_generated_files} ${GENERATED_DIR}/${basename}.pb.cc ${GENERATED_DIR}/${basename}.grpc.pb.cc)
+endforeach(proto_file)
+
+include_directories(${GENERATED_DIR})
+
+SET_SOURCE_FILES_PROPERTIES(${PROTO_SRCS} ${PROTO_HDRS} PROPERTIES GENERATED TRUE)
 
 add_executable(SimpleTaskManager
-        ${PROTO_TASK_SRCS}
-        ${PROTO_TASK_HDRS}
-        ${PROTO_TASK_NODE_SRCS}
-        ${PROTO_TASK_NODE_HDRS}
+        ${PROTO_SRCS}
+        ${PROTO_HDRS}
+        ${task_manager_generated_files}
         ${TaskManager_SRCS}
         src/main.cpp)
 
 add_executable(SimpleTaskManager_test
-        ${PROTO_TASK_SRCS}
-        ${PROTO_TASK_HDRS}
-        ${PROTO_TASK_NODE_SRCS}
-        ${PROTO_TASK_NODE_HDRS}
+        ${PROTO_SRCS}
+        ${PROTO_HDRS}
+        ${task_manager_generated_files}
         ${TaskManager_SRCS}
         ${TaskManager_TEST})
 
-target_link_libraries(SimpleTaskManager ${Protobuf_LIBRARIES})
+target_link_libraries(SimpleTaskManager protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
 
-target_link_libraries(SimpleTaskManager_test GTest::gtest GTest::gmock GTest::gmock_main ${Protobuf_LIBRARIES})
+target_link_libraries(SimpleTaskManager_test protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection GTest::gtest GTest::gmock GTest::gmock_main)
