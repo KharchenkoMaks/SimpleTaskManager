@@ -6,12 +6,7 @@
 #define SIMPLETASKMANAGER_MODELCONTROLLER_H
 
 #include "Task.pb.h"
-#include "Model.h"
-#include "utilities/TaskValidator.h"
-#include "utilities/TaskActionResult.h"
-#include "utilities/SaveLoadStatus.h"
 #include "ControllerRequestResult.h"
-#include "persistence/PersistenceFactory.h"
 
 #include <memory>
 #include <utility>

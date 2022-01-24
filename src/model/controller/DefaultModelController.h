@@ -7,6 +7,12 @@
 
 #include "ModelController.h"
 
+#include "Model.h"
+#include "utilities/TaskValidator.h"
+#include "utilities/TaskActionResult.h"
+#include "utilities/SaveLoadStatus.h"
+#include "persistence/PersistenceFactory.h"
+
 class DefaultModelController : public ModelController {
 public:
     DefaultModelController(std::unique_ptr<Model> model,
