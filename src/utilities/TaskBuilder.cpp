@@ -34,13 +34,6 @@ TaskBuilder& TaskBuilder::AddLabel(const std::string& label) {
     return *this;
 }
 
-TaskBuilder& TaskBuilder::RemoveLabel(const std::string& label) {
-    auto label_to_remove = std::find(labels_.begin(), labels_.end(), label);
-    if (label_to_remove != labels_.end())
-        labels_.erase(label_to_remove);
-    return *this;
-}
-
 TaskBuilder& TaskBuilder::Merge(const Task& task) {
     if (!title_.has_value())
         title_ = task.title();

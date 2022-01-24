@@ -20,7 +20,6 @@ public:
     TaskBuilder& SetDueDate(const google::protobuf::Timestamp& due_date);
     TaskBuilder& SetCompletion(bool is_completed);
     TaskBuilder& AddLabel(const std::string& label);
-    TaskBuilder& RemoveLabel(const std::string& label);
 
     TaskBuilder& Merge(const Task& task);
 public:
