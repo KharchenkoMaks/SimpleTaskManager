@@ -19,33 +19,25 @@
 
 class ModelController {
 public:
-    ModelController(std::unique_ptr<Model> model,
-               std::unique_ptr<TaskValidator> task_validator,
-               std::unique_ptr<persistence::PersistenceFactory> persistence_factory);
-public:
-    virtual std::pair<ControllerRequestResult, TaskId> AddTask(const Task& task);
-    virtual std::pair<ControllerRequestResult, TaskId> AddSubTask(const Task& task, const TaskId& parent_id);
-    virtual ControllerRequestResult EditTask(const TaskId& task_id, const Task& task);
-    virtual ControllerRequestResult DeleteTask(const TaskId& task_id);
-    virtual ControllerRequestResult CompleteTask(const TaskId& task_id);
-    virtual ControllerRequestResult AddTaskLabel(const TaskId& task_id, const std::string& label);
+    virtual std::pair<ControllerRequestResult, TaskId> AddTask(const Task& task) = 0;
+    virtual std::pair<ControllerRequestResult, TaskId> AddSubTask(const Task& task, const TaskId& parent_id) = 0;
+    virtual ControllerRequestResult EditTask(const TaskId& task_id, const Task& task) = 0;
+    virtual ControllerRequestResult DeleteTask(const TaskId& task_id) = 0;
+    virtual ControllerRequestResult CompleteTask(const TaskId& task_id) = 0;
+    virtual ControllerRequestResult AddTaskLabel(const TaskId& task_id, const std::string& label) = 0;
 
-    virtual ControllerRequestResult DeleteTaskWithSubTasks(const TaskId& task_id);
-    virtual ControllerRequestResult CompleteTaskWithSubTasks(const TaskId& task_id);
+    virtual ControllerRequestResult DeleteTaskWithSubTasks(const TaskId& task_id) = 0;
+    virtual ControllerRequestResult CompleteTaskWithSubTasks(const TaskId& task_id) = 0;
 
 public:
-    virtual std::vector<RelationalTask> GetAllTasks();
-    virtual std::optional<RelationalTask> GetTask(const TaskId& task_id);
+    virtual std::vector<RelationalTask> GetAllTasks() = 0;
+    virtual std::optional<RelationalTask> GetTask(const TaskId& task_id) = 0;
 public:
-    virtual ControllerRequestResult SaveToFile(const std::string& file_name);
-    virtual ControllerRequestResult LoadFromFile(const std::string& file_name);
+    virtual ControllerRequestResult SaveToFile(const std::string& file_name) = 0;
+    virtual ControllerRequestResult LoadFromFile(const std::string& file_name) = 0;
 
 public:
     virtual ~ModelController() = default;
-private:
-    std::unique_ptr<Model> model_;
-    std::unique_ptr<TaskValidator> task_validator_;
-    std::unique_ptr<persistence::PersistenceFactory> persistence_factory_;
 };
 
 

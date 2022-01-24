@@ -10,7 +10,7 @@
 
 #include "TaskManager.h"
 #include "states/factory/StatesFactory.h"
-#include "ModelController.h"
+#include "DefaultModelController.h"
 #include "user_interface/UserInterface.h"
 #include "ViewController.h"
 #include "persistence/PersistenceFactory.h"
@@ -51,7 +51,7 @@ public:
                                                                                         std::move(reader_));
         std::unique_ptr<UserInterface> user_interface = std::make_unique<UserInterface>(
                 states_factory);
-        std::unique_ptr<ModelController> model_controller = std::make_unique<ModelController>(
+        std::unique_ptr<ModelController> model_controller = std::make_unique<DefaultModelController>(
                 std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
                 std::make_unique<TaskValidator>(),
                 std::make_unique<persistence::PersistenceFactory>());
