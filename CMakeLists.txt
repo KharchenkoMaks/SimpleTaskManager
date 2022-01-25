@@ -29,6 +29,21 @@ file(GLOB_RECURSE TaskManager_SRCS CONFIGURE_DEPENDS
         "src/persistence/*.h"
         "src/persistence/*.cpp")
 
+file(GLOB_RECURSE SERVER_SRCS CONFIGURE_DEPENDS
+        "src/model/*.h"
+        "src/model/*.cpp"
+        "src/utilities/*.h"
+        "src/utilities/*.cpp"
+        "src/persistence/*.h"
+        "src/persistence/*.cpp")
+
+file(GLOB_RECURSE CLIENT_SRCS CONFIGURE_DEPENDS
+        "src/view/*.h"
+        "src/view/*.cpp"
+        "src/utilities/*.h"
+        "src/utilities/*.cpp"
+        "src/model/controller/ModelController.h")
+
 file(GLOB_RECURSE TaskManager_TEST CONFIGURE_DEPENDS
         "tests/*.h"
         "tests/*.cpp")
@@ -91,14 +106,14 @@ add_executable(client
         ${PROTO_SRCS}
         ${PROTO_HDRS}
         ${task_manager_generated_files}
-        ${TaskManager_SRCS}
+        ${CLIENT_SRCS}
         src/client.cpp)
 
 add_executable(server
         ${PROTO_SRCS}
         ${PROTO_HDRS}
         ${task_manager_generated_files}
-        ${TaskManager_SRCS}
+        ${SERVER_SRCS}
         src/server.cpp)
 
 add_executable(SimpleTaskManager_test
