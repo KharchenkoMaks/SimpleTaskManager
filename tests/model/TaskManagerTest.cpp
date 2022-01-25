@@ -573,7 +573,7 @@ TEST_F(TaskManagerTest, GetTasksByLabel_ShouldReturnTasksWithCertainLabel) {
     const std::string expected_search_label = "label";
     expected_first_task.set_label(expected_search_label);
     expected_third_task.set_label(expected_search_label);
-    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    std::unique_ptr<MockIdGenerator> gen = std::make_unique<MockIdGenerator>();
     EXPECT_CALL(*gen, CreateNewTaskId())
         .Times(3)
         .WillOnce(Return(expected_first_task_id))
