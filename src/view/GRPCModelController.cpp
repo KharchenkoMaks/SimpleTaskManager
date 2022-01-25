@@ -7,7 +7,7 @@
 #include "Requests.pb.h"
 #include "Responses.pb.h"
 
-GRPCModelController::GRPCModelController(std::unique_ptr<ModelControllerService::Stub> stub) :
+GRPCModelController::GRPCModelController(std::unique_ptr<ModelControllerService::StubInterface> stub) :
         stub_(std::move(stub)) {}
 
 std::pair<ControllerRequestResult, TaskId> GRPCModelController::AddTask(const Task& task) {

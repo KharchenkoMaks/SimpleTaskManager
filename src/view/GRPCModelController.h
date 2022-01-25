@@ -15,7 +15,7 @@
 
 class GRPCModelController : public ModelController {
 public:
-    explicit GRPCModelController(std::unique_ptr<ModelControllerService::Stub> stub);
+    explicit GRPCModelController(std::unique_ptr<ModelControllerService::StubInterface> stub);
 
 public:
     std::pair<ControllerRequestResult, TaskId> AddTask(const Task& task) override;
@@ -39,7 +39,7 @@ private:
     ControllerRequestResult ConvertToControllerRequestResult(const ControllerRequestStatus& status) const;
 
 private:
-    std::unique_ptr<ModelControllerService::Stub> stub_;
+    std::unique_ptr<ModelControllerService::StubInterface> stub_;
 };
 
 
