@@ -3,7 +3,6 @@
 //
 
 #include "CommandResult.h"
-#include "utilities/TaskComparators.h"
 
 CommandResult CommandResult::Create(const ControllerRequestResult result) {
     CommandResult cmd_result;
@@ -18,11 +17,10 @@ CommandResult CommandResult::Create(const TaskId& task_id) {
     return cmd_result;
 }
 
-CommandResult CommandResult::Create(const std::vector<RelationalTask>& tasks_to_show, const bool show_tasks_relations) {
+CommandResult CommandResult::Create(const std::vector<RelationalTask>& tasks_to_show) {
     CommandResult cmd_result;
     cmd_result.result_ = ControllerRequestResult::SUCCESS;
-    cmd_result.tasks_to_show_.tasks_ = tasks_to_show;
-    cmd_result.tasks_to_show_.show_task_relations_ = show_tasks_relations;
+    cmd_result.tasks_to_show_ = tasks_to_show;
     return cmd_result;
 }
 
@@ -34,11 +32,6 @@ std::optional<TaskId> CommandResult::GetTaskId() const {
     return task_id_;
 }
 
-CommandResult::TasksToShow CommandResult::GetTasksToShow() const {
+std::vector<RelationalTask> CommandResult::GetTasksToShow() const {
     return tasks_to_show_;
-}
-
-bool CommandResult::TasksToShow::operator==(const CommandResult::TasksToShow& tasks_to_show) const {
-    return this->tasks_ == tasks_to_show.tasks_ &&
-           this->show_task_relations_ == tasks_to_show.show_task_relations_;
 }
