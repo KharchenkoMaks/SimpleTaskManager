@@ -6,7 +6,7 @@
 #include "utilities/TaskConvertors.h"
 
 void ShowState::PrintTasks(const CommandResult::TasksToShow& tasks_to_show) {
-    for (auto task : tasks_to_show.tasks_) {
+    for (const auto& task : tasks_to_show.tasks_) {
         std::string task_string;
         if (task.has_parent_id() && tasks_to_show.show_task_relations_) {
             task_string += "\t";
