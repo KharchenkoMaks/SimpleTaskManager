@@ -24,8 +24,6 @@
 #include "view/commands/SetLabelCommand.h"
 #include "view/commands/ShowTasksCommand.h"
 
-#include "view/commands/CommandResult.h"
-
 #include <ctime>
 #include <utility>
 
@@ -275,16 +273,15 @@ TEST_F(CommandsTests, ShowTasksCommandExecute_ShouldFetchAllTasksFromControllerA
     tt3.set_allocated_task(new Task(t3));
     tt3.set_allocated_parent_id(new TaskId(parent_task_id));
 
-    std::vector<RelationalTask> tasks {tt1, tt3, tt2 };
-    const CommandResult::TasksToShow expected_tasks_to_show { tasks, true };
+    std::vector<RelationalTask> tasks_to_show {tt1, tt3, tt2 };
 
     // Assert
-    EXPECT_CALL(*controller_, GetAllTasks()).WillOnce(Return(tasks));
+    EXPECT_CALL(*controller_, GetAllTasks()).WillOnce(Return(tasks_to_show));
     // Act
     CommandResult actual_result = show_tasks_command.Execute(controller_);
     // Assert
     ASSERT_EQ(expected_result, actual_result.GetResult());
-    EXPECT_EQ(expected_tasks_to_show, actual_result.GetTasksToShow());
+    EXPECT_EQ(tasks_to_show, actual_result.GetTasksToShow());
 }
 
 TEST_F(CommandsTests, ShowTasksCommandExecute_ShouldFetchTasksFromControllerByLabelAndReturnThem) {
@@ -315,14 +312,16 @@ TEST_F(CommandsTests, ShowTasksCommandExecute_ShouldFetchTasksFromControllerByLa
     tt3.set_allocated_task(new Task(t3));
     tt3.set_allocated_parent_id(new TaskId(parent_task_id));
 
-    std::vector<RelationalTask> tasks { tt1, tt3, tt2 };
-    const CommandResult::TasksToShow expected_tasks_to_show { tasks, false };
+    std::vector<RelationalTask> tasks_to_show { tt1, tt3, tt2 };
 
     // Assert
-    EXPECT_CALL(*controller_, GetTasksByLabel(expected_label)).WillOnce(Return(tasks));
+    EXPECT_CALL(*controller_, GetTasksByLabel(expected_label)).WillOnce(Return(tasks_to_show));
+    std::for_each(tasks_to_show.begin(), tasks_to_show.end(), [&](auto& item){
+        item.clear_parent_id();
+    });
     // Act
     CommandResult actual_result = show_tasks_command.Execute(controller_);
     // Assert
     ASSERT_EQ(expected_result, actual_result.GetResult());
-    EXPECT_EQ(expected_tasks_to_show, actual_result.GetTasksToShow());
+    EXPECT_EQ(tasks_to_show, actual_result.GetTasksToShow());
 }

@@ -632,8 +632,7 @@ TEST_F(StatesTests, ShowStateExecute_ShouldPrintAllTasksFromContext) {
     tt3.set_allocated_task(new Task(t3));
     tt3.set_allocated_parent_id(new TaskId(parent_task_id));
 
-    std::vector<RelationalTask> tasks {tt1, tt3, tt2 };
-    CommandResult::TasksToShow tasks_to_show { tasks, true };
+    std::vector<RelationalTask> tasks_to_show {tt1, tt3, tt2 };
 
     show_state_context.SetTasksToShow(tasks_to_show);
 
