@@ -26,7 +26,7 @@ int main() {
     std::unique_ptr<UserInterface> user_interface = std::make_unique<UserInterface>(
             states_factory);
     std::unique_ptr<ModelController> model_controller =
-            std::make_unique<GRPCModelController>(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials()));
+            std::make_unique<GRPCModelController>(ModelControllerService::NewStub(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials())));
     std::unique_ptr<ViewController> view_controller = std::make_unique<ViewController>(
             std::move(model_controller),
             std::move(user_interface));

@@ -15,7 +15,7 @@
 
 class GRPCModelController : public ModelController {
 public:
-    explicit GRPCModelController(const std::shared_ptr<grpc::Channel>& channel);
+    explicit GRPCModelController(std::unique_ptr<ModelControllerService::Stub> stub);
 
 public:
     std::pair<ControllerRequestResult, TaskId> AddTask(const Task& task) override;

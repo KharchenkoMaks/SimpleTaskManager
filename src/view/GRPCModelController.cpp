@@ -7,8 +7,8 @@
 #include "Requests.pb.h"
 #include "Responses.pb.h"
 
-GRPCModelController::GRPCModelController(const std::shared_ptr<grpc::Channel>& channel) :
-        stub_(ModelControllerService::NewStub(channel)) {}
+GRPCModelController::GRPCModelController(std::unique_ptr<ModelControllerService::Stub> stub) :
+        stub_(std::move(stub)) {}
 
 std::pair<ControllerRequestResult, TaskId> GRPCModelController::AddTask(const Task& task) {
     AddTaskRequest request;
