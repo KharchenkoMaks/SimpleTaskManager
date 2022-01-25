@@ -4,11 +4,9 @@
 
 #include "ShowTasksCommand.h"
 
-ShowTasksCommand::ShowTasksCommand(const std::string& task_label) : task_label_(task_label) { }
+ShowTasksCommand::ShowTasksCommand() = default;
 
 CommandResult ShowTasksCommand::Execute(const std::shared_ptr<ModelController>& controller) {
-    if (task_label_.empty())
-        return CommandResult::Create(controller->GetAllTasks(), true);
-    else
-        return CommandResult::Create(controller->GetTasksByLabel(task_label_), false);
+    auto tasks = controller->GetAllTasks();
+    return CommandResult::Create(tasks);
 }

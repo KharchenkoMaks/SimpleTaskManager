@@ -48,7 +48,7 @@ void UserInterface::PrintRequestResult(ControllerRequestResult action_result) {
     }
 }
 
-void UserInterface::ShowTasks(const CommandResult::TasksToShow& tasks_to_show) {
+void UserInterface::ShowTasks(const std::vector<RelationalTask>& tasks) {
     std::shared_ptr<StateContext> context = std::make_shared<StateContext>();
     context->SetTasksToShow(tasks_to_show);
 

@@ -10,15 +10,12 @@
 #include "controller/ModelController.h"
 
 #include <memory>
-#include <string>
 
 class ShowTasksCommand : public Command {
 public:
-    explicit ShowTasksCommand(const std::string& task_label_);
+    ShowTasksCommand();
 public:
     CommandResult Execute(const std::shared_ptr<ModelController>& controller) override;
-private:
-    std::string task_label_;
 };
 
 

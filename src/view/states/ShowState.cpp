@@ -5,10 +5,10 @@
 #include "ShowState.h"
 #include "utilities/TaskConvertors.h"
 
-void ShowState::PrintTasks(const CommandResult::TasksToShow& tasks_to_show) {
-    for (const auto& task : tasks_to_show.tasks_) {
+void ShowState::PrintTasks(const std::vector<RelationalTask> &tasks) {
+    for (auto task : tasks) {
         std::string task_string;
-        if (task.has_parent_id() && tasks_to_show.show_task_relations_) {
+        if (task.has_parent_id()) {
             task_string += "\t";
         }
         task_string += TaskToString(task.task_id(), task.task());
