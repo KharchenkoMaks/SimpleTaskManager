@@ -87,6 +87,20 @@ add_executable(SimpleTaskManager
         ${TaskManager_SRCS}
         src/main.cpp)
 
+add_executable(client
+        ${PROTO_SRCS}
+        ${PROTO_HDRS}
+        ${task_manager_generated_files}
+        ${TaskManager_SRCS}
+        src/client.cpp)
+
+add_executable(server
+        ${PROTO_SRCS}
+        ${PROTO_HDRS}
+        ${task_manager_generated_files}
+        ${TaskManager_SRCS}
+        src/server.cpp)
+
 add_executable(SimpleTaskManager_test
         ${PROTO_SRCS}
         ${PROTO_HDRS}
@@ -95,5 +109,7 @@ add_executable(SimpleTaskManager_test
         ${TaskManager_TEST})
 
 target_link_libraries(SimpleTaskManager protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
+target_link_libraries(server protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
+target_link_libraries(client protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
 
 target_link_libraries(SimpleTaskManager_test protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection GTest::gtest GTest::gmock GTest::gmock_main)
