@@ -108,22 +108,3 @@ grpc::Status GRPCServerEndPoint::LoadFromFile(::grpc::ServerContext *context,
     response->set_status(ConvertToControllerRequestStatus(controller_result));
     return grpc::Status::OK;
 }
-
-ControllerRequestStatus GRPCServerEndPoint::ConvertToControllerRequestStatus(const ControllerRequestResult& controller_result) const {
-    switch (controller_result) {
-        case ControllerRequestResult::SUCCESS:
-            return ControllerRequestStatus::SUCCESS;
-        case ControllerRequestResult::FAIL_NO_SUCH_TASK:
-            return ControllerRequestStatus::FAIL_NO_SUCH_TASK;
-        case ControllerRequestResult::FAIL_UNCOMPLETED_SUBTASKS:
-            return ControllerRequestStatus::FAIL_UNCOMPLETED_SUBTASKS;
-        case ControllerRequestResult::FAIL_NOT_DELETED_SUBTASKS:
-            return ControllerRequestStatus::FAIL_NOT_DELETED_SUBTASKS;
-        case ControllerRequestResult::FAIL_INVALID_TASK:
-            return ControllerRequestStatus::FAIL_INVALID_TASK;
-        case ControllerRequestResult::FILE_WAS_NOT_OPENED:
-            return ControllerRequestStatus::FILE_WAS_NOT_OPENED;
-        case ControllerRequestResult::FILE_DAMAGED:
-            return ControllerRequestStatus::FILE_DAMAGED;
-    }
-}

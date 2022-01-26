@@ -8,6 +8,9 @@
 #include "model/controller/ModelController.h"
 
 #include "ModelControllerService.grpc.pb.h"
+
+#include "utilities/ModelControllerResultConvertors.h"
+
 #include <grpcpp/grpcpp.h>
 
 #include <memory>
@@ -34,9 +37,6 @@ public:
 public:
     ControllerRequestResult SaveToFile(const std::string& file_name) override;
     ControllerRequestResult LoadFromFile(const std::string& file_name) override;
-
-private:
-    ControllerRequestResult ConvertToControllerRequestResult(const ControllerRequestStatus& status) const;
 
 private:
     std::unique_ptr<ModelControllerService::StubInterface> stub_;

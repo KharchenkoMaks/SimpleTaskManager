@@ -11,6 +11,8 @@
 #include "Responses.pb.h"
 #include "ModelControllerService.grpc.pb.h"
 
+#include "utilities/ModelControllerResultConvertors.h"
+
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/health_check_service_interface.h>
@@ -33,8 +35,6 @@ public:
     grpc::Status SaveToFile(::grpc::ServerContext *context, const ::SaveToFileRequest *request, ::SaveToFileResponse *response) override;
     grpc::Status LoadFromFile(::grpc::ServerContext *context, const ::LoadFromFileRequest *request, ::LoadFromFileResponse *response) override;
 
-private:
-    ControllerRequestStatus ConvertToControllerRequestStatus(const ControllerRequestResult& controller_result) const;
 private:
     std::unique_ptr<ModelController> model_controller_;
 };

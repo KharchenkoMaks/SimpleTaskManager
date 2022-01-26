@@ -42,7 +42,9 @@ file(GLOB_RECURSE CLIENT_SRCS CONFIGURE_DEPENDS
         "src/view/*.cpp"
         "src/utilities/*.h"
         "src/utilities/*.cpp"
-        "src/model/controller/ModelController.h")
+        "src/model/controller/ModelController.h"
+        "src/model/controller/ControllerRequestResult.h"
+        "src/model/controller/ControllerRequestResult.cpp")
 
 file(GLOB_RECURSE TaskManager_TEST CONFIGURE_DEPENDS
         "tests/*.h"

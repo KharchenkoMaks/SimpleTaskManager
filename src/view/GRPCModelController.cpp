@@ -162,22 +162,3 @@ ControllerRequestResult GRPCModelController::LoadFromFile(const std::string& fil
 
     return ConvertToControllerRequestResult(response.status());
 }
-
-ControllerRequestResult GRPCModelController::ConvertToControllerRequestResult(const ControllerRequestStatus& request_status) const {
-    switch (request_status) {
-        case ControllerRequestStatus::SUCCESS:
-            return ControllerRequestResult::SUCCESS;
-        case ControllerRequestStatus::FAIL_NO_SUCH_TASK:
-            return ControllerRequestResult::FAIL_NO_SUCH_TASK;
-        case ControllerRequestStatus::FAIL_UNCOMPLETED_SUBTASKS:
-            return ControllerRequestResult::FAIL_UNCOMPLETED_SUBTASKS;
-        case ControllerRequestStatus::FAIL_NOT_DELETED_SUBTASKS:
-            return ControllerRequestResult::FAIL_NOT_DELETED_SUBTASKS;
-        case ControllerRequestStatus::FAIL_INVALID_TASK:
-            return ControllerRequestResult::FAIL_INVALID_TASK;
-        case ControllerRequestStatus::FILE_WAS_NOT_OPENED:
-            return ControllerRequestResult::FILE_WAS_NOT_OPENED;
-        default:
-            return ControllerRequestResult::FILE_DAMAGED;
-    }
-}
