@@ -2,8 +2,8 @@
 // Created by Maksym Kharchenko on 24.01.2022.
 //
 
-#ifndef SIMPLETASKMANAGER_GRPCMODELCONTROLLER_H
-#define SIMPLETASKMANAGER_GRPCMODELCONTROLLER_H
+#ifndef SIMPLETASKMANAGER_GRPCCLIENTENDPOINT_H
+#define SIMPLETASKMANAGER_GRPCCLIENTENDPOINT_H
 
 #include "model/controller/ModelController.h"
 
@@ -16,9 +16,9 @@
 #include <memory>
 #include <utility>
 
-class GRPCModelController : public ModelController {
+class GRPCClientEndPoint : public ModelController {
 public:
-    explicit GRPCModelController(std::unique_ptr<ModelControllerService::StubInterface> stub);
+    explicit GRPCClientEndPoint(std::unique_ptr<ModelControllerService::StubInterface> stub);
 
 public:
     std::pair<ControllerRequestResult, TaskId> AddTask(const Task& task) override;
@@ -43,4 +43,4 @@ private:
 };
 
 
-#endif //SIMPLETASKMANAGER_GRPCMODELCONTROLLER_H
+#endif //SIMPLETASKMANAGER_GRPCCLIENTENDPOINT_H

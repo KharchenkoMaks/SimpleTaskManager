@@ -2,15 +2,15 @@
 // Created by Maksym Kharchenko on 24.01.2022.
 //
 
-#include "GRPCModelController.h"
+#include "GRPCClientEndPoint.h"
 
 #include "Requests.pb.h"
 #include "Responses.pb.h"
 
-GRPCModelController::GRPCModelController(std::unique_ptr<ModelControllerService::StubInterface> stub) :
+GRPCClientEndPoint::GRPCClientEndPoint(std::unique_ptr<ModelControllerService::StubInterface> stub) :
         stub_(std::move(stub)) {}
 
-std::pair<ControllerRequestResult, TaskId> GRPCModelController::AddTask(const Task& task) {
+std::pair<ControllerRequestResult, TaskId> GRPCClientEndPoint::AddTask(const Task& task) {
     AddTaskRequest request;
     request.set_allocated_task(new Task(task));
 
@@ -22,7 +22,7 @@ std::pair<ControllerRequestResult, TaskId> GRPCModelController::AddTask(const Ta
     return std::make_pair(ConvertToControllerRequestResult(response.status()), response.added_task_id());
 }
 
-std::pair<ControllerRequestResult, TaskId> GRPCModelController::AddSubTask(const Task& task, const TaskId& parent_id) {
+std::pair<ControllerRequestResult, TaskId> GRPCClientEndPoint::AddSubTask(const Task& task, const TaskId& parent_id) {
     AddSubTaskRequest request;
     request.set_allocated_task(new Task(task));
     request.set_allocated_parent_id(new TaskId(parent_id));
@@ -35,7 +35,7 @@ std::pair<ControllerRequestResult, TaskId> GRPCModelController::AddSubTask(const
     return std::make_pair(ConvertToControllerRequestResult(response.status()), response.added_task_id());
 }
 
-ControllerRequestResult GRPCModelController::EditTask(const TaskId& task_id, const Task& task) {
+ControllerRequestResult GRPCClientEndPoint::EditTask(const TaskId& task_id, const Task& task) {
     EditTaskRequest request;
     request.set_allocated_task(new Task(task));
     request.set_allocated_task_id(new TaskId(task_id));
@@ -48,7 +48,7 @@ ControllerRequestResult GRPCModelController::EditTask(const TaskId& task_id, con
     return ConvertToControllerRequestResult(response.status());
 }
 
-ControllerRequestResult GRPCModelController::DeleteTask(const TaskId& task_id) {
+ControllerRequestResult GRPCClientEndPoint::DeleteTask(const TaskId& task_id) {
     DeleteTaskRequest request;
     request.set_allocated_task_id(new TaskId(task_id));
 
@@ -60,7 +60,7 @@ ControllerRequestResult GRPCModelController::DeleteTask(const TaskId& task_id) {
     return ConvertToControllerRequestResult(response.status());
 }
 
-ControllerRequestResult GRPCModelController::CompleteTask(const TaskId& task_id) {
+ControllerRequestResult GRPCClientEndPoint::CompleteTask(const TaskId& task_id) {
     CompleteTaskRequest request;
     request.set_allocated_task_id(new TaskId(task_id));
 
@@ -72,7 +72,7 @@ ControllerRequestResult GRPCModelController::CompleteTask(const TaskId& task_id)
     return ConvertToControllerRequestResult(response.status());
 }
 
-ControllerRequestResult GRPCModelController::AddTaskLabel(const TaskId& task_id, const std::string& label) {
+ControllerRequestResult GRPCClientEndPoint::AddTaskLabel(const TaskId& task_id, const std::string& label) {
     AddTaskLabelRequest request;
     request.set_allocated_task_id(new TaskId(task_id));
     request.set_label(label);
@@ -85,7 +85,7 @@ ControllerRequestResult GRPCModelController::AddTaskLabel(const TaskId& task_id,
     return ConvertToControllerRequestResult(response.status());
 }
 
-ControllerRequestResult GRPCModelController::DeleteTaskWithSubTasks(const TaskId& task_id) {
+ControllerRequestResult GRPCClientEndPoint::DeleteTaskWithSubTasks(const TaskId& task_id) {
     DeleteTaskWithSubTasksRequest request;
     request.set_allocated_task_id(new TaskId(task_id));
 
@@ -97,7 +97,7 @@ ControllerRequestResult GRPCModelController::DeleteTaskWithSubTasks(const TaskId
     return ConvertToControllerRequestResult(response.status());
 }
 
-ControllerRequestResult GRPCModelController::CompleteTaskWithSubTasks(const TaskId& task_id) {
+ControllerRequestResult GRPCClientEndPoint::CompleteTaskWithSubTasks(const TaskId& task_id) {
     CompleteTaskWithSubTasksRequest request;
     request.set_allocated_task_id(new TaskId(task_id));
 
@@ -109,7 +109,7 @@ ControllerRequestResult GRPCModelController::CompleteTaskWithSubTasks(const Task
     return ConvertToControllerRequestResult(response.status());
 }
 
-std::vector<RelationalTask> GRPCModelController::GetAllTasks() {
+std::vector<RelationalTask> GRPCClientEndPoint::GetAllTasks() {
     GetAllTasksRequest request;
 
     GetAllTasksResponse response;
@@ -124,7 +124,7 @@ std::vector<RelationalTask> GRPCModelController::GetAllTasks() {
     return tasks;
 }
 
-std::optional<RelationalTask> GRPCModelController::GetTask(const TaskId& task_id) {
+std::optional<RelationalTask> GRPCClientEndPoint::GetTask(const TaskId& task_id) {
     GetTaskRequest request;
     request.set_allocated_task_id(new TaskId(task_id));
 
@@ -139,7 +139,7 @@ std::optional<RelationalTask> GRPCModelController::GetTask(const TaskId& task_id
         return std::nullopt;
 }
 
-ControllerRequestResult GRPCModelController::SaveToFile(const std::string& file_name) {
+ControllerRequestResult GRPCClientEndPoint::SaveToFile(const std::string& file_name) {
     SaveToFileRequest request;
     request.set_file_name(file_name);
 
@@ -151,7 +151,7 @@ ControllerRequestResult GRPCModelController::SaveToFile(const std::string& file_
     return ConvertToControllerRequestResult(response.status());
 }
 
-ControllerRequestResult GRPCModelController::LoadFromFile(const std::string& file_name) {
+ControllerRequestResult GRPCClientEndPoint::LoadFromFile(const std::string& file_name) {
     LoadFromFileRequest request;
     request.set_file_name(file_name);
 

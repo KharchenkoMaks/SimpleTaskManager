@@ -10,7 +10,7 @@
 #include "view/user_interface/console_io/ConsoleReader.h"
 #include "view/user_interface/UserInterface.h"
 #include "view/ViewController.h"
-#include "view/GRPCModelController.h"
+#include "view/GRPCClientEndPoint.h"
 
 #include <grpcpp/grpcpp.h>
 
@@ -26,7 +26,7 @@ int main() {
     std::unique_ptr<UserInterface> user_interface = std::make_unique<UserInterface>(
             states_factory);
     std::unique_ptr<ModelController> model_controller =
-            std::make_unique<GRPCModelController>(ModelControllerService::NewStub(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials())));
+            std::make_unique<GRPCClientEndPoint>(ModelControllerService::NewStub(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials())));
     std::unique_ptr<ViewController> view_controller = std::make_unique<ViewController>(
             std::move(model_controller),
             std::move(user_interface));

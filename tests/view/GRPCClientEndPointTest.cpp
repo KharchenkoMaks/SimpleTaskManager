@@ -7,7 +7,7 @@
 
 #include "ModelControllerService_mock.grpc.pb.h"
 
-#include "view/GRPCModelController.h"
+#include "view/GRPCClientEndPoint.h"
 
 #include "utilities/TaskBuilder.h"
 #include "utilities/TaskComparators.h"
@@ -17,7 +17,7 @@
 using ::testing::Return;
 using ::testing::_;
 
-class GRPCModelControllerTest : public ::testing::Test {
+class GRPCClientEndPointTest : public ::testing::Test {
 public:
     Task expected_task_;
     TaskId expected_task_id_;
@@ -41,7 +41,7 @@ public:
     }
 };
 
-TEST_F(GRPCModelControllerTest, AddTask_ShouldSendServiceRequest) {
+TEST_F(GRPCClientEndPointTest, AddTask_ShouldSendServiceRequest) {
     // Arrange
     auto stub_ptr = std::make_unique<MockModelControllerServiceStub>();
 
@@ -52,7 +52,7 @@ TEST_F(GRPCModelControllerTest, AddTask_ShouldSendServiceRequest) {
                 response->set_allocated_added_task_id(new TaskId(expected_task_id_));
                 return grpc::Status::OK;
             }));
-    GRPCModelController controller { std::move(stub_ptr) };
+    GRPCClientEndPoint controller { std::move(stub_ptr) };
     // Act
     auto actual_result = controller.AddTask(expected_task_);
     // Assert
@@ -60,7 +60,7 @@ TEST_F(GRPCModelControllerTest, AddTask_ShouldSendServiceRequest) {
     EXPECT_EQ(expected_task_id_, actual_result.second);
 }
 
-TEST_F(GRPCModelControllerTest, AddSubTask_ShouldSendServiceRequest) {
+TEST_F(GRPCClientEndPointTest, AddSubTask_ShouldSendServiceRequest) {
     // Arrange
     auto stub_ptr = std::make_unique<MockModelControllerServiceStub>();
 
@@ -72,7 +72,7 @@ TEST_F(GRPCModelControllerTest, AddSubTask_ShouldSendServiceRequest) {
                 response->set_allocated_added_task_id(new TaskId(expected_task_id_));
                 return grpc::Status::OK;
             }));
-    GRPCModelController controller { std::move(stub_ptr) };
+    GRPCClientEndPoint controller { std::move(stub_ptr) };
     // Act
     auto actual_result = controller.AddSubTask(expected_task_, expected_parent_id_);
     // Assert
@@ -80,7 +80,7 @@ TEST_F(GRPCModelControllerTest, AddSubTask_ShouldSendServiceRequest) {
     EXPECT_EQ(expected_task_id_, actual_result.second);
 }
 
-TEST_F(GRPCModelControllerTest, EditTask_ShouldSendServiceRequest) {
+TEST_F(GRPCClientEndPointTest, EditTask_ShouldSendServiceRequest) {
     auto stub_ptr = std::make_unique<MockModelControllerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, EditTask(_, _, _)).WillOnce(testing::Invoke(
@@ -90,14 +90,14 @@ TEST_F(GRPCModelControllerTest, EditTask_ShouldSendServiceRequest) {
                 response->set_status(ControllerRequestStatus::FAIL_NO_SUCH_TASK);
                 return grpc::Status::OK;
             }));
-    GRPCModelController controller { std::move(stub_ptr) };
+    GRPCClientEndPoint controller { std::move(stub_ptr) };
     // Act
     auto actual_result = controller.EditTask(expected_task_id_, expected_task_);
     // Assert
     EXPECT_EQ(ControllerRequestResult::FAIL_NO_SUCH_TASK, actual_result);
 }
 
-TEST_F(GRPCModelControllerTest, DeleteTask_ShouldSendServiceRequest) {
+TEST_F(GRPCClientEndPointTest, DeleteTask_ShouldSendServiceRequest) {
     auto stub_ptr = std::make_unique<MockModelControllerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, DeleteTask(_, _, _)).WillOnce(testing::Invoke(
@@ -106,14 +106,14 @@ TEST_F(GRPCModelControllerTest, DeleteTask_ShouldSendServiceRequest) {
                 response->set_status(ControllerRequestStatus::FAIL_NOT_DELETED_SUBTASKS);
                 return grpc::Status::OK;
             }));
-    GRPCModelController controller { std::move(stub_ptr) };
+    GRPCClientEndPoint controller { std::move(stub_ptr) };
     // Act
     auto actual_result = controller.DeleteTask(expected_task_id_);
     // Assert
     EXPECT_EQ(ControllerRequestResult::FAIL_NOT_DELETED_SUBTASKS, actual_result);
 }
 
-TEST_F(GRPCModelControllerTest, CompleteTask_ShouldSendServiceRequest) {
+TEST_F(GRPCClientEndPointTest, CompleteTask_ShouldSendServiceRequest) {
     auto stub_ptr = std::make_unique<MockModelControllerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, CompleteTask(_, _, _)).WillOnce(testing::Invoke(
@@ -122,14 +122,14 @@ TEST_F(GRPCModelControllerTest, CompleteTask_ShouldSendServiceRequest) {
                 response->set_status(ControllerRequestStatus::FAIL_UNCOMPLETED_SUBTASKS);
                 return grpc::Status::OK;
             }));
-    GRPCModelController controller { std::move(stub_ptr) };
+    GRPCClientEndPoint controller { std::move(stub_ptr) };
     // Act
     auto actual_result = controller.CompleteTask(expected_task_id_);
     // Assert
     EXPECT_EQ(ControllerRequestResult::FAIL_UNCOMPLETED_SUBTASKS, actual_result);
 }
 
-TEST_F(GRPCModelControllerTest, AddTaskLabel_ShouldSendServiceRequest) {
+TEST_F(GRPCClientEndPointTest, AddTaskLabel_ShouldSendServiceRequest) {
     auto stub_ptr = std::make_unique<MockModelControllerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, AddTaskLabel(_, _, _)).WillOnce(testing::Invoke(
@@ -139,14 +139,14 @@ TEST_F(GRPCModelControllerTest, AddTaskLabel_ShouldSendServiceRequest) {
                 response->set_status(ControllerRequestStatus::SUCCESS);
                 return grpc::Status::OK;
             }));
-    GRPCModelController controller { std::move(stub_ptr) };
+    GRPCClientEndPoint controller { std::move(stub_ptr) };
     // Act
     auto actual_result = controller.AddTaskLabel(expected_task_id_, expected_label_);
     // Assert
     EXPECT_EQ(ControllerRequestResult::SUCCESS, actual_result);
 }
 
-TEST_F(GRPCModelControllerTest, DeleteTaskWithSubTasks_ShouldSendServiceRequest) {
+TEST_F(GRPCClientEndPointTest, DeleteTaskWithSubTasks_ShouldSendServiceRequest) {
     auto stub_ptr = std::make_unique<MockModelControllerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, DeleteTaskWithSubTasks(_, _, _)).WillOnce(testing::Invoke(
@@ -155,14 +155,14 @@ TEST_F(GRPCModelControllerTest, DeleteTaskWithSubTasks_ShouldSendServiceRequest)
                 response->set_status(ControllerRequestStatus::SUCCESS);
                 return grpc::Status::OK;
             }));
-    GRPCModelController controller { std::move(stub_ptr) };
+    GRPCClientEndPoint controller { std::move(stub_ptr) };
     // Act
     auto actual_result = controller.DeleteTaskWithSubTasks(expected_task_id_);
     // Assert
     EXPECT_EQ(ControllerRequestResult::SUCCESS, actual_result);
 }
 
-TEST_F(GRPCModelControllerTest, CompleteTaskWithSubTasks_ShouldSendServiceRequest) {
+TEST_F(GRPCClientEndPointTest, CompleteTaskWithSubTasks_ShouldSendServiceRequest) {
     auto stub_ptr = std::make_unique<MockModelControllerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, CompleteTaskWithSubTasks(_, _, _)).WillOnce(testing::Invoke(
@@ -171,14 +171,14 @@ TEST_F(GRPCModelControllerTest, CompleteTaskWithSubTasks_ShouldSendServiceReques
                 response->set_status(ControllerRequestStatus::FAIL_NO_SUCH_TASK);
                 return grpc::Status::OK;
             }));
-    GRPCModelController controller { std::move(stub_ptr) };
+    GRPCClientEndPoint controller { std::move(stub_ptr) };
     // Act
     auto actual_result = controller.CompleteTaskWithSubTasks(expected_task_id_);
     // Assert
     EXPECT_EQ(ControllerRequestResult::FAIL_NO_SUCH_TASK, actual_result);
 }
 
-TEST_F(GRPCModelControllerTest, GetAllTasks_ShouldSendServiceRequest) {
+TEST_F(GRPCClientEndPointTest, GetAllTasks_ShouldSendServiceRequest) {
     auto stub_ptr = std::make_unique<MockModelControllerServiceStub>();
     const std::vector<RelationalTask> expected_returned_tasks { expected_relational_task_, expected_relational_task_ };
 
@@ -188,14 +188,14 @@ TEST_F(GRPCModelControllerTest, GetAllTasks_ShouldSendServiceRequest) {
                 response->mutable_tasks()->AddAllocated(new RelationalTask(expected_relational_task_));
                 return grpc::Status::OK;
             }));
-    GRPCModelController controller { std::move(stub_ptr) };
+    GRPCClientEndPoint controller { std::move(stub_ptr) };
     // Act
     auto actual_result = controller.GetAllTasks();
     // Assert
     EXPECT_EQ(expected_returned_tasks, actual_result);
 }
 
-TEST_F(GRPCModelControllerTest, GetTask_ShouldSendServiceRequest) {
+TEST_F(GRPCClientEndPointTest, GetTask_ShouldSendServiceRequest) {
     auto stub_ptr = std::make_unique<MockModelControllerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, GetTask(_, _, _)).WillOnce(testing::Invoke(
@@ -204,7 +204,7 @@ TEST_F(GRPCModelControllerTest, GetTask_ShouldSendServiceRequest) {
                 response->set_allocated_task(new RelationalTask(expected_relational_task_));
                 return grpc::Status::OK;
             }));
-    GRPCModelController controller { std::move(stub_ptr) };
+    GRPCClientEndPoint controller { std::move(stub_ptr) };
     // Act
     auto actual_result = controller.GetTask(expected_task_id_);
     // Assert
@@ -212,7 +212,7 @@ TEST_F(GRPCModelControllerTest, GetTask_ShouldSendServiceRequest) {
     EXPECT_EQ(expected_relational_task_, actual_result.value());
 }
 
-TEST_F(GRPCModelControllerTest, GetTask_ShouldSendServiceRequestAndReturnNullOpt) {
+TEST_F(GRPCClientEndPointTest, GetTask_ShouldSendServiceRequestAndReturnNullOpt) {
     auto stub_ptr = std::make_unique<MockModelControllerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, GetTask(_, _, _)).WillOnce(testing::Invoke(
@@ -220,14 +220,14 @@ TEST_F(GRPCModelControllerTest, GetTask_ShouldSendServiceRequestAndReturnNullOpt
                 EXPECT_EQ(expected_task_id_, request.task_id());
                 return grpc::Status::OK;
             }));
-    GRPCModelController controller { std::move(stub_ptr) };
+    GRPCClientEndPoint controller { std::move(stub_ptr) };
     // Act
     auto actual_result = controller.GetTask(expected_task_id_);
     // Assert
     ASSERT_FALSE(actual_result.has_value());
 }
 
-TEST_F(GRPCModelControllerTest, SaveToFile_ShouldSendServiceRequest) {
+TEST_F(GRPCClientEndPointTest, SaveToFile_ShouldSendServiceRequest) {
     auto stub_ptr = std::make_unique<MockModelControllerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, SaveToFile(_, _, _)).WillOnce(testing::Invoke(
@@ -236,14 +236,14 @@ TEST_F(GRPCModelControllerTest, SaveToFile_ShouldSendServiceRequest) {
                 response->set_status(ControllerRequestStatus::FILE_DAMAGED);
                 return grpc::Status::OK;
             }));
-    GRPCModelController controller { std::move(stub_ptr) };
+    GRPCClientEndPoint controller { std::move(stub_ptr) };
     // Act
     auto actual_result = controller.SaveToFile(expected_file_name_);
     // Assert
     EXPECT_EQ(ControllerRequestResult::FILE_DAMAGED, actual_result);
 }
 
-TEST_F(GRPCModelControllerTest, LoadFromFile_ShouldSendServiceRequest) {
+TEST_F(GRPCClientEndPointTest, LoadFromFile_ShouldSendServiceRequest) {
     auto stub_ptr = std::make_unique<MockModelControllerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, LoadFromFile(_, _, _)).WillOnce(testing::Invoke(
@@ -252,7 +252,7 @@ TEST_F(GRPCModelControllerTest, LoadFromFile_ShouldSendServiceRequest) {
                 response->set_status(ControllerRequestStatus::FILE_WAS_NOT_OPENED);
                 return grpc::Status::OK;
             }));
-    GRPCModelController controller { std::move(stub_ptr) };
+    GRPCClientEndPoint controller { std::move(stub_ptr) };
     // Act
     auto actual_result = controller.LoadFromFile(expected_file_name_);
     // Assert
