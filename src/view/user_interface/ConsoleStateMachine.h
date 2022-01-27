@@ -20,7 +20,7 @@ public:
 public:
     virtual ~ConsoleStateMachine() = default;
 private:
-    std::shared_ptr<State> state_;
+    std::shared_ptr<State> initial_state_;
     std::shared_ptr<StateContext> context_;
 };
 

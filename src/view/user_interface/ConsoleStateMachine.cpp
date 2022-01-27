@@ -6,14 +6,15 @@
 
 ConsoleStateMachine::ConsoleStateMachine(const std::shared_ptr<State>& initial_state,
                                          const std::shared_ptr<StateContext>& context) :
-                                         state_(initial_state),
+                                         initial_state_(initial_state),
                                          context_(context) {
 
 }
 
 std::shared_ptr<StateContext> ConsoleStateMachine::Run() {
-    while (state_){
-        state_ = state_->Execute(*context_);
+    std::shared_ptr<State> current_state = initial_state_;
+    while (current_state){
+        current_state = current_state->Execute(*context_);
     }
     return context_;
 }
