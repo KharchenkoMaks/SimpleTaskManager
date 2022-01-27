@@ -148,6 +148,23 @@ TEST_F(GRPCClientEndPointTest, AddTaskLabel_ShouldSendServiceRequest) {
     EXPECT_EQ(TaskActionResult::SUCCESS, actual_result);
 }
 
+TEST_F(GRPCClientEndPointTest, RemoveTaskLabel_ShouldSendServiceRequest) {
+    auto stub_ptr = std::make_unique<MockTaskManagerServiceStub>();
+
+    EXPECT_CALL(*stub_ptr, RemoveTaskLabel(_, _, _)).WillOnce(testing::Invoke(
+            [this](::grpc::ClientContext* context, const ::RemoveTaskLabelRequest& request, ::RemoveTaskLabelResponse* response) -> ::grpc::Status {
+                EXPECT_EQ(expected_task_id_, request.task_id());
+                EXPECT_EQ(expected_label_, request.label());
+                response->set_result(TaskManagerServiceResult::FAIL_NO_SUCH_LABEL);
+                return grpc::Status::OK;
+            }));
+    GRPCClientEndPoint model { std::move(stub_ptr) };
+    // Act
+    auto actual_result = model.RemoveTaskLabel(expected_task_id_, expected_label_);
+    // Assert
+    EXPECT_EQ(TaskActionResult::FAIL_NO_SUCH_LABEL, actual_result);
+}
+
 TEST_F(GRPCClientEndPointTest, GetTasks_ShouldSendServiceRequest) {
     auto stub_ptr = std::make_unique<MockTaskManagerServiceStub>();
     const std::vector<RelationalTask> expected_returned_tasks { expected_relational_task_, expected_relational_task_ };
@@ -195,4 +212,25 @@ TEST_F(GRPCClientEndPointTest, GetTask_ShouldSendServiceRequestAndReturnNullOpt)
     auto actual_result = model.GetTask(expected_task_id_);
     // Assert
     ASSERT_FALSE(actual_result.has_value());
+}
+
+TEST_F(GRPCClientEndPointTest, LoadModelState_ShouldSendServiceRequest) {
+    auto stub_ptr = std::make_unique<MockTaskManagerServiceStub>();
+    const std::vector<RelationalTask> expected_returned_tasks { expected_relational_task_, expected_relational_task_ };
+    const bool expected_result = true;
+
+    EXPECT_CALL(*stub_ptr, LoadTasks(_, _, _)).WillOnce(testing::Invoke(
+            [this, &expected_returned_tasks, &expected_result](::grpc::ClientContext* context, const ::LoadTasksRequest& request, ::LoadTasksResponse* response) -> ::grpc::Status {
+                EXPECT_EQ(expected_returned_tasks.size(), request.tasks_size());
+                for (int i = 0; i < expected_returned_tasks.size(); ++i)
+                    EXPECT_EQ(expected_returned_tasks[i], request.tasks(i));
+
+                response->set_result(expected_result);
+                return grpc::Status::OK;
+            }));
+    GRPCClientEndPoint model { std::move(stub_ptr) };
+    // Act
+    auto actual_result = model.LoadModelState(expected_returned_tasks);
+    // Assert
+    EXPECT_EQ(expected_result, actual_result);
 }

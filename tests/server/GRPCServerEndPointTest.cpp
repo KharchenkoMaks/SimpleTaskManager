@@ -146,6 +146,22 @@ TEST_F(GRPCServerEndPointTests, AddTaskLabel_ShouldAskModelToAddTaskLabelAndRetu
     EXPECT_EQ(TaskManagerServiceResult::SUCCESS, response.result());
 }
 
+TEST_F(GRPCServerEndPointTests, RemoveTaskLabel_ShouldAskModelToRemoveTaskLabelAndReturnResult) {
+    // Arrange
+    const auto expected_model_result = TaskActionResult::FAIL_NO_SUCH_LABEL;
+    EXPECT_CALL(*model_, RemoveTaskLabel(expected_task_id_, expected_label_)).WillOnce(Return(expected_model_result));
+    GRPCServerEndPoint server_end_point { std::move(model_) };
+    RemoveTaskLabelResponse response;
+    RemoveTaskLabelRequest request;
+    request.set_allocated_task_id(new TaskId(expected_task_id_));
+    request.set_label(expected_label_);
+    // Act
+    const auto actual_result = server_end_point.RemoveTaskLabel(nullptr, &request, &response);
+    // Assert
+    EXPECT_TRUE(actual_result.ok());
+    EXPECT_EQ(TaskManagerServiceResult::FAIL_NO_SUCH_LABEL, response.result());
+}
+
 TEST_F(GRPCServerEndPointTests, GetTasks_ShouldGetTasksFromModelAndReturnThem) {
     const std::vector<RelationalTask> expected_returned_tasks { expected_relational_task_, expected_relational_task_ };
     EXPECT_CALL(*model_, GetTasks()).WillOnce(Return(expected_returned_tasks));
