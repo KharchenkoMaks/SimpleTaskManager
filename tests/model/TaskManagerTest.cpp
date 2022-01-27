@@ -668,8 +668,8 @@ TEST_F(TaskManagerTest, LoadState_TryLoadInvalidTasks_ShouldReturnFalse) {
 TEST_F(TaskManagerTest, GetTasksByLabel_ShouldReturnTasksWithCertainLabel) {
     // Arrange
     const std::string expected_search_label = "label";
-    expected_first_task.set_label(expected_search_label);
-    expected_third_task.set_label(expected_search_label);
+    expected_first_task.add_label(expected_search_label);
+    expected_third_task.add_label(expected_search_label);
     std::unique_ptr<MockIdGenerator> gen = std::make_unique<MockIdGenerator>();
     EXPECT_CALL(*gen, CreateNewTaskId())
         .Times(3)

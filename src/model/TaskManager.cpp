@@ -224,7 +224,8 @@ RelationalTask TaskManager::CreateRelationalTask(const TaskId& id, const TaskNod
 std::vector<RelationalTask> TaskManager::GetTasksByLabel(const std::string& task_label) {
     std::vector<RelationalTask> tasks;
     for (const auto& rel_task : tasks_) {
-        if (rel_task.second.task().label() == task_label) {
+        const auto task_labels = rel_task.second.task().label();
+        if (std::find(task_labels.begin(), task_labels.end(), task_label) != task_labels.end()) {
             tasks.push_back(CreateRelationalTask(rel_task.first, rel_task.second));
         }
     }
