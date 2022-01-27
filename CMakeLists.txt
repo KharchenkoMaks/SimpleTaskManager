@@ -48,6 +48,8 @@ file(GLOB_RECURSE CLIENT_SRCS CONFIGURE_DEPENDS
         "src/client/*.cpp"
         "src/controller/*.h"
         "src/controller/*.cpp"
+        "src/persistence/*.h"
+        "src/persistence/*.cpp"
         "src/model/Model.h")
 
 file(GLOB_RECURSE TaskManager_TEST CONFIGURE_DEPENDS

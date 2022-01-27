@@ -27,7 +27,7 @@ int main() {
     std::unique_ptr<UserInterface> user_interface = std::make_unique<UserInterface>(
             states_factory);
     std::unique_ptr<ModelController> model_controller = std::make_unique<DefaultModelController>(
-            std::make_unique<GRPCClientEndPoint>(TaskManagerService::NewStub(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials())),
+            std::make_unique<GRPCClientEndPoint>(TaskManagerService::NewStub(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials()))),
             std::make_unique<TaskValidator>(),
             std::make_unique<persistence::PersistenceFactory>());
     std::unique_ptr<ViewController> view_controller = std::make_unique<ViewController>(
