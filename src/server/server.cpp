@@ -4,24 +4,17 @@
 
 #include "server/GRPCServerEndPoint.h"
 
-#include "ModelControllerService.grpc.pb.h"
-
-#include "controller/DefaultModelController.h"
 #include "model/TaskManager.h"
 #include "model/IdGenerator.h"
-#include "persistence/PersistenceFactory.h"
 
-#include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/health_check_service_interface.h>
 
 int main() {
-    std::unique_ptr<ModelController> model_controller = std::make_unique<DefaultModelController>(
-            std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
-            std::make_unique<TaskValidator>(),
-            std::make_unique<persistence::PersistenceFactory>());
+    std::unique_ptr<Model> model =
+            std::make_unique<TaskManager>(std::make_unique<IdGenerator>());
 
-    GRPCServerEndPoint service { std::move(model_controller) };
+    GRPCServerEndPoint service { std::move(model) };
 
     std::string server_address("0.0.0.0:8586");
 
