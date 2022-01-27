@@ -45,6 +45,9 @@ void UserInterface::PrintRequestResult(ControllerRequestResult action_result) {
         case ControllerRequestResult::FILE_DAMAGED:
             states_factory_->GetConsolePrinter()->WriteError("File is damaged.");
             break;
+        case ControllerRequestResult::FAIL_NO_SUCH_LABEL:
+            states_factory_->GetConsolePrinter()->WriteError("Fail to remove label, current task doesn't include such label.");
+            break;
     }
 }
 
