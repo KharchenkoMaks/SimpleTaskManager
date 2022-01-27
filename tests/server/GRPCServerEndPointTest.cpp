@@ -163,6 +163,7 @@ TEST_F(GRPCServerEndPointTests, RemoveTaskLabel_ShouldAskModelToRemoveTaskLabelA
 }
 
 TEST_F(GRPCServerEndPointTests, GetTasks_ShouldGetTasksFromModelAndReturnThem) {
+    // Arrange
     const std::vector<RelationalTask> expected_returned_tasks { expected_relational_task_, expected_relational_task_ };
     EXPECT_CALL(*model_, GetTasks()).WillOnce(Return(expected_returned_tasks));
     GRPCServerEndPoint server_end_point { std::move(model_) };
@@ -179,6 +180,7 @@ TEST_F(GRPCServerEndPointTests, GetTasks_ShouldGetTasksFromModelAndReturnThem) {
 }
 
 TEST_F(GRPCServerEndPointTests, GetTask_ShouldGetTaskFromModelAndReturnIt) {
+    // Arrange
     EXPECT_CALL(*model_, GetTask(expected_task_id_)).WillOnce(Return(expected_relational_task_));
     GRPCServerEndPoint server_end_point { std::move(model_) };
     GetTaskResponse response;
@@ -190,4 +192,22 @@ TEST_F(GRPCServerEndPointTests, GetTask_ShouldGetTaskFromModelAndReturnIt) {
     EXPECT_TRUE(actual_result.ok());
     ASSERT_TRUE(response.has_task());
     EXPECT_EQ(expected_relational_task_, response.task());
+}
+
+TEST_F(GRPCServerEndPointTests, LoadTasks_ShouldGiveModelTasksToLoad) {
+    // Arrange
+    const std::vector<RelationalTask> expected_returned_tasks { expected_relational_task_, expected_relational_task_ };
+    const bool expected_model_result = true;
+    EXPECT_CALL(*model_, LoadModelState(expected_returned_tasks)).WillOnce(Return(expected_model_result));
+    GRPCServerEndPoint server_end_point { std::move(model_) };
+    LoadTasksResponse response;
+    LoadTasksRequest request;
+    for (const auto& task : expected_returned_tasks) {
+        request.mutable_tasks()->AddAllocated(new RelationalTask(task));
+    }
+    // Act
+    const auto actual_result = server_end_point.LoadTasks(nullptr, &request, &response);
+    // Assert
+    EXPECT_TRUE(actual_result.ok());
+    EXPECT_EQ(expected_model_result, response.result());
 }

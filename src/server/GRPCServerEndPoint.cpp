@@ -84,3 +84,14 @@ grpc::Status GRPCServerEndPoint::GetTask(::grpc::ServerContext *context,
 
     return grpc::Status::OK;
 }
+
+grpc::Status GRPCServerEndPoint::LoadTasks(::grpc::ServerContext *context, const ::LoadTasksRequest *request, ::LoadTasksResponse *response) {
+    std::vector<RelationalTask> tasks;
+    for (const auto& task : request->tasks()) {
+        tasks.push_back(task);
+    }
+    auto model_result = model_->LoadModelState(tasks);
+    response->set_result(model_result);
+
+    return grpc::Status::OK;
+}

@@ -81,6 +81,7 @@ TEST_F(GRPCClientEndPointTest, AddSubTask_ShouldSendServiceRequest) {
 }
 
 TEST_F(GRPCClientEndPointTest, EditTask_ShouldSendServiceRequest) {
+    // Arrange
     auto stub_ptr = std::make_unique<MockTaskManagerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, EditTask(_, _, _)).WillOnce(testing::Invoke(
@@ -98,6 +99,7 @@ TEST_F(GRPCClientEndPointTest, EditTask_ShouldSendServiceRequest) {
 }
 
 TEST_F(GRPCClientEndPointTest, DeleteTask_ShouldSendServiceRequest) {
+    // Arrange
     auto stub_ptr = std::make_unique<MockTaskManagerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, DeleteTask(_, _, _)).WillOnce(testing::Invoke(
@@ -115,6 +117,7 @@ TEST_F(GRPCClientEndPointTest, DeleteTask_ShouldSendServiceRequest) {
 }
 
 TEST_F(GRPCClientEndPointTest, CompleteTask_ShouldSendServiceRequest) {
+    // Arrange
     auto stub_ptr = std::make_unique<MockTaskManagerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, CompleteTask(_, _, _)).WillOnce(testing::Invoke(
@@ -132,6 +135,7 @@ TEST_F(GRPCClientEndPointTest, CompleteTask_ShouldSendServiceRequest) {
 }
 
 TEST_F(GRPCClientEndPointTest, AddTaskLabel_ShouldSendServiceRequest) {
+    // Arrange
     auto stub_ptr = std::make_unique<MockTaskManagerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, AddTaskLabel(_, _, _)).WillOnce(testing::Invoke(
@@ -149,6 +153,7 @@ TEST_F(GRPCClientEndPointTest, AddTaskLabel_ShouldSendServiceRequest) {
 }
 
 TEST_F(GRPCClientEndPointTest, RemoveTaskLabel_ShouldSendServiceRequest) {
+    // Arrange
     auto stub_ptr = std::make_unique<MockTaskManagerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, RemoveTaskLabel(_, _, _)).WillOnce(testing::Invoke(
@@ -166,6 +171,7 @@ TEST_F(GRPCClientEndPointTest, RemoveTaskLabel_ShouldSendServiceRequest) {
 }
 
 TEST_F(GRPCClientEndPointTest, GetTasks_ShouldSendServiceRequest) {
+    // Arrange
     auto stub_ptr = std::make_unique<MockTaskManagerServiceStub>();
     const std::vector<RelationalTask> expected_returned_tasks { expected_relational_task_, expected_relational_task_ };
 
@@ -183,6 +189,7 @@ TEST_F(GRPCClientEndPointTest, GetTasks_ShouldSendServiceRequest) {
 }
 
 TEST_F(GRPCClientEndPointTest, GetTask_ShouldSendServiceRequest) {
+    // Arrange
     auto stub_ptr = std::make_unique<MockTaskManagerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, GetTask(_, _, _)).WillOnce(testing::Invoke(
@@ -200,6 +207,7 @@ TEST_F(GRPCClientEndPointTest, GetTask_ShouldSendServiceRequest) {
 }
 
 TEST_F(GRPCClientEndPointTest, GetTask_ShouldSendServiceRequestAndReturnNullOpt) {
+    // Arrange
     auto stub_ptr = std::make_unique<MockTaskManagerServiceStub>();
 
     EXPECT_CALL(*stub_ptr, GetTask(_, _, _)).WillOnce(testing::Invoke(
@@ -215,6 +223,7 @@ TEST_F(GRPCClientEndPointTest, GetTask_ShouldSendServiceRequestAndReturnNullOpt)
 }
 
 TEST_F(GRPCClientEndPointTest, LoadModelState_ShouldSendServiceRequest) {
+    // Arrange
     auto stub_ptr = std::make_unique<MockTaskManagerServiceStub>();
     const std::vector<RelationalTask> expected_returned_tasks { expected_relational_task_, expected_relational_task_ };
     const bool expected_result = true;

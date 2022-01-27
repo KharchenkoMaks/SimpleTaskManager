@@ -31,6 +31,7 @@ public:
     grpc::Status RemoveTaskLabel(::grpc::ServerContext *context, const ::RemoveTaskLabelRequest *request, ::RemoveTaskLabelResponse *response) override;
     grpc::Status GetTasks(::grpc::ServerContext *context, const ::GetTasksRequest *request, ::GetTasksResponse *response) override;
     grpc::Status GetTask(::grpc::ServerContext *context, const ::GetTaskRequest *request, ::GetTaskResponse *response) override;
+    grpc::Status LoadTasks(::grpc::ServerContext *context, const ::LoadTasksRequest *request, ::LoadTasksResponse *response) override;
 
 private:
     std::unique_ptr<Model> model_;
