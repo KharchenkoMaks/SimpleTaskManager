@@ -13,6 +13,7 @@
 #include "commands/ShowTasksCommand.h"
 #include "commands/SaveCommand.h"
 #include "commands/LoadCommand.h"
+#include "commands/RemoveLabelCommand.h"
 
 std::unique_ptr<Command> CommandFactory::CreateAddTaskCommand(const StateContext& context) {
     Task task_to_add = context.GetTaskBuilder().BuildTask();
@@ -58,6 +59,15 @@ std::unique_ptr<Command> CommandFactory::CreateSetLabelCommand(const StateContex
     std::string task_label = context.GetTaskLabel();
     if (task_id.has_value())
         return std::make_unique<SetLabelCommand>(task_id.value(), task_label);
+
+    return nullptr;
+}
+
+std::unique_ptr<Command> CommandFactory::CreateRemoveLabelCommand(const StateContext& context) {
+    std::optional<TaskId> task_id = context.GetTaskId();
+    std::string task_label = context.GetTaskLabel();
+    if (task_id.has_value())
+        return std::make_unique<RemoveLabelCommand>(task_id.value(), task_label);
 
     return nullptr;
 }

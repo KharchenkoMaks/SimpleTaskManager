@@ -20,6 +20,7 @@ public:
     virtual TaskActionResult DeleteTask(const TaskId& id, bool force_delete_subtasks) = 0;
     virtual TaskActionResult CompleteTask(const TaskId& id, bool force_complete_subtasks) = 0;
     virtual TaskActionResult AddTaskLabel(const TaskId& id, const std::string& label) = 0;
+    virtual TaskActionResult RemoveTaskLabel(const TaskId& id, const std::string& label) = 0;
 
     virtual std::vector<RelationalTask> GetTasks() = 0;
     virtual std::vector<RelationalTask> GetTasksByLabel(const std::string& task_label) = 0;

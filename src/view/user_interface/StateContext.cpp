@@ -30,12 +30,12 @@ std::optional<TaskId> StateContext::GetTaskId() const {
     return task_id_;
 }
 
-void StateContext::AddTaskLabel(const std::string& task_label) {
-    task_.SetLabel(task_label);
+void StateContext::SetTaskLabel(const std::string& task_label) {
+    task_label_ = task_label;
 }
 
 std::string StateContext::GetTaskLabel() const {
-    return task_.BuildTask().label();
+    return task_label_;
 }
 
 void StateContext::SetFileName(const std::string& file_name) {

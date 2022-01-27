@@ -23,7 +23,7 @@ public:
         expected_built_task.set_priority(expected_priority);
         expected_built_task.set_allocated_due_date(new google::protobuf::Timestamp(expected_due_time));
         expected_built_task.set_completed(expected_completion);
-        expected_built_task.set_label(expected_label);
+        expected_built_task.add_label(expected_label);
     }
 };
 
@@ -36,7 +36,7 @@ TEST_F(TaskBuilderTest, BuildTask_ShouldBuildRightTask) {
             .SetPriority(expected_priority)
             .SetDueDate(expected_due_time)
             .SetCompletion(expected_completion)
-            .SetLabel(expected_label);
+            .AddLabel(expected_label);
     const Task actual_built_task = task_builder.BuildTask();
     // Assert
     EXPECT_EQ(expected_built_task, actual_built_task);

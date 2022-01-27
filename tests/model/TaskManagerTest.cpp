@@ -354,18 +354,40 @@ TEST_F(TaskManagerTest, AddTaskLabel_ShouldAddLabelsToDifferentTasksProperly) {
     TaskManager task_manager(std::move(gen));
     TaskId main_task_id = task_manager.AddTask(expected_first_task).second;
     TaskId subtask_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
-    std::string expected_main_task_label = "main task label";
+    std::string expected_main_task_label1 = "main task label";
+    std::string expected_main_task_label2 = "label2";
     std::string expected_subtask_label = "subtask label";
     // Act
-    TaskActionResult actual_main_task_result = task_manager.AddTaskLabel(main_task_id, expected_main_task_label);
+    TaskActionResult actual_main_task_result1 = task_manager.AddTaskLabel(main_task_id, expected_main_task_label1);
+    TaskActionResult actual_main_task_result2 = task_manager.AddTaskLabel(main_task_id, expected_main_task_label2);
     TaskActionResult actual_subtask_result = task_manager.AddTaskLabel(subtask_id, expected_subtask_label);
     Task actual_main_task = task_manager.GetTask(main_task_id).value().task();
     Task actual_subtask = task_manager.GetTask(subtask_id).value().task();
     // ASSERT
-    ASSERT_EQ(TaskActionResult::SUCCESS, actual_main_task_result);
+    ASSERT_EQ(TaskActionResult::SUCCESS, actual_main_task_result1);
+    ASSERT_EQ(TaskActionResult::SUCCESS, actual_main_task_result2);
     ASSERT_EQ(TaskActionResult::SUCCESS, actual_subtask_result);
-    EXPECT_EQ(expected_main_task_label, actual_main_task.label());
-    EXPECT_EQ(expected_subtask_label, actual_subtask.label());
+    ASSERT_EQ(2, actual_main_task.label_size());
+    ASSERT_EQ(1, actual_subtask.label_size());
+    EXPECT_EQ(expected_main_task_label1, actual_main_task.label(0));
+    EXPECT_EQ(expected_main_task_label2, actual_main_task.label(1));
+    EXPECT_EQ(expected_subtask_label, actual_subtask.label(0));
+}
+
+TEST_F(TaskManagerTest, AddTaskLabel_TryAddEmptyLabel_ShouldNotAddAnyLabel) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId()).WillOnce(Return(expected_first_task_id));
+    TaskManager task_manager(std::move(gen));
+    task_manager.AddTask(expected_first_task);
+    const std::string expected_label = "";
+    const TaskActionResult expected_result = TaskActionResult::SUCCESS;
+    // Act
+    TaskActionResult actual_result = task_manager.AddTaskLabel(TaskId::default_instance(), expected_label);
+    Task actual_task = task_manager.GetTask(expected_first_task_id).value().task();
+    // Assert
+    ASSERT_EQ(expected_result, actual_result);
+    EXPECT_EQ(expected_first_task, actual_task);
 }
 
 TEST_F(TaskManagerTest, AddTaskLabel_TryAddLabelForNonExistentTask_ShouldReturnError) {
@@ -378,6 +400,81 @@ TEST_F(TaskManagerTest, AddTaskLabel_TryAddLabelForNonExistentTask_ShouldReturnE
     TaskActionResult actual_result = task_manager.AddTaskLabel(TaskId::default_instance(), "label");
     // Assert
     EXPECT_EQ(expected_result, actual_result);
+}
+
+TEST_F(TaskManagerTest, AddTaskLabel_TryAddSameLabel_ShouldNotAddItTwice) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+            .WillOnce(Return(expected_first_task_id));
+
+    TaskManager task_manager(std::move(gen));
+    TaskId main_task_id = task_manager.AddTask(expected_first_task).second;
+    std::string expected_main_task_label = "main task label";
+    // Act
+    TaskActionResult actual_main_task_first_result = task_manager.AddTaskLabel(main_task_id, expected_main_task_label);
+    // adding same label for second time, should return fail
+    TaskActionResult actual_main_task_second_result = task_manager.AddTaskLabel(main_task_id, expected_main_task_label);
+    Task actual_main_task = task_manager.GetTask(main_task_id).value().task();
+    // ASSERT
+    ASSERT_EQ(TaskActionResult::SUCCESS, actual_main_task_first_result);
+    ASSERT_EQ(TaskActionResult::SUCCESS, actual_main_task_second_result);
+    ASSERT_EQ(1, actual_main_task.label_size());
+    EXPECT_EQ(expected_main_task_label, actual_main_task.label(0));
+}
+
+TEST_F(TaskManagerTest, RemoveTaskLabel_ShouldRemoveLabelFromTask) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+            .WillOnce(Return(expected_first_task_id));
+
+    TaskManager task_manager(std::move(gen));
+
+    const std::string expected_label_to_be_left = "first label";
+    const std::string expected_label_to_be_removed = "second label";
+    const TaskActionResult expected_result = TaskActionResult::SUCCESS;
+
+    expected_first_task.add_label(expected_label_to_be_left);
+    expected_first_task.add_label(expected_label_to_be_removed);
+    task_manager.AddTask(expected_first_task);
+    // Act
+    const TaskActionResult actual_result = task_manager.RemoveTaskLabel(expected_first_task_id, expected_label_to_be_removed);
+    Task actual_task = task_manager.GetTask(expected_first_task_id).value().task();
+    // Assert
+    ASSERT_EQ(expected_result, actual_result);
+    ASSERT_EQ(1, actual_task.label_size());
+    EXPECT_EQ(expected_label_to_be_left, actual_task.label(0));
+}
+
+TEST_F(TaskManagerTest, RemoveTaskLabel_TryToRemoveLabelFromNonExistentTask_ShouldReturnError) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId()).Times(0);
+    TaskManager task_manager(std::move(gen));
+    const TaskActionResult expected_result = TaskActionResult::FAIL_NO_SUCH_TASK;
+    // Act
+    TaskActionResult actual_result = task_manager.RemoveTaskLabel(TaskId::default_instance(), "label");
+    // Assert
+    EXPECT_EQ(expected_result, actual_result);
+}
+
+TEST_F(TaskManagerTest, RemoveTaskLabel_TryToRemoveNotAssignedLabel_ShouldReturnError) {
+    // Arrange
+    std::unique_ptr<MockIdGenerator> gen(new MockIdGenerator);
+    EXPECT_CALL(*gen, CreateNewTaskId())
+            .WillOnce(Return(expected_first_task_id));
+
+    TaskManager task_manager(std::move(gen));
+    task_manager.AddTask(expected_first_task);
+
+    const TaskActionResult expected_result = TaskActionResult::FAIL_NO_SUCH_LABEL;
+    // Act
+    const TaskActionResult actual_result = task_manager.RemoveTaskLabel(expected_first_task_id, "label");
+    const Task actual_task = task_manager.GetTask(expected_first_task_id).value().task();
+    // Assert
+    ASSERT_EQ(expected_result, actual_result);
+    EXPECT_EQ(0, actual_task.label_size());
 }
 
 TEST_F(TaskManagerTest, AddTask_TryAddInvalidTask_ShouldReturnError) {

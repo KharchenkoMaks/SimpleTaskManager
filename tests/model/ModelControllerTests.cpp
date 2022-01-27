@@ -238,6 +238,21 @@ TEST_F(ModelControllerTests, AddTaskLabel_ShouldAskModelToAddTaskLabelAndReturnR
     EXPECT_EQ(expected_result, actual_result);
 }
 
+TEST_F(ModelControllerTests, RemoveTaskLabel_ShouldAskModelToRemoveTaskLabelAndReturnResult) {
+    // Arrange
+    const ControllerRequestResult expected_result = ControllerRequestResult::FAIL_NO_SUCH_LABEL;
+    const TaskActionResult expected_model_result = TaskActionResult::FAIL_NO_SUCH_LABEL;
+    const std::string expected_label = "task label";
+
+    EXPECT_CALL(*model_, RemoveTaskLabel(task_id_, expected_label)).WillOnce(Return(expected_model_result));
+
+    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    // Act
+    const auto actual_result = controller.RemoveTaskLabel(task_id_, expected_label);
+    // Assert
+    EXPECT_EQ(expected_result, actual_result);
+}
+
 TEST_F(ModelControllerTests, SaveToFile_ShouldGetTasksFromModelAndGiveThemToFilePersistence) {
     // Arrange
     const std::vector<RelationalTask> expected_tasks_to_save {task_transfer_ };
@@ -334,14 +349,16 @@ TEST_F(ModelControllerTests, FormControllerRequestResult_ShouldConvertTaskAction
             TaskActionResult::FAIL_NO_SUCH_TASK,
             TaskActionResult::FAIL_INVALID_TASK,
             TaskActionResult::FAIL_UNCOMPLETED_SUBTASKS,
-            TaskActionResult::FAIL_NOT_DELETED_SUBTASKS
+            TaskActionResult::FAIL_NOT_DELETED_SUBTASKS,
+            TaskActionResult::FAIL_NO_SUCH_LABEL
     };
     const std::vector<ControllerRequestResult> expected_controller_results {
         ControllerRequestResult::SUCCESS,
         ControllerRequestResult::FAIL_NO_SUCH_TASK,
         ControllerRequestResult::FAIL_INVALID_TASK,
         ControllerRequestResult::FAIL_UNCOMPLETED_SUBTASKS,
-        ControllerRequestResult::FAIL_NOT_DELETED_SUBTASKS
+        ControllerRequestResult::FAIL_NOT_DELETED_SUBTASKS,
+        ControllerRequestResult::FAIL_NO_SUCH_LABEL
     };
     // Act & Assert
     for (int i = 0; i < expected_task_action_results.size(); ++i) {

@@ -30,6 +30,7 @@ class CompleteTaskState;
 class AddSubTaskState;
 class DeleteTaskState;
 class SetLabelState;
+class RemoveLabelState;
 class EndState;
 class SaveState;
 class LoadState;
@@ -79,6 +80,7 @@ public:
     virtual std::shared_ptr<State> GetNextState(const AddSubTaskState& state, MoveType move_type);
     virtual std::shared_ptr<State> GetNextState(const DeleteTaskState& state, MoveType move_type);
     virtual std::shared_ptr<State> GetNextState(const SetLabelState& state, MoveType move_type);
+    virtual std::shared_ptr<State> GetNextState(const RemoveLabelState& state, MoveType move_type);
     virtual std::shared_ptr<State> GetNextState(const SaveState& state, MoveType move_type);
     virtual std::shared_ptr<State> GetNextState(const LoadState& state, MoveType move_type);
     virtual std::shared_ptr<State> GetNextState(const ShowState& state, MoveType move_type);
@@ -102,6 +104,7 @@ private:
         kComplete,
         kDelete,
         kSetLabel,
+        kRemoveLabel,
         kEnd,
         kSave,
         kLoad,
