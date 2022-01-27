@@ -18,10 +18,12 @@ message EditTaskRequest {
 
 message DeleteTaskRequest {
   TaskId task_id = 1;
+  bool force_delete_subtasks = 2;
 }
 
 message CompleteTaskRequest {
   TaskId task_id = 1;
+  bool force_complete_subtasks = 2;
 }
 
 message AddTaskLabelRequest {
@@ -29,15 +31,12 @@ message AddTaskLabelRequest {
   string label = 2;
 }
 
-message DeleteTaskWithSubTasksRequest {
+message RemoveTaskLabelRequest {
   TaskId task_id = 1;
+  string label = 2;
 }
 
-message CompleteTaskWithSubTasksRequest {
-  TaskId task_id = 1;
-}
-
-message GetAllTasksRequest {}
+message GetTasksRequest {}
 
 message GetTaskRequest {
   TaskId task_id = 1;

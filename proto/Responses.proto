@@ -37,23 +37,7 @@ message AddTaskLabelResponse {
   ControllerRequestStatus status = 1;
 }
 
-message DeleteTaskWithSubTasksResponse {
-  ControllerRequestStatus status = 1;
-}
-
-message CompleteTaskWithSubTasksResponse {
-  ControllerRequestStatus status = 1;
-}
-
-message SaveToFileResponse {
-  ControllerRequestStatus status = 1;
-}
-
-message LoadFromFileResponse {
-  ControllerRequestStatus status = 1;
-}
-
-message GetAllTasksResponse {
+message GetTasksResponse {
   repeated RelationalTask tasks = 1;
 }
 
