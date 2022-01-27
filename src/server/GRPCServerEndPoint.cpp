@@ -57,6 +57,14 @@ grpc::Status GRPCServerEndPoint::AddTaskLabel(::grpc::ServerContext *context,
     return grpc::Status::OK;
 }
 
+grpc::Status GRPCServerEndPoint::RemoveTaskLabel(::grpc::ServerContext *context,
+                                                 const ::RemoveTaskLabelRequest *request,
+                                                 ::RemoveTaskLabelResponse *response) {
+    auto model_result = model_->RemoveTaskLabel(request->task_id(), request->label());
+    response->set_result(CreateTaskManagerServiceResult(model_result));
+    return grpc::Status::OK;
+}
+
 grpc::Status GRPCServerEndPoint::GetTasks(::grpc::ServerContext *context,
                                              const ::GetTasksRequest *request,
                                              ::GetTasksResponse *response) {

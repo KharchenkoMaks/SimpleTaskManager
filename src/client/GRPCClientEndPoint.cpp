@@ -88,7 +88,16 @@ TaskActionResult GRPCClientEndPoint::AddTaskLabel(const TaskId& task_id, const s
 }
 
 TaskActionResult GRPCClientEndPoint::RemoveTaskLabel(const TaskId &task_id, const std::string &label) {
-    return TaskActionResult::FAIL_NOT_DELETED_SUBTASKS;
+    RemoveTaskLabelRequest request;
+    request.set_allocated_task_id(new TaskId(task_id));
+    request.set_label(label);
+
+    RemoveTaskLabelResponse response;
+    grpc::ClientContext context;
+
+    grpc::Status status = stub_->RemoveTaskLabel(&context, request, &response);
+
+    return CreateTaskActionResult(response.result());
 }
 
 std::vector<RelationalTask> GRPCClientEndPoint::GetTasks() {

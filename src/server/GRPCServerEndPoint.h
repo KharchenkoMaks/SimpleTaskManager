@@ -28,6 +28,7 @@ public:
     grpc::Status DeleteTask(::grpc::ServerContext *context, const ::DeleteTaskRequest *request, ::DeleteTaskResponse *response) override;
     grpc::Status CompleteTask(::grpc::ServerContext *context, const ::CompleteTaskRequest *request, ::CompleteTaskResponse *response) override;
     grpc::Status AddTaskLabel(::grpc::ServerContext *context, const ::AddTaskLabelRequest *request, ::AddTaskLabelResponse *response) override;
+    grpc::Status RemoveTaskLabel(::grpc::ServerContext *context, const ::RemoveTaskLabelRequest *request, ::RemoveTaskLabelResponse *response) override;
     grpc::Status GetTasks(::grpc::ServerContext *context, const ::GetTasksRequest *request, ::GetTasksResponse *response) override;
     grpc::Status GetTask(::grpc::ServerContext *context, const ::GetTaskRequest *request, ::GetTaskResponse *response) override;
 
