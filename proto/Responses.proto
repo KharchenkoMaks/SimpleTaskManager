@@ -2,39 +2,42 @@ syntax = "proto3";
 
 import "Task.proto";
 
-enum ControllerRequestStatus {
+enum TaskManagerServiceResult {
     SUCCESS = 0;
     FAIL_NO_SUCH_TASK = 1;
-    FAIL_UNCOMPLETED_SUBTASKS = 2;
-    FAIL_NOT_DELETED_SUBTASKS = 3;
-    FAIL_INVALID_TASK = 4;
-    FILE_WAS_NOT_OPENED = 5;
-    FILE_DAMAGED = 6;
+    FAIL_INVALID_TASK = 2;
+    FAIL_UNCOMPLETED_SUBTASKS = 3;
+    FAIL_NOT_DELETED_SUBTASKS = 4;
+    FAIL_NO_SUCH_LABEL = 5;
 }
 
 message AddTaskResponse {
-  ControllerRequestStatus status = 1;
+  TaskManagerServiceResult result = 1;
   TaskId added_task_id = 2;
 }
 
 message AddSubTaskResponse {
-  ControllerRequestStatus status = 1;
+  TaskManagerServiceResult result = 1;
   TaskId added_task_id = 2;
 }
 
 message EditTaskResponse {
-  ControllerRequestStatus status = 1;
+  TaskManagerServiceResult result = 1;
 }
 
 message DeleteTaskResponse {
-  ControllerRequestStatus status = 1;
+  TaskManagerServiceResult result = 1;
 }
 
 message CompleteTaskResponse {
-  ControllerRequestStatus status = 1;
+  TaskManagerServiceResult result = 1;
 }
 message AddTaskLabelResponse {
-  ControllerRequestStatus status = 1;
+  TaskManagerServiceResult result = 1;
+}
+
+message RemoveTaskLabelResponse {
+  TaskManagerServiceResult result = 1;
 }
 
 message GetTasksResponse {

@@ -9,7 +9,7 @@
 
 #include "ModelControllerService.grpc.pb.h"
 
-#include "utilities/ModelControllerResultConvertors.h"
+#include "utilities/TaskManagerResultFactoryMethods.h"
 
 #include <grpcpp/grpcpp.h>
 
