@@ -33,6 +33,9 @@ public:
     std::vector<RelationalTask> GetTasks() override;
     std::optional<RelationalTask> GetTask(const TaskId& task_id) override;
 
+public:
+    bool LoadModelState(const std::vector<RelationalTask>& tasks) override;
+
 private:
     std::unique_ptr<TaskManagerService::StubInterface> stub_;
 };

@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 25.01.2022.
 //
 
-#include "ModelControllerService.grpc.pb.h"
+#include "TaskManagerService.grpc.pb.h"
 
 #include "view/commands/factory/CommandFactory.h"
 #include "view/states/factory/StatesFactory.h"
@@ -11,6 +11,7 @@
 #include "view/user_interface/UserInterface.h"
 #include "view/ViewController.h"
 #include "client/GRPCClientEndPoint.h"
+#include "controller/DefaultModelController.h"
 
 #include <grpcpp/grpcpp.h>
 
@@ -25,8 +26,10 @@ int main() {
                                                                                     std::make_unique<ConsoleReader>());
     std::unique_ptr<UserInterface> user_interface = std::make_unique<UserInterface>(
             states_factory);
-    std::unique_ptr<ModelController> model_controller =
-            std::make_unique<GRPCClientEndPoint>(ModelControllerService::NewStub(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials())));
+    std::unique_ptr<ModelController> model_controller = std::make_unique<DefaultModelController>(
+            std::make_unique<GRPCClientEndPoint>(TaskManagerService::NewStub(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials())),
+            std::make_unique<TaskValidator>(),
+            std::make_unique<persistence::PersistenceFactory>());
     std::unique_ptr<ViewController> view_controller = std::make_unique<ViewController>(
             std::move(model_controller),
             std::move(user_interface));

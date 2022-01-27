@@ -13,4 +13,5 @@ service TaskManagerService {
   rpc RemoveTaskLabel(RemoveTaskLabelRequest) returns (RemoveTaskLabelResponse) {}
   rpc GetTasks(GetTasksRequest) returns (GetTasksResponse) {}
   rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
+  rpc LoadTasks(LoadTasksRequest) returns (LoadTasksResponse) {}
 }

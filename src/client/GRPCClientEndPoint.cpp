@@ -120,3 +120,17 @@ std::optional<RelationalTask> GRPCClientEndPoint::GetTask(const TaskId& task_id)
     else
         return std::nullopt;
 }
+
+bool GRPCClientEndPoint::LoadModelState(const std::vector<RelationalTask>& tasks) {
+    LoadTasksRequest request;
+    for (const auto& task : tasks) {
+        request.mutable_tasks()->AddAllocated(new RelationalTask(task));
+    }
+
+    LoadTasksResponse response;
+    grpc::ClientContext context;
+
+    grpc::Status status = stub_->LoadTasks(&context, request, &response);
+
+    return response.result();
+}

@@ -42,10 +42,6 @@ message GetTaskRequest {
   TaskId task_id = 1;
 }
 
-message SaveToFileRequest {
-  string file_name = 1;
-}
-
-message LoadFromFileRequest {
-  string file_name = 1;
+message LoadTasksRequest {
+  repeated RelationalTask tasks = 1;
 }

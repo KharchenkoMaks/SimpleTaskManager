@@ -275,8 +275,6 @@ TEST_F(TaskManagerTest, TryAddingSubtask_ShouldReturnRightTask) {
     EXPECT_EQ(get_subtask.value().task_id(), subtask_id);
     EXPECT_EQ(get_subtask.value().parent_id(), main_task_id);
     EXPECT_EQ(get_subtask.value().task(), expected_second_task);
-    EXPECT_TRUE(task_manager.IsTaskExist(subtask_id));
-    EXPECT_TRUE(task_manager.IsTaskExist(main_task_id));
 }
 
 TEST_F(TaskManagerTest, TryGetNonExistentTask_ShouldReturnNullopt) {

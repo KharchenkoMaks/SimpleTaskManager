@@ -48,3 +48,7 @@ message GetTasksResponse {
 message GetTaskResponse {
   RelationalTask task = 1;
 }
+
+message LoadTasksResponse {
+  bool result = 1;
+}
