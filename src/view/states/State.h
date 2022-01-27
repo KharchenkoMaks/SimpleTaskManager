@@ -20,5 +20,25 @@ public:
     virtual ~State() = default;
 };
 
+enum class StateType {
+    kRoot,
+    kHelp,
+    kQuit,
+    kAddTask,
+    kAddSubTask,
+    kEditTask,
+    kInputTaskTitle,
+    kInputTaskPriority,
+    kInputTaskDueDate,
+    kInputShowParameters,
+    kComplete,
+    kDelete,
+    kSetLabel,
+    kEnd,
+    kSave,
+    kLoad,
+    kShow
+};
+
 
 #endif //SIMPLETASKMANAGER_STATE_H
