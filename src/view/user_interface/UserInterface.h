@@ -9,7 +9,7 @@
 #include "user_interface/console_io/ConsoleReader.h"
 #include "states/factory/StatesFactory.h"
 #include "commands/Command.h"
-#include "model/controller/ControllerRequestResult.h"
+#include "controller/ControllerRequestResult.h"
 
 #include <memory>
 #include <string>
