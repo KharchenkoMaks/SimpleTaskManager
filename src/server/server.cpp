@@ -2,11 +2,11 @@
 // Created by Maksym Kharchenko on 25.01.2022.
 //
 
-#include "model/GRPCServerEndPoint.h"
+#include "server/GRPCServerEndPoint.h"
 
 #include "ModelControllerService.grpc.pb.h"
 
-#include "model/controller/DefaultModelController.h"
+#include "controller/DefaultModelController.h"
 #include "model/TaskManager.h"
 #include "model/IdGenerator.h"
 #include "persistence/PersistenceFactory.h"

@@ -7,7 +7,7 @@
 
 #include "ModelControllerService_mock.grpc.pb.h"
 
-#include "view/GRPCClientEndPoint.h"
+#include "client/GRPCClientEndPoint.h"
 
 #include "utilities/TaskBuilder.h"
 #include "utilities/TaskComparators.h"

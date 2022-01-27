@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 24.01.2022.
 //
 
-#include "GRPCServerEndPoint.h"
+#include "server/GRPCServerEndPoint.h"
 
 GRPCServerEndPoint::GRPCServerEndPoint(std::unique_ptr<ModelController> model_controller) :
             model_controller_(std::move(model_controller)) {}

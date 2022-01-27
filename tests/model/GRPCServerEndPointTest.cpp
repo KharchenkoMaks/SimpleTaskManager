@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "model/GRPCServerEndPoint.h"
+#include "server/GRPCServerEndPoint.h"
 
 #include "utilities/TaskBuilder.h"
 #include "utilities/TaskComparators.h"

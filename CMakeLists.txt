@@ -15,6 +15,8 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 include_directories(src/model/)
 include_directories(src/view/)
 include_directories(src/controller/)
+include_directories(src/client/)
+include_directories(src/server/)
 include_directories(src/)
 
 file(GLOB_RECURSE TaskManager_SRCS CONFIGURE_DEPENDS
@@ -34,17 +36,19 @@ file(GLOB_RECURSE SERVER_SRCS CONFIGURE_DEPENDS
         "src/model/*.cpp"
         "src/utilities/*.h"
         "src/utilities/*.cpp"
-        "src/persistence/*.h"
-        "src/persistence/*.cpp")
+        "src/server/*.h"
+        "src/server/*.cpp")
 
 file(GLOB_RECURSE CLIENT_SRCS CONFIGURE_DEPENDS
         "src/view/*.h"
         "src/view/*.cpp"
         "src/utilities/*.h"
         "src/utilities/*.cpp"
-        "src/model/controller/ModelController.h"
-        "src/model/controller/ControllerRequestResult.h"
-        "src/model/controller/ControllerRequestResult.cpp")
+        "src/client/*.h"
+        "src/client/*.cpp"
+        "src/controller/*.h"
+        "src/controller/*.cpp"
+        "src/model/Model.h")
 
 file(GLOB_RECURSE TaskManager_TEST CONFIGURE_DEPENDS
         "tests/*.h"
@@ -109,14 +113,14 @@ add_executable(client
         ${PROTO_HDRS}
         ${task_manager_generated_files}
         ${CLIENT_SRCS}
-        src/client.cpp)
+        src/client/client.cpp)
 
 add_executable(server
         ${PROTO_SRCS}
         ${PROTO_HDRS}
         ${task_manager_generated_files}
         ${SERVER_SRCS}
-        src/server.cpp)
+        src/server/server.cpp)
 
 add_executable(SimpleTaskManager_test
         ${PROTO_SRCS}

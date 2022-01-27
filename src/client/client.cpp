@@ -10,7 +10,7 @@
 #include "view/user_interface/console_io/ConsoleReader.h"
 #include "view/user_interface/UserInterface.h"
 #include "view/ViewController.h"
-#include "view/GRPCClientEndPoint.h"
+#include "client/GRPCClientEndPoint.h"
 
 #include <grpcpp/grpcpp.h>
 
