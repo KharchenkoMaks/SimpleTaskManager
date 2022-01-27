@@ -19,7 +19,7 @@ TaskActionResult CreateTaskActionResult(const TaskManagerServiceResult& request_
         case FAIL_NO_SUCH_LABEL:
             return TaskActionResult::FAIL_NO_SUCH_LABEL;
         default:
-
+            return TaskActionResult::FAIL_SERVER_TROUBLES;
     }
 }
 

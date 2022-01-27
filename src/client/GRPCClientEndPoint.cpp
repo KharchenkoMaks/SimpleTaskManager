@@ -7,10 +7,10 @@
 #include "Requests.pb.h"
 #include "Responses.pb.h"
 
-GRPCClientEndPoint::GRPCClientEndPoint(std::unique_ptr<ModelControllerService::StubInterface> stub) :
+GRPCClientEndPoint::GRPCClientEndPoint(std::unique_ptr<TaskManagerService::StubInterface> stub) :
         stub_(std::move(stub)) {}
 
-std::pair<ControllerRequestResult, TaskId> GRPCClientEndPoint::AddTask(const Task& task) {
+std::pair<TaskActionResult, TaskId> GRPCClientEndPoint::AddTask(const Task& task) {
     AddTaskRequest request;
     request.set_allocated_task(new Task(task));
 
@@ -19,10 +19,10 @@ std::pair<ControllerRequestResult, TaskId> GRPCClientEndPoint::AddTask(const Tas
 
     grpc::Status status = stub_->AddTask(&context, request, &response);
 
-    return std::make_pair(ConvertToControllerRequestResult(response.status()), response.added_task_id());
+    return std::make_pair(CreateTaskActionResult(response.result()), response.added_task_id());
 }
 
-std::pair<ControllerRequestResult, TaskId> GRPCClientEndPoint::AddSubTask(const Task& task, const TaskId& parent_id) {
+std::pair<TaskActionResult, TaskId> GRPCClientEndPoint::AddSubTask(const Task& task, const TaskId& parent_id) {
     AddSubTaskRequest request;
     request.set_allocated_task(new Task(task));
     request.set_allocated_parent_id(new TaskId(parent_id));
@@ -32,10 +32,10 @@ std::pair<ControllerRequestResult, TaskId> GRPCClientEndPoint::AddSubTask(const 
 
     grpc::Status status = stub_->AddSubTask(&context, request, &response);
 
-    return std::make_pair(ConvertToControllerRequestResult(response.status()), response.added_task_id());
+    return std::make_pair(CreateTaskActionResult(response.result()), response.added_task_id());
 }
 
-ControllerRequestResult GRPCClientEndPoint::EditTask(const TaskId& task_id, const Task& task) {
+TaskActionResult GRPCClientEndPoint::EditTask(const TaskId& task_id, const Task& task) {
     EditTaskRequest request;
     request.set_allocated_task(new Task(task));
     request.set_allocated_task_id(new TaskId(task_id));
@@ -45,34 +45,36 @@ ControllerRequestResult GRPCClientEndPoint::EditTask(const TaskId& task_id, cons
 
     grpc::Status status = stub_->EditTask(&context, request, &response);
 
-    return ConvertToControllerRequestResult(response.status());
+    return CreateTaskActionResult(response.result());
 }
 
-ControllerRequestResult GRPCClientEndPoint::DeleteTask(const TaskId& task_id) {
+TaskActionResult GRPCClientEndPoint::DeleteTask(const TaskId& task_id, const bool force_delete_subtasks) {
     DeleteTaskRequest request;
     request.set_allocated_task_id(new TaskId(task_id));
+    request.set_force_delete_subtasks(force_delete_subtasks);
 
     DeleteTaskResponse response;
     grpc::ClientContext context;
 
     grpc::Status status = stub_->DeleteTask(&context, request, &response);
 
-    return ConvertToControllerRequestResult(response.status());
+    return CreateTaskActionResult(response.result());
 }
 
-ControllerRequestResult GRPCClientEndPoint::CompleteTask(const TaskId& task_id) {
+TaskActionResult GRPCClientEndPoint::CompleteTask(const TaskId& task_id, const bool force_complete_subtasks) {
     CompleteTaskRequest request;
     request.set_allocated_task_id(new TaskId(task_id));
+    request.set_force_complete_subtasks(force_complete_subtasks);
 
     CompleteTaskResponse response;
     grpc::ClientContext context;
 
     grpc::Status status = stub_->CompleteTask(&context, request, &response);
 
-    return ConvertToControllerRequestResult(response.status());
+    return CreateTaskActionResult(response.result());
 }
 
-ControllerRequestResult GRPCClientEndPoint::AddTaskLabel(const TaskId& task_id, const std::string& label) {
+TaskActionResult GRPCClientEndPoint::AddTaskLabel(const TaskId& task_id, const std::string& label) {
     AddTaskLabelRequest request;
     request.set_allocated_task_id(new TaskId(task_id));
     request.set_label(label);
@@ -82,40 +84,20 @@ ControllerRequestResult GRPCClientEndPoint::AddTaskLabel(const TaskId& task_id, 
 
     grpc::Status status = stub_->AddTaskLabel(&context, request, &response);
 
-    return ConvertToControllerRequestResult(response.status());
+    return CreateTaskActionResult(response.result());
 }
 
-ControllerRequestResult GRPCClientEndPoint::DeleteTaskWithSubTasks(const TaskId& task_id) {
-    DeleteTaskWithSubTasksRequest request;
-    request.set_allocated_task_id(new TaskId(task_id));
-
-    DeleteTaskWithSubTasksResponse response;
-    grpc::ClientContext context;
-
-    grpc::Status status = stub_->DeleteTaskWithSubTasks(&context, request, &response);
-
-    return ConvertToControllerRequestResult(response.status());
+TaskActionResult GRPCClientEndPoint::RemoveTaskLabel(const TaskId &task_id, const std::string &label) {
+    return TaskActionResult::FAIL_NOT_DELETED_SUBTASKS;
 }
 
-ControllerRequestResult GRPCClientEndPoint::CompleteTaskWithSubTasks(const TaskId& task_id) {
-    CompleteTaskWithSubTasksRequest request;
-    request.set_allocated_task_id(new TaskId(task_id));
+std::vector<RelationalTask> GRPCClientEndPoint::GetTasks() {
+    GetTasksRequest request;
 
-    CompleteTaskWithSubTasksResponse response;
+    GetTasksResponse response;
     grpc::ClientContext context;
 
-    grpc::Status status = stub_->CompleteTaskWithSubTasks(&context, request, &response);
-
-    return ConvertToControllerRequestResult(response.status());
-}
-
-std::vector<RelationalTask> GRPCClientEndPoint::GetAllTasks() {
-    GetAllTasksRequest request;
-
-    GetAllTasksResponse response;
-    grpc::ClientContext context;
-
-    grpc::Status status = stub_->GetAllTasks(&context, request, &response);
+    grpc::Status status = stub_->GetTasks(&context, request, &response);
 
     std::vector<RelationalTask> tasks;
     for (const auto& task : response.tasks()) {
@@ -137,28 +119,4 @@ std::optional<RelationalTask> GRPCClientEndPoint::GetTask(const TaskId& task_id)
         return response.task();
     else
         return std::nullopt;
-}
-
-ControllerRequestResult GRPCClientEndPoint::SaveToFile(const std::string& file_name) {
-    SaveToFileRequest request;
-    request.set_file_name(file_name);
-
-    SaveToFileResponse response;
-    grpc::ClientContext context;
-
-    grpc::Status status = stub_->SaveToFile(&context, request, &response);
-
-    return ConvertToControllerRequestResult(response.status());
-}
-
-ControllerRequestResult GRPCClientEndPoint::LoadFromFile(const std::string& file_name) {
-    LoadFromFileRequest request;
-    request.set_file_name(file_name);
-
-    LoadFromFileResponse response;
-    grpc::ClientContext context;
-
-    grpc::Status status = stub_->LoadFromFile(&context, request, &response);
-
-    return ConvertToControllerRequestResult(response.status());
 }
