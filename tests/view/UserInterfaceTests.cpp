@@ -125,6 +125,7 @@ TEST_F(UserInterfaceTests, PrintRequestResult_ShouldPrintRightString) {
             std::pair(ControllerRequestResult::FAIL_NO_SUCH_TASK, "No task with such id was found."),
             std::pair(ControllerRequestResult::FILE_WAS_NOT_OPENED, "Couldn't open the file."),
             std::pair(ControllerRequestResult::FILE_DAMAGED, "File is damaged."),
+            std::pair(ControllerRequestResult::FAIL_NO_SUCH_LABEL, "Fail to remove label, current task doesn't include such label.")
     };
     // Act & Assert
     EXPECT_CALL(*console_printer_, WriteLine("Action success.")).Times(1);

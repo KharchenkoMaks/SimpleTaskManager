@@ -17,7 +17,8 @@ bool operator==(const Task& task1, const Task& task2) {
            task1.priority() == task2.priority() &&
            task1.due_date() == task2.due_date() &&
            task1.completed() == task2.completed() &&
-           task1.label() == task2.label();
+           task1.label_size() == task2.label_size() &&
+           std::equal(task1.label().begin(), task1.label().end(), task2.label().begin());
 }
 
 bool operator==(const RelationalTask& task1, const RelationalTask& task2) {

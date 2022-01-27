@@ -129,14 +129,41 @@ std::optional<RelationalTask> TaskManager::GetTask(const TaskId& task_id) {
 }
 
 TaskActionResult TaskManager::AddTaskLabel(const TaskId& id, const std::string& label) {
+    if (label.empty())
+        return TaskActionResult::SUCCESS;
+
     auto task_to_add_label = tasks_.find(id);
     if (task_to_add_label == tasks_.end())
         return TaskActionResult::FAIL_NO_SUCH_TASK;
 
     Task task = task_to_add_label->second.task();
-    task.set_label(label);
+    if (FindTaskLabel(task, label) != task.label().end())
+        return TaskActionResult::SUCCESS;
+
+    task.add_label(label);
     task_to_add_label->second.set_allocated_task(new Task(task));
     return TaskActionResult::SUCCESS;
+}
+
+TaskActionResult TaskManager::RemoveTaskLabel(const TaskId& id, const std::string& label) {
+    auto task_to_remove_label = tasks_.find(id);
+    if (task_to_remove_label == tasks_.end())
+        return TaskActionResult::FAIL_NO_SUCH_TASK;
+
+    Task task = task_to_remove_label->second.task();
+    auto label_to_remove = FindTaskLabel(task, label);
+    if (label_to_remove == task.label().end())
+        return TaskActionResult::FAIL_NO_SUCH_LABEL;
+
+    task.mutable_label()->erase(label_to_remove);
+    task_to_remove_label->second.set_allocated_task(new Task(task));
+    return TaskActionResult::SUCCESS;
+}
+
+google::protobuf::internal::RepeatedPtrIterator<const std::string> TaskManager::FindTaskLabel(const Task& task, const std::string& label) {
+    return std::find_if(task.label().begin(), task.label().end(), [&label](const auto& task_label) {
+        return task_label == label;
+    });
 }
 
 bool TaskManager::LoadModelState(const std::vector<RelationalTask>& tasks) {
@@ -174,7 +201,7 @@ std::vector<RelationalTask> TaskManager::GetAllTaskChildren(const TaskId& task_i
     return tasks;
 }
 
-RelationalTask TaskManager::CreateTaskTransferFromTask(const std::map<TaskId, TaskNode>::iterator task) {
+RelationalTask TaskManager::CreateTaskTransferFromTask(const std::map<TaskId, TaskNode>::iterator& task) {
     RelationalTask task_transfer;
     task_transfer.set_allocated_task_id(new TaskId(task->first));
     task_transfer.set_allocated_task(new Task(task->second.task()));
