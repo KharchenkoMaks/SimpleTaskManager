@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "model/controller/DefaultModelController.h"
+#include "controller/DefaultModelController.h"
 
 #include "utilities/TaskBuilder.h"
 #include "utilities/TaskComparators.h"
