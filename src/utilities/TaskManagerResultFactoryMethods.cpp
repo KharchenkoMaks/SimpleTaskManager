@@ -37,5 +37,7 @@ TaskManagerServiceResult CreateTaskManagerServiceResult(const TaskActionResult& 
             return TaskManagerServiceResult::FAIL_INVALID_TASK;
         case TaskActionResult::FAIL_NO_SUCH_LABEL:
             return TaskManagerServiceResult::FAIL_NO_SUCH_LABEL;
+        case TaskActionResult::FAIL_SERVER_TROUBLES:
+            return TaskManagerServiceResult::FAIL_SERVER_TROUBLES;
     }
 }

@@ -18,7 +18,8 @@ enum class ControllerRequestResult {
     FAIL_INVALID_TASK,
     FAIL_NO_SUCH_LABEL,
     FILE_WAS_NOT_OPENED,
-    FILE_DAMAGED
+    FILE_DAMAGED,
+    FAIL_SERVER_TROUBLES
 };
 
 ControllerRequestResult FormControllerRequestResult(TaskActionResult result);
