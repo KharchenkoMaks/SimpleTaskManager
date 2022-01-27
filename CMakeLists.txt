@@ -129,7 +129,11 @@ add_executable(SimpleTaskManager_test
         ${PROTO_HDRS}
         ${task_manager_generated_files}
         ${TaskManager_SRCS}
-        ${TaskManager_TEST})
+        ${TaskManager_TEST}
+        src/server/GRPCServerEndPoint.h
+        src/server/GRPCServerEndPoint.cpp
+        src/client/GRPCClientEndPoint.h
+        src/client/GRPCClientEndPoint.cpp)
 
 target_link_libraries(SimpleTaskManager protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
 target_link_libraries(server protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
