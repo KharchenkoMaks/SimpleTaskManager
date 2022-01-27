@@ -25,6 +25,7 @@ public:
     ControllerRequestResult DeleteTask(const TaskId& task_id) override;
     ControllerRequestResult CompleteTask(const TaskId& task_id) override;
     ControllerRequestResult AddTaskLabel(const TaskId& task_id, const std::string& label) override;
+    ControllerRequestResult RemoveTaskLabel(const TaskId& task_id, const std::string& label) override;
 
     ControllerRequestResult DeleteTaskWithSubTasks(const TaskId& task_id) override;
     ControllerRequestResult CompleteTaskWithSubTasks(const TaskId& task_id) override;

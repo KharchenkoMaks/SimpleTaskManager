@@ -16,6 +16,8 @@ ControllerRequestResult FormControllerRequestResult(TaskActionResult result) {
             return ControllerRequestResult::FAIL_NOT_DELETED_SUBTASKS;
         case TaskActionResult::FAIL_UNCOMPLETED_SUBTASKS:
             return ControllerRequestResult::FAIL_UNCOMPLETED_SUBTASKS;
+        case TaskActionResult::FAIL_NO_SUCH_LABEL:
+            return ControllerRequestResult::FAIL_NO_SUCH_LABEL;
     }
 }
 

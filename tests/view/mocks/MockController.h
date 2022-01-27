@@ -23,6 +23,7 @@ public:
     MOCK_METHOD(ControllerRequestResult, DeleteTask, (const TaskId& task_id), (override));
     MOCK_METHOD(ControllerRequestResult, CompleteTask, (const TaskId& task_id), (override));
     MOCK_METHOD(ControllerRequestResult, AddTaskLabel, (const TaskId& task_id, const std::string& label), (override));
+    MOCK_METHOD(ControllerRequestResult, RemoveTaskLabel, (const TaskId& task_id, const std::string& label), (override));
     MOCK_METHOD(ControllerRequestResult, DeleteTaskWithSubTasks, (const TaskId& task_id), (override));
     MOCK_METHOD(ControllerRequestResult, CompleteTaskWithSubTasks, (const TaskId& task_id), (override));
     MOCK_METHOD(std::vector<RelationalTask>, GetAllTasks, (), (override));

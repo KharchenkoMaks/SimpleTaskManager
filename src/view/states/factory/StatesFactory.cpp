@@ -18,6 +18,7 @@
 #include "states/task_input/AddSubTaskState.h"
 #include "states/DeleteTaskState.h"
 #include "states/task_input/SetLabelState.h"
+#include "states/task_input/RemoveLabelState.h"
 #include "states/EndState.h"
 #include "states/persistence/SaveState.h"
 #include "states/persistence/LoadState.h"
@@ -47,8 +48,10 @@ std::shared_ptr<State> StatesFactory::GetStateByCommand(const std::string &comma
         return GetLazyStateByStatesEnum(States::kHelp);
     } else if (command == "quit") {
         return GetLazyStateByStatesEnum(States::kQuit);
-    } else if (command == "label") {
+    } else if (command == "add_label") {
         return GetLazyStateByStatesEnum(States::kSetLabel);
+    } else if (command == "remove_label") {
+        return GetLazyStateByStatesEnum(States::kRemoveLabel);
     } else if (command == "save") {
         return GetLazyStateByStatesEnum(States::kSave);
     } else if (command == "load") {
@@ -171,10 +174,19 @@ std::shared_ptr<State> StatesFactory::GetNextState(const DeleteTaskState& state,
     }
 }
 
-std::shared_ptr<State> StatesFactory::GetNextState(const SetLabelState &state, const StatesFactory::MoveType move_type) {
+std::shared_ptr<State> StatesFactory::GetNextState(const SetLabelState& state, const StatesFactory::MoveType move_type) {
     switch (move_type) {
         case MoveType::ERROR:
             return GetLazyStateByStatesEnum(States::kSetLabel);
+        default:
+            return GetLazyStateByStatesEnum(States::kEnd);
+    }
+}
+
+std::shared_ptr<State> StatesFactory::GetNextState(const RemoveLabelState& state, const StatesFactory::MoveType move_type) {
+    switch (move_type) {
+        case MoveType::ERROR:
+            return GetLazyStateByStatesEnum(States::kRemoveLabel);
         default:
             return GetLazyStateByStatesEnum(States::kEnd);
     }
@@ -251,6 +263,9 @@ void StatesFactory::InitializeState(States state) {
             break;
         case States::kSetLabel:
             states_.insert_or_assign(state, std::make_shared<SetLabelState>(shared_from_this()));
+            break;
+        case States::kRemoveLabel:
+            states_.insert_or_assign(state, std::make_shared<RemoveLabelState>(shared_from_this()));
             break;
         case States::kEnd:
             states_.insert_or_assign(state, std::make_shared<EndState>(shared_from_this()));

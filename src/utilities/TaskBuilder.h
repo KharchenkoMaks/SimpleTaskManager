@@ -9,6 +9,7 @@
 
 #include <string>
 #include <optional>
+#include <vector>
 
 class TaskBuilder {
 public:
@@ -18,7 +19,7 @@ public:
     TaskBuilder& SetPriority(Task::Priority priority);
     TaskBuilder& SetDueDate(const google::protobuf::Timestamp& due_date);
     TaskBuilder& SetCompletion(bool is_completed);
-    TaskBuilder& SetLabel(const std::string& label);
+    TaskBuilder& AddLabel(const std::string& label);
 
     TaskBuilder& Merge(const Task& task);
 public:
@@ -32,7 +33,7 @@ private:
     std::optional<Task::Priority> priority_;
     std::optional<google::protobuf::Timestamp> due_date_;
     std::optional<bool> is_completed_;
-    std::optional<std::string> label_;
+    std::vector<std::string> labels_;
 };
 
 

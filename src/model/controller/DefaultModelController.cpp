@@ -71,6 +71,11 @@ ControllerRequestResult DefaultModelController::AddTaskLabel(const TaskId& task_
     return FormControllerRequestResult(result);
 }
 
+ControllerRequestResult DefaultModelController::RemoveTaskLabel(const TaskId &task_id, const std::string& label) {
+    TaskActionResult result = model_->RemoveTaskLabel(task_id, label);
+    return FormControllerRequestResult(result);
+}
+
 ControllerRequestResult DefaultModelController::SaveToFile(const std::string& file_name) {
     auto persistence = persistence_factory_->CreateFilePersistence(file_name);
     persistence::SaveLoadStatus result = persistence->Save(model_->GetTasks());

@@ -20,6 +20,7 @@ public:
     virtual ControllerRequestResult DeleteTask(const TaskId& task_id) = 0;
     virtual ControllerRequestResult CompleteTask(const TaskId& task_id) = 0;
     virtual ControllerRequestResult AddTaskLabel(const TaskId& task_id, const std::string& label) = 0;
+    virtual ControllerRequestResult RemoveTaskLabel(const TaskId& task_id, const std::string& label) = 0;
 
     virtual ControllerRequestResult DeleteTaskWithSubTasks(const TaskId& task_id) = 0;
     virtual ControllerRequestResult CompleteTaskWithSubTasks(const TaskId& task_id) = 0;

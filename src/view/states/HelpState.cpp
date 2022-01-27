@@ -16,11 +16,12 @@ std::shared_ptr<State> HelpState::Execute(StateContext& context) {
     factory_.lock()->GetConsolePrinter()->WriteLine("3. edit");
     factory_.lock()->GetConsolePrinter()->WriteLine("4. delete");
     factory_.lock()->GetConsolePrinter()->WriteLine("5. complete");
-    factory_.lock()->GetConsolePrinter()->WriteLine("6. label");
-    factory_.lock()->GetConsolePrinter()->WriteLine("7. show");
-    factory_.lock()->GetConsolePrinter()->WriteLine("8. save");
-    factory_.lock()->GetConsolePrinter()->WriteLine("9. load");
-    factory_.lock()->GetConsolePrinter()->WriteLine("10. quit");
+    factory_.lock()->GetConsolePrinter()->WriteLine("6. add_label");
+    factory_.lock()->GetConsolePrinter()->WriteLine("7. remove_label");
+    factory_.lock()->GetConsolePrinter()->WriteLine("8. show");
+    factory_.lock()->GetConsolePrinter()->WriteLine("9. save");
+    factory_.lock()->GetConsolePrinter()->WriteLine("10. load");
+    factory_.lock()->GetConsolePrinter()->WriteLine("11. quit");
 
     return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
 }

@@ -90,12 +90,12 @@ TEST_F(TaskConvertorsTest, TaskToString_ShouldConvertTaskToString) {
             .SetPriority(Task::Priority::Task_Priority_HIGH)
             .SetDueDate(StringToTime("17:29 30.11.2021").value())
             .SetCompletion(true)
-            .SetLabel("label for task2")
+            .AddLabel("label for task2")
             .BuildTask();
     const std::vector<Task> expected_tasks { task1, task2 };
     const std::vector<std::string> expected_strings {
         "ID: 0, task, Priority: Low, Due to: 17:29 30.11.2021, Completed: No",
-        "ID: 0, task2, Priority: High, Due to: 17:29 30.11.2021, Completed: Yes, Label: label for task2"
+        "ID: 0, task2, Priority: High, Due to: 17:29 30.11.2021, Completed: Yes, Labels: label for task2"
     };
     // Act & Assert
     for (int i = 0; i < expected_tasks.size(); ++i) {
