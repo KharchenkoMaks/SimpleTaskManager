@@ -4,6 +4,7 @@
 
 #include "UserInterface.h"
 #include "utilities/TaskConvertors.h"
+#include "ConsoleStateMachine.h"
 
 UserInterface::UserInterface(const std::shared_ptr<StatesFactory>& states_factory,
                              const std::shared_ptr<ConsolePrinter>& printer) :
@@ -11,8 +12,9 @@ UserInterface::UserInterface(const std::shared_ptr<StatesFactory>& states_factor
                              printer_(printer) {}
 
 std::shared_ptr<Command> UserInterface::AskUserForAction() {
-    auto state_machine = states_factory_->CreateStateMachine(states_factory_->GetRootState(),
-                                                             std::make_shared<StateContext>());
+    auto state_machine = std::make_unique<ConsoleStateMachine>(StateType::kRoot,
+                                                               std::make_shared<StateContext>(),
+                                                               states_factory_);
     std::shared_ptr<StateContext> result_context = state_machine->Run();
 
     return result_context->GetCommand();
@@ -46,7 +48,7 @@ void UserInterface::PrintRequestResult(ControllerRequestResult action_result) {
             printer_->WriteError("File is damaged.");
             break;
         case ControllerRequestResult::FAIL_NO_SUCH_LABEL:
-            states_factory_->GetConsolePrinter()->WriteError("Fail to remove label, current task doesn't include such label.");
+            printer_->WriteError("Fail to remove label, current task doesn't include such label.");
             break;
     }
 }
@@ -55,7 +57,7 @@ void UserInterface::ShowTasks(const std::vector<RelationalTask>& tasks) {
     std::shared_ptr<StateContext> context = std::make_shared<StateContext>();
     context->SetTasksToShow(tasks);
 
-    auto state_machine = states_factory_->CreateStateMachine(states_factory_->GetShowState(), context);
+    auto state_machine = std::make_unique<ConsoleStateMachine>(StateType::kShow, context, states_factory_);
 
     state_machine->Run();
 }

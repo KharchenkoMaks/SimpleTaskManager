@@ -11,17 +11,21 @@
 #include <memory>
 #include <optional>
 
+class StatesFactory;
+
 class ConsoleStateMachine {
 public:
-    ConsoleStateMachine(const std::shared_ptr<State>& initial_state,
-                        const std::shared_ptr<StateContext>& context);
+    ConsoleStateMachine(StateType initial_state,
+                        const std::shared_ptr<StateContext>& context,
+                        const std::shared_ptr<StatesFactory>& states_factory);
 public:
     virtual std::shared_ptr<StateContext> Run();
 public:
     virtual ~ConsoleStateMachine() = default;
 private:
-    std::shared_ptr<State> initial_state_;
+    StateType initial_state_;
     std::shared_ptr<StateContext> context_;
+    std::shared_ptr<StatesFactory> states_factory_;
 };
 
 
