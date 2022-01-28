@@ -27,13 +27,13 @@ public:
                 .SetTitle("task title")
                 .SetPriority(Task::Priority::Task_Priority_HIGH)
                 .SetDueDate(google::protobuf::util::TimeUtil::TimeTToTimestamp(1000))
-                .SetLabel("task label")
+                .AddLabel("task label")
                 .BuildTask();
         task2 = TaskBuilder::Create()
                 .SetTitle("task title")
                 .SetPriority(Task::Priority::Task_Priority_HIGH)
                 .SetDueDate(google::protobuf::util::TimeUtil::TimeTToTimestamp(1000))
-                .SetLabel("task label")
+                .AddLabel("task label")
                 .BuildTask();
         task3 = TaskBuilder::Create()
                 .SetTitle("task title")

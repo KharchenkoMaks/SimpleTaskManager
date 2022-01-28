@@ -37,7 +37,8 @@ enum class StateType {
     kEnd,
     kSave,
     kLoad,
-    kShow
+    kShow,
+    kRemoveLabel
 };
 
 

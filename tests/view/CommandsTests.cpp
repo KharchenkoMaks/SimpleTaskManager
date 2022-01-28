@@ -23,6 +23,7 @@
 #include "view/commands/SaveCommand.h"
 #include "view/commands/SetLabelCommand.h"
 #include "view/commands/ShowTasksCommand.h"
+#include "view/commands/RemoveLabelCommand.h"
 
 #include <ctime>
 #include <utility>
@@ -242,6 +243,21 @@ TEST_F(CommandsTests, SetLabelCommandExecute_ShouldSetLabelInController) {
     EXPECT_CALL(*controller_, AddTaskLabel(task_id, label)).WillOnce(Return(expected_result));
     // Act
     CommandResult actual_result = set_label_command.Execute(controller_);
+    // Assert
+    EXPECT_EQ(expected_result, actual_result.GetResult());
+}
+
+TEST_F(CommandsTests, RemoveLabelCommandExecute_ShouldRemoveLabelInController) {
+    // Arrange
+    const std::string label = "some label";
+    TaskId task_id;
+    task_id.set_id(9);
+    RemoveLabelCommand remove_label_command(task_id, label);
+    const ControllerRequestResult expected_result = ControllerRequestResult::SUCCESS;
+    // Assert
+    EXPECT_CALL(*controller_, RemoveTaskLabel(task_id, label)).WillOnce(Return(expected_result));
+    // Act
+    CommandResult actual_result = remove_label_command.Execute(controller_);
     // Assert
     EXPECT_EQ(expected_result, actual_result.GetResult());
 }

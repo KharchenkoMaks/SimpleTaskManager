@@ -17,6 +17,7 @@
 #include "states/task_input/AddSubTaskState.h"
 #include "states/DeleteTaskState.h"
 #include "states/task_input/SetLabelState.h"
+#include "states/task_input/RemoveLabelState.h"
 #include "states/EndState.h"
 #include "states/persistence/SaveState.h"
 #include "states/persistence/LoadState.h"
@@ -78,6 +79,9 @@ void StatesFactory::InitializeState(StateType state) {
             break;
         case StateType::kSetLabel:
             states_.insert_or_assign(state, std::make_shared<SetLabelState>(shared_from_this()));
+            break;
+        case StateType::kRemoveLabel:
+            states_.insert_or_assign(state, std::make_shared<RemoveLabelState>(shared_from_this()));
             break;
         case StateType::kEnd:
             states_.insert_or_assign(state, std::make_shared<EndState>(shared_from_this()));
