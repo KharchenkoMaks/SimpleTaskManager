@@ -7,19 +7,21 @@
 
 #include "Task.pb.h"
 #include "State.h"
-#include "factory/StatesFactory.h"
+#include "view/user_interface/console_io/ConsolePrinter.h"
 
 #include <vector>
 
 class ShowState : public State {
 public:
-    explicit ShowState(const std::shared_ptr<StatesFactory>& factory);
+    ShowState(StateType next_state,
+              const std::shared_ptr<ConsolePrinter>& printer);
 public:
-    std::shared_ptr<State> Execute(StateContext& context) override;
+    StateType Execute(StateContext& context) override;
 private:
     void PrintTasks(const std::vector<RelationalTask>& tasks);
 private:
-    std::weak_ptr<StatesFactory> factory_;
+    StateType next_state_;
+    std::shared_ptr<ConsolePrinter> printer_;
 };
 
 

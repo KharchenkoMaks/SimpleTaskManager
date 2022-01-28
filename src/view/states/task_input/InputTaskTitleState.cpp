@@ -5,17 +5,19 @@
 #include "states/task_input/InputTaskTitleState.h"
 #include "user_interface/console_io/ConsoleUtilities.h"
 
-InputTaskTitleState::InputTaskTitleState(const std::shared_ptr<StatesFactory>& factory) :
-                                        factory_(factory) {
+InputTaskTitleState::InputTaskTitleState(const StateType next_state,
+                                         const std::shared_ptr<ConsolePrinter>& printer,
+                                         const std::shared_ptr<ConsoleReader>& reader) :
+                                         next_state_(next_state),
+                                         printer_(printer),
+                                         reader_(reader) {}
 
-}
-
-std::shared_ptr<State> InputTaskTitleState::Execute(StateContext& context) {
+StateType InputTaskTitleState::Execute(StateContext& context) {
     std::string user_input =
-            console_io::util::GetUserInput("Title", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
+            console_io::util::GetUserInput("Title", *printer_, *reader_);
 
     if (!user_input.empty())
         context.AddTaskTitle(user_input);
 
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
+    return next_state_;
 }

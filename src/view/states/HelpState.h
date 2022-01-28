@@ -6,18 +6,20 @@
 #define SIMPLETASKMANAGER_HELPSTATE_H
 
 #include "State.h"
-#include "states/factory/StatesFactory.h"
+#include "view/user_interface/console_io/ConsolePrinter.h"
 
 #include <string>
 #include <memory>
 
 class HelpState : public State {
 public:
-    explicit HelpState(const std::shared_ptr<StatesFactory>& factory);
+    HelpState(StateType next_state,
+              const std::shared_ptr<ConsolePrinter>& printer);
 public:
-    std::shared_ptr<State> Execute(StateContext& context) override;
+    StateType Execute(StateContext& context) override;
 private:
-    std::weak_ptr<StatesFactory> factory_;
+    StateType next_state_;
+    std::shared_ptr<ConsolePrinter> printer_;
 };
 
 

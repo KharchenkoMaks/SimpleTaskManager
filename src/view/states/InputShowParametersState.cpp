@@ -6,12 +6,12 @@
 #include "user_interface/console_io/ConsoleUtilities.h"
 #include "utilities/TaskConvertors.h"
 
-InputShowParametersState::InputShowParametersState(const std::shared_ptr<StatesFactory>& factory) :
-                    factory_(factory) {
+InputShowParametersState::InputShowParametersState(const StateType next_state,
+                                                   const std::shared_ptr<CommandFactory>& command_factory) :
+                                                   next_state_(next_state),
+                                                   command_factory_(command_factory) {}
 
-}
-
-std::shared_ptr<State> InputShowParametersState::Execute(StateContext& context) {
-    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateShowCommand(context));
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
+StateType InputShowParametersState::Execute(StateContext& context) {
+    context.SetCommand(command_factory_->CreateShowCommand(context));
+    return next_state_;
 }

@@ -6,21 +6,22 @@
 #include "utilities/TaskConvertors.h"
 
 void ShowState::PrintTasks(const std::vector<RelationalTask> &tasks) {
-    for (auto task : tasks) {
+    for (const auto& task : tasks) {
         std::string task_string;
         if (task.has_parent_id()) {
             task_string += "\t";
         }
         task_string += TaskToString(task.task_id(), task.task());
-        factory_.lock()->GetConsolePrinter()->WriteLine(task_string);
+        printer_->WriteLine(task_string);
     }
 }
 
-std::shared_ptr<State> ShowState::Execute(StateContext& context) {
+StateType ShowState::Execute(StateContext& context) {
     PrintTasks(context.GetTasksToShow());
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
+    return next_state_;
 }
 
-ShowState::ShowState(const std::shared_ptr<StatesFactory>& factory) : factory_(factory) {
-
-}
+ShowState::ShowState(const StateType next_state,
+                     const std::shared_ptr<ConsolePrinter>& printer) :
+                     next_state_(next_state),
+                     printer_(printer) {}
