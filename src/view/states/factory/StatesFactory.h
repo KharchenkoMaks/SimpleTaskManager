@@ -9,12 +9,13 @@
 #include "user_interface/console_io/ConsolePrinter.h"
 #include "user_interface/console_io/ConsoleReader.h"
 #include "ModelController.h"
-#include "user_interface/ConsoleStateMachine.h"
 #include "commands/factory/CommandFactory.h"
 
 #include <memory>
 #include <string>
 #include <optional>
+
+class ConsoleStateMachine;
 
 class StatesFactory {
 public:
@@ -23,16 +24,13 @@ public:
                   const std::shared_ptr<ConsoleReader>& reader);
 
 public:
-    virtual std::unique_ptr<ConsoleStateMachine> CreateStateMachine(StateType initial_state,
-                                                                    const std::shared_ptr<StateContext>& context);
-
-public:
     std::shared_ptr<State> GetState(StateType state);
 
 public:
     virtual ~StatesFactory() = default;
 
 private:
+    std::unique_ptr<ConsoleStateMachine> CreateStateMachine(StateType initial_state, const std::shared_ptr<StateContext>& context);
     void InitializeState(StateType state);
 
 private:
