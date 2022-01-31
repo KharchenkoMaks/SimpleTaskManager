@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "Responses.proto";
+import "Requests.proto";
+
+service TaskManagerService {
+  rpc AddTask(AddTaskRequest) returns (AddTaskResponse) {}
+  rpc AddSubTask(AddSubTaskRequest) returns (AddSubTaskResponse) {}
+  rpc EditTask(EditTaskRequest) returns (EditTaskResponse) {}
+  rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse) {}
+  rpc CompleteTask(CompleteTaskRequest) returns (CompleteTaskResponse) {}
+  rpc AddTaskLabel(AddTaskLabelRequest) returns (AddTaskLabelResponse) {}
+  rpc RemoveTaskLabel(RemoveTaskLabelRequest) returns (RemoveTaskLabelResponse) {}
+  rpc GetTasks(GetTasksRequest) returns (GetTasksResponse) {}
+  rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
+  rpc LoadTasks(LoadTasksRequest) returns (LoadTasksResponse) {}
+  rpc GetTasksByLabel(GetTasksByLabelRequest) returns (GetTasksByLabelResponse) {}
+}

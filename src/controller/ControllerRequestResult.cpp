@@ -18,6 +18,8 @@ ControllerRequestResult FormControllerRequestResult(TaskActionResult result) {
             return ControllerRequestResult::FAIL_UNCOMPLETED_SUBTASKS;
         case TaskActionResult::FAIL_NO_SUCH_LABEL:
             return ControllerRequestResult::FAIL_NO_SUCH_LABEL;
+        case TaskActionResult::FAIL_SERVER_TROUBLES:
+            return ControllerRequestResult::FAIL_SERVER_TROUBLES;
     }
 }
 

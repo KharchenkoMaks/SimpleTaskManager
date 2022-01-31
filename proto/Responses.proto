@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+import "Task.proto";
+
+enum TaskManagerServiceResult {
+    FAIL_SERVER_TROUBLES = 0;
+    SUCCESS = 1;
+    FAIL_NO_SUCH_TASK = 2;
+    FAIL_INVALID_TASK = 3;
+    FAIL_UNCOMPLETED_SUBTASKS = 4;
+    FAIL_NOT_DELETED_SUBTASKS = 5;
+    FAIL_NO_SUCH_LABEL = 6;
+}
+
+message AddTaskResponse {
+  TaskManagerServiceResult result = 1;
+  TaskId added_task_id = 2;
+}
+
+message AddSubTaskResponse {
+  TaskManagerServiceResult result = 1;
+  TaskId added_task_id = 2;
+}
+
+message EditTaskResponse {
+  TaskManagerServiceResult result = 1;
+}
+
+message DeleteTaskResponse {
+  TaskManagerServiceResult result = 1;
+}
+
+message CompleteTaskResponse {
+  TaskManagerServiceResult result = 1;
+}
+message AddTaskLabelResponse {
+  TaskManagerServiceResult result = 1;
+}
+
+message RemoveTaskLabelResponse {
+  TaskManagerServiceResult result = 1;
+}
+
+message GetTasksResponse {
+  repeated RelationalTask tasks = 1;
+}
+
+message GetTaskResponse {
+  RelationalTask task = 1;
+}
+
+message LoadTasksResponse {
+  bool result = 1;
+}
+
+message GetTasksByLabelResponse {
+  repeated RelationalTask tasks = 1;
+}
