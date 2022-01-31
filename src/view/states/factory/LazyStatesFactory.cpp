@@ -111,6 +111,12 @@ void LazyStatesFactory::InitializeState(StateType state) {
 }
 
 std::unique_ptr<ConsoleStateMachine> LazyStatesFactory::CreateStateMachine(const StateType initial_state,
-                                                                       const std::shared_ptr<StateContext>& context) {
+                                                                           const std::shared_ptr<StateContext>& context) {
     return std::make_unique<ConsoleStateMachine>(initial_state, context, std::make_shared<LazyStatesFactory>(command_factory_, printer_, reader_));
+}
+
+std::unique_ptr<ConsoleStateMachine> LazyStatesFactory::CreateStateMachine(const StateType initial_state,
+                                                                           const std::shared_ptr<StateContext>& context,
+                                                                           const std::shared_ptr<StatesFactory>& states_factory) {
+    return std::make_unique<ConsoleStateMachine>(initial_state, context, states_factory);
 }

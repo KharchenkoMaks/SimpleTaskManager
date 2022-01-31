@@ -11,15 +11,16 @@
 #include "user_interface/console_io/ConsoleReader.h"
 #include "commands/factory/CommandFactory.h"
 
-class ConsoleStateMachine;
-
 class LazyStatesFactory : public StatesFactory {
 public:
     LazyStatesFactory(const std::shared_ptr<CommandFactory>& command_factory,
                       const std::shared_ptr<ConsolePrinter>& printer,
                       const std::shared_ptr<ConsoleReader>& reader);
 public:
-    std::shared_ptr<State> GetState(StateType state);
+    std::shared_ptr<State> GetState(StateType state) override;
+    std::unique_ptr<ConsoleStateMachine> CreateStateMachine(StateType initial_state,
+                                                            const std::shared_ptr<StateContext>& context,
+                                                            const std::shared_ptr<StatesFactory>& states_factory) override;
 
 private:
     std::unique_ptr<ConsoleStateMachine> CreateStateMachine(StateType initial_state, const std::shared_ptr<StateContext>& context);
