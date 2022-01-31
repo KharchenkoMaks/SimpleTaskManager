@@ -14,20 +14,43 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 include_directories(src/model/)
 include_directories(src/view/)
-include_directories(src/model/controller/)
+include_directories(src/controller/)
+include_directories(src/client/)
+include_directories(src/server/)
 include_directories(src/)
 
 file(GLOB_RECURSE TaskManager_SRCS CONFIGURE_DEPENDS
         "src/view/*.h"
         "src/view/*.cpp"
-        "src/model/controller/*.h"
-        "src/model/controller/*.cpp"
+        "src/controller/*.h"
+        "src/controller/*.cpp"
         "src/model/*.h"
         "src/model/*.cpp"
         "src/utilities/*.h"
         "src/utilities/*.cpp"
         "src/persistence/*.h"
         "src/persistence/*.cpp")
+
+file(GLOB_RECURSE SERVER_SRCS CONFIGURE_DEPENDS
+        "src/model/*.h"
+        "src/model/*.cpp"
+        "src/utilities/*.h"
+        "src/utilities/*.cpp"
+        "src/server/*.h"
+        "src/server/*.cpp")
+
+file(GLOB_RECURSE CLIENT_SRCS CONFIGURE_DEPENDS
+        "src/view/*.h"
+        "src/view/*.cpp"
+        "src/utilities/*.h"
+        "src/utilities/*.cpp"
+        "src/client/*.h"
+        "src/client/*.cpp"
+        "src/controller/*.h"
+        "src/controller/*.cpp"
+        "src/persistence/*.h"
+        "src/persistence/*.cpp"
+        "src/model/Model.h")
 
 file(GLOB_RECURSE TaskManager_TEST CONFIGURE_DEPENDS
         "tests/*.h"
@@ -62,7 +85,7 @@ macro(compile_proto_file filename)
             COMMAND ${_PROTOBUF_PROTOC} ${PROTO_DIR}/${basename}.proto
             --proto_path=${GENERATED_DIR}
             --cpp_out=${GENERATED_DIR}
-            --grpc_out=${GENERATED_DIR}
+            --grpc_out=generate_mock_code=true:${GENERATED_DIR}
             --plugin=protoc-gen-grpc=${_GRPC_CPP_PLUGIN_EXECUTABLE}
             -I ${PROTO_DIR}
             VERBATIM
@@ -87,13 +110,33 @@ add_executable(SimpleTaskManager
         ${TaskManager_SRCS}
         src/main.cpp)
 
+add_executable(client
+        ${PROTO_SRCS}
+        ${PROTO_HDRS}
+        ${task_manager_generated_files}
+        ${CLIENT_SRCS}
+        src/client/client.cpp)
+
+add_executable(server
+        ${PROTO_SRCS}
+        ${PROTO_HDRS}
+        ${task_manager_generated_files}
+        ${SERVER_SRCS}
+        src/server/server.cpp)
+
 add_executable(SimpleTaskManager_test
         ${PROTO_SRCS}
         ${PROTO_HDRS}
         ${task_manager_generated_files}
         ${TaskManager_SRCS}
-        ${TaskManager_TEST})
+        ${TaskManager_TEST}
+        src/server/GRPCServerEndPoint.h
+        src/server/GRPCServerEndPoint.cpp
+        src/client/GRPCClientEndPoint.h
+        src/client/GRPCClientEndPoint.cpp)
 
 target_link_libraries(SimpleTaskManager protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
+target_link_libraries(server protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
+target_link_libraries(client protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
 
 target_link_libraries(SimpleTaskManager_test protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection GTest::gtest GTest::gmock GTest::gmock_main)

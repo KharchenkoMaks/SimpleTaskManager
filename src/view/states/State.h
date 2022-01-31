@@ -31,6 +31,7 @@ enum class StateType {
     kInputTaskPriority,
     kInputTaskDueDate,
     kInputShowParameters,
+    kInputShowTaskLabel,
     kComplete,
     kDelete,
     kSetLabel,

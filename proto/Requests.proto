@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+import "Task.proto";
+
+message AddTaskRequest {
+  Task task = 1;
+}
+
+message AddSubTaskRequest {
+  Task task = 1;
+  TaskId parent_id = 2;
+}
+
+message EditTaskRequest {
+  TaskId task_id = 1;
+  Task task = 2;
+}
+
+message DeleteTaskRequest {
+  TaskId task_id = 1;
+  bool force_delete_subtasks = 2;
+}
+
+message CompleteTaskRequest {
+  TaskId task_id = 1;
+  bool force_complete_subtasks = 2;
+}
+
+message AddTaskLabelRequest {
+  TaskId task_id = 1;
+  string label = 2;
+}
+
+message RemoveTaskLabelRequest {
+  TaskId task_id = 1;
+  string label = 2;
+}
+
+message GetTasksRequest {}
+
+message GetTaskRequest {
+  TaskId task_id = 1;
+}
+
+message LoadTasksRequest {
+  repeated RelationalTask tasks = 1;
+}
+
+message GetTasksByLabelRequest {
+  string label = 1;
+}

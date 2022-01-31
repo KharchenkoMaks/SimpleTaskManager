@@ -264,7 +264,7 @@ TEST_F(CommandsTests, RemoveLabelCommandExecute_ShouldRemoveLabelInController) {
 
 TEST_F(CommandsTests, ShowTasksCommandExecute_ShouldFetchAllTasksFromControllerAndReturnThem) {
     // Arrange
-    ShowTasksCommand show_tasks_command;
+    ShowTasksCommand show_tasks_command { "" };
     const ControllerRequestResult expected_result = ControllerRequestResult::SUCCESS;
     // Arrange tasks to show
     TaskId parent_task_id;
@@ -296,6 +296,48 @@ TEST_F(CommandsTests, ShowTasksCommandExecute_ShouldFetchAllTasksFromControllerA
     // Act
     CommandResult actual_result = show_tasks_command.Execute(controller_);
     // Assert
-    EXPECT_EQ(expected_result, actual_result.GetResult());
+    ASSERT_EQ(expected_result, actual_result.GetResult());
+    EXPECT_EQ(tasks_to_show, actual_result.GetTasksToShow());
+}
+
+TEST_F(CommandsTests, ShowTasksCommandExecute_ShouldFetchTasksFromControllerByLabelAndReturnThem) {
+    // Arrange
+    const std::string expected_label = "some label";
+    ShowTasksCommand show_tasks_command { expected_label };
+    const ControllerRequestResult expected_result = ControllerRequestResult::SUCCESS;
+    // Arrange tasks to show
+    TaskId parent_task_id;
+    TaskId task2_id;
+    task2_id.set_id(2);
+    TaskId task3_id;
+    task3_id.set_id(3);
+    Task t1 = TaskBuilder::Create()
+            .SetTitle("task1").SetPriority(Task::Priority::Task_Priority_LOW).SetDueDate(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))).BuildTask();
+    Task t2 = TaskBuilder::Create()
+            .SetTitle("task2").SetPriority(Task::Priority::Task_Priority_MEDIUM).SetDueDate(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))).BuildTask();
+    Task t3 = TaskBuilder::Create()
+            .SetTitle("subtask").SetPriority(Task::Priority::Task_Priority_MEDIUM).SetDueDate(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(0))).BuildTask();
+    RelationalTask tt1;
+    tt1.set_allocated_task_id(new TaskId(parent_task_id));
+    tt1.set_allocated_task(new Task(t1));
+    RelationalTask tt2;
+    tt2.set_allocated_task_id(new TaskId(task2_id));
+    tt2.set_allocated_task(new Task(t2));
+    RelationalTask tt3;
+    tt3.set_allocated_task_id(new TaskId(task3_id));
+    tt3.set_allocated_task(new Task(t3));
+    tt3.set_allocated_parent_id(new TaskId(parent_task_id));
+
+    std::vector<RelationalTask> tasks_to_show { tt1, tt3, tt2 };
+
+    // Assert
+    EXPECT_CALL(*controller_, GetTasksByLabel(expected_label)).WillOnce(Return(tasks_to_show));
+    std::for_each(tasks_to_show.begin(), tasks_to_show.end(), [&](auto& item){
+        item.clear_parent_id();
+    });
+    // Act
+    CommandResult actual_result = show_tasks_command.Execute(controller_);
+    // Assert
+    ASSERT_EQ(expected_result, actual_result.GetResult());
     EXPECT_EQ(tasks_to_show, actual_result.GetTasksToShow());
 }

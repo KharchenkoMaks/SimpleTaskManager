@@ -97,7 +97,7 @@ TEST_F(UserInterfaceTests, ShowTasks_ShouldStartStateMachineToShowTasks) {
     tt3.set_allocated_task(new Task(t3));
     tt3.set_allocated_parent_id(new TaskId(parent_task_id));
 
-    std::vector<RelationalTask> tasks_to_show {tt1, tt3, tt2 };
+    std::vector<RelationalTask> tasks_to_show { tt1, tt3, tt2 };
 
     expected_show_state_context->SetTasksToShow(tasks_to_show);
     // Assert
@@ -118,7 +118,8 @@ TEST_F(UserInterfaceTests, PrintRequestResult_ShouldPrintRightString) {
             std::pair(ControllerRequestResult::FAIL_NO_SUCH_TASK, "No task with such id was found."),
             std::pair(ControllerRequestResult::FILE_WAS_NOT_OPENED, "Couldn't open the file."),
             std::pair(ControllerRequestResult::FILE_DAMAGED, "File is damaged."),
-            std::pair(ControllerRequestResult::FAIL_NO_SUCH_LABEL, "Fail to remove label, current task doesn't include such label.")
+            std::pair(ControllerRequestResult::FAIL_NO_SUCH_LABEL, "Fail to remove label, current task doesn't include such label."),
+            std::pair(ControllerRequestResult::FAIL_SERVER_TROUBLES, "Fail, server troubles.")
     };
     // Act & Assert
     EXPECT_CALL(*console_printer_, WriteLine("Action success.")).Times(1);

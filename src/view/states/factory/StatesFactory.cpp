@@ -13,6 +13,7 @@
 #include "states/task_input/InputTaskPriorityState.h"
 #include "states/task_input/InputTaskDueDateState.h"
 #include "states/InputShowParametersState.h"
+#include "states/InputShowByLabelState.h"
 #include "states/CompleteTaskState.h"
 #include "states/task_input/AddSubTaskState.h"
 #include "states/DeleteTaskState.h"
@@ -76,7 +77,11 @@ void StatesFactory::InitializeState(StateType state) {
             states_.insert_or_assign(state, std::make_shared<InputTaskDueDateState>(StateType::kEnd, StateType::kInputTaskDueDate, printer_, reader_));
             break;
         case StateType::kInputShowParameters:
-            states_.insert_or_assign(state, std::make_shared<InputShowParametersState>(StateType::kEnd, command_factory_));
+            states_.insert_or_assign(state, std::make_shared<InputShowParametersState>(StateType::kEnd, command_factory_,
+                                                                                       CreateStateMachine(StateType::kInputShowTaskLabel, std::make_shared<StateContext>())));
+            break;
+        case StateType::kInputShowTaskLabel:
+            states_.insert_or_assign(state, std::make_shared<InputShowByLabelState>(StateType::kEnd, printer_, reader_));
             break;
         case StateType::kComplete:
             states_.insert_or_assign(state, std::make_shared<CompleteTaskState>(StateType::kEnd, StateType::kComplete, printer_, reader_, command_factory_));

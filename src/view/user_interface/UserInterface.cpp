@@ -50,6 +50,9 @@ void UserInterface::PrintRequestResult(ControllerRequestResult action_result) {
         case ControllerRequestResult::FAIL_NO_SUCH_LABEL:
             printer_->WriteError("Fail to remove label, current task doesn't include such label.");
             break;
+        case ControllerRequestResult::FAIL_SERVER_TROUBLES:
+            printer_->WriteError("Fail, server troubles.");
+            break;
     }
 }
 

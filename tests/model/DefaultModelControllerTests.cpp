@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "model/controller/ModelController.h"
+#include "controller/DefaultModelController.h"
 
 #include "utilities/TaskBuilder.h"
 #include "utilities/TaskComparators.h"
@@ -20,7 +20,7 @@
 
 using ::testing::Return;
 
-class ModelControllerTests : public ::testing::Test {
+class DefaultModelControllerTests : public ::testing::Test {
 public:
     std::unique_ptr<MockTaskValidator> task_validator_;
     std::unique_ptr<MockModel> model_;
@@ -50,7 +50,7 @@ public:
     }
 };
 
-TEST_F(ModelControllerTests, AddTask_ShouldAskModelToAddTaskAndReturnSuccessWithTaskId) {
+TEST_F(DefaultModelControllerTests, AddTask_ShouldAskModelToAddTaskAndReturnSuccessWithTaskId) {
     // Arrange
     const std::pair<TaskActionResult, TaskId> expected_model_result = std::make_pair(TaskActionResult::SUCCESS, task_id_);
     const std::pair<ControllerRequestResult, TaskId> expected_result = std::make_pair(ControllerRequestResult::SUCCESS, task_id_);
@@ -59,28 +59,28 @@ TEST_F(ModelControllerTests, AddTask_ShouldAskModelToAddTaskAndReturnSuccessWith
     EXPECT_CALL(*task_validator_, ValidateTask(expected_task_)).WillOnce(Return(expected_task_validator_result));
     EXPECT_CALL(*model_, AddTask(expected_task_)).WillOnce(Return(expected_model_result));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.AddTask(expected_task_);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, AddTask_ShouldReturnErrorOnInvalidTaskGiven) {
+TEST_F(DefaultModelControllerTests, AddTask_ShouldReturnErrorOnInvalidTaskGiven) {
     // Arrange
     const std::pair<ControllerRequestResult, TaskId> expected_result = std::make_pair(ControllerRequestResult::FAIL_INVALID_TASK, TaskId::default_instance());
     const bool expected_task_validator_result = false;
 
     EXPECT_CALL(*task_validator_, ValidateTask(expected_task_)).WillOnce(Return(expected_task_validator_result));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.AddTask(expected_task_);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, AddSubTask_ShouldAskModelToAddSubtaskAndReturnSuccessWithTaskId) {
+TEST_F(DefaultModelControllerTests, AddSubTask_ShouldAskModelToAddSubtaskAndReturnSuccessWithTaskId) {
     // Arrange
     const std::pair<TaskActionResult, TaskId> expected_model_result = std::make_pair(TaskActionResult::SUCCESS, task_id_);
     const std::pair<ControllerRequestResult, TaskId> expected_result = std::make_pair(ControllerRequestResult::SUCCESS, task_id_);
@@ -89,28 +89,28 @@ TEST_F(ModelControllerTests, AddSubTask_ShouldAskModelToAddSubtaskAndReturnSucce
     EXPECT_CALL(*task_validator_, ValidateTask(expected_task_)).WillOnce(Return(expected_task_validator_result));
     EXPECT_CALL(*model_, AddSubTask(expected_task_, parent_id_)).WillOnce(Return(expected_model_result));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.AddSubTask(expected_task_, parent_id_);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, AddSubTask_ShouldReturnErrorOnInvalidTaskGiven) {
+TEST_F(DefaultModelControllerTests, AddSubTask_ShouldReturnErrorOnInvalidTaskGiven) {
     // Arrange
     const std::pair<ControllerRequestResult, TaskId> expected_result = std::make_pair(ControllerRequestResult::FAIL_INVALID_TASK, TaskId::default_instance());
     const bool expected_task_validator_result = false;
 
     EXPECT_CALL(*task_validator_, ValidateTask(expected_task_)).WillOnce(Return(expected_task_validator_result));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.AddSubTask(expected_task_, parent_id_);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, EditTask_ShouldAskModelToEditTaskAndReturnModelResult) {
+TEST_F(DefaultModelControllerTests, EditTask_ShouldAskModelToEditTaskAndReturnModelResult) {
     // Arrange
     const ControllerRequestResult expected_result = ControllerRequestResult::SUCCESS;
     const TaskActionResult expected_model_result = TaskActionResult::SUCCESS;
@@ -119,90 +119,90 @@ TEST_F(ModelControllerTests, EditTask_ShouldAskModelToEditTaskAndReturnModelResu
     EXPECT_CALL(*task_validator_, ValidateTask(expected_task_)).WillOnce(Return(expected_task_validator_result));
     EXPECT_CALL(*model_, EditTask(task_id_, expected_task_)).WillOnce(Return(expected_model_result));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.EditTask(task_id_, expected_task_);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, EditTask_ShouldReturnErrorOnInvalidTaskGiven) {
+TEST_F(DefaultModelControllerTests, EditTask_ShouldReturnErrorOnInvalidTaskGiven) {
     // Arrange
     const ControllerRequestResult expected_result = ControllerRequestResult::FAIL_INVALID_TASK;
     const bool expected_task_validator_result = false;
 
     EXPECT_CALL(*task_validator_, ValidateTask(expected_task_)).WillOnce(Return(expected_task_validator_result));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.EditTask(task_id_, expected_task_);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, DeleteTask_ShouldAskModelToDeleteTaskWithNoForceTaskDeleting) {
+TEST_F(DefaultModelControllerTests, DeleteTask_ShouldAskModelToDeleteTaskWithNoForceTaskDeleting) {
     // Arrange
     const ControllerRequestResult expected_result = ControllerRequestResult::FAIL_NOT_DELETED_SUBTASKS;
     const TaskActionResult expected_model_result = TaskActionResult::FAIL_NOT_DELETED_SUBTASKS;
 
     EXPECT_CALL(*model_, DeleteTask(task_id_, false)).WillOnce(Return(expected_model_result));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.DeleteTask(task_id_);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, DeleteTaskWithSubTasks_ShouldAskModelToDeleteTaskWithForceDeletingSubtasks) {
+TEST_F(DefaultModelControllerTests, DeleteTaskWithSubTasks_ShouldAskModelToDeleteTaskWithForceDeletingSubtasks) {
     // Arrange
     const ControllerRequestResult expected_result = ControllerRequestResult::SUCCESS;
     const TaskActionResult expected_model_result = TaskActionResult::SUCCESS;
 
     EXPECT_CALL(*model_, DeleteTask(task_id_, true)).WillOnce(Return(expected_model_result));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.DeleteTaskWithSubTasks(task_id_);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, CompleteTask_ShouldAskModelToCimpleteTaskWithNoForceTaskCompleting) {
+TEST_F(DefaultModelControllerTests, CompleteTask_ShouldAskModelToCimpleteTaskWithNoForceTaskCompleting) {
     // Arrange
     const ControllerRequestResult expected_result = ControllerRequestResult::FAIL_UNCOMPLETED_SUBTASKS;
     const TaskActionResult expected_model_result = TaskActionResult::FAIL_UNCOMPLETED_SUBTASKS;
 
     EXPECT_CALL(*model_, CompleteTask(task_id_, false)).WillOnce(Return(expected_model_result));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.CompleteTask(task_id_);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, CompleteTaskWithSubTasks_ShouldAskModelToCompleteTaskWithForceCompletingSubtasks) {
+TEST_F(DefaultModelControllerTests, CompleteTaskWithSubTasks_ShouldAskModelToCompleteTaskWithForceCompletingSubtasks) {
     // Arrange
     const ControllerRequestResult expected_result = ControllerRequestResult::SUCCESS;
     const TaskActionResult expected_model_result = TaskActionResult::SUCCESS;
 
     EXPECT_CALL(*model_, CompleteTask(task_id_, true)).WillOnce(Return(expected_model_result));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.CompleteTaskWithSubTasks(task_id_);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, GetTask_ShouldAskModelToGetTaskWithSpecifiedIdAndReturnIt) {
+TEST_F(DefaultModelControllerTests, GetTask_ShouldAskModelToGetTaskWithSpecifiedIdAndReturnIt) {
     // Arrange
     const std::optional<RelationalTask> expected_result = task_transfer_;
 
     EXPECT_CALL(*model_, GetTask(task_id_)).WillOnce(Return(task_transfer_));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.GetTask(task_id_);
     // Assert
@@ -210,20 +210,20 @@ TEST_F(ModelControllerTests, GetTask_ShouldAskModelToGetTaskWithSpecifiedIdAndRe
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, GetAllTasks_ShouldAskModelToGetAllTasksAndReturnVector) {
+TEST_F(DefaultModelControllerTests, GetAllTasks_ShouldAskModelToGetAllTasksAndReturnVector) {
     // Arrange
     const std::vector<RelationalTask> expected_result {task_transfer_ };
 
     EXPECT_CALL(*model_, GetTasks()).WillOnce(Return(expected_result));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.GetAllTasks();
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, AddTaskLabel_ShouldAskModelToAddTaskLabelAndReturnResult) {
+TEST_F(DefaultModelControllerTests, AddTaskLabel_ShouldAskModelToAddTaskLabelAndReturnResult) {
     // Arrange
     const ControllerRequestResult expected_result = ControllerRequestResult::SUCCESS;
     const TaskActionResult expected_model_result = TaskActionResult::SUCCESS;
@@ -231,14 +231,14 @@ TEST_F(ModelControllerTests, AddTaskLabel_ShouldAskModelToAddTaskLabelAndReturnR
 
     EXPECT_CALL(*model_, AddTaskLabel(task_id_, expected_label)).WillOnce(Return(expected_model_result));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.AddTaskLabel(task_id_, expected_label);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, RemoveTaskLabel_ShouldAskModelToRemoveTaskLabelAndReturnResult) {
+TEST_F(DefaultModelControllerTests, RemoveTaskLabel_ShouldAskModelToRemoveTaskLabelAndReturnResult) {
     // Arrange
     const ControllerRequestResult expected_result = ControllerRequestResult::FAIL_NO_SUCH_LABEL;
     const TaskActionResult expected_model_result = TaskActionResult::FAIL_NO_SUCH_LABEL;
@@ -246,14 +246,14 @@ TEST_F(ModelControllerTests, RemoveTaskLabel_ShouldAskModelToRemoveTaskLabelAndR
 
     EXPECT_CALL(*model_, RemoveTaskLabel(task_id_, expected_label)).WillOnce(Return(expected_model_result));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.RemoveTaskLabel(task_id_, expected_label);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, SaveToFile_ShouldGetTasksFromModelAndGiveThemToFilePersistence) {
+TEST_F(DefaultModelControllerTests, SaveToFile_ShouldGetTasksFromModelAndGiveThemToFilePersistence) {
     // Arrange
     const std::vector<RelationalTask> expected_tasks_to_save {task_transfer_ };
     const std::string expected_file_name = "some_file";
@@ -267,14 +267,14 @@ TEST_F(ModelControllerTests, SaveToFile_ShouldGetTasksFromModelAndGiveThemToFile
     EXPECT_CALL(*persistence_factory_, CreateFilePersistence(expected_file_name))
         .WillOnce(Return(testing::ByMove(std::move(expected_persistence))));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.SaveToFile(expected_file_name);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, LoadFromFile_ShouldLoadTasksFromPersistenceAndGiveThemToModel) {
+TEST_F(DefaultModelControllerTests, LoadFromFile_ShouldLoadTasksFromPersistenceAndGiveThemToModel) {
     // Arrange
     const std::vector<RelationalTask> expected_tasks_to_save {task_transfer_ };
     const std::string expected_file_name = "some_file";
@@ -291,14 +291,14 @@ TEST_F(ModelControllerTests, LoadFromFile_ShouldLoadTasksFromPersistenceAndGiveT
     EXPECT_CALL(*persistence_factory_, CreateFilePersistence(expected_file_name))
             .WillOnce(Return(testing::ByMove(std::move(expected_persistence))));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.LoadFromFile(expected_file_name);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, LoadFromFile_ShouldReturnErrorOnPersistenceLoadError) {
+TEST_F(DefaultModelControllerTests, LoadFromFile_ShouldReturnErrorOnPersistenceLoadError) {
     const std::string expected_file_name = "some_file";
     const auto expected_persistence_result =
             std::make_pair(persistence::SaveLoadStatus::FILE_WAS_NOT_OPENED, std::vector<RelationalTask>());
@@ -311,14 +311,14 @@ TEST_F(ModelControllerTests, LoadFromFile_ShouldReturnErrorOnPersistenceLoadErro
     EXPECT_CALL(*persistence_factory_, CreateFilePersistence(expected_file_name))
             .WillOnce(Return(testing::ByMove(std::move(expected_persistence))));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.LoadFromFile(expected_file_name);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, LoadFromFile_ShouldReturnFileDamagedErrorOnModelLoadTasksError) {
+TEST_F(DefaultModelControllerTests, LoadFromFile_ShouldReturnFileDamagedErrorOnModelLoadTasksError) {
     // Arrange
     const std::vector<RelationalTask> expected_tasks_to_save {task_transfer_ };
     const std::string expected_file_name = "some_file";
@@ -335,14 +335,14 @@ TEST_F(ModelControllerTests, LoadFromFile_ShouldReturnFileDamagedErrorOnModelLoa
     EXPECT_CALL(*persistence_factory_, CreateFilePersistence(expected_file_name))
             .WillOnce(Return(testing::ByMove(std::move(expected_persistence))));
 
-    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
     // Act
     const auto actual_result = controller.LoadFromFile(expected_file_name);
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST_F(ModelControllerTests, FormControllerRequestResult_ShouldConvertTaskActionResult) {
+TEST_F(DefaultModelControllerTests, FormControllerRequestResult_ShouldConvertTaskActionResult) {
     // Arrange
     const std::vector<TaskActionResult> expected_task_action_results {
             TaskActionResult::SUCCESS,
@@ -367,7 +367,7 @@ TEST_F(ModelControllerTests, FormControllerRequestResult_ShouldConvertTaskAction
     }
 }
 
-TEST_F(ModelControllerTests, FormControllerRequestResult_ShouldConvertSaveLoadStatus) {
+TEST_F(DefaultModelControllerTests, FormControllerRequestResult_ShouldConvertSaveLoadStatus) {
     // Arrange
     const std::vector<persistence::SaveLoadStatus> expected_task_action_results {
             persistence::SaveLoadStatus::SUCCESS,
@@ -384,4 +384,18 @@ TEST_F(ModelControllerTests, FormControllerRequestResult_ShouldConvertSaveLoadSt
         const auto actual_controller_result = FormControllerRequestResult(expected_task_action_results[i]);
         EXPECT_EQ(expected_controller_results[i], actual_controller_result);
     }
+}
+
+TEST_F(DefaultModelControllerTests, GetTasksByLabel_ShouldAskModelToGetTasksByLabelAndReturnVector) {
+    // Arrange
+    const std::vector<RelationalTask> expected_result { task_transfer_ };
+    const std::string expected_label = "some label";
+
+    EXPECT_CALL(*model_, GetTasksByLabel(expected_label)).WillOnce(Return(expected_result));
+
+    DefaultModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    // Act
+    const auto actual_result = controller.GetTasksByLabel(expected_label);
+    // Assert
+    EXPECT_EQ(expected_result, actual_result);
 }
