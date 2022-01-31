@@ -22,8 +22,8 @@ class DISABLED_IntegrationTests : public ::testing::Test {
 public:
     void LaunchTest(const std::vector<std::string>& expected_show,
                     const std::vector<std::string>& inputs) {
-        std::unique_ptr<MockConsolePrinter> printer_ = std::make_unique<MockConsolePrinter>();
-        std::unique_ptr<MockConsoleReader> reader_ = std::make_unique<MockConsoleReader>();
+        std::shared_ptr<MockConsolePrinter> printer_ = std::make_shared<MockConsolePrinter>();
+        std::shared_ptr<MockConsoleReader> reader_ = std::make_shared<MockConsoleReader>();
         {
             InSequence s;
             for (const std::string &input: inputs) {
@@ -48,10 +48,9 @@ public:
         // Arrange
         std::shared_ptr<CommandFactory> command_factory = std::make_shared<CommandFactory>();
         std::shared_ptr<StatesFactory> states_factory = std::make_shared<StatesFactory>(command_factory,
-                                                                                        std::move(printer_),
-                                                                                        std::move(reader_));
-        std::unique_ptr<UserInterface> user_interface = std::make_unique<UserInterface>(
-                states_factory);
+                                                                                        printer_,
+                                                                                        reader_);
+        std::unique_ptr<UserInterface> user_interface = std::make_unique<UserInterface>(states_factory, printer_);
         std::unique_ptr<ModelController> model_controller = std::make_unique<ModelController>(
                 std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
                 std::make_unique<TaskValidator>(),

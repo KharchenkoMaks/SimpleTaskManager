@@ -12,7 +12,7 @@
 
 class MockUserInterface : public UserInterface {
 public:
-    MockUserInterface() : UserInterface(nullptr) {}
+    MockUserInterface() : UserInterface(nullptr, nullptr) {}
 
     MOCK_METHOD(std::shared_ptr<Command>, AskUserForAction, (), (override));
     MOCK_METHOD(void, PrintAddedTaskId, (const TaskId& task_id), (override));
