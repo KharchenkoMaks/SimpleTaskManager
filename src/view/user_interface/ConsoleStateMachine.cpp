@@ -14,9 +14,11 @@ ConsoleStateMachine::ConsoleStateMachine(const StateType initial_state,
                                          states_factory_(states_factory) {}
 
 std::shared_ptr<StateContext> ConsoleStateMachine::Run() {
+    // Saving machine's initial state and context to run it for several times
     std::shared_ptr<State> current_state = states_factory_->GetState(initial_state_);
+    std::shared_ptr<StateContext> current_context = std::make_shared<StateContext>(*context_);
     while (current_state) {
-        current_state = states_factory_->GetState(current_state->Execute(*context_));
+        current_state = states_factory_->GetState(current_state->Execute(*current_context));
     }
-    return context_;
+    return current_context;
 }
