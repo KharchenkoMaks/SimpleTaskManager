@@ -5,8 +5,8 @@
 #include "ShowState.h"
 #include "utilities/TaskConvertors.h"
 
-void ShowState::PrintTasks(const std::vector<RelationalTask> &tasks) {
-    for (auto task : tasks) {
+void ShowState::PrintTasks(const std::vector<RelationalTask>& tasks) {
+    for (const auto& task : tasks) {
         std::string task_string;
         if (task.has_parent_id()) {
             task_string += "\t";
