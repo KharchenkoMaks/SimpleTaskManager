@@ -243,3 +243,22 @@ TEST_F(GRPCClientEndPointTest, LoadModelState_ShouldSendServiceRequest) {
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
+
+TEST_F(GRPCClientEndPointTest, GetTasksByLabel_ShouldSendServiceRequest) {
+    // Arrange
+    auto stub_ptr = std::make_unique<MockTaskManagerServiceStub>();
+    const std::vector<RelationalTask> expected_returned_tasks { expected_relational_task_, expected_relational_task_ };
+
+    EXPECT_CALL(*stub_ptr, GetTasksByLabel(_, _, _)).WillOnce(testing::Invoke(
+            [this](::grpc::ClientContext* context, const ::GetTasksByLabelRequest& request, ::GetTasksByLabelResponse* response) -> ::grpc::Status {
+                EXPECT_EQ(expected_label_, request.label());
+                response->mutable_tasks()->AddAllocated(new RelationalTask(expected_relational_task_));
+                response->mutable_tasks()->AddAllocated(new RelationalTask(expected_relational_task_));
+                return grpc::Status::OK;
+            }));
+    GRPCClientEndPoint model { std::move(stub_ptr) };
+    // Act
+    auto actual_result = model.GetTasksByLabel(expected_label_);
+    // Assert
+    EXPECT_EQ(expected_returned_tasks, actual_result);
+}

@@ -95,3 +95,13 @@ grpc::Status GRPCServerEndPoint::LoadTasks(::grpc::ServerContext *context, const
 
     return grpc::Status::OK;
 }
+
+grpc::Status GRPCServerEndPoint::GetTasksByLabel(::grpc::ServerContext *context,
+                                                 const ::GetTasksByLabelRequest *request,
+                                                 ::GetTasksByLabelResponse *response) {
+    auto model_result = model_->GetTasksByLabel(request->label());
+    for (const auto& task : model_result) {
+        response->mutable_tasks()->AddAllocated(new RelationalTask(task));
+    }
+    return grpc::Status::OK;
+}

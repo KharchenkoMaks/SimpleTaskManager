@@ -49,7 +49,7 @@ void UserInterface::PrintRequestResult(ControllerRequestResult action_result) {
             printer_->WriteError("Fail to remove label, current task doesn't include such label.");
             break;
         case ControllerRequestResult::FAIL_SERVER_TROUBLES:
-            states_factory_->GetConsolePrinter()->WriteError("Fail, server troubles.");
+            printer_->WriteError("Fail, server troubles.");
             break;
     }
 }

@@ -45,3 +45,7 @@ message GetTaskRequest {
 message LoadTasksRequest {
   repeated RelationalTask tasks = 1;
 }
+
+message GetTasksByLabelRequest {
+  string label = 1;
+}

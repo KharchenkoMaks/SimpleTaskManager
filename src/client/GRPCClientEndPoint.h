@@ -31,6 +31,7 @@ public:
 
 public:
     std::vector<RelationalTask> GetTasks() override;
+    std::vector<RelationalTask> GetTasksByLabel(const std::string& task_label) override;
     std::optional<RelationalTask> GetTask(const TaskId& task_id) override;
 
 public:

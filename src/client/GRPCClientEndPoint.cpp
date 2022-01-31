@@ -143,3 +143,19 @@ bool GRPCClientEndPoint::LoadModelState(const std::vector<RelationalTask>& tasks
 
     return response.result();
 }
+
+std::vector<RelationalTask> GRPCClientEndPoint::GetTasksByLabel(const std::string& task_label) {
+    GetTasksByLabelRequest request;
+    request.set_label(task_label);
+
+    GetTasksByLabelResponse response;
+    grpc::ClientContext context;
+
+    grpc::Status status = stub_->GetTasksByLabel(&context, request, &response);
+
+    std::vector<RelationalTask> tasks;
+    for (const auto& task : response.tasks()) {
+        tasks.push_back(task);
+    }
+    return tasks;
+}

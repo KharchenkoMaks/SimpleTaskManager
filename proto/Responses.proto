@@ -52,3 +52,7 @@ message GetTaskResponse {
 message LoadTasksResponse {
   bool result = 1;
 }
+
+message GetTasksByLabelResponse {
+  repeated RelationalTask tasks = 1;
+}

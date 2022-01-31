@@ -211,3 +211,22 @@ TEST_F(GRPCServerEndPointTests, LoadTasks_ShouldGiveModelTasksToLoad) {
     EXPECT_TRUE(actual_result.ok());
     EXPECT_EQ(expected_model_result, response.result());
 }
+
+TEST_F(GRPCServerEndPointTests, GetTasksByLabel_ShouldGetTasksByLabelFromModelAndReturnThem) {
+    // Arrange
+    const std::vector<RelationalTask> expected_returned_tasks { expected_relational_task_, expected_relational_task_ };
+    const std::string expected_task_label = "some label";
+    EXPECT_CALL(*model_, GetTasksByLabel(expected_task_label)).WillOnce(Return(expected_returned_tasks));
+    GRPCServerEndPoint server_end_point { std::move(model_) };
+    GetTasksByLabelResponse response;
+    GetTasksByLabelRequest request;
+    request.set_label(expected_task_label);
+    // Act
+    const auto actual_result = server_end_point.GetTasksByLabel(nullptr, &request, &response);
+    const auto actual_returned_tasks = response.tasks();
+    // Assert
+    EXPECT_TRUE(actual_result.ok());
+    ASSERT_EQ(expected_returned_tasks.size(), actual_returned_tasks.size());
+    for (int i = 0; i < expected_returned_tasks.size(); ++i)
+        EXPECT_EQ(expected_returned_tasks[i], actual_returned_tasks[i]);
+}

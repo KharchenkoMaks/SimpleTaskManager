@@ -32,6 +32,7 @@ public:
     grpc::Status GetTasks(::grpc::ServerContext *context, const ::GetTasksRequest *request, ::GetTasksResponse *response) override;
     grpc::Status GetTask(::grpc::ServerContext *context, const ::GetTaskRequest *request, ::GetTaskResponse *response) override;
     grpc::Status LoadTasks(::grpc::ServerContext *context, const ::LoadTasksRequest *request, ::LoadTasksResponse *response) override;
+    grpc::Status GetTasksByLabel(::grpc::ServerContext *context, const ::GetTasksByLabelRequest *request, ::GetTasksByLabelResponse *response) override;
 
 private:
     std::unique_ptr<Model> model_;

@@ -21,11 +21,12 @@ int main() {
     std::string target_str = "localhost:8586";
 
     std::shared_ptr<CommandFactory> command_factory = std::make_shared<CommandFactory>();
+    std::shared_ptr<ConsolePrinter> printer = std::make_shared<ConsolePrinter>();
+    std::shared_ptr<ConsoleReader> reader = std::make_shared<ConsoleReader>();
     std::shared_ptr<StatesFactory> states_factory = std::make_shared<StatesFactory>(command_factory,
-                                                                                    std::make_unique<ConsolePrinter>(),
-                                                                                    std::make_unique<ConsoleReader>());
-    std::unique_ptr<UserInterface> user_interface = std::make_unique<UserInterface>(
-            states_factory);
+                                                                                    printer,
+                                                                                    reader);
+    std::unique_ptr<UserInterface> user_interface = std::make_unique<UserInterface>(states_factory, printer);
     std::unique_ptr<ModelController> model_controller = std::make_unique<DefaultModelController>(
             std::make_unique<GRPCClientEndPoint>(TaskManagerService::NewStub(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials()))),
             std::make_unique<TaskValidator>(),
