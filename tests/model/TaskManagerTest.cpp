@@ -662,3 +662,36 @@ TEST_F(TaskManagerTest, LoadState_TryLoadInvalidTasks_ShouldReturnFalse) {
     // Assert
     EXPECT_EQ(expected_result, actual_result);
 }
+
+TEST_F(TaskManagerTest, GetTasksByLabel_ShouldReturnTasksWithCertainLabel) {
+    // Arrange
+    const std::string expected_search_label = "label";
+    expected_first_task.add_label(expected_search_label);
+    expected_third_task.add_label(expected_search_label);
+    std::unique_ptr<MockIdGenerator> gen = std::make_unique<MockIdGenerator>();
+    EXPECT_CALL(*gen, CreateNewTaskId())
+        .Times(3)
+        .WillOnce(Return(expected_first_task_id))
+        .WillOnce(Return(expected_second_task_id))
+        .WillOnce(Return(expected_third_task_id));
+    TaskManager task_manager { std::move(gen) };
+
+    TaskId main_task_id = task_manager.AddTask(expected_first_task).second;
+    TaskId subtask1_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
+    TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, main_task_id).second;
+
+    RelationalTask tt1;
+    tt1.set_allocated_task(new Task(expected_first_task));
+    tt1.set_allocated_task_id(new TaskId(expected_first_task_id));
+    RelationalTask tt3;
+    tt3.set_allocated_task(new Task(expected_third_task));
+    tt3.set_allocated_task_id(new TaskId(expected_third_task_id));
+    tt3.set_allocated_parent_id(new TaskId(expected_first_task_id));
+
+    const std::vector<RelationalTask> expected_returned_tasks { tt1, tt3 };
+    // Act
+    const std::vector<RelationalTask> actual_returned_tasks = task_manager.GetTasksByLabel(expected_search_label);
+    // Assert
+    ASSERT_EQ(expected_returned_tasks.size(), actual_returned_tasks.size());
+    EXPECT_EQ(expected_returned_tasks, actual_returned_tasks);
+}

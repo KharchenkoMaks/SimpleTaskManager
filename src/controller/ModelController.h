@@ -27,7 +27,9 @@ public:
 
 public:
     virtual std::vector<RelationalTask> GetAllTasks() = 0;
+    virtual std::vector<RelationalTask> GetTasksByLabel(const std::string& task_label) = 0;
     virtual std::optional<RelationalTask> GetTask(const TaskId& task_id) = 0;
+
 public:
     virtual ControllerRequestResult SaveToFile(const std::string& file_name) = 0;
     virtual ControllerRequestResult LoadFromFile(const std::string& file_name) = 0;

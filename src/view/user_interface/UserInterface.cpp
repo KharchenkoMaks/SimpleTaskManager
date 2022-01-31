@@ -5,10 +5,10 @@
 #include "UserInterface.h"
 #include "utilities/TaskConvertors.h"
 
-UserInterface::UserInterface(const std::shared_ptr<StatesFactory>& states_factory) :
-                             states_factory_(states_factory) {
-
-}
+UserInterface::UserInterface(const std::shared_ptr<StatesFactory>& states_factory,
+                             const std::shared_ptr<ConsolePrinter>& printer) :
+                             states_factory_(states_factory),
+                             printer_(printer) {}
 
 std::shared_ptr<Command> UserInterface::AskUserForAction() {
     auto state_machine = states_factory_->CreateStateMachine(states_factory_->GetRootState(),
@@ -19,34 +19,34 @@ std::shared_ptr<Command> UserInterface::AskUserForAction() {
 }
 
 void UserInterface::PrintAddedTaskId(const TaskId& task_id) {
-    states_factory_->GetConsolePrinter()->WriteLine("Task was successfully added, TaskId: " + std::to_string(task_id.id()));
+    printer_->WriteLine("Task was successfully added, TaskId: " + std::to_string(task_id.id()));
 }
 
 void UserInterface::PrintRequestResult(ControllerRequestResult action_result) {
     switch (action_result) {
         case ControllerRequestResult::SUCCESS:
-            states_factory_->GetConsolePrinter()->WriteLine("Action success.");
+            printer_->WriteLine("Action success.");
             break;
         case ControllerRequestResult::FAIL_INVALID_TASK:
-            states_factory_->GetConsolePrinter()->WriteError("Invalid task was given.");
+            printer_->WriteError("Invalid task was given.");
             break;
         case ControllerRequestResult::FAIL_UNCOMPLETED_SUBTASKS:
-            states_factory_->GetConsolePrinter()->WriteError("Found uncompleted subtasks of this task.");
+            printer_->WriteError("Found uncompleted subtasks of this task.");
             break;
         case ControllerRequestResult::FAIL_NOT_DELETED_SUBTASKS:
-            states_factory_->GetConsolePrinter()->WriteError("Found not deleted subtask of this task.");
+            printer_->WriteError("Found not deleted subtask of this task.");
             break;
         case ControllerRequestResult::FAIL_NO_SUCH_TASK:
-            states_factory_->GetConsolePrinter()->WriteError("No task with such id was found.");
+            printer_->WriteError("No task with such id was found.");
             break;
         case ControllerRequestResult::FILE_WAS_NOT_OPENED:
-            states_factory_->GetConsolePrinter()->WriteError("Couldn't open the file.");
+            printer_->WriteError("Couldn't open the file.");
             break;
         case ControllerRequestResult::FILE_DAMAGED:
-            states_factory_->GetConsolePrinter()->WriteError("File is damaged.");
+            printer_->WriteError("File is damaged.");
             break;
         case ControllerRequestResult::FAIL_NO_SUCH_LABEL:
-            states_factory_->GetConsolePrinter()->WriteError("Fail to remove label, current task doesn't include such label.");
+            printer_->WriteError("Fail to remove label, current task doesn't include such label.");
             break;
         case ControllerRequestResult::FAIL_SERVER_TROUBLES:
             states_factory_->GetConsolePrinter()->WriteError("Fail, server troubles.");

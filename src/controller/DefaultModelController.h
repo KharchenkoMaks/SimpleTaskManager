@@ -32,6 +32,7 @@ public:
 
 public:
     std::vector<RelationalTask> GetAllTasks() override;
+    std::vector<RelationalTask> GetTasksByLabel(const std::string& task_label) override;
     std::optional<RelationalTask> GetTask(const TaskId& task_id) override;
 public:
     ControllerRequestResult SaveToFile(const std::string& file_name) override;

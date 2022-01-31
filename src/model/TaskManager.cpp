@@ -121,7 +121,7 @@ std::optional<RelationalTask> TaskManager::GetTask(const TaskId& task_id) {
     if (task == tasks_.end())
         return std::nullopt;
 
-    return CreateTaskTransferFromTask(task);
+    return CreateRelationalTask(task);
 }
 
 TaskActionResult TaskManager::AddTaskLabel(const TaskId& id, const std::string& label) {
@@ -186,7 +186,7 @@ std::vector<RelationalTask> TaskManager::GetAllTaskChildren(const TaskId& task_i
     if (main_task == tasks_.end())
         return tasks;
 
-    tasks.push_back(CreateTaskTransferFromTask(main_task));
+    tasks.push_back(CreateRelationalTask(main_task));
     for (const auto& task : tasks_) {
         if (task.second.parent_id() == task_id) {
             auto task_children = GetAllTaskChildren(task.first);
@@ -197,7 +197,7 @@ std::vector<RelationalTask> TaskManager::GetAllTaskChildren(const TaskId& task_i
     return tasks;
 }
 
-RelationalTask TaskManager::CreateTaskTransferFromTask(const std::map<TaskId, TaskNode>::iterator& task) {
+RelationalTask TaskManager::CreateRelationalTask(const std::map<TaskId, TaskNode>::iterator task) {
     RelationalTask task_transfer;
     task_transfer.set_allocated_task_id(new TaskId(task->first));
     task_transfer.set_allocated_task(new Task(task->second.task()));
@@ -205,4 +205,25 @@ RelationalTask TaskManager::CreateTaskTransferFromTask(const std::map<TaskId, Ta
         task_transfer.set_allocated_parent_id(new TaskId(task->second.parent_id()));
     }
     return task_transfer;
+}
+
+RelationalTask TaskManager::CreateRelationalTask(const TaskId& id, const TaskNode& task_node) {
+    RelationalTask task;
+    task.set_allocated_task_id(new TaskId(id));
+    task.set_allocated_task(new Task(task_node.task()));
+    if (task_node.has_parent_id())
+        task.set_allocated_parent_id(new TaskId(task_node.parent_id()));
+
+    return task;
+}
+
+std::vector<RelationalTask> TaskManager::GetTasksByLabel(const std::string& task_label) {
+    std::vector<RelationalTask> tasks;
+    for (const auto& rel_task : tasks_) {
+        const auto task_labels = rel_task.second.task().label();
+        if (std::find(task_labels.begin(), task_labels.end(), task_label) != task_labels.end()) {
+            tasks.push_back(CreateRelationalTask(rel_task.first, rel_task.second));
+        }
+    }
+    return tasks;
 }

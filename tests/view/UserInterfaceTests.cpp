@@ -27,16 +27,9 @@ class UserInterfaceTests : public ::testing::Test {
 public:
     std::shared_ptr<MockStatesFactory> states_factory_;
     std::shared_ptr<MockConsolePrinter> console_printer_;
-    std::shared_ptr<MockConsoleReader> console_reader_;
-    std::shared_ptr<MockCommandFactory> command_factory_;
     void SetUp() override {
         states_factory_ = std::make_shared<MockStatesFactory>();
         console_printer_ = std::make_shared<MockConsolePrinter>();
-        console_reader_ = std::make_shared<MockConsoleReader>();
-        command_factory_ = std::make_shared<MockCommandFactory>();
-        EXPECT_CALL(*states_factory_, GetConsolePrinter()).WillRepeatedly(Return(console_printer_));
-        EXPECT_CALL(*states_factory_, GetConsoleReader()).WillRepeatedly(Return(console_reader_));
-        EXPECT_CALL(*states_factory_, GetCommandFactory()).WillRepeatedly(Return(command_factory_));
     }
 };
 
@@ -46,7 +39,7 @@ bool operator==(const std::shared_ptr<StateContext>& context1, const std::shared
 
 TEST_F(UserInterfaceTests, AskUserForAction_ShouldRunStateMachineAndReturnCommandFromContext) {
     // Arrange
-    UserInterface ui { states_factory_ };
+    UserInterface ui { states_factory_, console_printer_ };
     std::unique_ptr<MockStateMachine> state_machine = std::make_unique<MockStateMachine>();
     std::shared_ptr<State> expected_root_state = std::make_shared<RootState>(nullptr);
     std::shared_ptr<StateContext> returned_context = std::make_shared<StateContext>();
@@ -65,7 +58,7 @@ TEST_F(UserInterfaceTests, AskUserForAction_ShouldRunStateMachineAndReturnComman
 
 TEST_F(UserInterfaceTests, PrintAddedTaskId_ShouldPrintGivenTaskId) {
     // Arrange
-    UserInterface ui { states_factory_ };
+    UserInterface ui { states_factory_, console_printer_ };
     TaskId task_id;
     task_id.set_id(42);
     // Assert
@@ -76,7 +69,7 @@ TEST_F(UserInterfaceTests, PrintAddedTaskId_ShouldPrintGivenTaskId) {
 
 TEST_F(UserInterfaceTests, ShowTasks_ShouldStartStateMachineToShowTasks) {
     // Arrange
-    UserInterface ui { states_factory_ };
+    UserInterface ui { states_factory_, console_printer_ };
     std::unique_ptr<MockStateMachine> state_machine = std::make_unique<MockStateMachine>();
     std::shared_ptr<State> expected_show_state = std::make_shared<ShowState>(nullptr);
     std::shared_ptr<StateContext> expected_show_state_context = std::make_shared<StateContext>();
@@ -104,7 +97,7 @@ TEST_F(UserInterfaceTests, ShowTasks_ShouldStartStateMachineToShowTasks) {
     tt3.set_allocated_task(new Task(t3));
     tt3.set_allocated_parent_id(new TaskId(parent_task_id));
 
-    std::vector<RelationalTask> tasks_to_show {tt1, tt3, tt2 };
+    std::vector<RelationalTask> tasks_to_show { tt1, tt3, tt2 };
 
     expected_show_state_context->SetTasksToShow(tasks_to_show);
     // Assert
@@ -117,7 +110,7 @@ TEST_F(UserInterfaceTests, ShowTasks_ShouldStartStateMachineToShowTasks) {
 
 TEST_F(UserInterfaceTests, PrintRequestResult_ShouldPrintRightString) {
     // Arrange
-    UserInterface ui { states_factory_ };
+    UserInterface ui { states_factory_, console_printer_ };
     std::vector<std::pair<ControllerRequestResult, std::string>> expected_prints = {
             std::pair(ControllerRequestResult::FAIL_INVALID_TASK, "Invalid task was given."),
             std::pair(ControllerRequestResult::FAIL_UNCOMPLETED_SUBTASKS, "Found uncompleted subtasks of this task."),
