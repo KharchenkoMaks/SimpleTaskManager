@@ -13,6 +13,7 @@
 class MockStatesFactory : public StatesFactory {
 public:
     MOCK_METHOD(std::shared_ptr<State>, GetState, (StateType state), (override));
+    MOCK_METHOD(std::unique_ptr<ConsoleStateMachine>, CreateStateMachine, (StateType initial_state, const std::shared_ptr<StateContext>& context, const std::shared_ptr<StatesFactory>& states_factory), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKSTATESFACTORY_H
