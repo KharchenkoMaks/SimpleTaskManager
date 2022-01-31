@@ -1,19 +1,19 @@
 //
-// Created by Maksym Kharchenko on 29.11.2021.
+// Created by Maksym Kharchenko on 24.01.2022.
 //
 
-#include "ModelController.h"
+#include "DefaultModelController.h"
 
-ModelController::ModelController(std::unique_ptr<Model> model,
-                       std::unique_ptr<TaskValidator> task_validator,
-                       std::unique_ptr<persistence::PersistenceFactory> persistence_factory) :
-                        model_(std::move(model)),
-                        task_validator_(std::move(task_validator)),
-                        persistence_factory_(std::move(persistence_factory)) {
+DefaultModelController::DefaultModelController(std::unique_ptr<Model> model,
+                                 std::unique_ptr<TaskValidator> task_validator,
+                                 std::unique_ptr<persistence::PersistenceFactory> persistence_factory) :
+        model_(std::move(model)),
+        task_validator_(std::move(task_validator)),
+        persistence_factory_(std::move(persistence_factory)) {
 
 }
 
-std::pair<ControllerRequestResult, TaskId> ModelController::AddTask(const Task& task) {
+std::pair<ControllerRequestResult, TaskId> DefaultModelController::AddTask(const Task& task) {
     if (task_validator_->ValidateTask(task)) {
         std::pair<TaskActionResult, TaskId> result = model_->AddTask(task);
         return std::make_pair(FormControllerRequestResult(result.first), result.second);
@@ -22,7 +22,7 @@ std::pair<ControllerRequestResult, TaskId> ModelController::AddTask(const Task& 
     }
 }
 
-std::pair<ControllerRequestResult, TaskId> ModelController::AddSubTask(const Task& task, const TaskId& parent_id) {
+std::pair<ControllerRequestResult, TaskId> DefaultModelController::AddSubTask(const Task& task, const TaskId& parent_id) {
     if (task_validator_->ValidateTask(task)) {
         std::pair<TaskActionResult, TaskId> result = model_->AddSubTask(task, parent_id);
         return std::make_pair(FormControllerRequestResult(result.first), result.second);
@@ -30,7 +30,7 @@ std::pair<ControllerRequestResult, TaskId> ModelController::AddSubTask(const Tas
     return std::make_pair(ControllerRequestResult::FAIL_INVALID_TASK, TaskId::default_instance());
 }
 
-ControllerRequestResult ModelController::EditTask(const TaskId& task_id, const Task& task) {
+ControllerRequestResult DefaultModelController::EditTask(const TaskId& task_id, const Task& task) {
     if (task_validator_->ValidateTask(task)) {
         TaskActionResult result = model_->EditTask(task_id, task);
         return FormControllerRequestResult(result);
@@ -38,51 +38,51 @@ ControllerRequestResult ModelController::EditTask(const TaskId& task_id, const T
     return ControllerRequestResult::FAIL_INVALID_TASK;
 }
 
-ControllerRequestResult ModelController::DeleteTask(const TaskId& task_id) {
+ControllerRequestResult DefaultModelController::DeleteTask(const TaskId& task_id) {
     TaskActionResult result = model_->DeleteTask(task_id, false);
     return FormControllerRequestResult(result);
 }
 
-ControllerRequestResult ModelController::DeleteTaskWithSubTasks(const TaskId& task_id) {
+ControllerRequestResult DefaultModelController::DeleteTaskWithSubTasks(const TaskId& task_id) {
     TaskActionResult result = model_->DeleteTask(task_id, true);
     return FormControllerRequestResult(result);
 }
 
-ControllerRequestResult ModelController::CompleteTask(const TaskId& task_id) {
+ControllerRequestResult DefaultModelController::CompleteTask(const TaskId& task_id) {
     TaskActionResult result = model_->CompleteTask(task_id, false);
     return FormControllerRequestResult(result);
 }
 
-ControllerRequestResult ModelController::CompleteTaskWithSubTasks(const TaskId& task_id) {
+ControllerRequestResult DefaultModelController::CompleteTaskWithSubTasks(const TaskId& task_id) {
     TaskActionResult result = model_->CompleteTask(task_id, true);
     return FormControllerRequestResult(result);
 }
 
-std::optional<RelationalTask> ModelController::GetTask(const TaskId& task_id) {
+std::optional<RelationalTask> DefaultModelController::GetTask(const TaskId& task_id) {
     return model_->GetTask(task_id);
 }
 
-std::vector<RelationalTask> ModelController::GetAllTasks() {
+std::vector<RelationalTask> DefaultModelController::GetAllTasks() {
     return model_->GetTasks();
 }
 
-ControllerRequestResult ModelController::AddTaskLabel(const TaskId& task_id, const std::string& label) {
+ControllerRequestResult DefaultModelController::AddTaskLabel(const TaskId& task_id, const std::string& label) {
     TaskActionResult result = model_->AddTaskLabel(task_id, label);
     return FormControllerRequestResult(result);
 }
 
-ControllerRequestResult ModelController::RemoveTaskLabel(const TaskId &task_id, const std::string &label) {
+ControllerRequestResult DefaultModelController::RemoveTaskLabel(const TaskId &task_id, const std::string& label) {
     TaskActionResult result = model_->RemoveTaskLabel(task_id, label);
     return FormControllerRequestResult(result);
 }
 
-ControllerRequestResult ModelController::SaveToFile(const std::string& file_name) {
+ControllerRequestResult DefaultModelController::SaveToFile(const std::string& file_name) {
     auto persistence = persistence_factory_->CreateFilePersistence(file_name);
     persistence::SaveLoadStatus result = persistence->Save(model_->GetTasks());
     return FormControllerRequestResult(result);
 }
 
-ControllerRequestResult ModelController::LoadFromFile(const std::string& file_name) {
+ControllerRequestResult DefaultModelController::LoadFromFile(const std::string& file_name) {
     auto persistence = persistence_factory_->CreateFilePersistence(file_name);
     auto model_state = persistence->Load();
     if (model_state.first != persistence::SaveLoadStatus::SUCCESS) {
@@ -95,6 +95,6 @@ ControllerRequestResult ModelController::LoadFromFile(const std::string& file_na
     }
 }
 
-std::vector<RelationalTask> ModelController::GetTasksByLabel(const std::string& task_label) {
+std::vector<RelationalTask> DefaultModelController::GetTasksByLabel(const std::string& task_label) {
     return model_->GetTasksByLabel(task_label);
 }

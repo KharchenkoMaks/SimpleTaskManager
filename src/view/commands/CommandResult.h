@@ -6,7 +6,7 @@
 #define SIMPLETASKMANAGER_COMMANDRESULT_H
 
 #include "Task.pb.h"
-#include "model/controller/ControllerRequestResult.h"
+#include "controller/ControllerRequestResult.h"
 
 #include <optional>
 

@@ -116,10 +116,6 @@ std::vector<RelationalTask> TaskManager::GetTasks() {
     return tasks;
 }
 
-bool TaskManager::IsTaskExist(const TaskId& task_id) {
-    return tasks_.find(task_id) != tasks_.end();
-}
-
 std::optional<RelationalTask> TaskManager::GetTask(const TaskId& task_id) {
     auto task = tasks_.find(task_id);
     if (task == tasks_.end())

@@ -35,8 +35,6 @@ public:
     std::vector<RelationalTask> GetTasks() override;
     std::vector<RelationalTask> GetTasksByLabel(const std::string& task_label) override;
     std::optional<RelationalTask> GetTask(const TaskId& task_id) override;
-public:
-    bool IsTaskExist(const TaskId& task_id) override;
 public: // Persistence
     bool LoadModelState(const std::vector<RelationalTask>& tasks) override;
 private:
