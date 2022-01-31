@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 23.11.2021.
 //
 
-#include "StatesFactory.h"
+#include "LazyStatesFactory.h"
 
 #include "states/RootState.h"
 #include "states/HelpState.h"
@@ -25,14 +25,14 @@
 
 #include "user_interface/ConsoleStateMachine.h"
 
-StatesFactory::StatesFactory(const std::shared_ptr<CommandFactory>& command_factory,
-                             const std::shared_ptr<ConsolePrinter>& printer,
-                             const std::shared_ptr<ConsoleReader>& reader) :
-                             command_factory_(command_factory),
-                             printer_(printer),
-                             reader_(reader) {}
+LazyStatesFactory::LazyStatesFactory(const std::shared_ptr<CommandFactory>& command_factory,
+                                     const std::shared_ptr<ConsolePrinter>& printer,
+                                     const std::shared_ptr<ConsoleReader>& reader) :
+                                     command_factory_(command_factory),
+                                     printer_(printer),
+                                     reader_(reader) {}
 
-std::shared_ptr<State> StatesFactory::GetState(StateType state) {
+std::shared_ptr<State> LazyStatesFactory::GetState(StateType state) {
     if (state == StateType::kEnd)
         return nullptr;
 
@@ -44,7 +44,7 @@ std::shared_ptr<State> StatesFactory::GetState(StateType state) {
     return found_state->second;
 }
 
-void StatesFactory::InitializeState(StateType state) {
+void LazyStatesFactory::InitializeState(StateType state) {
     switch (state) {
         case StateType::kRoot:
             states_.insert_or_assign(state, std::make_shared<RootState>(StateType::kRoot, printer_, reader_));
@@ -110,7 +110,7 @@ void StatesFactory::InitializeState(StateType state) {
     }
 }
 
-std::unique_ptr<ConsoleStateMachine> StatesFactory::CreateStateMachine(const StateType initial_state,
+std::unique_ptr<ConsoleStateMachine> LazyStatesFactory::CreateStateMachine(const StateType initial_state,
                                                                        const std::shared_ptr<StateContext>& context) {
-    return std::make_unique<ConsoleStateMachine>(initial_state, context, std::make_shared<StatesFactory>(command_factory_, printer_, reader_));
+    return std::make_unique<ConsoleStateMachine>(initial_state, context, std::make_shared<LazyStatesFactory>(command_factory_, printer_, reader_));
 }

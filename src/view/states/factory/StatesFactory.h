@@ -6,40 +6,14 @@
 #define SIMPLETASKMANAGER_STATESFACTORY_H
 
 #include "states/State.h"
-#include "user_interface/console_io/ConsolePrinter.h"
-#include "user_interface/console_io/ConsoleReader.h"
-#include "ModelController.h"
-#include "commands/factory/CommandFactory.h"
 
 #include <memory>
-#include <string>
-#include <optional>
-
-class ConsoleStateMachine;
 
 class StatesFactory {
 public:
-    StatesFactory(const std::shared_ptr<CommandFactory>& command_factory,
-                  const std::shared_ptr<ConsolePrinter>& printer,
-                  const std::shared_ptr<ConsoleReader>& reader);
-
-public:
-    std::shared_ptr<State> GetState(StateType state);
-
+    virtual std::shared_ptr<State> GetState(StateType state) = 0;
 public:
     virtual ~StatesFactory() = default;
-
-private:
-    std::unique_ptr<ConsoleStateMachine> CreateStateMachine(StateType initial_state, const std::shared_ptr<StateContext>& context);
-    void InitializeState(StateType state);
-
-private:
-    std::map<StateType, std::shared_ptr<State>> states_;
-
-    std::shared_ptr<ConsolePrinter> printer_;
-    std::shared_ptr<ConsoleReader> reader_;
-
-    std::shared_ptr<CommandFactory> command_factory_;
 };
 
 
