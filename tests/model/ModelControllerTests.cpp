@@ -385,3 +385,17 @@ TEST_F(ModelControllerTests, FormControllerRequestResult_ShouldConvertSaveLoadSt
         EXPECT_EQ(expected_controller_results[i], actual_controller_result);
     }
 }
+
+TEST_F(ModelControllerTests, GetTasksByLabel_ShouldAskModelToGetTasksByLabelAndReturnVector) {
+    // Arrange
+    const std::vector<RelationalTask> expected_result { task_transfer_ };
+    const std::string expected_label = "some label";
+
+    EXPECT_CALL(*model_, GetTasksByLabel(expected_label)).WillOnce(Return(expected_result));
+
+    ModelController controller { std::move(model_), std::move(task_validator_), std::move(persistence_factory_) };
+    // Act
+    const auto actual_result = controller.GetTasksByLabel(expected_label);
+    // Assert
+    EXPECT_EQ(expected_result, actual_result);
+}

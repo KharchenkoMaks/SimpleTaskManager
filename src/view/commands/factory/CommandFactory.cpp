@@ -73,7 +73,7 @@ std::unique_ptr<Command> CommandFactory::CreateRemoveLabelCommand(const StateCon
 }
 
 std::unique_ptr<Command> CommandFactory::CreateShowCommand(const StateContext& context) {
-    return std::make_unique<ShowTasksCommand>();
+    return std::make_unique<ShowTasksCommand>(context.GetTaskLabel());
 }
 
 std::unique_ptr<Command> CommandFactory::CreateSaveCommand(const StateContext& context) {

@@ -104,7 +104,7 @@ TEST_F(UserInterfaceTests, ShowTasks_ShouldStartStateMachineToShowTasks) {
     tt3.set_allocated_task(new Task(t3));
     tt3.set_allocated_parent_id(new TaskId(parent_task_id));
 
-    std::vector<RelationalTask> tasks_to_show {tt1, tt3, tt2 };
+    std::vector<RelationalTask> tasks_to_show { tt1, tt3, tt2 };
 
     expected_show_state_context->SetTasksToShow(tasks_to_show);
     // Assert

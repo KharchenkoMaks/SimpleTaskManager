@@ -32,6 +32,7 @@ public:
     MOCK_METHOD(std::optional<RelationalTask>, GetTask, (const TaskId& task_id), (override));
     MOCK_METHOD(ControllerRequestResult, SaveToFile, (const std::string& file_name), (override));
     MOCK_METHOD(ControllerRequestResult, LoadFromFile, (const std::string& file_name), (override));
+    MOCK_METHOD(std::vector<RelationalTask>, GetTasksByLabel, (const std::string& task_label), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKCONTROLLER_H
