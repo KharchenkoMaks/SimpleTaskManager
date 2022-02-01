@@ -9,7 +9,7 @@
 #include "view/mocks/MockConsoleReader.h"
 
 #include "TaskManager.h"
-#include "states/factory/StatesFactory.h"
+#include "states/factory/LazyStatesFactory.h"
 #include "DefaultModelController.h"
 #include "user_interface/UserInterface.h"
 #include "ViewController.h"
@@ -47,9 +47,7 @@ public:
         }
         // Arrange
         std::shared_ptr<CommandFactory> command_factory = std::make_shared<CommandFactory>();
-        std::shared_ptr<StatesFactory> states_factory = std::make_shared<StatesFactory>(command_factory,
-                                                                                        printer_,
-                                                                                        reader_);
+        std::shared_ptr<StatesFactory> states_factory = std::make_shared<LazyStatesFactory>(command_factory, printer_, reader_);
         std::unique_ptr<UserInterface> user_interface = std::make_unique<UserInterface>(states_factory, printer_);
         std::unique_ptr<ModelController> model_controller = std::make_unique<DefaultModelController>(
                 std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
@@ -150,13 +148,13 @@ TEST_F(DISABLED_IntegrationTests, Script3) {
         "y",
         "load",
         "some_file",
-        "label",
+        "add_label",
         "2",
         "subtask label"
     };
     std::vector<std::string> expected_show {
         "ID: 1, Main task, Priority: High, Due to: 00:00 01.01.2030, Completed: No",
-        "\tID: 2, edited subtask, Priority: None, Due to: 00:00 01.01.2030, Completed: No, Label: subtask label"
+        "\tID: 2, edited subtask, Priority: None, Due to: 00:00 01.01.2030, Completed: No, Labels: subtask label"
     };
     // Act & Assert
     LaunchTest(expected_show, inputs);
