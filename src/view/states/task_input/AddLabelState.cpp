@@ -2,10 +2,10 @@
 // Created by Maksym Kharchenko on 06.12.2021.
 //
 
-#include "SetLabelState.h"
+#include "AddLabelState.h"
 #include "user_interface/console_io/ConsoleUtilities.h"
 
-SetLabelState::SetLabelState(const StateType next_state,
+AddLabelState::AddLabelState(const StateType next_state,
                              const StateType error_state,
                              const std::shared_ptr<ConsolePrinter>& printer,
                              const std::shared_ptr<ConsoleReader>& reader,
@@ -16,7 +16,7 @@ SetLabelState::SetLabelState(const StateType next_state,
                              reader_(reader),
                              command_factory_(command_factory) {}
 
-StateType SetLabelState::Execute(StateContext& context) {
+StateType AddLabelState::Execute(StateContext& context) {
     std::optional<TaskId> task_id =
             console_io::util::GetTaskIdFromUser("Task ID", *printer_, *reader_);
     if (!task_id.has_value()){

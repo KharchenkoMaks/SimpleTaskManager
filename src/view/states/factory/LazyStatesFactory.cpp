@@ -17,7 +17,7 @@
 #include "states/CompleteTaskState.h"
 #include "states/task_input/AddSubTaskState.h"
 #include "states/DeleteTaskState.h"
-#include "states/task_input/SetLabelState.h"
+#include "states/task_input/AddLabelState.h"
 #include "states/task_input/RemoveLabelState.h"
 #include "states/persistence/SaveState.h"
 #include "states/persistence/LoadState.h"
@@ -90,7 +90,7 @@ void LazyStatesFactory::InitializeState(StateType state) {
             states_.insert_or_assign(state, std::make_shared<DeleteTaskState>(StateType::kEnd, StateType::kDelete, printer_, reader_, command_factory_));
             break;
         case StateType::kAddLabel:
-            states_.insert_or_assign(state, std::make_shared<SetLabelState>(StateType::kEnd, StateType::kAddLabel, printer_, reader_, command_factory_));
+            states_.insert_or_assign(state, std::make_shared<AddLabelState>(StateType::kEnd, StateType::kAddLabel, printer_, reader_, command_factory_));
             break;
         case StateType::kRemoveLabel:
             states_.insert_or_assign(state, std::make_shared<RemoveLabelState>(StateType::kEnd, StateType::kRemoveLabel, printer_, reader_, command_factory_));

@@ -19,7 +19,7 @@
 #include "states/CompleteTaskState.h"
 #include "states/task_input/AddSubTaskState.h"
 #include "states/DeleteTaskState.h"
-#include "states/task_input/SetLabelState.h"
+#include "states/task_input/AddLabelState.h"
 #include "states/persistence/SaveState.h"
 #include "states/persistence/LoadState.h"
 #include "states/ShowState.h"
@@ -55,7 +55,7 @@ TEST_F(LazyStatesFactoryTests, GetState_ShouldReturnRightState) {
     TestGetState<InputTaskDueDateState>(StateType::kInputTaskDueDate);
     TestGetState<CompleteTaskState>(StateType::kComplete);
     TestGetState<DeleteTaskState>(StateType::kDelete);
-    TestGetState<SetLabelState>(StateType::kAddLabel);
+    TestGetState<AddLabelState>(StateType::kAddLabel);
     TestGetState<SaveState>(StateType::kSave);
     TestGetState<LoadState>(StateType::kLoad);
     TestGetState<ShowState>(StateType::kShow);

@@ -2,8 +2,8 @@
 // Created by Maksym Kharchenko on 06.12.2021.
 //
 
-#ifndef SIMPLETASKMANAGER_SETLABELSTATE_H
-#define SIMPLETASKMANAGER_SETLABELSTATE_H
+#ifndef SIMPLETASKMANAGER_ADDLABELSTATE_H
+#define SIMPLETASKMANAGER_ADDLABELSTATE_H
 
 #include "states/State.h"
 #include "view/commands/factory/CommandFactory.h"
@@ -14,9 +14,9 @@
 #include <memory>
 #include <optional>
 
-class SetLabelState : public State {
+class AddLabelState : public State {
 public:
-    SetLabelState(StateType next_state,
+    AddLabelState(StateType next_state,
                   StateType error_state,
                   const std::shared_ptr<ConsolePrinter>& printer,
                   const std::shared_ptr<ConsoleReader>& reader,
@@ -32,4 +32,4 @@ private:
 };
 
 
-#endif //SIMPLETASKMANAGER_SETLABELSTATE_H
+#endif //SIMPLETASKMANAGER_ADDLABELSTATE_H
