@@ -12,7 +12,7 @@
 
 class MockState : public State {
 public:
-    MOCK_METHOD(std::shared_ptr<State>, Execute, (StateContext&), (override));
+    MOCK_METHOD(StateType, Execute, (StateContext&), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKSTATE_H
