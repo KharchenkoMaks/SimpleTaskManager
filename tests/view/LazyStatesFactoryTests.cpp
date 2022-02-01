@@ -37,9 +37,9 @@ public:
 
     template<class TStateType>
     void TestGetState(const StateType state_type) {
-        auto actual_state = states_factory_->GetState(state_type);
+        auto& actual_state = *states_factory_->GetState(state_type);
 
-        EXPECT_EQ(typeid(TStateType), typeid(actual_state));
+        ASSERT_EQ(typeid(TStateType), typeid(actual_state));
     }
 };
 
