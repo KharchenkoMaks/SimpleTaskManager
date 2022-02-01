@@ -35,6 +35,7 @@
 #include "utilities/TaskConvertors.h"
 #include "utilities/TaskComparators.h"
 
+#include <utility>
 #include <ctime>
 #include <google/protobuf/util/time_util.h>
 
@@ -528,13 +529,28 @@ TEST_F(StatesTests, RootStateExecuteWithRightCommand_ShouldReturnNextState) {
     StateContext root_state_context;
     RootState root_state(expected_error_state, console_printer_, console_reader_);
 
-    const std::string expected_input_command = "help";
-    // Assert
-    ExpectGetUserInput("", expected_input_command);
-    // Act
-    const StateType actual_next_state = root_state.Execute(root_state_context);
-    // Assert
-    EXPECT_EQ(StateType::kHelp, actual_next_state);
+    const std::vector<std::pair<std::string, StateType>> expected_commands {
+        std::pair("add", StateType::kAddTask),
+        std::pair("add_subtask", StateType::kAddSubTask),
+        std::pair("edit", StateType::kEditTask),
+        std::pair("delete", StateType::kDelete),
+        std::pair("complete", StateType::kComplete),
+        std::pair("show", StateType::kInputShowParameters),
+        std::pair("help", StateType::kHelp),
+        std::pair("quit", StateType::kQuit),
+        std::pair("add_label", StateType::kAddLabel),
+        std::pair("remove_label", StateType::kRemoveLabel),
+        std::pair("save", StateType::kSave),
+        std::pair("load", StateType::kLoad),
+    };
+    // Act & Assert
+    for (const auto& case_ : expected_commands) {
+        ExpectGetUserInput("", case_.first);
+
+        const StateType actual_next_state = root_state.Execute(root_state_context);
+
+        EXPECT_EQ(case_.second, actual_next_state);
+    }
 }
 
 TEST_F(StatesTests, RootStateExecuteWithIncorrectCommand_ShouldPrintError) {
