@@ -42,7 +42,7 @@ TEST_F(UserInterfaceTests, AskUserForAction_ShouldRunStateMachineAndReturnComman
     UserInterface ui { states_factory_, console_printer_ };
     std::unique_ptr<MockStateMachine> state_machine = std::make_unique<MockStateMachine>();
     StateType expected_root_state = StateType::kRoot;
-    std::unique_ptr<StateContext> returned_context = std::unique_ptr<StateContext>();
+    std::unique_ptr<StateContext> returned_context = std::make_unique<StateContext>();
     std::unique_ptr<AddTaskCommand> expected_command = std::make_unique<AddTaskCommand>(Task::default_instance());
     std::reference_wrapper<AddTaskCommand> expected_returned_command(*expected_command);
     returned_context->SetCommand(std::move(expected_command));
