@@ -42,12 +42,12 @@ TEST_F(UserInterfaceTests, AskUserForAction_ShouldRunStateMachineAndReturnComman
     UserInterface ui { states_factory_, console_printer_ };
     std::unique_ptr<MockStateMachine> state_machine = std::make_unique<MockStateMachine>();
     StateType expected_root_state = StateType::kRoot;
-    std::shared_ptr<StateContext> returned_context = std::make_shared<StateContext>();
+    std::unique_ptr<StateContext> returned_context = std::unique_ptr<StateContext>();
     std::unique_ptr<AddTaskCommand> expected_command = std::make_unique<AddTaskCommand>(Task::default_instance());
     std::reference_wrapper<AddTaskCommand> expected_returned_command(*expected_command);
     returned_context->SetCommand(std::move(expected_command));
     // Assert
-    EXPECT_CALL(*state_machine, Run()).WillOnce(Return(returned_context));
+    EXPECT_CALL(*state_machine, Run()).WillOnce(Return(testing::ByMove(std::move(returned_context))));
     EXPECT_CALL(*states_factory_, CreateStateMachine(expected_root_state, testing::_, testing::_)).WillOnce(Return(testing::ByMove(std::move(state_machine))));
     // Act
     std::shared_ptr<Command> actual_returned_command = ui.AskUserForAction();
@@ -71,7 +71,7 @@ TEST_F(UserInterfaceTests, ShowTasks_ShouldStartStateMachineToShowTasks) {
     UserInterface ui { states_factory_, console_printer_ };
     std::unique_ptr<MockStateMachine> state_machine = std::make_unique<MockStateMachine>();
     StateType expected_show_state = StateType::kShow;
-    std::shared_ptr<StateContext> expected_show_state_context = std::make_shared<StateContext>();
+    std::unique_ptr<StateContext> expected_show_state_context = std::make_unique<StateContext>();
 
     // Arrange tasks to show
     TaskId parent_task_id;
@@ -101,7 +101,8 @@ TEST_F(UserInterfaceTests, ShowTasks_ShouldStartStateMachineToShowTasks) {
     expected_show_state_context->SetTasksToShow(tasks_to_show);
     // Assert
     EXPECT_CALL(*state_machine, Run()).Times(1);
-    EXPECT_CALL(*states_factory_, CreateStateMachine(expected_show_state, expected_show_state_context, testing::_)).WillOnce(Return(testing::ByMove(std::move(state_machine))));
+    EXPECT_CALL(*states_factory_, CreateStateMachine(expected_show_state, testing::NotNull(), testing::_))
+        .WillOnce(Return(testing::ByMove(std::move(state_machine))));
     // Act
     ui.ShowTasks(tasks_to_show);
 }
