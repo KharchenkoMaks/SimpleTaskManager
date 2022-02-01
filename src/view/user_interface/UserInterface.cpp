@@ -12,7 +12,7 @@ UserInterface::UserInterface(const std::shared_ptr<StatesFactory>& states_factor
                              printer_(printer) {}
 
 std::shared_ptr<Command> UserInterface::AskUserForAction() {
-    auto state_machine = states_factory_->CreateStateMachine(StateType::kRoot,std::make_shared<StateContext>(), states_factory_);
+    auto state_machine = states_factory_->CreateStateMachine(StateType::kRoot,std::make_unique<StateContext>(), states_factory_);
 
     std::shared_ptr<StateContext> result_context = state_machine->Run();
 
@@ -56,10 +56,10 @@ void UserInterface::PrintRequestResult(ControllerRequestResult action_result) {
 }
 
 void UserInterface::ShowTasks(const std::vector<RelationalTask>& tasks) {
-    std::shared_ptr<StateContext> context = std::make_shared<StateContext>();
+    auto context = std::make_unique<StateContext>();
     context->SetTasksToShow(tasks);
 
-    auto state_machine = states_factory_->CreateStateMachine(StateType::kShow, context, states_factory_);
+    auto state_machine = states_factory_->CreateStateMachine(StateType::kShow, std::move(context), states_factory_);
 
     state_machine->Run();
 }

@@ -55,7 +55,7 @@ TEST_F(LazyStatesFactoryTests, GetState_ShouldReturnRightState) {
     TestGetState<InputTaskDueDateState>(StateType::kInputTaskDueDate);
     TestGetState<CompleteTaskState>(StateType::kComplete);
     TestGetState<DeleteTaskState>(StateType::kDelete);
-    TestGetState<SetLabelState>(StateType::kSetLabel);
+    TestGetState<SetLabelState>(StateType::kAddLabel);
     TestGetState<SaveState>(StateType::kSave);
     TestGetState<LoadState>(StateType::kLoad);
     TestGetState<ShowState>(StateType::kShow);

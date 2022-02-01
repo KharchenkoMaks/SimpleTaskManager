@@ -57,15 +57,15 @@ void LazyStatesFactory::InitializeState(StateType state) {
             break;
         case StateType::kAddTask:
             states_.insert_or_assign(state, std::make_shared<AddTaskState>(StateType::kEnd, command_factory_,
-                                                                           CreateStateMachine(StateType::kInputTaskTitle, std::make_shared<StateContext>())));
+                                                                           CreateStateMachine(StateType::kInputTaskTitle, std::make_unique<StateContext>())));
             break;
         case StateType::kAddSubTask:
             states_.insert_or_assign(state, std::make_shared<AddSubTaskState>(StateType::kEnd, StateType::kAddSubTask, printer_, reader_, command_factory_,
-                                                                              CreateStateMachine(StateType::kInputTaskTitle, std::make_shared<StateContext>())));
+                                                                              CreateStateMachine(StateType::kInputTaskTitle, std::make_unique<StateContext>())));
             break;
         case StateType::kEditTask:
             states_.insert_or_assign(state, std::make_shared<EditTaskState>(StateType::kEnd, StateType::kEditTask, printer_, reader_, command_factory_,
-                                                                            CreateStateMachine(StateType::kInputTaskTitle, std::make_shared<StateContext>())));
+                                                                            CreateStateMachine(StateType::kInputTaskTitle, std::make_unique<StateContext>())));
             break;
         case StateType::kInputTaskTitle:
             states_.insert_or_assign(state, std::make_shared<InputTaskTitleState>(StateType::kInputTaskPriority, printer_, reader_));
@@ -78,7 +78,7 @@ void LazyStatesFactory::InitializeState(StateType state) {
             break;
         case StateType::kInputShowParameters:
             states_.insert_or_assign(state, std::make_shared<InputShowParametersState>(StateType::kEnd, command_factory_,
-                                                                                       CreateStateMachine(StateType::kInputShowTaskLabel, std::make_shared<StateContext>())));
+                                                                                       CreateStateMachine(StateType::kInputShowTaskLabel, std::make_unique<StateContext>())));
             break;
         case StateType::kInputShowTaskLabel:
             states_.insert_or_assign(state, std::make_shared<InputShowByLabelState>(StateType::kEnd, printer_, reader_));
@@ -89,8 +89,8 @@ void LazyStatesFactory::InitializeState(StateType state) {
         case StateType::kDelete:
             states_.insert_or_assign(state, std::make_shared<DeleteTaskState>(StateType::kEnd, StateType::kDelete, printer_, reader_, command_factory_));
             break;
-        case StateType::kSetLabel:
-            states_.insert_or_assign(state, std::make_shared<SetLabelState>(StateType::kEnd, StateType::kSetLabel, printer_, reader_, command_factory_));
+        case StateType::kAddLabel:
+            states_.insert_or_assign(state, std::make_shared<SetLabelState>(StateType::kEnd, StateType::kAddLabel, printer_, reader_, command_factory_));
             break;
         case StateType::kRemoveLabel:
             states_.insert_or_assign(state, std::make_shared<RemoveLabelState>(StateType::kEnd, StateType::kRemoveLabel, printer_, reader_, command_factory_));
@@ -111,12 +111,12 @@ void LazyStatesFactory::InitializeState(StateType state) {
 }
 
 std::unique_ptr<ConsoleStateMachine> LazyStatesFactory::CreateStateMachine(const StateType initial_state,
-                                                                           const std::shared_ptr<StateContext>& context) {
-    return std::make_unique<ConsoleStateMachine>(initial_state, context, std::make_shared<LazyStatesFactory>(command_factory_, printer_, reader_));
+                                                                           std::unique_ptr<StateContext> context) {
+    return CreateStateMachine(initial_state, std::move(context), std::make_shared<LazyStatesFactory>(command_factory_, printer_, reader_));
 }
 
 std::unique_ptr<ConsoleStateMachine> LazyStatesFactory::CreateStateMachine(const StateType initial_state,
-                                                                           const std::shared_ptr<StateContext>& context,
+                                                                           std::unique_ptr<StateContext> context,
                                                                            const std::shared_ptr<StatesFactory>& states_factory) {
-    return std::make_unique<ConsoleStateMachine>(initial_state, context, states_factory);
+    return std::make_unique<ConsoleStateMachine>(initial_state, std::move(context), states_factory);
 }

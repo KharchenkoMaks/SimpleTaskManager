@@ -16,15 +16,15 @@ class StatesFactory;
 class ConsoleStateMachine {
 public:
     ConsoleStateMachine(StateType initial_state,
-                        const std::shared_ptr<StateContext>& context,
+                        std::unique_ptr<StateContext> context,
                         const std::shared_ptr<StatesFactory>& states_factory);
 public:
-    virtual std::shared_ptr<StateContext> Run();
+    virtual std::unique_ptr<StateContext> Run();
 public:
     virtual ~ConsoleStateMachine() = default;
 private:
     StateType initial_state_;
-    std::shared_ptr<StateContext> context_;
+    std::unique_ptr<StateContext> context_;
     std::shared_ptr<StatesFactory> states_factory_;
 };
 

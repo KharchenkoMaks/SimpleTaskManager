@@ -22,29 +22,30 @@ StateType RootState::Execute(StateContext& context) {
 }
 
 StateType RootState::GetStateTypeByUserCommand(const std::string& command) {
-    if (command == "add") {
+    if (command == "add")
         return StateType::kAddTask;
-    } else if (command == "add_subtask") {
+    else if (command == "add_subtask")
         return (StateType::kAddSubTask);
-    } else if (command == "edit") {
+    else if (command == "edit")
         return (StateType::kEditTask);
-    } else if (command == "delete") {
+    else if (command == "delete")
         return (StateType::kDelete);
-    } else if (command == "complete") {
+    else if (command == "complete")
         return (StateType::kComplete);
-    } else if (command == "show") {
+    else if (command == "show")
         return (StateType::kInputShowParameters);
-    } else if (command == "help") {
+    else if (command == "help")
         return (StateType::kHelp);
-    } else if (command == "quit") {
+    else if (command == "quit")
         return (StateType::kQuit);
-    } else if (command == "label") {
-        return (StateType::kSetLabel);
-    } else if (command == "save") {
+    else if (command == "add_label")
+        return (StateType::kAddLabel);
+    else if (command == "remove_label")
+        return (StateType::kRemoveLabel);
+    else if (command == "save")
         return (StateType::kSave);
-    } else if (command == "load") {
+    else if (command == "load")
         return (StateType::kLoad);
-    } else {
+    else
         return error_state_;
-    }
 }

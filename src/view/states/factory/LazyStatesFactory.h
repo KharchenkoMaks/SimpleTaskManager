@@ -19,11 +19,11 @@ public:
 public:
     std::shared_ptr<State> GetState(StateType state) override;
     std::unique_ptr<ConsoleStateMachine> CreateStateMachine(StateType initial_state,
-                                                            const std::shared_ptr<StateContext>& context,
+                                                            std::unique_ptr<StateContext> context,
                                                             const std::shared_ptr<StatesFactory>& states_factory) override;
 
 private:
-    std::unique_ptr<ConsoleStateMachine> CreateStateMachine(StateType initial_state, const std::shared_ptr<StateContext>& context);
+    std::unique_ptr<ConsoleStateMachine> CreateStateMachine(StateType initial_state, std::unique_ptr<StateContext> context);
     void InitializeState(StateType state);
 
 private:

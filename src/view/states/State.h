@@ -34,7 +34,7 @@ enum class StateType {
     kInputShowTaskLabel,
     kComplete,
     kDelete,
-    kSetLabel,
+    kAddLabel,
     kEnd,
     kSave,
     kLoad,
