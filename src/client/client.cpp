@@ -13,11 +13,15 @@
 #include "client/GRPCClientEndPoint.h"
 #include "controller/DefaultModelController.h"
 
+#include "logs/LogInit.h"
+
 #include <grpcpp/grpcpp.h>
 
 #include <string>
 
 int main() {
+    logs_init();
+
     std::string target_str = "localhost:8586";
 
     std::shared_ptr<CommandFactory> command_factory = std::make_shared<CommandFactory>();

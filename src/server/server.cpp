@@ -9,10 +9,14 @@
 #include "model/TaskManager.h"
 #include "model/IdGenerator.h"
 
+#include "logs/LogInit.h"
+
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/health_check_service_interface.h>
 
 int main() {
+    logs_init();
+
     std::unique_ptr<Model> model =
             std::make_unique<TaskManager>(std::make_unique<IdGenerator>());
 
