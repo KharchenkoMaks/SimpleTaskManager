@@ -6,6 +6,8 @@
 #include "utilities/TaskComparators.h"
 #include "TaskNodeFactoryMethod.h"
 
+#include "logs/DefaultLogging.h"
+
 using namespace model;
 
 TaskManager::TaskManager(std::unique_ptr<IdGenerator> generator) :
@@ -23,26 +25,35 @@ TaskManager::TaskManager(std::unique_ptr<IdGenerator> generator,
 
 std::pair<TaskActionResult, TaskId> TaskManager::AddTask(const Task& task) {
     if (!task_validator_->ValidateTask(task)) {
+        LOG_TRIVIAL(warning) << "Invalid task given, Task: " << task.ShortDebugString();
         return std::pair(TaskActionResult::FAIL_INVALID_TASK, TaskId::default_instance());
     }
 
     TaskId task_id = generator_->CreateNewTaskId();
     tasks_.insert({ task_id, model::CreateTaskNode(task) });
+
+    LOG_TRIVIAL(debug) << "Task added, " << task_id.ShortDebugString();
+
     return std::pair(TaskActionResult::SUCCESS, task_id);
 }
 
 std::pair<TaskActionResult, TaskId> TaskManager::AddSubTask(const Task& task, const TaskId& parent_id) {
     if (!task_validator_->ValidateTask(task)) {
+        LOG_TRIVIAL(warning) << "Invalid task given, Task: " << task.ShortDebugString();
         return std::pair(TaskActionResult::FAIL_INVALID_TASK, TaskId::default_instance());
     }
 
     auto parent_task = tasks_.find(parent_id);
     if (parent_task == tasks_.end()) {
+        LOG_TRIVIAL(warning) << "No such task found, " << parent_id.ShortDebugString();
         return std::pair(TaskActionResult::FAIL_NO_SUCH_TASK, TaskId::default_instance());
     }
 
     TaskId subtask_id = generator_->CreateNewTaskId();
     tasks_.insert({ subtask_id, model::CreateTaskNode(task, parent_id) });
+
+    LOG_TRIVIAL(debug) << "Task added, " << subtask_id.ShortDebugString();
+
     return std::pair(TaskActionResult::SUCCESS, subtask_id);
 }
 

@@ -4,24 +4,42 @@
 
 #include "server/GRPCServerEndPoint.h"
 
+#include "logs/DefaultLogging.h"
+
 GRPCServerEndPoint::GRPCServerEndPoint(std::unique_ptr<Model> model) :
             model_(std::move(model)) {}
 
 grpc::Status GRPCServerEndPoint::AddTask(::grpc::ServerContext *context,
                                          const ::AddTaskRequest *request,
                                          ::AddTaskResponse *response) {
+    LOG_TRIVIAL(debug) << "Request received, Task: {" << request->task().ShortDebugString() << "}";
+
     auto model_result = model_->AddTask(request->task());
     response->set_result(CreateTaskManagerServiceResult(model_result.first));
     response->set_allocated_added_task_id(new TaskId(model_result.second));
+
+    LOG_TRIVIAL(debug)
+        << "Sending response, result: "
+        << TaskManagerServiceResult_descriptor()->FindValueByNumber(response->result())->name()
+        << ", " << response->added_task_id().ShortDebugString();
+
     return grpc::Status::OK;
 }
 
 grpc::Status GRPCServerEndPoint::AddSubTask(::grpc::ServerContext *context,
                                             const ::AddSubTaskRequest *request,
                                             ::AddSubTaskResponse *response) {
+    LOG_TRIVIAL(debug) << "Request received, Task: {" << request->task().ShortDebugString() << "}, " << request->parent_id().ShortDebugString();
+
     auto model_result = model_->AddSubTask(request->task(), request->parent_id());
     response->set_result(CreateTaskManagerServiceResult(model_result.first));
     response->set_allocated_added_task_id(new TaskId(model_result.second));
+
+    LOG_TRIVIAL(debug)
+        << "Sending response, result: "
+        << TaskManagerServiceResult_descriptor()->FindValueByNumber(response->result())->name()
+        << ", " << response->added_task_id().ShortDebugString();
+
     return grpc::Status::OK;
 }
 
@@ -68,10 +86,15 @@ grpc::Status GRPCServerEndPoint::RemoveTaskLabel(::grpc::ServerContext *context,
 grpc::Status GRPCServerEndPoint::GetTasks(::grpc::ServerContext *context,
                                              const ::GetTasksRequest *request,
                                              ::GetTasksResponse *response) {
+    LOG_TRIVIAL(debug) << "Request received";
+
     auto model_result = model_->GetTasks();
     for (const auto& task : model_result) {
         response->mutable_tasks()->AddAllocated(new RelationalTask(task));
     }
+
+    LOG_TRIVIAL(debug) << "Sending request response, tasks: " << response->tasks_size();
+
     return grpc::Status::OK;
 }
 
