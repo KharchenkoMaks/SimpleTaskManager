@@ -20,7 +20,7 @@
 #include <string>
 
 int main() {
-    logs_init();
+    logs_init(false);
 
     std::string target_str = "localhost:8586";
 

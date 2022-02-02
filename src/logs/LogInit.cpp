@@ -16,7 +16,7 @@
 
 #include <iostream>
 
-void logs_init() {
+void logs_init(const bool show_in_console) {
     //boost::log::core::get()->add_global_attribute("Scope", boost::log::attributes::named_scope());
 
     /*auto log_format = boost::log::expressions::stream
@@ -43,9 +43,11 @@ void logs_init() {
             boost::log::keywords::open_mode = std::ios_base::app,
             boost::log::keywords::format = log_format);
 
-    boost::log::add_console_log(
-            std::cout,
-            boost::log::keywords::format = log_format);
+    if (show_in_console) {
+        boost::log::add_console_log(
+                std::cout,
+                boost::log::keywords::format = log_format);
+    }
 
     boost::log::add_common_attributes();
 }
