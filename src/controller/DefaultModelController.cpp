@@ -4,6 +4,8 @@
 
 #include "DefaultModelController.h"
 
+#include "logs/DefaultLogging.h"
+
 DefaultModelController::DefaultModelController(std::unique_ptr<Model> model,
                                  std::unique_ptr<TaskValidator> task_validator,
                                  std::unique_ptr<persistence::PersistenceFactory> persistence_factory) :
@@ -15,19 +17,26 @@ DefaultModelController::DefaultModelController(std::unique_ptr<Model> model,
 
 std::pair<ControllerRequestResult, TaskId> DefaultModelController::AddTask(const Task& task) {
     if (task_validator_->ValidateTask(task)) {
+        LOG_TRIVIAL(info) << "Sending request, Task: {" << task.ShortDebugString() << "}";
+
         std::pair<TaskActionResult, TaskId> result = model_->AddTask(task);
         return std::make_pair(FormControllerRequestResult(result.first), result.second);
     } else {
+        LOG_TRIVIAL(warning) << "Invalid task was given, Task: {" << task.ShortDebugString() << "}";
         return std::make_pair(ControllerRequestResult::FAIL_INVALID_TASK, TaskId::default_instance());
     }
 }
 
 std::pair<ControllerRequestResult, TaskId> DefaultModelController::AddSubTask(const Task& task, const TaskId& parent_id) {
     if (task_validator_->ValidateTask(task)) {
+        LOG_TRIVIAL(info) << "Sending request, Task: {" << task.ShortDebugString() << "} parent id: " << parent_id.id();
+
         std::pair<TaskActionResult, TaskId> result = model_->AddSubTask(task, parent_id);
         return std::make_pair(FormControllerRequestResult(result.first), result.second);
+    } else {
+        LOG_TRIVIAL(warning) << "Invalid task was given, Task: {" << task.ShortDebugString() << "}";
+        return std::make_pair(ControllerRequestResult::FAIL_INVALID_TASK, TaskId::default_instance());
     }
-    return std::make_pair(ControllerRequestResult::FAIL_INVALID_TASK, TaskId::default_instance());
 }
 
 ControllerRequestResult DefaultModelController::EditTask(const TaskId& task_id, const Task& task) {
@@ -63,7 +72,11 @@ std::optional<RelationalTask> DefaultModelController::GetTask(const TaskId& task
 }
 
 std::vector<RelationalTask> DefaultModelController::GetAllTasks() {
-    return model_->GetTasks();
+    auto tasks = model_->GetTasks();
+
+    LOG_TRIVIAL(info) << "Tasks received: " << tasks.size();
+
+    return tasks;
 }
 
 ControllerRequestResult DefaultModelController::AddTaskLabel(const TaskId& task_id, const std::string& label) {

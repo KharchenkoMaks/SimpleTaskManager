@@ -25,7 +25,7 @@ TaskManager::TaskManager(std::unique_ptr<IdGenerator> generator,
 
 std::pair<TaskActionResult, TaskId> TaskManager::AddTask(const Task& task) {
     if (!task_validator_->ValidateTask(task)) {
-        LOG_TRIVIAL(warning) << "Invalid task given, Task: " << task.ShortDebugString();
+        LOG_TRIVIAL(error) << "Invalid task given, Task: " << task.ShortDebugString();
         return std::pair(TaskActionResult::FAIL_INVALID_TASK, TaskId::default_instance());
     }
 
@@ -39,7 +39,7 @@ std::pair<TaskActionResult, TaskId> TaskManager::AddTask(const Task& task) {
 
 std::pair<TaskActionResult, TaskId> TaskManager::AddSubTask(const Task& task, const TaskId& parent_id) {
     if (!task_validator_->ValidateTask(task)) {
-        LOG_TRIVIAL(warning) << "Invalid task given, Task: " << task.ShortDebugString();
+        LOG_TRIVIAL(error) << "Invalid task given, Task: " << task.ShortDebugString();
         return std::pair(TaskActionResult::FAIL_INVALID_TASK, TaskId::default_instance());
     }
 
@@ -124,6 +124,9 @@ std::vector<RelationalTask> TaskManager::GetTasks() {
             tasks.insert(tasks.end(), adding_tasks.begin(), adding_tasks.end());
         }
     }
+
+    LOG_TRIVIAL(debug) << "Tasks returned: " << tasks.size();
+
     return tasks;
 }
 
