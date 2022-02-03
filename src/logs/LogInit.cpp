@@ -5,7 +5,6 @@
 #include "LogInit.h"
 
 #include <boost/date_time/posix_time/posix_time_types.hpp>
-#include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/sources/record_ostream.hpp>
@@ -16,7 +15,8 @@
 
 #include <iostream>
 
-void logs_init(const bool show_in_console) {
+void logs_init(const boost::log::trivial::severity_level severity_level,
+               const bool show_in_console) {
     //boost::log::core::get()->add_global_attribute("Scope", boost::log::attributes::named_scope());
 
     /*auto log_format = boost::log::expressions::stream
@@ -48,6 +48,11 @@ void logs_init(const bool show_in_console) {
                 std::cout,
                 boost::log::keywords::format = log_format);
     }
+
+    boost::log::core::get()->set_filter
+            (
+                    boost::log::trivial::severity >= severity_level
+            );
 
     boost::log::add_common_attributes();
 }

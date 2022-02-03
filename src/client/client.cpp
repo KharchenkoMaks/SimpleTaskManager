@@ -14,13 +14,42 @@
 #include "controller/DefaultModelController.h"
 
 #include "logs/LogInit.h"
+#include <boost/log/trivial.hpp>
+#include <boost/program_options.hpp>
 
 #include <grpcpp/grpcpp.h>
 
 #include <string>
+#include <iostream>
 
-int main() {
-    logs_init(false);
+void parse_options(int argc, char* argv[]) {
+    bool show_logs_in_console = false;
+    bool severity_debug = false;
+
+    boost::program_options::options_description desc("Allowed options");
+
+    desc.add_options()
+            ("help", "prints help message")
+            ("log_console", boost::program_options::bool_switch(&show_logs_in_console), "show logs in console")
+            ("debug", boost::program_options::bool_switch(&severity_debug), "enable debug logs");
+
+    boost::program_options::variables_map vm;
+    boost::program_options::store(parse_command_line(argc, argv, desc), vm);
+    boost::program_options::notify(vm);
+
+    if (vm.count("help")) {
+        std::cout << desc << "\n";
+        return;
+    }
+
+    if (severity_debug)
+        logs_init(boost::log::trivial::severity_level::debug, show_logs_in_console);
+    else
+        logs_init(boost::log::trivial::severity_level::info, show_logs_in_console);
+}
+
+int main(int argc, char* argv[]) {
+    parse_options(argc, argv);
 
     std::string target_str = "localhost:8586";
 

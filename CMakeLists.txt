@@ -16,7 +16,7 @@ set(Boost_USE_RELEASE_LIBS       ON)  # only find release libs
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 
-find_package(Boost REQUIRED log_setup log COMPONENTS)
+find_package(Boost REQUIRED log_setup log program_options COMPONENTS)
 if(Boost_FOUND)
     message(STATUS "Using BOOST ${Boost_VERSION}")
     include_directories(${Boost_INCLUDE_DIRS})
