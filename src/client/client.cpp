@@ -13,53 +13,18 @@
 #include "client/GRPCClientEndPoint.h"
 #include "controller/DefaultModelController.h"
 
-#include "logs/LogInit.h"
+#include "options/ProgramOptionsParsers.h"
+
 #include "logs/DefaultLogging.h"
-#include <boost/log/trivial.hpp>
-#include <boost/program_options.hpp>
 
 #include <grpcpp/grpcpp.h>
 
 #include <string>
-#include <iostream>
-
-std::string parse_options(int argc, char* argv[]) {
-    bool show_logs_in_console = false;
-    bool severity_debug = false;
-    std::string ip = "localhost:8586";
-
-    boost::program_options::options_description desc("Allowed options");
-
-    desc.add_options()
-            ("help", "prints help message")
-            ("log_console", boost::program_options::bool_switch(&show_logs_in_console), "show logs in console")
-            ("debug", boost::program_options::bool_switch(&severity_debug), "enable debug logs")
-            ("ip", boost::program_options::value(&ip), "server remote host, default: localhost:8586");
-
-    boost::program_options::variables_map vm;
-    boost::program_options::store(parse_command_line(argc, argv, desc), vm);
-    boost::program_options::notify(vm);
-
-    if (vm.count("help")) {
-        std::cout << desc << "\n";
-        return "";
-    }
-
-    if (severity_debug)
-        logs_init(boost::log::trivial::severity_level::debug, show_logs_in_console);
-    else
-        logs_init(boost::log::trivial::severity_level::info, show_logs_in_console);
-
-    return ip;
-}
 
 int main(int argc, char* argv[]) {
-    std::string target_str = parse_options(argc, argv);
+    std::string target_str = parse_options_host(argc, argv, "localhost", "8586");
 
-    if (target_str.empty())
-        return 1;
-    else
-        LOG_TRIVIAL(info) << "Client started with target ip: " << target_str;
+    LOG_TRIVIAL(info) << "Client starting with target ip: " << target_str;
 
     std::shared_ptr<CommandFactory> command_factory = std::make_shared<CommandFactory>();
     std::shared_ptr<ConsolePrinter> printer = std::make_shared<ConsolePrinter>();
