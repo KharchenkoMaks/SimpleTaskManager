@@ -8,9 +8,13 @@
 #include "ViewController.h"
 #include "persistence/PersistenceFactory.h"
 
+#include "logs/LogInit.h"
+
 #include <memory>
 
 int main() {
+    logs_init();
+
     std::shared_ptr<CommandFactory> command_factory = std::make_shared<CommandFactory>();
     std::shared_ptr<ConsolePrinter> printer = std::make_shared<ConsolePrinter>();
     std::shared_ptr<ConsoleReader> reader = std::make_shared<ConsoleReader>();

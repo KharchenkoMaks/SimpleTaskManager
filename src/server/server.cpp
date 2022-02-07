@@ -2,17 +2,20 @@
 // Created by Maksym Kharchenko on 25.01.2022.
 //
 
-#include <boost/log/trivial.hpp>
-
 #include "server/GRPCServerEndPoint.h"
 
 #include "model/TaskManager.h"
 #include "model/IdGenerator.h"
 
+#include "logs/LogInit.h"
+#include "logs/DefaultLogging.h"
+
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/health_check_service_interface.h>
 
 int main() {
+    logs_init();
+
     std::unique_ptr<Model> model =
             std::make_unique<TaskManager>(std::make_unique<IdGenerator>());
 
@@ -29,7 +32,10 @@ int main() {
     // Finally assemble the server.
     std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
     //std::cout << "Server listening on " << server_address << std::endl;
-    BOOST_LOG_TRIVIAL(info) << "Server listening on " << server_address;
+
+    //BOOST_LOG_NAMED_SCOPE(__FILE__);
+    //BOOST_LOG_NAMED_SCOPE(__FUNCTION__);
+    LOG_TRIVIAL(info) << "Server listening on " << server_address;
 
     // Wait for the server to shutdown. Note that some other thread must be
     // responsible for shutting down the server for this call to ever return.
