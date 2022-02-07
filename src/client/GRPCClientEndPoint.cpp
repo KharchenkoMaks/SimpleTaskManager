@@ -23,7 +23,10 @@ std::pair<TaskActionResult, TaskId> GRPCClientEndPoint::AddTask(const Task& task
 
     grpc::Status status = stub_->AddTask(&context, request, &response);
 
-    LOG_TRIVIAL(debug) << "Request success: " << status.ok() << ", " << response.added_task_id().ShortDebugString();
+    if (!status.ok())
+        LOG_TRIVIAL(error) << status.error_message();
+    else
+        LOG_TRIVIAL(debug) << "Request answer: " << response.added_task_id().ShortDebugString();
 
     return std::make_pair(CreateTaskActionResult(response.result()), response.added_task_id());
 }
@@ -40,7 +43,10 @@ std::pair<TaskActionResult, TaskId> GRPCClientEndPoint::AddSubTask(const Task& t
 
     grpc::Status status = stub_->AddSubTask(&context, request, &response);
 
-    LOG_TRIVIAL(debug) << "Request success: " << status.ok() << ", " << response.added_task_id().ShortDebugString();
+    if (!status.ok())
+        LOG_TRIVIAL(error) << status.error_message();
+    else
+        LOG_TRIVIAL(debug) << "Request answer: " << response.added_task_id().ShortDebugString();
 
     return std::make_pair(CreateTaskActionResult(response.result()), response.added_task_id());
 }
@@ -120,7 +126,10 @@ std::vector<RelationalTask> GRPCClientEndPoint::GetTasks() {
 
     grpc::Status status = stub_->GetTasks(&context, request, &response);
 
-    LOG_TRIVIAL(debug) << "Tasks received: " << response.tasks_size();
+    if (!status.ok())
+        LOG_TRIVIAL(error) << status.error_message();
+    else
+        LOG_TRIVIAL(debug) << "Tasks received: " << response.tasks_size();
 
     std::vector<RelationalTask> tasks;
     for (const auto& task : response.tasks()) {
