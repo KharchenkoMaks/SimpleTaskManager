@@ -1,8 +1,5 @@
-#include <iostream>
-
 #include "TaskManager.h"
-#include "user_interface/ConsoleStateMachine.h"
-#include "states/factory/StatesFactory.h"
+#include "states/factory/LazyStatesFactory.h"
 #include "DefaultModelController.h"
 #include "user_interface/UserInterface.h"
 #include "ViewController.h"
@@ -15,20 +12,16 @@
 int main() {
     logs_init();
 
-    std::shared_ptr<CommandFactory> command_factory = std::make_shared<CommandFactory>();
-    std::shared_ptr<ConsolePrinter> printer = std::make_shared<ConsolePrinter>();
-    std::shared_ptr<ConsoleReader> reader = std::make_shared<ConsoleReader>();
-    std::shared_ptr<StatesFactory> states_factory = std::make_shared<StatesFactory>(command_factory,
-                                                                                    printer,
-                                                                                    reader);
-    std::unique_ptr<UserInterface> user_interface = std::make_unique<UserInterface>(states_factory, printer);
-    std::unique_ptr<ModelController> model_controller = std::make_unique<DefaultModelController>(
+    auto command_factory = std::make_shared<CommandFactory>();
+    auto printer = std::make_shared<ConsolePrinter>();
+    auto reader = std::make_shared<ConsoleReader>();
+    auto states_factory = std::make_shared<LazyStatesFactory>(command_factory, printer, reader);
+    auto user_interface = std::make_unique<UserInterface>(states_factory, printer);
+    auto model_controller = std::make_unique<DefaultModelController>(
             std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
             std::make_unique<TaskValidator>(),
             std::make_unique<persistence::PersistenceFactory>());
-    std::unique_ptr<ViewController> view_controller = std::make_unique<ViewController>(
-            std::move(model_controller),
-            std::move(user_interface));
+    auto view_controller = std::make_unique<ViewController>(std::move(model_controller), std::move(user_interface));
 
     view_controller->RunUserInterface();
     return 0;

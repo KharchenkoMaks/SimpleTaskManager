@@ -3,20 +3,26 @@
 //
 
 #include "LoadState.h"
-#include "utilities/SaveLoadStatus.h"
 #include "user_interface/console_io/ConsoleUtilities.h"
 
-LoadState::LoadState(const std::shared_ptr<StatesFactory>& factory) : factory_(factory) {
+LoadState::LoadState(const StateType next_state,
+                     const StateType error_state,
+                     const std::shared_ptr<ConsolePrinter>& printer,
+                     const std::shared_ptr<ConsoleReader>& reader,
+                     const std::shared_ptr<CommandFactory>& command_factory) :
+                     next_state_(next_state),
+                     error_state_(error_state),
+                     printer_(printer),
+                     reader_(reader),
+                     command_factory_(command_factory) {}
 
-}
-
-std::shared_ptr<State> LoadState::Execute(StateContext& context) {
-    std::string file_name = console_io::util::GetUserInput("File name", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
+StateType LoadState::Execute(StateContext& context) {
+    std::string file_name = console_io::util::GetUserInput("File name", *printer_, *reader_);
     if (file_name.empty()) {
-        factory_.lock()->GetConsolePrinter()->WriteError("Invalid file name!");
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
+        printer_->WriteError("Invalid file name!");
+        return error_state_;
     }
     context.SetFileName(file_name);
-    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateLoadCommand(context));
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
+    context.SetCommand(command_factory_->CreateLoadCommand(context));
+    return next_state_;
 }

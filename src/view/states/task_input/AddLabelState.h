@@ -1,27 +1,26 @@
 //
-// Created by Maksym Kharchenko on 16.12.2021.
+// Created by Maksym Kharchenko on 06.12.2021.
 //
 
-#ifndef SIMPLETASKMANAGER_SAVESTATE_H
-#define SIMPLETASKMANAGER_SAVESTATE_H
+#ifndef SIMPLETASKMANAGER_ADDLABELSTATE_H
+#define SIMPLETASKMANAGER_ADDLABELSTATE_H
 
 #include "states/State.h"
 #include "view/commands/factory/CommandFactory.h"
 #include "user_interface/StateContext.h"
-#include "Task.pb.h"
 #include "view/user_interface/console_io/ConsolePrinter.h"
 #include "view/user_interface/console_io/ConsoleReader.h"
 
 #include <memory>
 #include <optional>
 
-class SaveState : public State {
+class AddLabelState : public State {
 public:
-    SaveState(StateType next_state,
-              StateType error_state,
-              const std::shared_ptr<ConsolePrinter>& printer,
-              const std::shared_ptr<ConsoleReader>& reader,
-              const std::shared_ptr<CommandFactory>& command_factory);
+    AddLabelState(StateType next_state,
+                  StateType error_state,
+                  const std::shared_ptr<ConsolePrinter>& printer,
+                  const std::shared_ptr<ConsoleReader>& reader,
+                  const std::shared_ptr<CommandFactory>& command_factory);
 public:
     StateType Execute(StateContext& context) override;
 private:
@@ -33,4 +32,4 @@ private:
 };
 
 
-#endif //SIMPLETASKMANAGER_SAVESTATE_H
+#endif //SIMPLETASKMANAGER_ADDLABELSTATE_H

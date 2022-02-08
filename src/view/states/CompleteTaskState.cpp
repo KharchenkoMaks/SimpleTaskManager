@@ -5,19 +5,27 @@
 #include "CompleteTaskState.h"
 #include "user_interface/console_io/ConsoleUtilities.h"
 
-CompleteTaskState::CompleteTaskState(const std::shared_ptr<StatesFactory>& factory) :
-                                    factory_(factory) {
+CompleteTaskState::CompleteTaskState(const StateType next_state,
+                                     const StateType error_state,
+                                     const std::shared_ptr<ConsolePrinter>& printer,
+                                     const std::shared_ptr<ConsoleReader>& reader,
+                                     const std::shared_ptr<CommandFactory>& command_factory) :
+                                     next_state_(next_state),
+                                     error_state_(error_state),
+                                     printer_(printer),
+                                     reader_(reader),
+                                     command_factory_(command_factory) {}
 
-}
-
-std::shared_ptr<State> CompleteTaskState::Execute(StateContext& context) {
-    std::optional<TaskId> task_id = console_io::util::GetTaskIdFromUser("Task ID", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
+StateType CompleteTaskState::Execute(StateContext& context) {
+    std::optional<TaskId> task_id = console_io::util::GetTaskIdFromUser("Task ID", *printer_, *reader_);
     if (!task_id.has_value()) {
-        factory_.lock()->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
+        printer_->WriteError("Incorrect task id was given, try again!");
+        return error_state_;
     }
 
     context.SetTaskId(task_id.value());
-    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateCompleteCommand(context, console_io::util::UserConfirm("Complete all subtasks?", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader())));
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
+    context.SetCommand(command_factory_->CreateCompleteCommand(context,console_io::util::UserConfirm("Complete all subtasks?",
+                                                                                                     *printer_,
+                                                                                                     *reader_)));
+    return next_state_;
 }

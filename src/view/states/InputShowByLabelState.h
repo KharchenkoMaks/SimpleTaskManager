@@ -6,9 +6,10 @@
 #define SIMPLETASKMANAGER_INPUTSHOWBYLABELSTATE_H
 
 #include "states/State.h"
-#include "states/factory/StatesFactory.h"
 #include "user_interface/StateContext.h"
 #include "Task.pb.h"
+#include "view/user_interface/console_io/ConsolePrinter.h"
+#include "view/user_interface/console_io/ConsoleReader.h"
 
 #include <memory>
 #include <optional>
@@ -19,11 +20,15 @@
 
 class InputShowByLabelState : public State {
 public:
-    explicit InputShowByLabelState(const std::shared_ptr<StatesFactory>& factory);
+    InputShowByLabelState(StateType next_state,
+                          const std::shared_ptr<ConsolePrinter>& printer,
+                          const std::shared_ptr<ConsoleReader>& reader);
 public:
-    std::shared_ptr<State> Execute(StateContext& context) override;
+    StateType Execute(StateContext& context) override;
 private:
-    std::weak_ptr<StatesFactory> factory_;
+    StateType next_state_;
+    std::shared_ptr<ConsolePrinter> printer_;
+    std::shared_ptr<ConsoleReader> reader_;
 };
 
 

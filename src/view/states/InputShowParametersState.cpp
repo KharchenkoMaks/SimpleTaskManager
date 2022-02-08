@@ -6,18 +6,17 @@
 #include "user_interface/console_io/ConsoleUtilities.h"
 #include "utilities/TaskConvertors.h"
 
-InputShowParametersState::InputShowParametersState(const std::shared_ptr<StatesFactory>& factory) :
-                    factory_(factory) {
+InputShowParametersState::InputShowParametersState(const StateType next_state,
+                                                   const std::shared_ptr<CommandFactory>& command_factory,
+                                                   std::unique_ptr<ConsoleStateMachine> state_machine) :
+                                                   next_state_(next_state),
+                                                   command_factory_(command_factory),
+                                                   state_machine_(std::move(state_machine)) {}
 
-}
-
-std::shared_ptr<State> InputShowParametersState::Execute(StateContext& context) {
-    auto state_machine = factory_.lock()->CreateStateMachine(factory_.lock()->GetInputShowParametersInitialState(),
-                                                             std::make_shared<StateContext>());
-
-    std::shared_ptr<StateContext> context_with_show_parameters = state_machine->Run();
+StateType InputShowParametersState::Execute(StateContext& context) {
+    std::shared_ptr<StateContext> context_with_show_parameters = state_machine_->Run();
 
     context.SetTaskLabel(context_with_show_parameters->GetTaskLabel());
-    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateShowCommand(context));
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT);
+    context.SetCommand(command_factory_->CreateShowCommand(context));
+    return next_state_;
 }

@@ -9,9 +9,9 @@
 
 class MockStateMachine : public ConsoleStateMachine {
 public:
-    MockStateMachine() : ConsoleStateMachine(nullptr, nullptr) {}
+    MockStateMachine() : ConsoleStateMachine(StateType::kRoot, nullptr, nullptr) {}
 
-    MOCK_METHOD(std::shared_ptr<StateContext>, Run, (), (override));
+    MOCK_METHOD(std::unique_ptr<StateContext>, Run, (), (override));
 };
 
 #endif //SIMPLETASKMANAGER_MOCKSTATEMACHINE_H

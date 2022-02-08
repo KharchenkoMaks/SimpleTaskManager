@@ -5,24 +5,32 @@
 #include "states/task_input/EditTaskState.h"
 #include "user_interface/console_io/ConsoleUtilities.h"
 
-EditTaskState::EditTaskState(const std::shared_ptr<StatesFactory>& factory) :
-                            factory_(factory) {
+EditTaskState::EditTaskState(const StateType next_state,
+                             const StateType error_state,
+                             const std::shared_ptr<ConsolePrinter>& printer,
+                             const std::shared_ptr<ConsoleReader>& reader,
+                             const std::shared_ptr<CommandFactory>& command_factory,
+                             std::unique_ptr<ConsoleStateMachine> state_machine) :
+                             next_state_(next_state),
+                             error_state_(error_state),
+                             printer_(printer),
+                             reader_(reader),
+                             command_factory_(command_factory),
+                             state_machine_(std::move(state_machine)) {
 
 }
 
-std::shared_ptr<State> EditTaskState::Execute(StateContext& context) {
-    std::optional<TaskId> editing_task_id = console_io::util::GetTaskIdFromUser("Task ID", *factory_.lock()->GetConsolePrinter(), *factory_.lock()->GetConsoleReader());
+StateType EditTaskState::Execute(StateContext& context) {
+    std::optional<TaskId> editing_task_id = console_io::util::GetTaskIdFromUser("Task ID", *printer_, *reader_);
     if (!editing_task_id.has_value()) {
-        factory_.lock()->GetConsolePrinter()->WriteError("Incorrect task id was given, try again!");
-        return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::ERROR);
+        printer_->WriteError("Incorrect task id was given, try again!");
+        return error_state_;
     }
 
-    auto state_machine = factory_.lock()->CreateStateMachine(factory_.lock()->GetNextState(*this, StatesFactory::MoveType::NEXT),
-                                                             std::make_shared<StateContext>());
-    std::shared_ptr<StateContext> context_with_edited_task = state_machine->Run();
+    std::shared_ptr<StateContext> context_with_edited_task = state_machine_->Run();
 
     context.SetTaskBuilder(context_with_edited_task->GetTaskBuilder());
     context.SetTaskId(editing_task_id.value());
-    context.SetCommand(factory_.lock()->GetCommandFactory()->CreateEditCommand(context));
-    return factory_.lock()->GetNextState(*this, StatesFactory::MoveType::PREVIOUS);
+    context.SetCommand(command_factory_->CreateEditCommand(context));
+    return next_state_;
 }
