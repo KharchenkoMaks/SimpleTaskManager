@@ -10,6 +10,18 @@ enable_testing()
 
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
+set(Boost_USE_STATIC_LIBS        ON)  # only find static libs
+set(Boost_USE_DEBUG_LIBS         OFF) # ignore debug libs and
+set(Boost_USE_RELEASE_LIBS       ON)  # only find release libs
+set(Boost_USE_MULTITHREADED      ON)
+set(Boost_USE_STATIC_RUNTIME    OFF)
+
+find_package(Boost REQUIRED log_setup log COMPONENTS)
+if(Boost_FOUND)
+    message(STATUS "Using BOOST ${Boost_VERSION}")
+    include_directories(${Boost_INCLUDE_DIRS})
+endif()
+
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=nullability")
 
 include_directories(src/model/)
@@ -29,7 +41,9 @@ file(GLOB_RECURSE TaskManager_SRCS CONFIGURE_DEPENDS
         "src/utilities/*.h"
         "src/utilities/*.cpp"
         "src/persistence/*.h"
-        "src/persistence/*.cpp")
+        "src/persistence/*.cpp"
+        "src/logs/*.h"
+        "src/logs/*.cpp")
 
 file(GLOB_RECURSE SERVER_SRCS CONFIGURE_DEPENDS
         "src/model/*.h"
@@ -37,7 +51,9 @@ file(GLOB_RECURSE SERVER_SRCS CONFIGURE_DEPENDS
         "src/utilities/*.h"
         "src/utilities/*.cpp"
         "src/server/*.h"
-        "src/server/*.cpp")
+        "src/server/*.cpp"
+        "src/logs/*.h"
+        "src/logs/*.cpp")
 
 file(GLOB_RECURSE CLIENT_SRCS CONFIGURE_DEPENDS
         "src/view/*.h"
@@ -50,7 +66,9 @@ file(GLOB_RECURSE CLIENT_SRCS CONFIGURE_DEPENDS
         "src/controller/*.cpp"
         "src/persistence/*.h"
         "src/persistence/*.cpp"
-        "src/model/Model.h")
+        "src/model/Model.h"
+        "src/logs/*.h"
+        "src/logs/*.cpp")
 
 file(GLOB_RECURSE TaskManager_TEST CONFIGURE_DEPENDS
         "tests/*.h"
@@ -135,8 +153,8 @@ add_executable(SimpleTaskManager_test
         src/client/GRPCClientEndPoint.h
         src/client/GRPCClientEndPoint.cpp)
 
-target_link_libraries(SimpleTaskManager protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
-target_link_libraries(server protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
-target_link_libraries(client protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
+target_link_libraries(SimpleTaskManager protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection ${Boost_LIBRARIES})
+target_link_libraries(server protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection ${Boost_LIBRARIES})
+target_link_libraries(client protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection ${Boost_LIBRARIES})
 
-target_link_libraries(SimpleTaskManager_test protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection GTest::gtest GTest::gmock GTest::gmock_main)
+target_link_libraries(SimpleTaskManager_test protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection GTest::gtest GTest::gmock ${Boost_LIBRARIES})

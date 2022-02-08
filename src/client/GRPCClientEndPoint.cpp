@@ -7,6 +7,8 @@
 #include "Requests.pb.h"
 #include "Responses.pb.h"
 
+#include "logs/DefaultLogging.h"
+
 GRPCClientEndPoint::GRPCClientEndPoint(std::unique_ptr<TaskManagerService::StubInterface> stub) :
         stub_(std::move(stub)) {}
 
@@ -17,7 +19,14 @@ std::pair<TaskActionResult, TaskId> GRPCClientEndPoint::AddTask(const Task& task
     AddTaskResponse response;
     grpc::ClientContext context;
 
+    LOG_TRIVIAL(debug) << "Sending request, Task: {" << task.ShortDebugString() << "}";
+
     grpc::Status status = stub_->AddTask(&context, request, &response);
+
+    if (!status.ok())
+        LOG_TRIVIAL(error) << status.error_message();
+    else
+        LOG_TRIVIAL(debug) << "Request answer: " << response.added_task_id().ShortDebugString();
 
     return std::make_pair(CreateTaskActionResult(response.result()), response.added_task_id());
 }
@@ -30,7 +39,14 @@ std::pair<TaskActionResult, TaskId> GRPCClientEndPoint::AddSubTask(const Task& t
     AddSubTaskResponse response;
     grpc::ClientContext context;
 
+    LOG_TRIVIAL(debug) << "Sending request, Task: {" << task.ShortDebugString() << "}, " << parent_id.ShortDebugString();
+
     grpc::Status status = stub_->AddSubTask(&context, request, &response);
+
+    if (!status.ok())
+        LOG_TRIVIAL(error) << status.error_message();
+    else
+        LOG_TRIVIAL(debug) << "Request answer: " << response.added_task_id().ShortDebugString();
 
     return std::make_pair(CreateTaskActionResult(response.result()), response.added_task_id());
 }
@@ -106,7 +122,14 @@ std::vector<RelationalTask> GRPCClientEndPoint::GetTasks() {
     GetTasksResponse response;
     grpc::ClientContext context;
 
+    LOG_TRIVIAL(debug) << "Sending request";
+
     grpc::Status status = stub_->GetTasks(&context, request, &response);
+
+    if (!status.ok())
+        LOG_TRIVIAL(error) << status.error_message();
+    else
+        LOG_TRIVIAL(debug) << "Tasks received: " << response.tasks_size();
 
     std::vector<RelationalTask> tasks;
     for (const auto& task : response.tasks()) {

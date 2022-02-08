@@ -5,9 +5,13 @@
 #include "ViewController.h"
 #include "persistence/PersistenceFactory.h"
 
+#include "logs/LogInit.h"
+
 #include <memory>
 
 int main() {
+    logs_init();
+
     auto command_factory = std::make_shared<CommandFactory>();
     auto printer = std::make_shared<ConsolePrinter>();
     auto reader = std::make_shared<ConsoleReader>();
