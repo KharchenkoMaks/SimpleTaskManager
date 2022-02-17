@@ -18,6 +18,7 @@
 #include <memory>
 #include <optional>
 #include <algorithm>
+#include <mutex>
 
 class TaskManager : public Model {
 public:
@@ -45,6 +46,7 @@ private:
     google::protobuf::internal::RepeatedPtrIterator<const std::string> FindTaskLabel(const Task& task, const std::string& label);
 private:
     std::map<TaskId, model::TaskNode> tasks_;
+    std::mutex tasks_map_mutex_;
 
     std::map<TaskId, model::TaskNode> deleted_tasks_;
 
