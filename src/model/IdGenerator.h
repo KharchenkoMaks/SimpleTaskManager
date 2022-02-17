@@ -7,6 +7,8 @@
 
 #include "Task.pb.h"
 
+#include <mutex>
+
 class IdGenerator{
 public:
     IdGenerator();
@@ -18,6 +20,8 @@ public:
     virtual ~IdGenerator();
 private:
     int last_id_;
+
+    std::mutex last_id_mutex_;
 };
 
 
