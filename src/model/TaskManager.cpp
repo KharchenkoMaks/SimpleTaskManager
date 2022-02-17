@@ -71,25 +71,31 @@ TaskActionResult TaskManager::EditTask(const TaskId& id, const Task& task) {
 }
 
 TaskActionResult TaskManager::DeleteTask(const TaskId& id, bool force_delete_subtasks) {
-    auto deleting_task = tasks_.find(id);
-    if (deleting_task == tasks_.end())
-        return TaskActionResult::FAIL_NO_SUCH_TASK;
+    std::vector<TaskId> task_ids_to_delete;
+    auto task_to_delete = tasks_.find(id);
 
-    auto search_child_rule = [&id](const std::pair<TaskId, TaskNode>& task) {
+    if (task_to_delete == tasks_.end())
+        return TaskActionResult::FAIL_NO_SUCH_TASK;
+    else
+        task_ids_to_delete.push_back(task_to_delete->first);
+
+    if (!force_delete_subtasks && std::find_if(tasks_.begin(), tasks_.end(), [&id](const std::pair<TaskId, TaskNode>& task) {
         return task.second.parent_id() == id;
-    };
-    if (force_delete_subtasks) {
-        auto subtask = std::find_if(tasks_.begin(), tasks_.end(), search_child_rule);
-        while (subtask != tasks_.end()) {
-            this->DeleteTask(subtask->first, true);
-            subtask = std::find_if(tasks_.begin(), tasks_.end(), search_child_rule);
-        }
-    } else if (std::find_if(tasks_.begin(), tasks_.end(), search_child_rule) != tasks_.end()) {
+    }) != tasks_.end()) {
         return TaskActionResult::FAIL_NOT_DELETED_SUBTASKS;
     }
 
-    deleted_tasks_.insert_or_assign(deleting_task->first, deleting_task->second);
-    tasks_.erase(deleting_task);
+    for (size_t i = 0; i < task_ids_to_delete.size(); ++i) {
+        for (const auto& task : tasks_) {
+            if (task.second.parent_id() == task_ids_to_delete[i]) {
+                task_ids_to_delete.push_back(task.first);
+            }
+        }
+        auto deleting_task = tasks_.find(task_ids_to_delete[i]);
+        deleted_tasks_.insert_or_assign(deleting_task->first, deleting_task->second);
+        tasks_.erase(deleting_task);
+    }
+
     return TaskActionResult::SUCCESS;
 }
 
