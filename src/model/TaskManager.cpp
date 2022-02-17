@@ -100,25 +100,29 @@ TaskActionResult TaskManager::DeleteTask(const TaskId& id, bool force_delete_sub
 }
 
 TaskActionResult TaskManager::CompleteTask(const TaskId& id, bool force_complete_subtasks) {
-    auto completing_task = tasks_.find(id);
-    if (completing_task == tasks_.end())
+    std::vector<TaskId> task_ids_to_complete;
+    auto task_to_complete = tasks_.find(id);
+
+    if (task_to_complete == tasks_.end())
         return TaskActionResult::FAIL_NO_SUCH_TASK;
+    else
+        task_ids_to_complete.push_back(task_to_complete->first);
 
-    auto search_uncompleted_child_rule = [&id](const std::pair<TaskId, TaskNode>& task) {
+    if (!force_complete_subtasks && std::find_if(tasks_.begin(), tasks_.end(), [&id](const std::pair<TaskId, TaskNode>& task) {
         return task.second.parent_id() == id && !task.second.task().completed();
-    };
-
-    if (force_complete_subtasks) {
-        for (const auto& task : tasks_)
-            if (task.second.parent_id() == id && !task.second.task().completed())
-                this->CompleteTask(task.first, true);
-    } else if (std::find_if(tasks_.begin(), tasks_.end(), search_uncompleted_child_rule) != tasks_.end()) {
+    }) != tasks_.end()) {
         return TaskActionResult::FAIL_UNCOMPLETED_SUBTASKS;
     }
 
-    Task task_to_complete = completing_task->second.task();
-    task_to_complete.set_completed(true);
-    completing_task->second.set_allocated_task(new Task(task_to_complete));
+    for (size_t i = 0; i < task_ids_to_complete.size(); ++i) {
+        for (const auto& task : tasks_) {
+            if (task.second.parent_id() == task_ids_to_complete[i] && !task.second.task().completed()) {
+                task_ids_to_complete.push_back(task.first);
+            }
+        }
+        auto completing_task = tasks_.find(task_ids_to_complete[i]);
+        completing_task->second.mutable_task()->set_completed(true);
+    }
     return TaskActionResult::SUCCESS;
 }
 
