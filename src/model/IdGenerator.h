@@ -7,7 +7,7 @@
 
 #include "Task.pb.h"
 
-#include <mutex>
+#include <atomic>
 
 class IdGenerator{
 public:
@@ -19,9 +19,7 @@ public:
 public:
     virtual ~IdGenerator();
 private:
-    int last_id_;
-
-    std::mutex last_id_mutex_;
+    std::atomic<int> last_id_;
 };
 
 

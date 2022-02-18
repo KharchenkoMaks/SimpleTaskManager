@@ -20,12 +20,14 @@
 class DISABLED_MultiThreadTaskManagerTest : public ::testing::Test {
 public:
     std::shared_ptr<ModelController> model_controller_;
+
     void SetUp() override {
         model_controller_ = std::make_shared<DefaultModelController>(
                 std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
                 std::make_unique<TaskValidator>(),
                 std::make_unique<persistence::PersistenceFactory>());
     }
+
     std::shared_ptr<Command> CreateRandomCommand() {
         int cmd_type = rand() % 4;
         TaskId id;
