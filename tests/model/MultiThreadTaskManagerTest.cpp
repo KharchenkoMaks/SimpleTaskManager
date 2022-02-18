@@ -19,7 +19,14 @@
 
 class DISABLED_MultiThreadTaskManagerTest : public ::testing::Test {
 public:
-    static std::shared_ptr<Command> CreateRandomCommand() {
+    std::shared_ptr<ModelController> model_controller_;
+    void SetUp() override {
+        model_controller_ = std::make_shared<DefaultModelController>(
+                std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
+                std::make_unique<TaskValidator>(),
+                std::make_unique<persistence::PersistenceFactory>());
+    }
+    std::shared_ptr<Command> CreateRandomCommand() {
         int cmd_type = rand() % 4;
         TaskId id;
         id.set_id(rand() % 200);
@@ -38,15 +45,10 @@ public:
         }
     }
 
-    static void ExecuteRandomCommandToTaskManager(const int times) {
-        auto model_controller = std::make_shared<DefaultModelController>(
-                std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
-                std::make_unique<TaskValidator>(),
-                std::make_unique<persistence::PersistenceFactory>());
-
+    void ExecuteRandomCommandToTaskManager(const int times) {
         for (int i = 0; i < times; ++i) {
             auto cmd = DISABLED_MultiThreadTaskManagerTest::CreateRandomCommand();
-            cmd->Execute(model_controller);
+            cmd->Execute(model_controller_);
         }
     }
 };
@@ -59,7 +61,7 @@ TEST_F(DISABLED_MultiThreadTaskManagerTest, SendingDifferentRequestsToTaskManage
     std::vector<std::thread> threads;
     // Act
     for (int i = 0; i < thread_count; ++i) {
-        std::thread t {DISABLED_MultiThreadTaskManagerTest::ExecuteRandomCommandToTaskManager, commands_per_thread };
+        std::thread t {&DISABLED_MultiThreadTaskManagerTest::ExecuteRandomCommandToTaskManager, this, commands_per_thread };
         threads.push_back(std::move(t));
     }
 
