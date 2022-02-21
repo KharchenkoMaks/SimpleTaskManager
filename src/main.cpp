@@ -10,7 +10,7 @@
 #include <memory>
 
 int main() {
-    logs_init();
+    logs_init(boost::log::trivial::severity_level::info, false);
 
     auto command_factory = std::make_shared<CommandFactory>();
     auto printer = std::make_shared<ConsolePrinter>();
