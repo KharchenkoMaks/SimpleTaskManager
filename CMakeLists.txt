@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 include(GoogleTest)
 
-find_package(GTest REQUIRED)
+find_package(GTest CONFIG REQUIRED)
 enable_testing()
 
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
