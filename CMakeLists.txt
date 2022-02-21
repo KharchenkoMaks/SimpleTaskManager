@@ -16,7 +16,7 @@ set(Boost_USE_RELEASE_LIBS       ON)  # only find release libs
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 
-find_package(Boost REQUIRED log_setup log COMPONENTS)
+find_package(Boost REQUIRED log_setup log program_options COMPONENTS)
 if(Boost_FOUND)
     message(STATUS "Using BOOST ${Boost_VERSION}")
     include_directories(${Boost_INCLUDE_DIRS})
@@ -43,7 +43,9 @@ file(GLOB_RECURSE TaskManager_SRCS CONFIGURE_DEPENDS
         "src/persistence/*.h"
         "src/persistence/*.cpp"
         "src/logs/*.h"
-        "src/logs/*.cpp")
+        "src/logs/*.cpp"
+        "src/options/*.h"
+        "src/options/*.cpp")
 
 file(GLOB_RECURSE SERVER_SRCS CONFIGURE_DEPENDS
         "src/model/*.h"
@@ -53,7 +55,9 @@ file(GLOB_RECURSE SERVER_SRCS CONFIGURE_DEPENDS
         "src/server/*.h"
         "src/server/*.cpp"
         "src/logs/*.h"
-        "src/logs/*.cpp")
+        "src/logs/*.cpp"
+        "src/options/*.h"
+        "src/options/*.cpp")
 
 file(GLOB_RECURSE CLIENT_SRCS CONFIGURE_DEPENDS
         "src/view/*.h"
@@ -68,7 +72,9 @@ file(GLOB_RECURSE CLIENT_SRCS CONFIGURE_DEPENDS
         "src/persistence/*.cpp"
         "src/model/Model.h"
         "src/logs/*.h"
-        "src/logs/*.cpp")
+        "src/logs/*.cpp"
+        "src/options/*.h"
+        "src/options/*.cpp")
 
 file(GLOB_RECURSE TaskManager_TEST CONFIGURE_DEPENDS
         "tests/*.h"
