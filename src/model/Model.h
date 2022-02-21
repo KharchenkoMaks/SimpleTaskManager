@@ -16,26 +16,26 @@ class Model {
 public:
     /**
      * @param task Protobuf Task message to add
-     * @return std::pair: enum TaskActionResult, TaskId of added Task, if task was added
+     * @return std::pair: enum \b TaskActionResult, TaskId of added Task, if task was added
      */
     virtual std::pair<TaskActionResult, TaskId> AddTask(const Task& task) = 0;
     /**
      * @param task Protobuf Task message to add
      * @param parent_id Protobuf TaskId of parent Task
-     * @return std::pair: enum TaskActionResult, TaskId of added SubTask, if it was added
+     * @return std::pair: enum \b TaskActionResult, TaskId of added SubTask, if it was added
      */
     virtual std::pair<TaskActionResult, TaskId> AddSubTask(const Task& task, const TaskId& parent_id) = 0;
     /**
      * Swaps current task with specified id with new one.
      * @param id TaskId of task to update
      * @param t New task
-     * @return enum TaskActionResult
+     * @return enum \b TaskActionResult
      */
     virtual TaskActionResult EditTask(const TaskId& id, const Task& t) = 0;
     /**
      * @param id TaskId to delete
      * @param force_delete_subtasks confirm for deleting all subtasks of deleted task if there are some
-     * @return enum TaskActionResult
+     * @return enum \b TaskActionResult
      * @attention If \b force_delete_subtasks set to false and target task has subtasks,
      * deleting will be failed
      */
@@ -43,7 +43,7 @@ public:
     /**
      * @param id TaskId to complete
      * @param force_complete_subtasks confirm for completing all subtasks of deleted task if there are some uncompleted
-     * @return enum TaskActionResult
+     * @return enum \b TaskActionResult
      * @attention If \b force_complete_subtasks set to false and target task has \b uncompleted subtasks,
      * completing will be failed
      */
@@ -51,13 +51,13 @@ public:
     /**
      * @param id TaskId of task for adding label
      * @param label Label to add
-     * @return enum TaskActionResult
+     * @return enum \b TaskActionResult
      */
     virtual TaskActionResult AddTaskLabel(const TaskId& id, const std::string& label) = 0;
     /**
      * @param id TaskId of task to remove label from
      * @param label Label to remove
-     * @return enum TaskActionResult
+     * @return enum \b TaskActionResult
      */
     virtual TaskActionResult RemoveTaskLabel(const TaskId& id, const std::string& label) = 0;
 
