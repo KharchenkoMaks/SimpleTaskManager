@@ -4,20 +4,24 @@
 
 #include "ShowState.h"
 #include "utilities/TaskConvertors.h"
+#include "utilities/TaskComparators.h"
 
-void ShowState::PrintTasks(const std::vector<RelationalTask>& tasks) {
+void ShowState::PrintTaskWithChildren(const std::vector<RelationalTask>& tasks, const RelationalTask& task_to_print, const std::string& prefix = "") const {
+    printer_->WriteLine(prefix + TaskToString(task_to_print.task_id(), task_to_print.task()));
     for (const auto& task : tasks) {
-        std::string task_string;
-        if (task.has_parent_id()) {
-            task_string += "\t";
+        if (task.parent_id() == task_to_print.task_id()) {
+            PrintTaskWithChildren(tasks, task, prefix + "\t");
         }
-        task_string += TaskToString(task.task_id(), task.task());
-        printer_->WriteLine(task_string);
     }
 }
 
 StateType ShowState::Execute(StateContext& context) {
-    PrintTasks(context.GetTasksToShow());
+    auto tasks = context.GetTasksToShow();
+    for (const auto& task : tasks) {
+        if (!task.has_parent_id()) {
+            PrintTaskWithChildren(tasks, task);
+        }
+    }
     return next_state_;
 }
 

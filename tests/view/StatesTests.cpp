@@ -575,6 +575,7 @@ TEST_F(StatesTests, ShowStateExecute_ShouldPrintAllTasksFromContext) {
 
     // Arrange tasks to show
     TaskId parent_task_id;
+    parent_task_id.set_id(1);
     TaskId task2_id;
     task2_id.set_id(2);
     TaskId task3_id;
@@ -596,7 +597,7 @@ TEST_F(StatesTests, ShowStateExecute_ShouldPrintAllTasksFromContext) {
     tt3.set_allocated_task(new Task(t3));
     tt3.set_allocated_parent_id(new TaskId(parent_task_id));
 
-    std::vector<RelationalTask> tasks_to_show {tt1, tt3, tt2 };
+    std::vector<RelationalTask> tasks_to_show { tt1, tt2, tt3 };
 
     show_state_context.SetTasksToShow(tasks_to_show);
 
