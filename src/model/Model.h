@@ -12,6 +12,11 @@
 #include <optional>
 #include <utility>
 
+/**
+ * \brief \b Core interface for \b TaskManager
+ * \details Provides API of \b TaskManager
+ * \author Maksym Kharchenko
+ */
 class Model {
 public:
     /**
