@@ -18,7 +18,7 @@ public:
 public:
     StateType Execute(StateContext& context) override;
 private:
-    void PrintTasks(const std::vector<RelationalTask>& tasks);
+    void PrintTaskWithChildren(const std::vector<RelationalTask>& tasks, const RelationalTask& task_to_print, const std::string& prefix) const;
 private:
     StateType next_state_;
     std::shared_ptr<ConsolePrinter> printer_;

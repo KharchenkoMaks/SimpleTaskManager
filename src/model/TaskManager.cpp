@@ -118,12 +118,9 @@ TaskActionResult TaskManager::CompleteTask(const TaskId& id, bool force_complete
 
 std::vector<RelationalTask> TaskManager::GetTasks() {
     std::vector<RelationalTask> tasks;
-    for (const auto& task : tasks_) {
-        if (!task.second.has_parent_id()) {
-            auto adding_tasks = GetAllTaskChildren(task.first);
-            tasks.insert(tasks.end(), adding_tasks.begin(), adding_tasks.end());
-        }
-    }
+
+    std::transform(tasks_.begin(), tasks_.end(), std::back_inserter(tasks),
+                   [this](const std::pair<TaskId, model::TaskNode>& task) { return this->CreateRelationalTask(task.first, task.second); });
 
     LOG_TRIVIAL(debug) << "Tasks returned: " << tasks.size();
 
@@ -135,7 +132,7 @@ std::optional<RelationalTask> TaskManager::GetTask(const TaskId& task_id) {
     if (task == tasks_.end())
         return std::nullopt;
 
-    return CreateRelationalTask(task);
+    return CreateRelationalTask(task->first, task->second);
 }
 
 TaskActionResult TaskManager::AddTaskLabel(const TaskId& id, const std::string& label) {
@@ -192,33 +189,6 @@ bool TaskManager::LoadModelState(const std::vector<RelationalTask>& tasks) {
     generator_->SetLastTaskId(max_id);
     tasks_.swap(tasks_to_add);
     return true;
-}
-
-std::vector<RelationalTask> TaskManager::GetAllTaskChildren(const TaskId& task_id) {
-    std::vector<RelationalTask> tasks;
-    auto main_task = tasks_.find(task_id);
-    if (main_task == tasks_.end())
-        return tasks;
-
-    tasks.push_back(CreateRelationalTask(main_task));
-    for (const auto& task : tasks_) {
-        if (task.second.parent_id() == task_id) {
-            auto task_children = GetAllTaskChildren(task.first);
-            tasks.insert(tasks.end(), task_children.begin(), task_children.end());
-        }
-    }
-
-    return tasks;
-}
-
-RelationalTask TaskManager::CreateRelationalTask(const std::map<TaskId, TaskNode>::iterator task) {
-    RelationalTask task_transfer;
-    task_transfer.set_allocated_task_id(new TaskId(task->first));
-    task_transfer.set_allocated_task(new Task(task->second.task()));
-    if (task->second.has_parent_id()) {
-        task_transfer.set_allocated_parent_id(new TaskId(task->second.parent_id()));
-    }
-    return task_transfer;
 }
 
 RelationalTask TaskManager::CreateRelationalTask(const TaskId& id, const TaskNode& task_node) {
