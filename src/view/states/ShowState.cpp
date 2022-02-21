@@ -6,7 +6,7 @@
 #include "utilities/TaskConvertors.h"
 #include "utilities/TaskComparators.h"
 
-void ShowState::PrintTaskWithChildren(const std::vector<RelationalTask>& tasks, const RelationalTask& task_to_print, const std::string& prefix = "") const {
+void ShowState::PrintTaskWithChildren(const std::vector<RelationalTask>& tasks, const RelationalTask& task_to_print, const std::string& prefix) const {
     printer_->WriteLine(prefix + TaskToString(task_to_print.task_id(), task_to_print.task()));
     for (const auto& task : tasks) {
         if (task.parent_id() == task_to_print.task_id()) {
@@ -19,7 +19,7 @@ StateType ShowState::Execute(StateContext& context) {
     auto tasks = context.GetTasksToShow();
     for (const auto& task : tasks) {
         if (!task.has_parent_id()) {
-            PrintTaskWithChildren(tasks, task);
+            PrintTaskWithChildren(tasks, task, "");
         }
     }
     return next_state_;
