@@ -63,13 +63,13 @@ public:
 
     /**
      * @return All not deleted \b tasks as \b std::vector
-     * @attention Order of tasks in \b std::vector is not guaranteed
+     * @warning Order of tasks in \b std::vector is not guaranteed
      */
     virtual std::vector<RelationalTask> GetTasks() = 0;
     /**
      * @param task_label Label to sort tasks by
      * @return All not deleted \b tasks as \b std::vector, that contains specified \b task_label
-     * @attention Order of tasks in \b std::vector is not guaranteed
+     * @warning Order of tasks in \b std::vector is not guaranteed
      */
     virtual std::vector<RelationalTask> GetTasksByLabel(const std::string& task_label) = 0;
     /**
@@ -82,7 +82,7 @@ public:
      * Loads new tasks to model and deletes all previous tasks
      * @param tasks Tasks to load to model
      * @return Whether tasks were loaded successfully
-     * @attention Loading of new model state leads to losing it's previous state.
+     * @warning Loading of new model state leads to losing it's previous state.
      * @attention If loading of new state fails, previous state is remaining untouched.
      */
     virtual bool LoadModelState(const std::vector<RelationalTask>& tasks) = 0;
