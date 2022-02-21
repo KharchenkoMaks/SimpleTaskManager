@@ -13,16 +13,18 @@
 #include "client/GRPCClientEndPoint.h"
 #include "controller/DefaultModelController.h"
 
-#include "logs/LogInit.h"
+#include "options/ProgramOptionsParsers.h"
+
+#include "logs/DefaultLogging.h"
 
 #include <grpcpp/grpcpp.h>
 
 #include <string>
 
-int main() {
-    logs_init(false);
+int main(int argc, char* argv[]) {
+    std::string target_str = parse_options_host(argc, argv, "localhost", "8586");
 
-    std::string target_str = "localhost:8586";
+    LOG_TRIVIAL(info) << "Client starting with target ip: " << target_str;
 
     auto command_factory = std::make_shared<CommandFactory>();
     auto printer = std::make_shared<ConsolePrinter>();
