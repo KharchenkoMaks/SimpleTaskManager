@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 25.11.2021.
 //
 
-#include "states/task_input/EditTaskState.h"
+#include "EditTaskState.h"
 #include "user_interface/console_io/ConsoleUtilities.h"
 
 EditTaskState::EditTaskState(const StateType next_state,
