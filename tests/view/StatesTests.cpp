@@ -7,13 +7,13 @@
 
 #include "Task.pb.h"
 
-#include "view/states/task_input/AddSubTaskState.h"
-#include "view/states/task_input/AddTaskState.h"
-#include "view/states/task_input/EditTaskState.h"
+#include "states/AddSubTaskState.h"
+#include "states/AddTaskState.h"
+#include "states/EditTaskState.h"
 #include "view/states/task_input/InputTaskTitleState.h"
 #include "view/states/task_input/InputTaskPriorityState.h"
 #include "view/states/task_input/InputTaskDueDateState.h"
-#include "view/states/task_input/AddLabelState.h"
+#include "states/AddLabelState.h"
 #include "view/states/CompleteTaskState.h"
 #include "view/states/DeleteTaskState.h"
 #include "view/states/HelpState.h"
@@ -24,7 +24,7 @@
 #include "view/states/ShowState.h"
 #include "view/states/persistence/LoadState.h"
 #include "view/states/persistence/SaveState.h"
-#include "view/states/task_input/RemoveLabelState.h"
+#include "states/RemoveLabelState.h"
 
 #include "mocks/MockStatesFactory.h"
 #include "mocks/MockCommandFactory.h"
