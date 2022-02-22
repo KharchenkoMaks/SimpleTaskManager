@@ -10,11 +10,20 @@
 
 #include <memory>
 
+/**
+ * @brief Main client side class
+ * @details Running user interface and executing user's commands until user quits the program
+ * @author Maksym Kharchenko
+ */
 class ViewController {
 public:
     ViewController(std::unique_ptr<ModelController> controller,
                    std::unique_ptr<UserInterface> user_interface);
 public:
+    /**
+     * Starting loop of asking user for command and executing it
+     * @attention Method will be running until user quits the program
+     */
     void RunUserInterface();
 private:
     std::unique_ptr<UserInterface> user_interface_;
