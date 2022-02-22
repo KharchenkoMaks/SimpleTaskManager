@@ -3,22 +3,22 @@
 //
 
 #include "gtest/gtest.h"
-#include "IdGenerator.h"
+#include "SequentIdGenerator.h"
 #include "Task.pb.h"
 
 #include <thread>
 #include <mutex>
 
-class IdGeneratorTest : public ::testing::Test{
+class SequentIdGeneratorTest : public ::testing::Test{
 
 };
 
 // Creating new TaskIds using IdGenerator
 // Should return incremented TaskId
-TEST_F(IdGeneratorTest, CreateNewTaskId_shouldIncrementTaskId){
+TEST_F(SequentIdGeneratorTest, CreateNewTaskId_shouldIncrementTaskId){
     // Arrange
     const int test_times = 100;
-    IdGenerator generator;
+    SequentIdGenerator generator;
     // Act & Assert
     for (int expected = 1; expected < test_times; ++expected){
         TaskId task = generator.CreateNewTaskId();
@@ -26,12 +26,12 @@ TEST_F(IdGeneratorTest, CreateNewTaskId_shouldIncrementTaskId){
     }
 }
 
-TEST_F(IdGeneratorTest, SetLastTaskId_ShouldResetLastTaskId) {
+TEST_F(SequentIdGeneratorTest, SetLastTaskId_ShouldResetLastTaskId) {
     // Arrange
     const int test_times = 100;
     TaskId last_id;
     last_id.set_id(42);
-    IdGenerator generator;
+    SequentIdGenerator generator;
     // Act & Assert
     generator.SetLastTaskId(last_id);
     for (int expected = last_id.id() + 1; expected < test_times + last_id.id() + 1; ++expected){
@@ -40,7 +40,7 @@ TEST_F(IdGeneratorTest, SetLastTaskId_ShouldResetLastTaskId) {
     }
 }
 
-TEST_F(IdGeneratorTest, CreateNewTaskId_ShouldWorkWithMultiThread) {
+TEST_F(SequentIdGeneratorTest, CreateNewTaskId_ShouldWorkWithMultiThread) {
     // Arrange
     const int times_per_thread = 1000;
     const int threads_count = 5;
@@ -48,7 +48,7 @@ TEST_F(IdGeneratorTest, CreateNewTaskId_ShouldWorkWithMultiThread) {
     std::vector<int> ids_times_created(times_per_thread * threads_count + 1, 0);
     std::mutex ids_times_created_mutex;
 
-    IdGenerator generator;
+    SequentIdGenerator generator;
     // Act
     for (int i = 0; i < threads_count; ++i) {
         std::thread t { [&](){

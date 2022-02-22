@@ -5,6 +5,7 @@
 #include "gtest/gtest.h"
 
 #include "model/TaskManager.h"
+#include "model/SequentIdGenerator.h"
 
 #include "view/commands/AddTaskCommand.h"
 #include "view/commands/AddSubTaskCommand.h"
@@ -23,7 +24,7 @@ public:
 
     void SetUp() override {
         model_controller_ = std::make_shared<DefaultModelController>(
-                std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
+                std::make_unique<TaskManager>(std::make_unique<SequentIdGenerator>()),
                 std::make_unique<TaskValidator>(),
                 std::make_unique<persistence::PersistenceFactory>());
     }

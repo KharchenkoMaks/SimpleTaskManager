@@ -5,6 +5,7 @@
 #include "gtest/gtest.h"
 
 #include "model/TaskManager.h"
+#include "model/SequentIdGenerator.h"
 #include "utilities/TaskBuilder.h"
 
 #include "Task.pb.h"
@@ -21,7 +22,7 @@ public:
                 .SetDueDate(google::protobuf::util::TimeUtil::TimeTToTimestamp(time(nullptr) + 10000))
                 .BuildTask();
 
-        task_manager_ = std::make_unique<TaskManager>(std::make_unique<IdGenerator>());
+        task_manager_ = std::make_unique<TaskManager>(std::make_unique<SequentIdGenerator>());
     }
 
     void AddTaskMultipleTimes(const int times) {

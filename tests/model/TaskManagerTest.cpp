@@ -211,8 +211,15 @@ TEST_F(TaskManagerTest, TryDeletingNonExistentTask_ShouldReturnFalse){
 // First and third Tasks should be completed
 TEST_F(TaskManagerTest, TryCompletingDifferentTasks_ShouldCompleteThoseTasks){
     // Arrange
+    auto generator = std::make_unique<MockIdGenerator>();
 
-    TaskManager task_manager(std::make_unique<IdGenerator>());
+    EXPECT_CALL(*generator, CreateNewTaskId())
+            .Times(3)
+            .WillOnce(Return(expected_first_task_id))
+            .WillOnce(Return(expected_second_task_id))
+            .WillOnce(Return(expected_third_task_id));
+
+    TaskManager task_manager(std::move(generator));
 
     const std::string expected_not_completed_title = "i am not completed";
     Task expected_not_completed_task;
@@ -279,7 +286,7 @@ TEST_F(TaskManagerTest, TryAddingSubtask_ShouldReturnRightTask) {
 
 TEST_F(TaskManagerTest, TryGetNonExistentTask_ShouldReturnNullopt) {
     // Arrange
-    TaskManager task_manager(std::make_unique<IdGenerator>());
+    TaskManager task_manager(std::make_unique<MockIdGenerator>());
     // Act
     std::optional<RelationalTask> task = task_manager.GetTask(expected_first_task_id);
     // Assert

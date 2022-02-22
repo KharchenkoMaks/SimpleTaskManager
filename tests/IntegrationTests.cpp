@@ -9,6 +9,7 @@
 #include "view/mocks/MockConsoleReader.h"
 
 #include "TaskManager.h"
+#include "model/SequentIdGenerator.h"
 #include "states/factory/LazyStatesFactory.h"
 #include "DefaultModelController.h"
 #include "user_interface/UserInterface.h"
@@ -50,7 +51,7 @@ public:
         std::shared_ptr<StatesFactory> states_factory = std::make_shared<LazyStatesFactory>(command_factory, printer_, reader_);
         std::unique_ptr<UserInterface> user_interface = std::make_unique<UserInterface>(states_factory, printer_);
         std::unique_ptr<ModelController> model_controller = std::make_unique<DefaultModelController>(
-                std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
+                std::make_unique<TaskManager>(std::make_unique<SequentIdGenerator>()),
                 std::make_unique<TaskValidator>(),
                 std::make_unique<persistence::PersistenceFactory>());
         std::unique_ptr<ViewController> view_controller = std::make_unique<ViewController>(
