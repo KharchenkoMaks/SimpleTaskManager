@@ -2,7 +2,7 @@
 // Created by Maksym Kharchenko on 24.11.2021.
 //
 
-#include "states/task_input/AddTaskState.h"
+#include "AddTaskState.h"
 #include "user_interface/console_io/ConsoleUtilities.h"
 
 StateType AddTaskState::Execute(StateContext& context) {
