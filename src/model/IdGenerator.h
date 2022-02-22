@@ -7,19 +7,26 @@
 
 #include "Task.pb.h"
 
-#include <atomic>
+/**
+ * @brief \b Interface for id generators.
+ */
+class IdGenerator {
+public:
+    /**
+     * @return New unique \b TaskId
+     */
+    virtual TaskId CreateNewTaskId() = 0;
 
-class IdGenerator{
 public:
-    IdGenerator();
+    /**
+     * @brief Used to manually change last generated \b TaskId to recover it's state
+     * @param task_id last generated \b TaskId
+     * @warning Previously generated \b TaskIds are not guaranteed to be unique after using this method
+     */
+    virtual void SetLastTaskId(const TaskId& task_id) = 0;
+
 public:
-    virtual TaskId CreateNewTaskId();
-public:
-    virtual void SetLastTaskId(const TaskId& task_id);
-public:
-    virtual ~IdGenerator();
-private:
-    std::atomic<int> last_id_;
+    virtual ~IdGenerator() = default;
 };
 
 

@@ -5,7 +5,7 @@
 #include "server/GRPCServerEndPoint.h"
 
 #include "model/TaskManager.h"
-#include "model/IdGenerator.h"
+#include "model/SequentIdGenerator.h"
 
 #include "options/ProgramOptionsParsers.h"
 
@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     std::string server_address = parse_options_host(argc, argv, "0.0.0.0", "8586");
 
     std::unique_ptr<Model> model =
-            std::make_unique<TaskManager>(std::make_unique<IdGenerator>());
+            std::make_unique<TaskManager>(std::make_unique<SequentIdGenerator>());
 
     GRPCServerEndPoint service { std::move(model) };
 
