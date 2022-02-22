@@ -5,7 +5,7 @@
 #include "server/GRPCServerEndPoint.h"
 
 #include "model/TaskManager.h"
-#include "model/SequentIdGenerator.h"
+#include "id_generation/SequentIdGenerator.h"
 
 #include "options/ProgramOptionsParsers.h"
 

@@ -3,7 +3,7 @@
 //
 
 #include "gtest/gtest.h"
-#include "SequentIdGenerator.h"
+#include "id_generation/SequentIdGenerator.h"
 #include "Task.pb.h"
 
 #include <thread>

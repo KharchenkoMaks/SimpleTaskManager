@@ -6,7 +6,7 @@
 #include "gmock/gmock.h"
 
 #include "TaskManager.h"
-#include "IdGenerator.h"
+#include "id_generation/IdGenerator.h"
 #include "Task.pb.h"
 #include "TaskNode.pb.h"
 #include "utilities/TaskActionResult.h"

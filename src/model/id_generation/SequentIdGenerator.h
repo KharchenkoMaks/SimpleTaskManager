@@ -5,7 +5,7 @@
 #ifndef SIMPLETASKMANAGER_SEQUENTIDGENERATOR_H
 #define SIMPLETASKMANAGER_SEQUENTIDGENERATOR_H
 
-#include "IdGenerator.h"
+#include "id_generation/IdGenerator.h"
 
 #include <atomic>
 

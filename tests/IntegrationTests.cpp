@@ -9,7 +9,7 @@
 #include "view/mocks/MockConsoleReader.h"
 
 #include "TaskManager.h"
-#include "model/SequentIdGenerator.h"
+#include "id_generation/SequentIdGenerator.h"
 #include "states/factory/LazyStatesFactory.h"
 #include "DefaultModelController.h"
 #include "user_interface/UserInterface.h"

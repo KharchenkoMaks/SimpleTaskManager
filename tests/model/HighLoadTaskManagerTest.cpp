@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 
 #include "model/TaskManager.h"
-#include "model/SequentIdGenerator.h"
+#include "id_generation/SequentIdGenerator.h"
 
 #include "view/commands/AddTaskCommand.h"
 #include "view/commands/AddSubTaskCommand.h"
