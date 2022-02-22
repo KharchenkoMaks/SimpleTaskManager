@@ -17,7 +17,8 @@ DeleteTaskState::DeleteTaskState(const StateType next_state,
                                  command_factory_(command_factory) {}
 
 StateType DeleteTaskState::Execute(StateContext& context) {
-    std::optional<TaskId> task_id = console_io::util::GetTaskIdFromUser("Task ID", *printer_, *reader_);
+    auto task_id = console_io::util::GetTaskIdFromUser("Task ID", *printer_, *reader_);
+
     if (!task_id.has_value()){
         printer_->WriteError("Incorrect task id was given, try again!");
         return error_state_;

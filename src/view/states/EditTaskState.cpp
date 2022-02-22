@@ -21,7 +21,8 @@ EditTaskState::EditTaskState(const StateType next_state,
 }
 
 StateType EditTaskState::Execute(StateContext& context) {
-    std::optional<TaskId> editing_task_id = console_io::util::GetTaskIdFromUser("Task ID", *printer_, *reader_);
+    auto editing_task_id = console_io::util::GetTaskIdFromUser("Task ID", *printer_, *reader_);
+
     if (!editing_task_id.has_value()) {
         printer_->WriteError("Incorrect task id was given, try again!");
         return error_state_;

@@ -19,7 +19,8 @@ AddSubTaskState::AddSubTaskState(const StateType next_state,
                                  state_machine_(std::move(state_machine)) {}
 
 StateType AddSubTaskState::Execute(StateContext& context) {
-    std::optional<TaskId> parent_task_id = console_io::util::GetTaskIdFromUser("Parent Task ID", *printer_, *reader_);
+    auto parent_task_id = console_io::util::GetTaskIdFromUser("Parent Task ID", *printer_, *reader_);
+
     if (!parent_task_id.has_value()) {
         printer_->WriteError("Incorrect task id was given, try again!");
         return error_state_;
