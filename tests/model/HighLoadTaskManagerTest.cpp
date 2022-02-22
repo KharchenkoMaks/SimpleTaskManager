@@ -17,7 +17,7 @@
 #include <google/protobuf/util/time_util.h>
 #include <thread>
 
-class DISABLED_MultiThreadTaskManagerTest : public ::testing::Test {
+class DISABLED_HighLoadTaskManagerTest : public ::testing::Test {
 public:
     std::shared_ptr<ModelController> model_controller_;
 
@@ -49,13 +49,13 @@ public:
 
     void ExecuteRandomCommandToTaskManager(const int times) {
         for (int i = 0; i < times; ++i) {
-            auto cmd = DISABLED_MultiThreadTaskManagerTest::CreateRandomCommand();
+            auto cmd = DISABLED_HighLoadTaskManagerTest::CreateRandomCommand();
             cmd->Execute(model_controller_);
         }
     }
 };
 
-TEST_F(DISABLED_MultiThreadTaskManagerTest, SendingDifferentRequestsToTaskManagerInDifferentThreads_ShouldNotDie) {
+TEST_F(DISABLED_HighLoadTaskManagerTest, SendingDifferentRequestsToTaskManagerInDifferentThreads_ShouldNotDie) {
     // Arrange
     const int thread_count = 8;
     const int commands_per_thread = 1000;
@@ -63,7 +63,7 @@ TEST_F(DISABLED_MultiThreadTaskManagerTest, SendingDifferentRequestsToTaskManage
     std::vector<std::thread> threads;
     // Act
     for (int i = 0; i < thread_count; ++i) {
-        std::thread t {&DISABLED_MultiThreadTaskManagerTest::ExecuteRandomCommandToTaskManager, this, commands_per_thread };
+        std::thread t {&DISABLED_HighLoadTaskManagerTest::ExecuteRandomCommandToTaskManager, this, commands_per_thread };
         threads.push_back(std::move(t));
     }
 
