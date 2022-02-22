@@ -7,6 +7,8 @@
 
 #include "Task.pb.h"
 
+#include <atomic>
+
 class IdGenerator{
 public:
     IdGenerator();
@@ -17,7 +19,7 @@ public:
 public:
     virtual ~IdGenerator();
 private:
-    int last_id_;
+    std::atomic<int> last_id_;
 };
 
 

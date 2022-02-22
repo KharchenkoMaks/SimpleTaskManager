@@ -577,7 +577,7 @@ TEST_F(TaskManagerTest, DeleteTask_TryDeleteMainTaskWithForceDeleteSubtasks_Shou
 
     TaskId main_task_id = task_manager.AddTask(expected_first_task).second;
     TaskId subtask1_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
-    TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, main_task_id).second;
+    TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, subtask1_id).second;
 
     const TaskActionResult expected_result = TaskActionResult::SUCCESS;
     const size_t expected_tasks_size = 0;
@@ -602,7 +602,7 @@ TEST_F(TaskManagerTest, CompleteTask_TryCompleteMainTaskWithForceCompleteSubtask
 
     TaskId main_task_id = task_manager.AddTask(expected_first_task).second;
     TaskId subtask1_id = task_manager.AddSubTask(expected_second_task, main_task_id).second;
-    TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, main_task_id).second;
+    TaskId subtask2_id = task_manager.AddSubTask(expected_third_task, subtask1_id).second;
 
     const TaskActionResult expected_result = TaskActionResult::SUCCESS;
     const size_t expected_tasks_size = 3;

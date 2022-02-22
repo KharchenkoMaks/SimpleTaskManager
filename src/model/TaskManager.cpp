@@ -30,8 +30,10 @@ std::pair<TaskActionResult, TaskId> TaskManager::AddTask(const Task& task) {
     }
 
     TaskId task_id = generator_->CreateNewTaskId();
-    tasks_.insert({ task_id, model::CreateTaskNode(task) });
-
+    {
+        std::lock_guard<std::mutex> guard(tasks_map_mutex_);
+        tasks_.insert({task_id, model::CreateTaskNode(task)});
+    }
     LOG_TRIVIAL(debug) << "Task added, " << task_id.ShortDebugString();
 
     return std::pair(TaskActionResult::SUCCESS, task_id);
@@ -42,16 +44,19 @@ std::pair<TaskActionResult, TaskId> TaskManager::AddSubTask(const Task& task, co
         LOG_TRIVIAL(error) << "Invalid task given, Task: " << task.ShortDebugString();
         return std::pair(TaskActionResult::FAIL_INVALID_TASK, TaskId::default_instance());
     }
+    TaskId subtask_id;
+    {
+        std::lock_guard<std::mutex> guard(tasks_map_mutex_);
 
-    auto parent_task = tasks_.find(parent_id);
-    if (parent_task == tasks_.end()) {
-        LOG_TRIVIAL(warning) << "No such task found, " << parent_id.ShortDebugString();
-        return std::pair(TaskActionResult::FAIL_NO_SUCH_TASK, TaskId::default_instance());
+        auto parent_task = tasks_.find(parent_id);
+        if (parent_task == tasks_.end()) {
+            LOG_TRIVIAL(warning) << "No such task found, " << parent_id.ShortDebugString();
+            return std::pair(TaskActionResult::FAIL_NO_SUCH_TASK, TaskId::default_instance());
+        }
+
+        subtask_id = generator_->CreateNewTaskId();
+        tasks_.insert({subtask_id, model::CreateTaskNode(task, parent_id)});
     }
-
-    TaskId subtask_id = generator_->CreateNewTaskId();
-    tasks_.insert({ subtask_id, model::CreateTaskNode(task, parent_id) });
-
     LOG_TRIVIAL(debug) << "Task added, " << subtask_id.ShortDebugString();
 
     return std::pair(TaskActionResult::SUCCESS, subtask_id);
@@ -62,6 +67,8 @@ TaskActionResult TaskManager::EditTask(const TaskId& id, const Task& task) {
         return TaskActionResult::FAIL_INVALID_TASK;
     }
 
+    std::lock_guard<std::mutex> guard(tasks_map_mutex_);
+
     auto editing_task = tasks_.find(id);
     if (editing_task == tasks_.end())
         return TaskActionResult::FAIL_NO_SUCH_TASK;
@@ -71,56 +78,77 @@ TaskActionResult TaskManager::EditTask(const TaskId& id, const Task& task) {
 }
 
 TaskActionResult TaskManager::DeleteTask(const TaskId& id, bool force_delete_subtasks) {
-    auto deleting_task = tasks_.find(id);
-    if (deleting_task == tasks_.end())
-        return TaskActionResult::FAIL_NO_SUCH_TASK;
+    std::lock_guard<std::mutex> guard(tasks_map_mutex_);
 
-    auto search_child_rule = [&id](const std::pair<TaskId, TaskNode>& task) {
+    std::vector<TaskId> task_ids_to_delete;
+    auto task_to_delete = tasks_.find(id);
+
+    if (task_to_delete == tasks_.end())
+        return TaskActionResult::FAIL_NO_SUCH_TASK;
+    else
+        task_ids_to_delete.push_back(task_to_delete->first);
+
+    if (!force_delete_subtasks && std::find_if(tasks_.begin(), tasks_.end(), [&id](const std::pair<TaskId, TaskNode>& task) {
         return task.second.parent_id() == id;
-    };
-    if (force_delete_subtasks) {
-        auto subtask = std::find_if(tasks_.begin(), tasks_.end(), search_child_rule);
-        while (subtask != tasks_.end()) {
-            this->DeleteTask(subtask->first, true);
-            subtask = std::find_if(tasks_.begin(), tasks_.end(), search_child_rule);
-        }
-    } else if (std::find_if(tasks_.begin(), tasks_.end(), search_child_rule) != tasks_.end()) {
+    }) != tasks_.end()) {
         return TaskActionResult::FAIL_NOT_DELETED_SUBTASKS;
     }
 
-    deleted_tasks_.insert_or_assign(deleting_task->first, deleting_task->second);
-    tasks_.erase(deleting_task);
+    for (size_t i = 0; i < task_ids_to_delete.size(); ++i) {
+        for (const auto& task : tasks_) {
+            if (task.second.parent_id() == task_ids_to_delete[i]) {
+                task_ids_to_delete.push_back(task.first);
+            }
+        }
+        auto deleting_task = tasks_.find(task_ids_to_delete[i]);
+        deleted_tasks_.insert_or_assign(deleting_task->first, deleting_task->second);
+        tasks_.erase(deleting_task);
+    }
+
     return TaskActionResult::SUCCESS;
 }
 
 TaskActionResult TaskManager::CompleteTask(const TaskId& id, bool force_complete_subtasks) {
-    auto completing_task = tasks_.find(id);
-    if (completing_task == tasks_.end())
+    std::lock_guard<std::mutex> guard(tasks_map_mutex_);
+
+    std::vector<TaskId> task_ids_to_complete;
+    auto task_to_complete = tasks_.find(id);
+
+    if (task_to_complete == tasks_.end())
         return TaskActionResult::FAIL_NO_SUCH_TASK;
+    else
+        task_ids_to_complete.push_back(task_to_complete->first);
 
-    auto search_uncompleted_child_rule = [&id](const std::pair<TaskId, TaskNode>& task) {
+    if (!force_complete_subtasks && std::find_if(tasks_.begin(), tasks_.end(), [&id](const std::pair<TaskId, TaskNode>& task) {
         return task.second.parent_id() == id && !task.second.task().completed();
-    };
-
-    if (force_complete_subtasks) {
-        for (const auto& task : tasks_)
-            if (task.second.parent_id() == id && !task.second.task().completed())
-                this->CompleteTask(task.first, true);
-    } else if (std::find_if(tasks_.begin(), tasks_.end(), search_uncompleted_child_rule) != tasks_.end()) {
+    }) != tasks_.end()) {
         return TaskActionResult::FAIL_UNCOMPLETED_SUBTASKS;
     }
 
-    Task task_to_complete = completing_task->second.task();
-    task_to_complete.set_completed(true);
-    completing_task->second.set_allocated_task(new Task(task_to_complete));
+    for (size_t i = 0; i < task_ids_to_complete.size(); ++i) {
+        for (const auto& task : tasks_) {
+            if (task.second.parent_id() == task_ids_to_complete[i] && !task.second.task().completed()) {
+                task_ids_to_complete.push_back(task.first);
+            }
+        }
+        auto completing_task = tasks_.find(task_ids_to_complete[i]);
+        completing_task->second.mutable_task()->set_completed(true);
+    }
     return TaskActionResult::SUCCESS;
 }
 
 std::vector<RelationalTask> TaskManager::GetTasks() {
     std::vector<RelationalTask> tasks;
 
-    std::transform(tasks_.begin(), tasks_.end(), std::back_inserter(tasks),
-                   [this](const std::pair<TaskId, model::TaskNode>& task) { return this->CreateRelationalTask(task.first, task.second); });
+    {
+        std::lock_guard<std::mutex> guard(tasks_map_mutex_);
+
+        std::transform(tasks_.begin(), tasks_.end(), std::back_inserter(tasks),
+                       [this](const std::pair<TaskId, model::TaskNode> &task) {
+                           return this->CreateRelationalTask(task.first, task.second);
+                       });
+
+    }
 
     LOG_TRIVIAL(debug) << "Tasks returned: " << tasks.size();
 
@@ -128,6 +156,8 @@ std::vector<RelationalTask> TaskManager::GetTasks() {
 }
 
 std::optional<RelationalTask> TaskManager::GetTask(const TaskId& task_id) {
+    std::lock_guard<std::mutex> guard(tasks_map_mutex_);
+
     auto task = tasks_.find(task_id);
     if (task == tasks_.end())
         return std::nullopt;
@@ -138,6 +168,8 @@ std::optional<RelationalTask> TaskManager::GetTask(const TaskId& task_id) {
 TaskActionResult TaskManager::AddTaskLabel(const TaskId& id, const std::string& label) {
     if (label.empty())
         return TaskActionResult::SUCCESS;
+
+    std::lock_guard<std::mutex> guard(tasks_map_mutex_);
 
     auto task_to_add_label = tasks_.find(id);
     if (task_to_add_label == tasks_.end())
@@ -153,6 +185,8 @@ TaskActionResult TaskManager::AddTaskLabel(const TaskId& id, const std::string& 
 }
 
 TaskActionResult TaskManager::RemoveTaskLabel(const TaskId& id, const std::string& label) {
+    std::lock_guard<std::mutex> guard(tasks_map_mutex_);
+
     auto task_to_remove_label = tasks_.find(id);
     if (task_to_remove_label == tasks_.end())
         return TaskActionResult::FAIL_NO_SUCH_TASK;
@@ -174,6 +208,8 @@ google::protobuf::internal::RepeatedPtrIterator<const std::string> TaskManager::
 }
 
 bool TaskManager::LoadModelState(const std::vector<RelationalTask>& tasks) {
+    std::lock_guard<std::mutex> guard(tasks_map_mutex_);
+
     std::map<TaskId, TaskNode> tasks_to_add;
     TaskId max_id;
     max_id.set_id(1);
@@ -202,6 +238,8 @@ RelationalTask TaskManager::CreateRelationalTask(const TaskId& id, const TaskNod
 }
 
 std::vector<RelationalTask> TaskManager::GetTasksByLabel(const std::string& task_label) {
+    std::lock_guard<std::mutex> guard(tasks_map_mutex_);
+
     std::vector<RelationalTask> tasks;
     for (const auto& rel_task : tasks_) {
         const auto task_labels = rel_task.second.task().label();
