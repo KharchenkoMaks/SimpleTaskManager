@@ -7,7 +7,7 @@
 
 #include "Task.pb.h"
 #include "utilities/TaskActionResult.h"
-#include "IdGenerator.h"
+#include "id_generation/IdGenerator.h"
 
 #include <optional>
 #include <utility>

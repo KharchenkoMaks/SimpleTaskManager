@@ -1,4 +1,5 @@
 #include "TaskManager.h"
+#include "id_generation/SequentIdGenerator.h"
 #include "states/factory/LazyStatesFactory.h"
 #include "DefaultModelController.h"
 #include "user_interface/UserInterface.h"
@@ -18,7 +19,7 @@ int main() {
     auto states_factory = std::make_shared<LazyStatesFactory>(command_factory, printer, reader);
     auto user_interface = std::make_unique<UserInterface>(states_factory, printer);
     auto model_controller = std::make_unique<DefaultModelController>(
-            std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
+            std::make_unique<TaskManager>(std::make_unique<SequentIdGenerator>()),
             std::make_unique<TaskValidator>(),
             std::make_unique<persistence::PersistenceFactory>());
     auto view_controller = std::make_unique<ViewController>(std::move(model_controller), std::move(user_interface));
