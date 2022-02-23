@@ -13,11 +13,9 @@ CommandResult AddTaskCommand::Execute(const std::shared_ptr<ModelController>& co
     auto add_task_result = controller->AddTask(task_);
 
     switch (add_task_result.first) {
-        case ControllerRequestResult::SUCCESS: {
+        case ControllerRequestResult::SUCCESS:
             return CommandResult::Create(add_task_result.second);
-        }
-        default: {
+        default:
             return CommandResult::Create(add_task_result.first);
-        }
     }
 }
