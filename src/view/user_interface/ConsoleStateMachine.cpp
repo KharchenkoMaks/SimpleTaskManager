@@ -20,5 +20,5 @@ std::unique_ptr<StateContext> ConsoleStateMachine::Run() {
     while (current_state) {
         current_state = states_factory_->GetState(current_state->Execute(*current_context));
     }
-    return std::move(current_context);
+    return current_context;
 }
