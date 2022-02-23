@@ -13,7 +13,7 @@
 
 class SaveCommand : public Command {
 public:
-    SaveCommand(const std::string& file_name);
+    explicit SaveCommand(const std::string& file_name);
 public:
     CommandResult Execute(const std::shared_ptr<ModelController>& controller) override;
 private:
