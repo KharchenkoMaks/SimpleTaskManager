@@ -16,8 +16,6 @@ std::string parse_options_host(int argc, char* argv[], const std::string& defaul
     std::string host = default_host;
     std::string port = default_port;
 
-    const std::string host_help_message = "server host, default" + default_host;
-
     boost::program_options::options_description desc("Allowed options");
 
     desc.add_options()
